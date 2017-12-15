@@ -6,7 +6,7 @@ Currently used technology include:
 
 * nodejs
 * webpack
-* Babel
+* babel
 
 #### usage
 
