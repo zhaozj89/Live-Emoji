@@ -29,6 +29,9 @@
 
 import * as D3NE from "./d3-node-editor";
 
+require('../css/app.css');
+require('../css/d3-node-editor.css');
+
 var numSocket = new D3NE.Socket("number", "Number value", "hint");
 
 var componentNum = new D3NE.Component("Number", {

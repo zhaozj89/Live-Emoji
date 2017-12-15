@@ -1,2 +1,22 @@
-# Webpack 2 Basics Tutorial
-This repository holds the source code of my Webpack 2 Basics Series on YouTube. Make sure to watch the Videos on YouTube to understand how to use that code.
+#### app
+
+This app is my personal framework for research usage on hci, graphics, image, and more :tada: :tada: :tada:
+
+Currently used technology include:
+
+* nodejs
+* webpack
+* Babel
+
+#### usage
+
+* `npm install` to install dependencies
+* `npm run build` to build (similar to `make` in C)
+
+#### other tips
+
+* `npm install XXX --save-dev`
+
+### testing
+
+* MacOS
