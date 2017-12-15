@@ -1,0 +1,17 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "my framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack src/js/app.js dist/bundle.js"
+  },
+  "author": "Zhenjie Zhao",
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^0.28.7",
+    "webpack": "^3.10.0"
+  },
+  "dependencies": {}
+}
