@@ -1,8 +1,43 @@
-body{background: skyblue; font-family: verdana; color: #fff; padding: 30px;}
-h1{font-size: 48px; text-transform: uppercase; letter-spacing: 2px; text-align: center;}
-p{font-size: 16px; text-align: center;}
-#nodeEditor{width: 100px;}
-.socket.number{background: #96b38a;}
+body{
+  background: white; /*skyblue;*/
+  font-family: verdana;
+  /* color: #fff; */
+  padding: 30px;
+}
+
+h1{
+  font-size: 48px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+p{
+  font-size: 16px;
+  text-align: center;
+}
+
+.column {
+    float: left;
+    width: 48%;
+    border:2px solid blue;
+    height: 600px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+#nodeEditor{
+  height: 600px;
+}
+
+.socket.number{
+  background: #ffb38a;
+}
 
 .intro-component{
   padding: 20px;
