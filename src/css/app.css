@@ -5,18 +5,18 @@ h1{
   text-align: center;
 }
 
-.column {
-    float: left;
-    width: 48%;
-    border:0px;
-    height: 600px;
-}
+/*.column {*/
+    /*float: left;*/
+    /*width: 48%;*/
+    /*border:0px;*/
+    /*height: 300px;*/
+/*}*/
 
-.row:after {
-    content: "";
-    display: table;
-    clear: both;
-}
+/*.row:after {*/
+    /*content: "";*/
+    /*display: table;*/
+    /*clear: both;*/
+/*}*/
 
 .socket.number{
   background: #ffb38a;

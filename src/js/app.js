@@ -1,9 +1,8 @@
-import * as D3NE from "./d3-node-editor";
-import * as THREE from "./lib/three.min.js";
+// require('../css/app.css');
 
-require('../css/app.css');
-require('../css/d3-node-editor.css');
-
+// import * as D3NE from "./d3-node-editor";
+// require('../css/d3-node-editor.css');
+/*
 var numSocket = new D3NE.Socket("number", "number value", "hint");
 
 var componentNum = new D3NE.Component("Number", {
@@ -104,6 +103,7 @@ editor.view.zoomAt(editor.nodes);
 editor.eventListener.trigger("change");
 editor.view.resize();
 
+*/
 // canvas renderer
 
 /*
@@ -146,3 +146,12 @@ function animate() {
 
 }
 */
+
+// import * as BBW from "./bbw";
+
+// BBW.init_3D(document.getElementById("canvas"), 480, 320);
+// BBW.init_Widgets();
+// BBW.needs_redisplay();
+
+// init_Widgets();
+// needs_redisplay();
