@@ -2,7 +2,7 @@
 
 // import * as D3NE from "./d3-node-editor";
 // require('../css/d3-node-editor.css');
-/*
+
 var numSocket = new D3NE.Socket("number", "number value", "hint");
 
 var componentNum = new D3NE.Component("Number", {
@@ -103,7 +103,7 @@ editor.view.zoomAt(editor.nodes);
 editor.eventListener.trigger("change");
 editor.view.resize();
 
-*/
+
 // canvas renderer
 
 /*

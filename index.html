@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--<link rel="stylesheet" type="text/css" href="src/css/app.css">-->
-    <!--<link rel="stylesheet" type="text/css" href="src/css/d3-node-editor.css">-->
+    <link rel="stylesheet" type="text/css" href="src/css/app.css">
+    <link rel="stylesheet" type="text/css" href="src/css/d3-node-editor.css">
     <!--<style>-->
         <!--body {-->
             <!--font-family: Monospace;-->
@@ -71,8 +71,8 @@
     <script src="https://cdn.jsdelivr.net/npm/d3@4.10.2/build/d3.min.js"></script>
 </head>
 <body>
-  <div class="row">
-      <div class="col-sm-4">
+    <div class="row">
+      <div class="col-sm-2">
           <div id="gui">
               <form id="variables" action="">
                   <div class="control_group">
@@ -125,10 +125,10 @@
               </form>
           </div>
       </div>
-      <div class="col-sm-4" id="middle">
+      <div class="col-sm-5" id="middle">
           <!--<div id="canvas"></div>-->
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-5">
           <div class="panel">
               <p>Rendering Control</p>
               <table>
@@ -144,28 +144,28 @@
                   </tr>
               </table>
           </div>
-          <!--<div id="nodeEditor" class="node-editor" style="width: 150px; height: 20px; padding: 0px; border: 1px;"></div>-->
+          <div id="nodeEditor" class="node-editor" style="width: 150px; height: 20px; padding: 0px; border: 1px;"></div>
       </div>
   </div>
 
-  <script src="src/bbw/Blob.js"></script>
-  <script src="src/bbw/FileSaver.js"></script>
-  <script src="src/bbw/threejs/three.min.js"></script>
-  <script src="src/bbw/threejs/loaders/OBJLoader.js"></script>
-  <script src="src/bbw/threejs/libs/stats.min.js"></script>
-  <!--<script src="src/bbw/jquery-2.1.1.min.js"></script>-->
-  <script src="src/bbw/numeric-1.2.6.js"></script>
-  <script src="src/bbw/bbw.js"></script>
+    <script src="src/bbw/Blob.js"></script>
+    <script src="src/bbw/FileSaver.js"></script>
+    <script src="src/bbw/threejs/three.min.js"></script>
+    <script src="src/bbw/threejs/loaders/OBJLoader.js"></script>
+    <script src="src/bbw/threejs/libs/stats.min.js"></script>
+    <!--<script src="src/bbw/jquery-2.1.1.min.js"></script>-->
+    <script src="src/bbw/numeric-1.2.6.js"></script>
+    <script src="src/bbw/bbw.js"></script>
 
-  <script type="x-shader/x-vertex" id="vertShaderWeights">
+    <script type="x-shader/x-vertex" id="vertShaderWeights">
       attribute float weight;
       varying float vweight;
       void main() {
           vweight = weight;
           gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
       }
-  </script>
-  <script type="x-shader/x-fragment" id="fragShaderWeights">
+    </script>
+    <script type="x-shader/x-fragment" id="fragShaderWeights">
     varying float vweight;
     void main() {
         vec3 two = vec3( 1., .5, 1. );
@@ -186,15 +186,16 @@
             gl_FragColor = vec4( (vweight+1.)*zero + (1.-(vweight+1.))*minus_one, 1.0 );
         }
     }
-  </script>
-  <!--<script src="dist/bundle.js"></script>-->
-  <!--<script src="src/js/lib/numeric-1.2.6.min.js"></script>-->
-  <!--<script src="src/js/lib/stats.min.js"></script>-->
-  <!--<script src="src/js/lib/three.min.js"></script>-->
-  <!--<script src="src/js/bbw_utils.js"></script>-->
-  <!--<script src="src/js/bbw.js"></script>-->
-  <!--<script src="src/js/app.js"></script>-->
-  <script>
+    </script>
+    <!--<script src="dist/bundle.js"></script>-->
+    <!--<script src="src/js/lib/numeric-1.2.6.min.js"></script>-->
+    <!--<script src="src/js/lib/stats.min.js"></script>-->
+    <!--<script src="src/js/lib/three.min.js"></script>-->
+    <!--<script src="src/js/bbw_utils.js"></script>-->
+    <!--<script src="src/js/bbw.js"></script>-->
+    <script src="src/js/d3-node-editor.js"></script>
+    <script src="src/js/app.js"></script>
+    <script>
       var the_mesh, the_faces, the_undeformed_vertices, the_handles = [], the_transforms = [], the_weights = null;
       var the_texture, the_mesh_container, the_handle_objects = [];
 
@@ -956,6 +957,6 @@
 
       }
 
-  </script>
+    </script>
 </body>
 </html>
