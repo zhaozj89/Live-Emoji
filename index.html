@@ -93,8 +93,8 @@
                  </div>
                   <div class="control_group">
                      OBJ file URL:
-                     <span class="small-link URL" id="obj_URL_woody" for="obj_URL" href="examples/woody-norm.obj">woody</span>
-                     <span class="small-link URL" id="obj_URL_circle" for="obj_URL" href="examples/simple-uvs.obj">circle</span>
+                      <span class="small-link URL" id="obj_URL_circle" for="obj_URL" href="examples/simple-uvs.obj">circle</span>
+                      <span class="small-link URL" id="obj_URL_woody" for="obj_URL" href="examples/woody-norm.obj">woody</span>
                      <br>
                      <input type="text" name="obj_URL" value="" id="obj_URL" size=50 />
                      <br />
@@ -199,7 +199,7 @@
       var the_texture, the_mesh_container, the_handle_objects = [];
 
       var container, stats;
-      var camera, scene, projector, renderer;
+      var camera, scene, raycaster, renderer;
       var plane;
 
       var mouse = new THREE.Vector2(), INTERSECTED, SELECTED;
@@ -237,7 +237,7 @@
 
           scene.add( plane );
 
-          projector = new THREE.Projector();
+          raycaster = new THREE.Raycaster();
 
           renderer = new THREE.WebGLRenderer( { antialias: true } );
           renderer.setClearColor( 0xffffff );
@@ -416,23 +416,25 @@
 
       function load_OBJ( URL, success_callback )
       {
-          /// model
+          // model
           var manager = new THREE.LoadingManager();
-          manager.onProgress = function ( item, loaded, total ) {
-              console.log( item, loaded, total );
-          };
+          manager.onProgress = function ( item, loaded, total ) {console.log( item, loaded, total );}
+
           var loader = new THREE.OBJLoader( manager );
           loader.load( URL, function ( object ) {
-              needs_redisplay();
-
+              // console.log(URL);
+              // needs_redisplay();
               // Upon success, remove the current model and reset the handles.
               reset_handles();
+
               if( the_mesh_container !== undefined ) scene.remove( the_mesh_container );
 
               the_mesh_container = object;
               object.traverse( function ( child ) {
                   if ( child instanceof THREE.Mesh ) {
                       the_mesh = child;
+
+                      // console.log('geometry: ' + child.geometry);
 
                       child.material = create_default_material();
 
@@ -786,11 +788,11 @@
 
           set_mouse( event );
 
-          // raycaster.setFromCamera( mouse, camera );
+          raycaster.setFromCamera( mouse, camera );
 
-          var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
+          // var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
 
-          var raycaster = projector.pickingRay( vector, camera );
+          // var raycaster = projector.pickingRay( vector, camera );
 
           // raycaster.set(camera.position, vector.sub(camera.position).normalize());
 
@@ -865,11 +867,11 @@
 
           set_mouse( event );
 
-          // raycaster.setFromCamera( mouse, camera );
+          raycaster.setFromCamera( mouse, camera );
 
-          var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
-          var raycaster = projector.pickingRay( vector, camera );
-
+          // var vector = new THREE.Vector3( mouse.x, mouse.y, 0.5 );
+          // var raycaster = projector.pickingRay( vector, camera );
+          //
           // If we're not manipulating handles.
           var mouse_mode = $('input[name=mouse_mode]:checked').val();
 
