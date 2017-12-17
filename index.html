@@ -3,67 +3,8 @@
 <head>
     <link rel="stylesheet" type="text/css" href="src/css/app.css">
     <link rel="stylesheet" type="text/css" href="src/css/d3-node-editor.css">
-    <!--<style>-->
-        <!--body {-->
-            <!--font-family: Monospace;-->
-            <!--background-color: #f0f0f0;-->
-            <!--margin: 0px;-->
-            <!--overflow: hidden;-->
-        <!--}-->
-
-        <!--#gui {-->
-            <!--position: absolute;-->
-            <!--top: 0;-->
-            <!--left: 0;-->
-
-            <!--padding-top: 10px;-->
-            <!--padding-left: 10px;-->
-            <!--text-align: left;-->
-            <!--height: 100px;-->
-            <!--/*-->
-            <!--Setting display to inline-block instead of width 100% so that-->
-            <!--mouse events fall through to the THREE.js view to the right of the contents.-->
-            <!--*/-->
-            <!--display: inline-block;-->
-        <!--}-->
-
-        <!--.control_group-->
-        <!--{-->
-            <!--/* border-top: 1px dotted #000; */-->
-            <!--padding: 5px;-->
-        <!--}-->
-
-        <!--.control_group_last-->
-        <!--{-->
-            <!--/* border-bottom: 1px dotted #000; */-->
-        <!--}-->
-
-        <!--.small-->
-        <!--{-->
-            <!--font-size: 80%;-->
-        <!--}-->
-
-        <!--.small-link-->
-        <!--{-->
-            <!--text-decoration: underline;-->
-            <!--font-size: 80%;-->
-            <!--cursor: pointer;-->
-        <!--}-->
-
-        <!--.column {-->
-            <!--float: left;-->
-            <!--width: 33.33%;-->
-            <!--height: 300px;-->
-        <!--}-->
-
-        <!--/* Clear floats after the columns */-->
-        <!--.row:after {-->
-            <!--content: "";-->
-            <!--display: table;-->
-            <!--clear: both;-->
-        <!--}-->
-    <!--</style>-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
@@ -152,8 +93,8 @@
     <script src="src/bbw/FileSaver.js"></script>
     <script src="src/bbw/threejs/three.min.js"></script>
     <script src="src/bbw/threejs/loaders/OBJLoader.js"></script>
+    <script src="src/bbw/threejs/controls/TrackballControls.js"></script>
     <script src="src/bbw/threejs/libs/stats.min.js"></script>
-    <!--<script src="src/bbw/jquery-2.1.1.min.js"></script>-->
     <script src="src/bbw/numeric-1.2.6.js"></script>
     <script src="src/bbw/bbw.js"></script>
 
@@ -187,12 +128,6 @@
         }
     }
     </script>
-    <!--<script src="dist/bundle.js"></script>-->
-    <!--<script src="src/js/lib/numeric-1.2.6.min.js"></script>-->
-    <!--<script src="src/js/lib/stats.min.js"></script>-->
-    <!--<script src="src/js/lib/three.min.js"></script>-->
-    <!--<script src="src/js/bbw_utils.js"></script>-->
-    <!--<script src="src/js/bbw.js"></script>-->
     <script src="src/js/d3-node-editor.js"></script>
     <script src="src/js/app.js"></script>
     <script>
@@ -223,8 +158,6 @@
           camera = new THREE.OrthographicCamera( lrtb[0], lrtb[1], lrtb[2], lrtb[3], 1, 10000 );
           camera.position.z = 1000;
 
-          // console.log(camera.position.x);
-          // console.log(camera.position.y);
 
           scene = new THREE.Scene();
 
@@ -232,9 +165,7 @@
 
           plane = new THREE.Mesh( new THREE.PlaneGeometry( 5000, 5000, 1, 1 ), new THREE.MeshBasicMaterial( { color: 0xff0000, opacity: 0.25, transparent: true, wireframe: true } ) );
           plane.visible = true;
-          // console.log(plane.position.x);
-          // console.log(plane.position.y);
-          // console.log(plane.position.z);
+
 
           scene.add( plane );
 
