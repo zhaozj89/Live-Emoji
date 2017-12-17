@@ -1,35 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>app</title>
   <script src="https://cdn.jsdelivr.net/npm/alight@0.14.0/alight.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/d3@4.10.2/build/d3.min.js"></script>
-
 </head>
 <body>
-  <!-- <h1>Let's start!</h1> -->
-
-
-
-
   <div class="row">
     <div class="column">
-      <div id="nodeEditor" class="node-editor"></div>
+      <div style="margin-left:5px; float:left">
+        <div class="panel">
+          <p>Rendering Control</p>
+          <table>
+            <tr>
+              <td width="200px">Resolution</td>
+              <td width="230px">
+                <select onchange="changeResolution(this);">
+                  <option value="0">480x640</option>
+                  <option value="1" selected="selected">600x800</option>
+                  <option value="2">720x960</option>
+                </select>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div id="nodeEditor" class="node-editor" style="width: 150px; height: 20px; padding: 0px; border: 1px;"></div>
     </div>
     <div class="column">
-      <div>placeholder</p>
+       <div style="margin-left:5px; float:left">
+         <div class="panel">
+           <p>Rendering Control</p>
+           <table>
+             <tr>
+               <td width="200px">Resolution</td>
+               <td width="230px">
+                 <select onchange="changeResolution(this);">
+                   <option value="0">480x640</option>
+                   <option value="1" selected="selected">600x800</option>
+                   <option value="2">720x960</option>
+                 </select>
+               </td>
+             </tr>
+           </table>
+         </div>
+       </div>
+       <div id="canvas"></div>
     </div>
   </div>
 
   <script src="dist/bundle.js"></script>
-
-  <!-- <div id="body-content">
-    <div class="intro-component">
-      <h1> CSS Loaders are awosome</h1>
-    </div>
-  </div> -->
 </body>
 </html>

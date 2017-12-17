@@ -1,10 +1,3 @@
-body{
-  background: white; /*skyblue;*/
-  font-family: verdana;
-  /* color: #fff; */
-  padding: 30px;
-}
-
 h1{
   font-size: 48px;
   text-transform: uppercase;
@@ -12,36 +5,55 @@ h1{
   text-align: center;
 }
 
-p{
-  font-size: 16px;
-  text-align: center;
-}
-
 .column {
     float: left;
     width: 48%;
-    border:2px solid blue;
+    border:0px;
     height: 600px;
 }
 
-/* Clear floats after the columns */
 .row:after {
     content: "";
     display: table;
     clear: both;
 }
 
-#nodeEditor{
-  height: 600px;
-}
-
 .socket.number{
   background: #ffb38a;
 }
 
-.intro-component{
-  padding: 20px;
-  background: maroon;
-  color: #fff;
-  font-family: arial;
+
+/* explainable CSS*/
+body, p, table {
+  background: white;
+  font-family: verdana;
+  padding: 0px;
+	font-family: Verdana, Geneva, 'DejaVu Sans', sans-serif;
+	font-size: 14px;
+  text-align: center;
+}
+
+div.panel {
+	margin-top: 10px;
+	padding: 5px;
+	border: 2px solid #666;
+	background: #eee;
+	float: left;
+}
+
+div.panel p {
+	font-weight: bold;
+	margin: 5px 0 5px 0;
+	padding: 0;
+}
+
+div.panel hr {
+	border: 0;
+  	height: 1px;
+    background: #333;
+    margin: 0 0 10px 0;
+}
+
+td {
+	padding: 3px 0 3px 0;
 }
