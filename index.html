@@ -8,6 +8,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/alight@0.14.0/alight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@4.10.2/build/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
 </head>
 <body>
     <div class="row">
@@ -22,13 +23,6 @@
                   <div class="control_group">
                      <input type="button" value="Clear handles" id="clear_handles">
                      <input type="button" value="Reset transforms" id="reset_transforms">
-                 </div>
-                  <div class="control_group">
-                     Handle presets:<br>
-                     <span class="small-link handle_preset" id="woody_one"  data-handle-preset="[ 691 ]">woody one</span>
-                     <span class="small-link handle_preset" id="woody_five" data-handle-preset="[183, 344, 536, 406, 282]">woody five</span>
-                     <span class="small-link handle_preset" id="circle_one" data-handle-preset="[ 91 ]">circle one</span>
-                     <span class="small-link handle_preset" id="circle_two" data-handle-preset="[ 20, 150 ]">circle two</span>
                  </div>
                   <div class="control_group">
                      OBJ file URL:
@@ -93,6 +87,19 @@
     <script src="lib/js/stats.min.js"></script>
     <script src="lib/js/numeric-1.2.6.min.js"></script>
     <script src="lib/js/d3-node-editor.js"></script>
+    <script src="lib/js/p2.min.js"></script>
+    <script src="lib/js/p2.renderer.min.js"></script>
+
+    <!-- NOTE: the following libraries are not free-->
+    <script src="lib/live2d/lib/live2d.min.js"></script>
+    <script src="lib/live2d/framework/Live2DFramework.js"></script>
+    <script src="lib/live2d/src/utils/MatrixStack.js"></script>
+    <script src="lib/live2d/src/utils/ModelSettingJson.js"></script>
+    <script src="lib/live2d/src/PlatformManager.js"></script>
+    <script src="lib/live2d/src/LAppDefine.js"></script>
+    <script src="lib/live2d/src/LAppModel.js"></script>
+    <script src="lib/live2d/src/LAppLive2DManager.js"></script>
+    <script src="lib/live2d/src/SampleApp1.js"></script>
 
     <script type="x-shader/x-vertex" id="vertShaderWeights">
       attribute float weight;
