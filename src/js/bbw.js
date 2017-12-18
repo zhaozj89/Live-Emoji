@@ -133,7 +133,7 @@ Each row of W must sum to 1.
 If mode === 'bounded', apply inequality constraints so that the weights are
 all between 0 and 1.
 */
-function bbw( faces, vertices, handles, mode )
+export var bbw = function ( faces, vertices, handles, mode )
 {
 
     /// 1 Create the laplacian L and mass M matrices.
@@ -329,7 +329,7 @@ an array of #vertices-by-#transforms 'weights',
 and an array of 3x3 matrices 'transforms',
 returns the linear blend skinning deformation of each vertex.
 */
-function linear_blend_skin_2D( vertices, weights, transforms )
+export var linear_blend_skin_2D = function ( vertices, weights, transforms )
 {
     /// Add your code here.
     var result = []; 
