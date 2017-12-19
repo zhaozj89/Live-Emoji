@@ -1,22 +1,30 @@
-#### app
+# my-project
 
-This app is my personal framework for research usage on hci, graphics, image, and more :tada: :tada: :tada:
+> A Vue.js project
 
-Currently used technology include:
+## Build Setup
 
-* nodejs
-* webpack
-* babel
+``` bash
+# install dependencies
+npm install
 
-#### usage
+# serve with hot reload at localhost:8080
+npm run dev
 
-* `npm install` to install dependencies
-* `npm run build` to build (similar to `make` in C)
+# build for production with minification
+npm run build
 
-#### other tips
+# build for production and view the bundle analyzer report
+npm run build --report
 
-* `npm install XXX --save-dev`
+# run unit tests
+npm run unit
 
-#### testing
+# run e2e tests
+npm run e2e
 
-* MacOS
+# run all tests
+npm test
+```
+
+For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
