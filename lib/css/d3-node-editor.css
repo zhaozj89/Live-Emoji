@@ -35,9 +35,9 @@
     background: transparent; }
   .context-menu .item {
     padding: 4px;
-    border-bottom: 1px solid rgba(69, 103, 255, 0.8);
-    color: #fff;
-    background-color: rgba(110, 136, 255, 0.8);
+    border-bottom: 1px solid rgba(160, 160, 160, 0.8);
+    color: white;
+    background-color: rgba(180, 180, 180, 0.8);
     cursor: pointer;
     width: 100px;
     position: relative; }
@@ -48,17 +48,18 @@
       border-bottom-left-radius: 7px;
       border-bottom-right-radius: 7px; }
     .context-menu .item:hover {
-      background-color: rgba(130, 153, 255, 0.8); }
+      background-color: rgba(190, 190, 190, 0.8); }
 
 .node-editor {
   overflow: hidden;
   background: transparent;
-  text-align: left; }
+  text-align: left;
+  outline: transparent; }
   .node-editor * {
     box-sizing: border-box; }
   .node-editor .node {
-    background: rgba(110, 136, 255, 0.8);
-    border: 2px solid #4e58bf;
+    background: rgba(180, 180, 180, 0.8);
+    border: 0px solid;
     border-radius: 10px;
     cursor: pointer;
     width: 180px;
@@ -68,10 +69,10 @@
     position: absolute;
     user-select: none; }
     .node-editor .node:hover {
-      background: rgba(130, 153, 255, 0.8); }
+      background: rgba(190, 190, 190, 0.8); }
     .node-editor .node.selected {
-      background: #ffd92c;
-      border-color: #e3c000; }
+      background: #787878;
+      border-color: white; }
     .node-editor .node .title {
       color: white;
       font-family: sans-serif;
@@ -90,7 +91,7 @@
       .node-editor .node .socket:hover {
         border-width: 4px; }
       .node-editor .node .socket.multiple {
-        border-color: yellow; }
+        border-color: white; }
       .node-editor .node .socket.output {
         margin-right: -12px; }
       .node-editor .node .socket.input {
@@ -112,14 +113,14 @@
       padding: 6px 18px; }
   .node-editor .group {
     border-radius: 16px;
-    background: rgba(15, 80, 255, 0.2);
+    background: rgba(200, 200, 200, 0.6);
     cursor: pointer;
     width: inherit;
     height: inherit;
-    border: 6px solid transparent;
+    border: 0px solid transparent;
     position: absolute; }
     .node-editor .group.selected {
-      border-color: #ffd92c; }
+      border-color: white; }
     .node-editor .group .group-title {
       color: white;
       font-family: sans-serif;
@@ -162,5 +163,5 @@
     border-radius: 30px;
     background-color: white;
     padding: 2px 6px;
-    border: 1px solid #999;
+    border: 1px solid #ffffff;
     font-size: 110%; }

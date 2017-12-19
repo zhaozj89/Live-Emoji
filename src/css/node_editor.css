@@ -1,8 +1,9 @@
 #nodeEditor{
     position: relative;
-    height: 713px
+    height: 600px;
+    border: 1px solid rgba(180,180,180,1.0);
 }
 
 .socket.number{
-    background: #96b38a
+    background: rgba(180,180,180,1.0)
 }

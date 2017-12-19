@@ -9,6 +9,6 @@ var height = window.innerHeight;
 
 console.log(height);
 
-createNodeEditor(height);
-createGraphics2(height);
+createNodeEditor();
+createGraphics2(height-150);
 createVueUI();

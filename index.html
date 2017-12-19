@@ -8,8 +8,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alight@0.14.0/alight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/d3@4.10.2/build/d3.min.js"></script>
-    <script src="lib/js/d3-node-editor.js"></script>
+    <script src="lib/js/d3-node-editor.min.js"></script>
     <script src="https://unpkg.com/vue"></script>
+    <script src="lib/js/bootstrap-slider.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/css/slider.css">
     <link rel="stylesheet" type="text/css" href="lib/css/d3-node-editor.css">
     <link rel="stylesheet" type="text/css" href="src/css/node_editor.css">
 </head>
@@ -80,13 +82,15 @@
           <!--</div>-->
       <!--</div>-->
       <div class="col-sm-4">
-          <div style="height: 80px;"></div>
-          <div id="middle"></div>
+          <div class="row" style="height: 80px; border: 1px solid rgba(180,180,180,1.0)"></div>
+          <br>
+          <div class="row" id="middle" style="border: 1px solid rgba(180,180,180,1.0)"></div>
       </div>
-      <div class="col-sm-2" id="package">
+      <div class="col-sm-2" id="package" style="border: 1px solid rgba(180,180,180,1.0)">
           <div v-for="btn in btns">
-              <button type="button" class="btn btn-primary">{{btn.text}}</button>
-              <br>
+              <div class="row">
+                  <button type="button" class="btngit ">{{btn.text}}</button>
+              </div>
               <br>
           </div>
       </div>
@@ -106,7 +110,12 @@
                   <!--</tr>-->
               <!--</table>-->
           <!--</div>-->
-          <div id="nodeEditor" class="node-editor"></div>
+          <div class="row">
+              <div id="nodeEditor" class="node-editor"></div>
+          </div>
+          <div class="row">
+              <input type="range" min="1" max="100" value="50">
+          </div>
       </div>
   </div>
 
