@@ -1,8 +1,8 @@
 
-export var createGraphics2 = function () {
+export var createGraphics2 = function (height) {
 
     let canvas_width = document.getElementById("middle").offsetWidth;
-    let canvas_height = document.getElementById("middle").offsetHeight;
+    let canvas_height = height; //document.getElementById("middle").offsetHeight;
 
     // The application will create a renderer using WebGL, if possible,
 // with a fallback to a canvas render. It will also setup the ticker

@@ -1,4 +1,4 @@
-export var createNodeEditor = function(){
+export var createNodeEditor = function(height){
     var numSocket = new D3NE.Socket("number", "number value", "hint");
 
     var componentNum = new D3NE.Component("Number", {
@@ -86,7 +86,6 @@ export var createNodeEditor = function(){
     editor.addNode(n1);
     editor.addNode(n2);
     editor.addNode(add);
-//  editor.selectNode(tnode);
 
     var engine = new D3NE.Engine("demo@0.1.0", components);
 
