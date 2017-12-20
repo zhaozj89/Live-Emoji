@@ -1,17 +1,19 @@
 <template>
   <div id="app">
-    <ElementUITest></ElementUITest>
+    <!-- <ElementUITest></ElementUITest> -->
+    <Workspace></Workspace>
   </div>
 </template>
 
 <script>
 import Test from './components/Test'
 import ElementUITest from './components/ElementUITest'
+import Workspace from './components/Workspace'
 
 export default {
   name: 'app',
   components: {
-    Test, ElementUITest
+    Test, ElementUITest, Workspace
   }
 }
 </script>
