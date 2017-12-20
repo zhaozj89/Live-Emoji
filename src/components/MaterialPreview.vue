@@ -45,7 +45,7 @@ export class MaterialPreview {
 
     this.mesh = this.createMesh();
 
-    // this.loadEnvMap("./static/envMap/", ".jpg");
+    this.loadEnvMap("./static/envMap/", ".jpg");
     this.loadGeometry("cube");
 
     this.resize();
