@@ -65,10 +65,10 @@ export default {
     },
     saveToStorage() {
       this.active.data = this.editor.toJSON();
-      LocalStorage.write("allmatter", this.root);
+      LocalStorage.write("animation_editor", this.root);
     },
     restoreFromStorage() {
-      var backup = LocalStorage.read("allmatter");
+      var backup = LocalStorage.read("animation_editor");
 
       if (!backup) return;
 
@@ -198,9 +198,10 @@ export default {
 
     if (this.editor.nodes.length === 0) {
       fetch("./projects/guide.mtr")
-        .then(resp => resp.json())
-        .then(proj => this.import(proj.data,proj.name));
+      .then(resp => resp.json())
+      .then(proj => this.import(proj.data,proj.name));
     }
+
   }
 };
 </script>

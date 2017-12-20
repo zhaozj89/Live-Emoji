@@ -1,13 +1,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-// import Tour from '../guide-tour';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        editorIdentifier: 'allmatter@0.2.1',
-        // tour: new Tour(),
+        editorIdentifier: 'animation_editor@1.0.0',
         textureSize: 1024,
         geometry: null,
         maps: [],
@@ -18,9 +16,6 @@ export default new Vuex.Store({
         previewControls: []
     },
     getters: {
-        // tour(state) {
-        //     return state.tour;
-        // },
         geometry(state) {
             return state.geometry;
         },

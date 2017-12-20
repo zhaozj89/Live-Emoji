@@ -1,17 +1,18 @@
 <template>
 <div class="workspace">
-  <div class="sidebar">
-    <material-preview class="region" v-on:dblclick.prevent.native="setActive('material')" v-show="isVisible('material')"></material-preview>
-  </div>
   <div class="editor-wrap region" v-show="isVisible('')">
     <node-editor></node-editor>
+  </div>
+  <div class="sidebar">
+    <material-preview class="region" v-on:dblclick.prevent.native="setActive('material')" v-show="isVisible('material')"></material-preview>
+    <texture-preview class="region" v-on:dblclick.prevent.native="setActive('texture')" v-show="isVisible('texture')"></texture-preview>
   </div>
 </div>
 </template>
 
 <script>
 import NodeEditor from "./editor/NodeEditor.vue";
-// import TexturePreview from "./TexturePreview.vue";
+import TexturePreview from "./TexturePreview.vue";
 import MaterialPreview from "./MaterialPreview.vue";
 export default {
   data() {
@@ -30,13 +31,13 @@ export default {
   },
   components: {
     NodeEditor,
-    // TexturePreview,
+    TexturePreview,
     MaterialPreview
   }
 };
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 .workspace
   padding: 0.5vh
   margin-top: -2vh;

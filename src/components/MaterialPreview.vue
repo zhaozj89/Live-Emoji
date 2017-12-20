@@ -45,7 +45,7 @@ export class MaterialPreview {
 
     this.mesh = this.createMesh();
 
-    this.loadEnvMap("./static/envMap/", ".jpg");
+    // this.loadEnvMap("./static/envMap/", ".jpg");
     this.loadGeometry("cube");
 
     this.resize();
@@ -213,6 +213,7 @@ export default {
       callback(this.preview.getPreview());
     });
   },
+
   beforeDestroy() {
     window.removeEventListener(
       "resize",
@@ -222,5 +223,5 @@ export default {
 };
 </script>
 
-<style lang="sass">
+<style scoped>
 </style>
