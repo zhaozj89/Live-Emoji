@@ -5,15 +5,14 @@
   </div>
   <div class="sidebar">
     <material-preview class="region" v-on:dblclick.prevent.native="setActive('material')" v-show="isVisible('material')"></material-preview>
-    <texture-preview class="region" v-on:dblclick.prevent.native="setActive('texture')" v-show="isVisible('texture')"></texture-preview>
   </div>
 </div>
 </template>
 
 <script>
 import NodeEditor from "./editor/NodeEditor.vue";
-import TexturePreview from "./TexturePreview.vue";
 import MaterialPreview from "./MaterialPreview.vue";
+
 export default {
   data() {
     return {
@@ -31,7 +30,7 @@ export default {
   },
   components: {
     NodeEditor,
-    TexturePreview,
+    // TexturePreview,
     MaterialPreview
   }
 };

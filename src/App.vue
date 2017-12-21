@@ -7,13 +7,13 @@
 
 <script>
 import Test from './components/Test'
-import ElementUITest from './components/ElementUITest'
+// import ElementUITest from './components/ElementUITest'
 import Workspace from './components/Workspace'
 
 export default {
   name: 'app',
   components: {
-    Test, ElementUITest, Workspace
+    Test, Workspace
   }
 }
 </script>

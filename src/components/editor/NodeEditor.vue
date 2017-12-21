@@ -196,11 +196,11 @@ export default {
 
     this.restoreFromStorage();
 
-    if (this.editor.nodes.length === 0) {
-      fetch("./projects/guide.mtr")
-      .then(resp => resp.json())
-      .then(proj => this.import(proj.data,proj.name));
-    }
+    // if (this.editor.nodes.length === 0) {
+    //   fetch("./projects/guide.mtr")
+    //   .then(resp => resp.json())
+    //   .then(proj => this.import(proj.data,proj.name));
+    // }
 
   }
 };
