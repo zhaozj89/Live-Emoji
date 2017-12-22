@@ -1,21 +1,19 @@
-# frontend
+# frame.js
 
-> A Vue.js project
+Work in progress.
 
-## Build Setup
+### Editor
 
-``` bash
-# install dependencies
-npm install
+* [http://mrdoob.github.io/frame.js/editor/](http://mrdoob.github.io/frame.js/editor/)
 
-# serve with hot reload at localhost:8080
-npm run dev
+### Examples
 
-# build for production with minification
-npm run build
+* [http://mrdoob.github.io/frame.js/player/?file=../examples/html_colors.json](http://mrdoob.github.io/frame.js/player/?file=../examples/html_colors.json)
+* [http://mrdoob.github.io/frame.js/player/?file=../examples/threejs_cube.json](http://mrdoob.github.io/frame.js/player/?file=../examples/threejs_cube.json)
+* [http://mrdoob.github.io/frame.js/player/?file=../examples/threejs_shaders.json](http://mrdoob.github.io/frame.js/player/?file=../examples/threejs_shaders.json)
 
-# build for production and view the bundle analyzer report
-npm run build --report
-```
+### Projects
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+* [https://with.in/watch/under-neon-lights/](https://with.in/watch/under-neon-lights/) ([editor](https://within-unlimited.github.io/under-neon-lights/))
+* [http://fernandojsg.com/lab/thiswayjs/](http://fernandojsg.com/lab/thiswayjs/)
+* [http://xplsv.github.io/obsidian/](http://xplsv.github.io/obsidian/)
