@@ -1,248 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>frame.js / editor</title>
-		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-	</head>
-	<body ontouchstart="">
-		<link href="css/main.css" rel="stylesheet" />
-		<link id="theme" href="css/dark.css" rel="stylesheet" />
+<head>
+	<meta charset="utf-8">
+	<title>frame.js / editor</title>
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+</head>
+<body ontouchstart="">
+<link href="css/main.css" rel="stylesheet"/>
+<link id="theme" href="css/dark.css" rel="stylesheet"/>
 
-		<link rel="stylesheet" href="js/libs/codemirror/codemirror.css">
-		<link rel="stylesheet" href="js/libs/codemirror/theme/monokai.css">
-		<script src="js/libs/codemirror/codemirror.js"></script>
-		<script src="js/libs/codemirror/mode/javascript.js"></script>
+<link rel="stylesheet" href="js/libs/codemirror/codemirror.css">
+<link rel="stylesheet" href="js/libs/codemirror/theme/monokai.css">
+<script src="js/libs/codemirror/codemirror.js"></script>
+<script src="js/libs/codemirror/mode/javascript.js"></script>
 
-		<script src="js/libs/signals.min.js"></script>
-		<script src="js/libs/ui.js"></script>
+<script src="js/libs/signals.min.js"></script>
+<script src="js/libs/ui.js"></script>
 
-		<script src="js/Editor.js"></script>
-		<script src="js/Code.js"></script>
-		<script src="js/Config.js"></script>
-		<script src="js/Menubar.js"></script>
-		<script src="js/Menubar.File.js"></script>
-		<script src="js/Menubar.Edit.js"></script>
-		<script src="js/Menubar.Examples.js"></script>
-		<script src="js/Menubar.Help.js"></script>
-		<script src="js/Sidebar.js"></script>
-		<script src="js/Sidebar.Animation.js"></script>
-		<script src="js/Sidebar.Project.js"></script>
-		<script src="js/Sidebar.Settings.js"></script>
-		<script src="js/Viewport.js"></script>
-		<script src="js/Controls.js"></script>
-		<script src="js/Timeline.js"></script>
-		<script src="js/Timeline.Animations.js"></script>
-		<script src="js/Timeline.Curves.js"></script>
+<script src="js/Editor.js"></script>
+<script src="js/Code.js"></script>
+<script src="js/Config.js"></script>
+<script src="js/Menubar.js"></script>
+<script src="js/Menubar.File.js"></script>
+<script src="js/Menubar.Edit.js"></script>
+<script src="js/Menubar.Examples.js"></script>
+<script src="js/Menubar.Help.js"></script>
+<script src="js/Sidebar.js"></script>
+<script src="js/Sidebar.Animation.js"></script>
+<script src="js/Sidebar.Project.js"></script>
+<script src="js/Sidebar.Settings.js"></script>
+<script src="js/Viewport.js"></script>
+<script src="js/Controls.js"></script>
+<script src="js/Timeline.js"></script>
+<script src="js/Timeline.Animations.js"></script>
+<script src="js/Timeline.Curves.js"></script>
 
-		<script src="../src/Frame.js"></script>
-    <script src="../examples/js/libs/three.min.js"></script>
-		<!-- Project specific files -->
+<script src="../src/Frame.js"></script>
+<script src="../examples/js/libs/three.min.js"></script>
+<!-- Project specific files -->
 
-		<script>
+<script>
 
 
-			var editor = new Editor();
+	var editor = new Editor();
 
-			var viewport = new Viewport( editor );
-			document.body.appendChild( viewport.dom );
+	var viewport = new Viewport(editor);
+	document.body.appendChild(viewport.dom);
 
-			var code = new Code( editor );
-			document.body.appendChild( code.dom );
+	var code = new Code(editor);
+	document.body.appendChild(code.dom);
 
-			var sidebar = new Sidebar( editor );
-			document.body.appendChild( sidebar.dom );
+	var sidebar = new Sidebar(editor);
+	document.body.appendChild(sidebar.dom);
 
-			var controls = new Controls( editor );
-			document.body.appendChild( controls.dom );
+	var controls = new Controls(editor);
+	document.body.appendChild(controls.dom);
 
-			var timeline = new Timeline( editor );
-			document.body.appendChild( timeline.dom );
+	var timeline = new Timeline(editor);
+	document.body.appendChild(timeline.dom);
 
-			var menubar = new Menubar( editor );
-			document.body.appendChild( menubar.dom );
+	var menubar = new Menubar(editor);
+	document.body.appendChild(menubar.dom);
 
-			// LocalStorage
+	// LocalStorage
 
-			editor.signals.animationAdded.add( saveState );
-			editor.signals.animationModified.add( saveState );
-			editor.signals.animationRemoved.add( saveState );
-			editor.signals.animationRenamed.add( saveState );
-			editor.signals.effectCompiled.add( saveState );
-			editor.signals.effectRenamed.add( saveState );
-			editor.signals.includeChanged.add( saveState );
-			editor.signals.includeRemoved.add( saveState );
-			editor.signals.editorCleared.add( saveState );
+	editor.signals.animationAdded.add(saveState);
+	editor.signals.animationModified.add(saveState);
+	editor.signals.animationRemoved.add(saveState);
+	editor.signals.animationRenamed.add(saveState);
+	editor.signals.effectCompiled.add(saveState);
+	editor.signals.effectRenamed.add(saveState);
+	editor.signals.includeChanged.add(saveState);
+	editor.signals.includeRemoved.add(saveState);
+	editor.signals.editorCleared.add(saveState);
 
-			var timeout;
+	var timeout;
 
-			function saveState() {
+	function saveState() {
 
-				clearTimeout( timeout );
+		clearTimeout(timeout);
 
-				timeout = setTimeout( function () {
+		timeout = setTimeout(function () {
 
-					editor.config.setKey( 'state', JSON.stringify( editor.toJSON() ) );
+			editor.config.setKey('state', JSON.stringify(editor.toJSON()));
 
-				}, 1000 );
+		}, 1000);
 
+	}
+
+	//
+
+	var state = editor.config.getKey('state');
+
+	if (state !== undefined) {
+
+		editor.fromJSON(JSON.parse(state));
+
+	}
+
+	// Short-cuts
+
+	document.addEventListener('keydown', function (event) {
+
+		if (event.metaKey || event.ctrlKey) {
+
+			switch (event.keyCode) {
+				case 83: // prevent CMD + S
+					event.preventDefault();
+					break;
+				case 69: // CMD + E to export
+					event.preventDefault();
+					editor.signals.exportState.dispatch();
+					break;
 			}
 
-			//
+			return;
 
-			var state = editor.config.getKey( 'state' );
+		}
 
-			if ( state !== undefined ) {
+		switch (event.keyCode) {
 
-				editor.fromJSON( JSON.parse( state ) );
-
-			}
-
-			// Short-cuts
-
-			document.addEventListener( 'keydown', function ( event ) {
-
-				if ( event.metaKey || event.ctrlKey ) {
-
-					switch ( event.keyCode ) {
-						case 83: // prevent CMD + S
-							event.preventDefault();
-							break;
-						case 69: // CMD + E to export
-							event.preventDefault();
-							editor.signals.exportState.dispatch();
-							break;
-					}
-
-					return;
-
-				}
-
-				switch ( event.keyCode ) {
-
-					case 8: // prevent browser back
-						event.preventDefault();
-						break;
-					case 32:
-						editor.player.isPlaying ? editor.stop() : editor.play();
-						break;
-					case 37:
-						event.preventDefault();
-						editor.setTime( editor.player.currentTime - editor.player.playbackRate );
-						break;
-					case 39:
-						event.preventDefault();
-						editor.setTime( editor.player.currentTime + editor.player.playbackRate );
-						break;
-					case 38:
-						event.preventDefault();
-						editor.speedUp();
-						break;
-					case 40:
-						event.preventDefault();
-						editor.speedDown();
-						break;
-					case 83:
-						break;
-
-				}
-
-			} );
-
-			// Drop
-
-			document.addEventListener( 'dragover', function ( event ) {
-
+			case 8: // prevent browser back
 				event.preventDefault();
-				event.dataTransfer.dropEffect = 'copy';
-
-			}, false );
-
-			document.addEventListener( 'drop', function ( event ) {
-
+				break;
+			case 32:
+				editor.player.isPlaying ? editor.stop() : editor.play();
+				break;
+			case 37:
 				event.preventDefault();
+				editor.setTime(editor.player.currentTime - editor.player.playbackRate);
+				break;
+			case 39:
+				event.preventDefault();
+				editor.setTime(editor.player.currentTime + editor.player.playbackRate);
+				break;
+			case 38:
+				event.preventDefault();
+				editor.speedUp();
+				break;
+			case 40:
+				event.preventDefault();
+				editor.speedDown();
+				break;
+			case 83:
+				break;
 
-				if ( event.dataTransfer.files.length > 0 ) {
+		}
 
-					var reader = new FileReader();
-					reader.addEventListener( 'load', function ( event ) {
+	});
 
-						if ( confirm( 'Any unsaved data will be lost. Are you sure?' ) ) {
+	// Drop
 
-							editor.clear();
-							editor.fromJSON( JSON.parse( event.target.result ) );
+	document.addEventListener('dragover', function (event) {
 
-						}
+		event.preventDefault();
+		event.dataTransfer.dropEffect = 'copy';
 
-					}, false );
-					reader.readAsText( event.dataTransfer.files[ 0 ] );
+	}, false);
+
+	document.addEventListener('drop', function (event) {
+
+		event.preventDefault();
+
+		if (event.dataTransfer.files.length > 0) {
+
+			var reader = new FileReader();
+			reader.addEventListener('load', function (event) {
+
+				if (confirm('Any unsaved data will be lost. Are you sure?')) {
+
+					editor.clear();
+					editor.fromJSON(JSON.parse(event.target.result));
 
 				}
 
-			}, false );
+			}, false);
+			reader.readAsText(event.dataTransfer.files[0]);
 
-			//
+		}
 
-			window.addEventListener( 'resize', function () {
+	}, false);
 
-				editor.signals.windowResized.dispatch();
+	//
 
-			} );
+	window.addEventListener('resize', function () {
 
-			editor.signals.windowResized.dispatch();
+		editor.signals.windowResized.dispatch();
+
+	});
+
+	editor.signals.windowResized.dispatch();
 
 
-			/// my code goes here
-      var camera, scene, renderer;
-      var geometry, material, mesh;
+	/// my code goes here
+	var camera, scene, renderer;
+	var geometry, material, mesh;
+	window.addEventListener('load', function () {
 
-      window.addEventListener('load', function () {
-        let dom = viewport.dom;
-        let width = dom.clientWidth;
-        let height = dom.clientHeight;
+		let dom = viewport.dom;
+		let width = dom.clientWidth;
+		let height = dom.clientHeight;
 
-        init(dom, width, height);
-        animate();
-      });
+		init(dom, width, height);
+		animate();
+	});
 
-      window.addEventListener('resize', function () {
-        let dom = viewport.dom;
-        let width = dom.clientWidth;
-        let height = dom.clientHeight;
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-        renderer.setSize( width, height );
-      });
+	window.addEventListener('resize', function () {
+		let dom = viewport.dom;
+		let width = dom.clientWidth;
+		let height = dom.clientHeight;
+		camera.aspect = width / height;
+		camera.updateProjectionMatrix();
+		renderer.setSize(width, height);
+	});
 
-      function init(dom, width, height) {
+	function init(dom, width, height) {
 
-        camera = new THREE.PerspectiveCamera( 70, width / height, 0.01, 10 );
-        camera.position.z = 1;
+		camera = new THREE.PerspectiveCamera(70, width / height, 0.01, 10);
+		camera.position.z = 1;
 
-        scene = new THREE.Scene();
+		scene = new THREE.Scene();
 
-        geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-        material = new THREE.MeshNormalMaterial();
+		geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+		material = new THREE.MeshNormalMaterial();
 
-        mesh = new THREE.Mesh( geometry, material );
-        scene.add( mesh );
+		mesh = new THREE.Mesh(geometry, material);
+		scene.add(mesh);
 
-        renderer = new THREE.WebGLRenderer( { antialias: true } );
-        renderer.setSize( width, height );
-        dom.appendChild( renderer.domElement );
+		renderer = new THREE.WebGLRenderer({antialias: true});
+		renderer.setSize(width, height);
+		dom.appendChild(renderer.domElement);
 
-      }
+	}
 
-      function animate() {
+	function animate() {
 
-        requestAnimationFrame( animate );
+		requestAnimationFrame(animate);
 
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.02;
+		mesh.rotation.x += 0.01;
+		mesh.rotation.y += 0.02;
 
-        renderer.render( scene, camera );
+		renderer.render(scene, camera);
 
-      }
-		</script>
-	</body>
+	}
+</script>
+</body>
 </html>
