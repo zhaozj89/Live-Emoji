@@ -47,21 +47,49 @@ Menubar.File = function (editor) {
 	fileInput.addEventListener('change', function (event) {
 
 		var reader = new FileReader();
-		reader.addEventListener('load', function (event) {
+		console.log(this.files[0].name);
+		// reader.addEventListener('load', function (event) {
 
-			editor.clear();
-			editor.fromJSON(JSON.parse(event.target.result));
+			// editor.clear();
+			// editor.fromJSON(JSON.parse(event.target.result));
 
-		}, false);
+			// console.log(event);
 
-		reader.readAsText(fileInput.files[0]);
+		// }, false);
+		//
+		// reader.readAsText(fileInput.files[0]);
+
+		let loader = new THREE.ImageLoader();
+		loader.load(
+			'../test/' + this.files[0].name, // all imported files should be in ../test
+
+			// onLoad callback
+			function ( image ) {
+				// use the image, e.g. draw part of it on a canvas
+				var canvas = document.createElement( 'canvas' );
+				var context = canvas.getContext( '2d' );
+				context.drawImage( image, 10, 10 );
+
+				document.body.appendChild(canvas);
+
+				console.log(canvas.clientHeight);
+			},
+
+			// onProgress callback currently not supported
+			undefined,
+
+			// onError callback
+			function () {
+				console.error( 'An error happened.' );
+			}
+		);
 
 	});
 
 	function Import() {
 
-		if (confirm('Any unsaved data will be lost. Are you sure?'))
-			fileInput.click();
+		// if (confirm('Any unsaved data will be lost. Are you sure?'))
+		fileInput.click();
 
 	}
 
