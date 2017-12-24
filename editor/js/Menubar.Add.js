@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Menubar.Add = function ( editor ) {
+Menubar.Add = function (editor) {
 
 	var container = new UI.Panel();
 	container.setClass( 'menu' );
@@ -198,7 +198,7 @@ Menubar.Add = function ( editor ) {
 	var option = new UI.Row();
 	option.setClass( 'option' );
 	option.setTextContent( 'Lathe' );
-	option.onClick( function() {
+	option.onClick( function () {
 
 		var points = [
 			new THREE.Vector2( 0, 0 ),
@@ -215,7 +215,7 @@ Menubar.Add = function ( editor ) {
 		];
 
 		var geometry = new THREE.LatheBufferGeometry( points, 12, 0, Math.PI * 2 );
-		var mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial( { side: THREE.DoubleSide } ) );
+		var mesh = new THREE.Mesh( geometry, new THREE.MeshStandardMaterial( {side: THREE.DoubleSide} ) );
 		mesh.name = 'Lathe';
 
 		editor.execute( new AddObjectCommand( mesh ) );
@@ -332,7 +332,7 @@ Menubar.Add = function ( editor ) {
 	var option = new UI.Row();
 	option.setClass( 'option' );
 	option.setTextContent( 'AmbientLight' );
-	option.onClick( function() {
+	option.onClick( function () {
 
 		var color = 0x222222;
 
@@ -344,7 +344,20 @@ Menubar.Add = function ( editor ) {
 	} );
 	options.add( option );
 
-	//
+	// ImageMesh
+
+	var option = new UI.Row();
+	option.setClass( 'option' );
+	option.setTextContent( 'ImageMesh' );
+	option.onClick( function () {
+		var color = 0x222222;
+
+		var light = new THREE.AmbientLight( color );
+		light.name = 'AmbientLight';
+
+		editor.execute( new AddObjectCommand( light ) );
+	} );
+	options.add( option );
 
 	options.add( new UI.HorizontalRule() );
 
@@ -353,7 +366,7 @@ Menubar.Add = function ( editor ) {
 	var option = new UI.Row();
 	option.setClass( 'option' );
 	option.setTextContent( 'PerspectiveCamera' );
-	option.onClick( function() {
+	option.onClick( function () {
 
 		var camera = new THREE.PerspectiveCamera( 50, 1, 1, 10000 );
 		camera.name = 'PerspectiveCamera';

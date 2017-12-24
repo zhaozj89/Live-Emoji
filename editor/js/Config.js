@@ -5,8 +5,8 @@
 var Config = function ( name ) {
 
 	var storage = {
-		'autosave': true,
-		'theme': 'css/light.css',
+		'autosave': false,
+		'theme': 'css/dark.css',
 
 		'project/title': '',
 		'project/editable': false,
