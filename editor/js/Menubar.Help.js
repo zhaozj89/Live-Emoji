@@ -4,8 +4,6 @@
 
 Menubar.Help = function ( editor ) {
 
-	var signals = editor.signals;
-
 	var container = new UI.Panel();
 	container.setClass( 'menu' );
 
@@ -14,28 +12,34 @@ Menubar.Help = function ( editor ) {
 	title.setTextContent( 'Help' );
 	container.add( title );
 
-	//
-
 	var options = new UI.Panel();
 	options.setClass( 'options' );
 	container.add( options );
 
-	// source code
+	// Source code
 
-	var option = new UI.Panel();
+	var option = new UI.Row();
 	option.setClass( 'option' );
 	option.setTextContent( 'Source code' );
-	option.onClick( function () { window.open( 'https://github.com/mrdoob/frame.js/tree/master/editor', '_blank' ) } );
+	option.onClick( function () {
+
+		window.open( 'https://github.com/mrdoob/three.js/tree/master/editor', '_blank' )
+
+	} );
 	options.add( option );
 
-	// about
+	// About
 
-	var option = new UI.Panel();
+	var option = new UI.Row();
 	option.setClass( 'option' );
 	option.setTextContent( 'About' );
-	option.onClick( function () { window.open( 'http://github.com/mrdoob/frame.js/', '_blank' ) } );
+	option.onClick( function () {
+
+		window.open( 'http://threejs.org', '_blank' );
+
+	} );
 	options.add( option );
 
 	return container;
 
-}
+};

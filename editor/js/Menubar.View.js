@@ -12,24 +12,30 @@ Menubar.View = function ( editor ) {
 	title.setTextContent( 'View' );
 	container.add( title );
 
-	//
-
 	var options = new UI.Panel();
 	options.setClass( 'options' );
 	container.add( options );
 
-	// remove
+	// VR mode
 
-	var option = new UI.Panel();
+	var option = new UI.Row();
 	option.setClass( 'option' );
-	option.setTextContent( 'Fullscreen' );
+	option.setTextContent( 'VR mode' );
 	option.onClick( function () {
 
-		editor.signals.fullscreen.dispatch();
+		if ( WEBVR.isAvailable() === true ) {
+
+			editor.signals.enterVR.dispatch();
+
+		} else {
+
+			alert( 'WebVR not available' );
+
+		}
 
 	} );
 	options.add( option );
 
 	return container;
 
-}
+};

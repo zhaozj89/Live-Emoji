@@ -4,140 +4,178 @@
 
 Sidebar.Project = function ( editor ) {
 
+	var config = editor.config;
 	var signals = editor.signals;
 
+	var rendererTypes = {
+
+		'WebGLRenderer': THREE.WebGLRenderer,
+		'CanvasRenderer': THREE.CanvasRenderer,
+		'SVGRenderer': THREE.SVGRenderer,
+		'SoftwareRenderer': THREE.SoftwareRenderer,
+		'RaytracingRenderer': THREE.RaytracingRenderer
+
+	};
+
 	var container = new UI.Panel();
-	container.setId( 'project' );
+	container.setBorderTop( '0' );
+	container.setPaddingTop( '20px' );
 
-	// Libraries
+	// Title
 
-	container.add( new UI.Text( 'Libraries' ).setTextTransform( 'uppercase' ) );
-	container.add( new UI.Break(), new UI.Break() );
+	var titleRow = new UI.Row();
+	var title = new UI.Input( config.getKey( 'project/title' ) ).setLeft( '100px' ).onChange( function () {
 
-	var libraries = new UI.Select().setMultiple( true ).setWidth( '280px' );
-	container.add( libraries );
-
-	container.add( new UI.Break(), new UI.Break() );
-
-	// Scripts
-
-	container.add( new UI.Text( 'Scripts' ).setTextTransform( 'uppercase' ) );
-	container.add( new UI.Break(), new UI.Break() );
-
-	var includesContainer = new UI.Row();
-	container.add( includesContainer );
-
-	var newInclude = new UI.Button( 'New' );
-	newInclude.onClick( function () {
-
-		editor.addInclude( 'Name', '' );
-
-		update();
+		config.setKey( 'project/title', this.getValue() );
 
 	} );
-	container.add( newInclude );
 
-	/*
-	var cleanEffects = new UI.Button( 'Clean Effects' );
-	cleanEffects.onClick( function () {
+	titleRow.add( new UI.Text( 'Title' ).setWidth( '90px' ) );
+	titleRow.add( title );
 
-		editor.cleanEffects();
+	container.add( titleRow );
 
-	} );
-	cleanEffects.setMarginLeft( '4px' );
-	container.add( cleanEffects );
-	*/
+	// Editable
 
-	var reload = new UI.Button( 'Reload Scripts' );
-	reload.onClick( function () {
+	var editableRow = new UI.Row();
+	var editable = new UI.Checkbox( config.getKey( 'project/editable' ) ).setLeft( '100px' ).onChange( function () {
 
-		editor.reloadIncludes();
-
-		var effects = editor.effects;
-
-		for ( var j = 0; j < effects.length; j++ ) {
-
-			var effect = effects[ j ];
-			editor.compileEffect( effect );
-
-		}
-
-		editor.timeline.reset();
-		editor.timeline.update( editor.player.currentTime );
+		config.setKey( 'project/editable', this.getValue() );
 
 	} );
-	reload.setMarginLeft( '4px' );
-	container.add( reload );
 
-	//
+	editableRow.add( new UI.Text( 'Editable' ).setWidth( '90px' ) );
+	editableRow.add( editable );
 
-	function buildInclude( id ) {
+	container.add( editableRow );
 
-		var include = editor.includes[ id ];
+	// VR
 
-		var span = new UI.Span();
+	var vrRow = new UI.Row();
+	var vr = new UI.Checkbox( config.getKey( 'project/vr' ) ).setLeft( '100px' ).onChange( function () {
 
-		var name = new UI.Input( include.name ).setWidth( '130px' ).setFontSize( '12px' );
-		name.onChange( function () {
+		config.setKey( 'project/vr', this.getValue() );
 
-			include.name = this.getValue();
+	} );
 
-		} );
-		span.add( name );
+	vrRow.add( new UI.Text( 'VR' ).setWidth( '90px' ) );
+	vrRow.add( vr );
 
-		var edit = new UI.Button( 'Edit' );
-		edit.setMarginLeft( '4px' );
-		edit.onClick( function () {
+	container.add( vrRow );
 
-			editor.selectInclude( include );
+	// Renderer
 
-		} );
-		span.add( edit );
+	var options = {};
 
-		var remove = new UI.Button( 'Remove' );
-		remove.setMarginLeft( '4px' );
-		remove.onClick( function () {
+	for ( var key in rendererTypes ) {
 
-			if ( confirm( 'Are you sure?' ) ) {
+		if ( key.indexOf( 'WebGL' ) >= 0 && System.support.webgl === false ) continue;
 
-				editor.removeInclude( include );
-
-			}
-
-		} );
-		span.add( remove );
-
-		return span;
+		options[ key ] = key;
 
 	}
 
-	//
+	var rendererTypeRow = new UI.Row();
+	var rendererType = new UI.Select().setOptions( options ).setWidth( '150px' ).onChange( function () {
 
-	function update() {
+		var value = this.getValue();
 
-		libraries.setOptions( editor.libraries );
-		libraries.dom.size = editor.libraries.length;
+		config.setKey( 'project/renderer', value );
 
-		//
+		updateRenderer();
 
-		includesContainer.clear();
+	} );
 
-		var includes = editor.includes;
+	rendererTypeRow.add( new UI.Text( 'Renderer' ).setWidth( '90px' ) );
+	rendererTypeRow.add( rendererType );
 
-		for ( var i = 0; i < includes.length; i ++ ) {
+	container.add( rendererTypeRow );
 
-			includesContainer.add( buildInclude( i ) );
+	if ( config.getKey( 'project/renderer' ) !== undefined ) {
 
-		}
+		rendererType.setValue( config.getKey( 'project/renderer' ) );
 
 	}
 
-	// signals
+	// Renderer / Antialias
 
-	signals.editorCleared.add( update );
-	signals.libraryAdded.add( update );
-	signals.includeAdded.add( update );
-	signals.includeRemoved.add( update );
+	var rendererPropertiesRow = new UI.Row().setMarginLeft( '90px' );
+
+	var rendererAntialias = new UI.THREE.Boolean( config.getKey( 'project/renderer/antialias' ), 'antialias' ).onChange( function () {
+
+		config.setKey( 'project/renderer/antialias', this.getValue() );
+		updateRenderer();
+
+	} );
+	rendererPropertiesRow.add( rendererAntialias );
+
+	// Renderer / Shadows
+
+	var rendererShadows = new UI.THREE.Boolean( config.getKey( 'project/renderer/shadows' ), 'shadows' ).onChange( function () {
+
+		config.setKey( 'project/renderer/shadows', this.getValue() );
+		updateRenderer();
+
+	} );
+	rendererPropertiesRow.add( rendererShadows );
+
+	rendererPropertiesRow.add( new UI.Break() );
+
+	// Renderer / Gamma input
+
+	var rendererGammaInput = new UI.THREE.Boolean( config.getKey( 'project/renderer/gammaInput' ), 'γ input' ).onChange( function () {
+
+		config.setKey( 'project/renderer/gammaInput', this.getValue() );
+		updateRenderer();
+
+	} );
+	rendererPropertiesRow.add( rendererGammaInput );
+
+	// Renderer / Gamma output
+
+	var rendererGammaOutput = new UI.THREE.Boolean( config.getKey( 'project/renderer/gammaOutput' ), 'γ output' ).onChange( function () {
+
+		config.setKey( 'project/renderer/gammaOutput', this.getValue() );
+		updateRenderer();
+
+	} );
+	rendererPropertiesRow.add( rendererGammaOutput );
+
+	container.add( rendererPropertiesRow );
+
+	//
+
+	function updateRenderer() {
+
+		createRenderer( rendererType.getValue(), rendererAntialias.getValue(), rendererShadows.getValue(), rendererGammaInput.getValue(), rendererGammaOutput.getValue() );
+
+	}
+
+	function createRenderer( type, antialias, shadows, gammaIn, gammaOut ) {
+
+		if ( type === 'WebGLRenderer' && System.support.webgl === false ) {
+
+			type = 'CanvasRenderer';
+
+		}
+
+		rendererPropertiesRow.setDisplay( type === 'WebGLRenderer' ? '' : 'none' );
+
+		var renderer = new rendererTypes[ type ]( { antialias: antialias} );
+		renderer.gammaInput = gammaIn;
+		renderer.gammaOutput = gammaOut;
+		if ( shadows && renderer.shadowMap ) {
+
+			renderer.shadowMap.enabled = true;
+			// renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+		}
+
+		signals.rendererChanged.dispatch( renderer );
+
+	}
+
+	createRenderer( config.getKey( 'project/renderer' ), config.getKey( 'project/renderer/antialias' ), config.getKey( 'project/renderer/shadows' ), config.getKey( 'project/renderer/gammaInput' ), config.getKey( 'project/renderer/gammaOutput' ) );
 
 	return container;
 

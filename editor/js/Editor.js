@@ -4,286 +4,413 @@
 
 var Editor = function () {
 
+	this.DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.01, 1000 );
+	this.DEFAULT_CAMERA.name = 'Camera';
+	this.DEFAULT_CAMERA.position.set( 20, 10, 20 );
+	this.DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
+
 	var Signal = signals.Signal;
 
 	this.signals = {
 
-		editorCleared: new Signal(),
+		// script
 
-		// libraries
+		editScript: new Signal(),
 
-		libraryAdded: new Signal(),
+		// player
 
-		// includes
-
-		includeAdded: new Signal(),
-		includeSelected: new Signal(),
-		includeChanged: new Signal(),
-		includeRemoved: new Signal(),
-		includesCleared: new Signal(),
-
-		// effects
-
-		effectRenamed: new Signal(),
-		effectRemoved: new Signal(),
-		effectSelected: new Signal(),
-		effectCompiled: new Signal(),
+		startPlayer: new Signal(),
+		stopPlayer: new Signal(),
 
 		// actions
 
-		fullscreen: new Signal(),
-		exportState: new Signal(),
+		showModal: new Signal(),
 
-		// animations
+		// notifications
 
-		animationRenamed: new Signal(),
-		animationAdded: new Signal(),
-		animationModified: new Signal(),
-		animationRemoved: new Signal(),
-		animationSelected: new Signal(),
+		editorCleared: new Signal(),
 
-		// curves
+		savingStarted: new Signal(),
+		savingFinished: new Signal(),
 
-		curveAdded: new Signal(),
+		themeChanged: new Signal(),
 
-		// events
+		transformModeChanged: new Signal(),
+		snapChanged: new Signal(),
+		spaceChanged: new Signal(),
+		rendererChanged: new Signal(),
 
-		playingChanged: new Signal(),
-		playbackRateChanged: new Signal(),
-		timeChanged: new Signal(),
-		timelineScaled: new Signal(),
+		sceneBackgroundChanged: new Signal(),
+		sceneFogChanged: new Signal(),
+		sceneGraphChanged: new Signal(),
 
-		windowResized: new Signal()
+		cameraChanged: new Signal(),
+
+		geometryChanged: new Signal(),
+
+		objectSelected: new Signal(),
+		objectFocused: new Signal(),
+
+		objectAdded: new Signal(),
+		objectChanged: new Signal(),
+		objectRemoved: new Signal(),
+
+		helperAdded: new Signal(),
+		helperRemoved: new Signal(),
+
+		materialChanged: new Signal(),
+
+		scriptAdded: new Signal(),
+		scriptChanged: new Signal(),
+		scriptRemoved: new Signal(),
+
+		windowResize: new Signal(),
+
+		showGridChanged: new Signal(),
+		refreshSidebarObject3D: new Signal(),
+		historyChanged: new Signal()
 
 	};
 
-	this.config = new Config( 'framejs-editor' );
+	this.config = new Config( 'threejs-editor' );
+	this.history = new History( this );
+	this.storage = new Storage();
+	this.loader = new Loader( this );
 
-	this.player = new FRAME.Player();
-	this.resources = new FRAME.Resources();
+	this.camera = this.DEFAULT_CAMERA.clone();
 
-	this.duration = 500;
+	this.scene = new THREE.Scene();
+	this.scene.name = 'Scene';
+	this.scene.background = new THREE.Color( 0xaaaaaa );
 
-	this.libraries = [];
-	this.includes = [];
-	this.effects = [];
-	this.timeline = new FRAME.Timeline();
+	this.sceneHelpers = new THREE.Scene();
+
+	this.object = {};
+	this.geometries = {};
+	this.materials = {};
+	this.textures = {};
+	this.scripts = {};
 
 	this.selected = null;
-
-	// signals
-
-	var scope = this;
-
-	this.signals.animationModified.add( function () {
-
-		scope.timeline.reset();
-		scope.timeline.sort();
-		scope.timeline.update( scope.player.currentTime );
-
-	} );
-
-	this.signals.effectCompiled.add( function () {
-
-		scope.timeline.update( scope.player.currentTime );
-
-	} );
-
-	this.signals.timeChanged.add( function () {
-
-		scope.timeline.update( scope.player.currentTime );
-
-	} );
-
-	// Animate
-
-	var prevTime = 0;
-
-	function animate( time ) {
-
-		scope.player.tick( time - prevTime );
-
-		if ( scope.player.isPlaying ) {
-
-			scope.signals.timeChanged.dispatch( scope.player.currentTime );
-
-		}
-
-		prevTime = time;
-
-		requestAnimationFrame( animate );
-
-	}
-
-	requestAnimationFrame( animate );
+	this.helpers = {};
 
 };
 
 Editor.prototype = {
 
-	play: function () {
+	setTheme: function ( value ) {
 
-		this.player.play();
-		this.signals.playingChanged.dispatch( true );
+		document.getElementById( 'theme' ).href = value;
 
-	},
-
-	stop: function () {
-
-		this.player.pause();
-		this.signals.playingChanged.dispatch( false );
+		this.signals.themeChanged.dispatch( value );
 
 	},
 
-	speedUp: function () {
+	//
 
-		this.player.playbackRate += 0.1;
-		this.signals.playbackRateChanged.dispatch( this.player.playbackRate );
+	setScene: function ( scene ) {
 
-	},
+		this.scene.uuid = scene.uuid;
+		this.scene.name = scene.name;
 
-	speedDown: function () {
+		if ( scene.background !== null ) this.scene.background = scene.background.clone();
+		if ( scene.fog !== null ) this.scene.fog = scene.fog.clone();
 
-		this.player.playbackRate -= 0.1;
-		this.signals.playbackRateChanged.dispatch( this.player.playbackRate );
+		this.scene.userData = JSON.parse( JSON.stringify( scene.userData ) );
 
-	},
+		// avoid render per object
 
-	setTime: function ( time ) {
+		this.signals.sceneGraphChanged.active = false;
 
-		// location.hash = time;
+		while ( scene.children.length > 0 ) {
 
-		this.player.currentTime = Math.max( 0, time );
-		this.signals.timeChanged.dispatch( this.player.currentTime );
-
-	},
-
-	// libraries
-
-	addLibrary: function ( url, content ) {
-
-		var script = document.createElement( 'script' );
-		script.id = 'library-' + this.libraries.length;
-		script.textContent = content;
-		document.head.appendChild( script );
-
-		this.libraries.push( url );
-		this.signals.libraryAdded.dispatch();
-
-	},
-
-	// includes
-
-	addInclude: function ( name, source ) {
-
-		try {
-			new Function( 'resources', source )( this.resources );
-		} catch ( e ) {
-			console.error( e );
-		}
-
-		this.includes.push( { name: name, source: source } );
-		this.signals.includeAdded.dispatch();
-
-	},
-
-	removeInclude: function ( include ) {
-
-		var index = this.includes.indexOf( include );
-
-		this.includes.splice( index, 1 );
-		this.signals.includeRemoved.dispatch();
-
-	},
-
-	selectInclude: function ( include ) {
-
-		this.signals.includeSelected.dispatch( include );
-
-	},
-
-	reloadIncludes: function () {
-
-		var includes = this.includes;
-
-		this.signals.includesCleared.dispatch();
-
-		for ( var i = 0; i < includes.length; i ++ ) {
-
-			var include = includes[ i ];
-
-			try {
-				new Function( 'resources', include.source )( this.resources );
-			} catch ( e ) {
-				console.error( e );
-			}
+			this.addObject( scene.children[ 0 ] );
 
 		}
 
-	},
-
-	// effects
-
-	addEffect: function ( effect ) {
-
-		this.effects.push( effect );
+		this.signals.sceneGraphChanged.active = true;
+		this.signals.sceneGraphChanged.dispatch();
 
 	},
 
-	selectEffect: function ( effect ) {
+	//
 
-		this.signals.effectSelected.dispatch( effect );
-
-	},
-
-	removeEffect: function ( effect ) {
-
-		var index = this.effects.indexOf( effect );
-
-		if ( index >= 0 ) {
-
-			this.effects.splice( index, 1 );
-			this.signals.effectRemoved.dispatch( effect );
-
-		}
-
-	},
-
-	compileEffect: function ( effect ) {
-
-		effect.compile( this.resources, this.player );
-		editor.signals.effectCompiled.dispatch();
-
-	},
-
-	// Remove any effects that are not bound to any animations.
-
-	cleanEffects: function () {
+	addObject: function ( object ) {
 
 		var scope = this;
-		var effects = this.effects.slice( 0 );
-		var animations = this.timeline.animations;
 
-		effects.forEach( function ( effect, i ) {
+		object.traverse( function ( child ) {
 
-			var bound = false;
+			if ( child.geometry !== undefined ) scope.addGeometry( child.geometry );
+			if ( child.material !== undefined ) scope.addMaterial( child.material );
 
-			for ( var j = 0; j < animations.length; j++ ) {
+			scope.addHelper( child );
 
-				var animation = animations[ j ];
+		} );
 
-				if ( animation.effect === effect ) {
+		this.scene.add( object );
 
-					bound = true;
-					break;
+		this.signals.objectAdded.dispatch( object );
+		this.signals.sceneGraphChanged.dispatch();
 
-				}
+	},
+
+	moveObject: function ( object, parent, before ) {
+
+		if ( parent === undefined ) {
+
+			parent = this.scene;
+
+		}
+
+		parent.add( object );
+
+		// sort children array
+
+		if ( before !== undefined ) {
+
+			var index = parent.children.indexOf( before );
+			parent.children.splice( index, 0, object );
+			parent.children.pop();
+
+		}
+
+		this.signals.sceneGraphChanged.dispatch();
+
+	},
+
+	nameObject: function ( object, name ) {
+
+		object.name = name;
+		this.signals.sceneGraphChanged.dispatch();
+
+	},
+
+	removeObject: function ( object ) {
+
+		if ( object.parent === null ) return; // avoid deleting the camera or scene
+
+		var scope = this;
+
+		object.traverse( function ( child ) {
+
+			scope.removeHelper( child );
+
+		} );
+
+		object.parent.remove( object );
+
+		this.signals.objectRemoved.dispatch( object );
+		this.signals.sceneGraphChanged.dispatch();
+
+	},
+
+	addGeometry: function ( geometry ) {
+
+		this.geometries[ geometry.uuid ] = geometry;
+
+	},
+
+	setGeometryName: function ( geometry, name ) {
+
+		geometry.name = name;
+		this.signals.sceneGraphChanged.dispatch();
+
+	},
+
+	addMaterial: function ( material ) {
+
+		this.materials[ material.uuid ] = material;
+
+	},
+
+	setMaterialName: function ( material, name ) {
+
+		material.name = name;
+		this.signals.sceneGraphChanged.dispatch();
+
+	},
+
+	addTexture: function ( texture ) {
+
+		this.textures[ texture.uuid ] = texture;
+
+	},
+
+	//
+
+	addHelper: function () {
+
+		var geometry = new THREE.SphereBufferGeometry( 2, 4, 2 );
+		var material = new THREE.MeshBasicMaterial( { color: 0xff0000, visible: false } );
+
+		return function ( object ) {
+
+			var helper;
+
+			if ( object instanceof THREE.Camera ) {
+
+				helper = new THREE.CameraHelper( object, 1 );
+
+			} else if ( object instanceof THREE.PointLight ) {
+
+				helper = new THREE.PointLightHelper( object, 1 );
+
+			} else if ( object instanceof THREE.DirectionalLight ) {
+
+				helper = new THREE.DirectionalLightHelper( object, 1 );
+
+			} else if ( object instanceof THREE.SpotLight ) {
+
+				helper = new THREE.SpotLightHelper( object, 1 );
+
+			} else if ( object instanceof THREE.HemisphereLight ) {
+
+				helper = new THREE.HemisphereLightHelper( object, 1 );
+
+			} else if ( object instanceof THREE.SkinnedMesh ) {
+
+				helper = new THREE.SkeletonHelper( object );
+
+			} else {
+
+				// no helper for this object type
+				return;
 
 			}
 
-			if ( !bound ) {
+			var picker = new THREE.Mesh( geometry, material );
+			picker.name = 'picker';
+			picker.userData.object = object;
+			helper.add( picker );
 
-				scope.removeEffect( effect );
+			this.sceneHelpers.add( helper );
+			this.helpers[ object.id ] = helper;
+
+			this.signals.helperAdded.dispatch( helper );
+
+		};
+
+	}(),
+
+	removeHelper: function ( object ) {
+
+		if ( this.helpers[ object.id ] !== undefined ) {
+
+			var helper = this.helpers[ object.id ];
+			helper.parent.remove( helper );
+
+			delete this.helpers[ object.id ];
+
+			this.signals.helperRemoved.dispatch( helper );
+
+		}
+
+	},
+
+	//
+
+	addScript: function ( object, script ) {
+
+		if ( this.scripts[ object.uuid ] === undefined ) {
+
+			this.scripts[ object.uuid ] = [];
+
+		}
+
+		this.scripts[ object.uuid ].push( script );
+
+		this.signals.scriptAdded.dispatch( script );
+
+	},
+
+	removeScript: function ( object, script ) {
+
+		if ( this.scripts[ object.uuid ] === undefined ) return;
+
+		var index = this.scripts[ object.uuid ].indexOf( script );
+
+		if ( index !== - 1 ) {
+
+			this.scripts[ object.uuid ].splice( index, 1 );
+
+		}
+
+		this.signals.scriptRemoved.dispatch( script );
+
+	},
+
+	getObjectMaterial: function ( object, slot ) {
+
+		var material = object.material;
+
+		if ( Array.isArray( material ) ) {
+
+			material = material[ slot ];
+
+		}
+
+		return material;
+
+	},
+
+	setObjectMaterial: function ( object, slot, newMaterial ) {
+
+		if ( Array.isArray( object.material ) ) {
+
+			object.material[ slot ] = newMaterial;
+
+		} else {
+
+			object.material = newMaterial;
+
+		}
+
+	},
+
+	//
+
+	select: function ( object ) {
+
+		if ( this.selected === object ) return;
+
+		var uuid = null;
+
+		if ( object !== null ) {
+
+			uuid = object.uuid;
+
+		}
+
+		this.selected = object;
+
+		this.config.setKey( 'selected', uuid );
+		this.signals.objectSelected.dispatch( object );
+
+	},
+
+	selectById: function ( id ) {
+
+		if ( id === this.camera.id ) {
+
+			this.select( this.camera );
+			return;
+
+		}
+
+		this.select( this.scene.getObjectById( id, true ) );
+
+	},
+
+	selectByUuid: function ( uuid ) {
+
+		var scope = this;
+
+		this.scene.traverse( function ( child ) {
+
+			if ( child.uuid === uuid ) {
+
+				scope.select( child );
 
 			}
 
@@ -291,256 +418,140 @@ Editor.prototype = {
 
 	},
 
-	// animations
+	deselect: function () {
 
-	addAnimation: function ( animation ) {
-
-		var effect = animation.effect;
-
-		if ( effect.program === null ) {
-
-			editor.compileEffect( effect );
-
-		}
-
-		this.timeline.add( animation );
-		this.signals.animationAdded.dispatch( animation );
+		this.select( null );
 
 	},
 
-	selectAnimation: function ( animation ) {
+	focus: function ( object ) {
 
-		if ( this.selected === animation ) return;
-
-		this.selected = animation;
-		this.signals.animationSelected.dispatch( animation );
+		this.signals.objectFocused.dispatch( object );
 
 	},
 
-	removeAnimation: function ( animation ) {
+	focusById: function ( id ) {
 
-		this.timeline.remove( animation );
-		this.signals.animationRemoved.dispatch( animation );
-
-	},
-
-	addCurve: function ( curve ) {
-
-		this.timeline.curves.push( curve );
-		this.signals.curveAdded.dispatch( curve );
+		this.focus( this.scene.getObjectById( id, true ) );
 
 	},
 
 	clear: function () {
 
-		this.libraries = [];
-		this.includes = [];
-		this.effects = [];
+		this.history.clear();
+		this.storage.clear();
 
-		while ( this.timeline.animations.length > 0 ) {
+		this.camera.copy( this.DEFAULT_CAMERA );
+		this.scene.background.setHex( 0xaaaaaa );
+		this.scene.fog = null;
 
-			this.removeAnimation( this.timeline.animations[ 0 ] );
+		var objects = this.scene.children;
+
+		while ( objects.length > 0 ) {
+
+			this.removeObject( objects[ 0 ] );
 
 		}
+
+		this.geometries = {};
+		this.materials = {};
+		this.textures = {};
+		this.scripts = {};
+
+		this.deselect();
 
 		this.signals.editorCleared.dispatch();
 
 	},
 
+	//
+
 	fromJSON: function ( json ) {
 
-		function loadFile( url, onLoad ) {
+		var loader = new THREE.ObjectLoader();
 
-			var request = new XMLHttpRequest();
-			request.open( 'GET', url, true );
-			request.addEventListener( 'load', function ( event ) {
+		// backwards
 
-				onLoad( event.target.response );
+		if ( json.scene === undefined ) {
 
-			} );
-			request.send( null );
+			this.setScene( loader.parse( json ) );
+			return;
 
 		}
 
-		function loadLibraries( libraries, onLoad ) {
+		var camera = loader.parse( json.camera );
 
-			var count = 0;
+		this.camera.copy( camera );
+		this.camera.aspect = this.DEFAULT_CAMERA.aspect;
+		this.camera.updateProjectionMatrix();
 
-			function loadNext() {
+		this.history.fromJSON( json.history );
+		this.scripts = json.scripts;
 
-				if ( count === libraries.length ) {
-
-					onLoad();
-					return;
-
-				}
-
-				var url = libraries[ count ++ ];
-
-				loadFile( url, function ( content ) {
-
-					scope.addLibrary( url, content );
-					loadNext();
-
-				} );
-
-			}
-
-			loadNext();
-
-		}
-
-		var scope = this;
-
-		var libraries = json.libraries || [];
-
-		loadLibraries( libraries, function () {
-
-			var includes = json.includes;
-
-			for ( var i = 0, l = includes.length; i < l; i ++ ) {
-
-				var data = includes[ i ];
-
-				var name = data[ 0 ];
-				var source = data[ 1 ];
-
-				if ( Array.isArray( source ) ) source = source.join( '\n' );
-
-				scope.addInclude( name, source );
-
-			}
-
-			var effects = json.effects;
-
-			for ( var i = 0, l = effects.length; i < l; i ++ ) {
-
-				var data = effects[ i ];
-
-				var name = data[ 0 ];
-				var source = data[ 1 ];
-
-				if ( Array.isArray( source ) ) source = source.join( '\n' );
-
-				scope.addEffect( new FRAME.Effect( name, source ) );
-
-			}
-
-			var animations = json.animations;
-
-			for ( var i = 0, l = animations.length; i < l; i ++ ) {
-
-				var data = animations[ i ];
-
-				var animation = new FRAME.Animation(
-					data[ 0 ],
-					data[ 1 ],
-					data[ 2 ],
-					data[ 3 ],
-					scope.effects[ data[ 4 ] ],
-					data[ 5 ]
-				);
-
-				scope.addAnimation( animation );
-
-			}
-
-			scope.setTime( 0 );
-
-		} );
+		this.setScene( loader.parse( json.scene ) );
 
 	},
 
 	toJSON: function () {
 
-		var json = {
-			"config": {},
-			"libraries": this.libraries.slice(),
-			"includes": [],
-			"effects": [],
-			// "curves": [],
-			"animations": []
+		// scripts clean up
+
+		var scene = this.scene;
+		var scripts = this.scripts;
+
+		for ( var key in scripts ) {
+
+			var script = scripts[ key ];
+
+			if ( script.length === 0 || scene.getObjectByProperty( 'uuid', key ) === undefined ) {
+
+				delete scripts[ key ];
+
+			}
+
+		}
+
+		//
+
+		return {
+
+			metadata: {},
+			project: {
+				gammaInput: this.config.getKey( 'project/renderer/gammaInput' ),
+				gammaOutput: this.config.getKey( 'project/renderer/gammaOutput' ),
+				shadows: this.config.getKey( 'project/renderer/shadows' ),
+				vr: this.config.getKey( 'project/vr' )
+			},
+			camera: this.camera.toJSON(),
+			scene: this.scene.toJSON(),
+			scripts: this.scripts,
+			history: this.history.toJSON()
+
 		};
 
-		/*
-		// curves
+	},
 
-		var curves = this.timeline.curves;
+	objectByUuid: function ( uuid ) {
 
-		for ( var i = 0, l = curves.length; i < l; i ++ ) {
+		return this.scene.getObjectByProperty( 'uuid', uuid, true );
 
-			var curve = curves[ i ];
+	},
 
-			if ( curve instanceof FRAME.Curves.Linear ) {
+	execute: function ( cmd, optionalName ) {
 
-				json.curves.push( [ 'linear', curve.points ] );
+		this.history.execute( cmd, optionalName );
 
-			}
+	},
 
-		}
-		*/
+	undo: function () {
 
-		// includes
+		this.history.undo();
 
-		var includes = this.includes;
+	},
 
-		for ( var i = 0, l = includes.length; i < l; i ++ ) {
+	redo: function () {
 
-			var include = includes[ i ];
-
-			var name = include.name;
-			var source = include.source;
-
-			json.includes.push( [ name, source.split( '\n' ) ] );
-
-		}
-
-		// effects
-
-		var effects = this.effects;
-
-		for ( var i = 0, l = effects.length; i < l; i ++ ) {
-
-			var effect = effects[ i ];
-
-			var name = effect.name;
-			var source = effect.source;
-
-			json.effects.push( [ name, source.split( '\n' ) ] );
-
-		}
-
-		// animations
-
-		var animations = this.timeline.animations;
-
-		for ( var i = 0, l = animations.length; i < l; i ++ ) {
-
-			var animation = animations[ i ];
-			var effect = animation.effect;
-
-			/*
-			var parameters = {};
-
-			for ( var key in module.parameters ) {
-
-				parameters[ key ] = module.parameters[ key ].value;
-
-			}
-			*/
-
-			json.animations.push( [
-				animation.name,
-				animation.start,
-				animation.end,
-				animation.layer,
-				this.effects.indexOf( animation.effect ),
-				animation.enabled
-			] );
-
-		}
-
-		return json;
+		this.history.redo();
 
 	}
 

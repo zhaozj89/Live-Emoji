@@ -19,10 +19,14 @@ Menubar.Examples = function ( editor ) {
 	// Examples
 
 	var items = [
-		{ title: 'HTML Colors', file: 'html_colors.json' },
-		{ title: 'Three.js Cube', file: 'threejs_cube.json' },
-		{ title: 'Three.js Shaders', file: 'threejs_shaders.json' }
+		{ title: 'Arkanoid', file: 'arkanoid.app.json' },
+		{ title: 'Camera', file: 'camera.app.json' },
+		{ title: 'Particles', file: 'particles.app.json' },
+		{ title: 'Pong', file: 'pong.app.json' },
+		{ title: 'Shaders', file: 'shaders.app.json' }
 	];
+
+	var loader = new THREE.FileLoader();
 
 	for ( var i = 0; i < items.length; i ++ ) {
 
@@ -37,15 +41,12 @@ Menubar.Examples = function ( editor ) {
 
 				if ( confirm( 'Any unsaved data will be lost. Are you sure?' ) ) {
 
-					var request = new XMLHttpRequest();
-					request.open( 'GET', '../examples/' + item.file, true );
-					request.addEventListener( 'load', function ( event ) {
+					loader.load( 'examples/' + item.file, function ( text ) {
 
 						editor.clear();
-						editor.fromJSON( JSON.parse( event.target.responseText ) );
+						editor.fromJSON( JSON.parse( text ) );
 
-					}, false );
-					request.send( null );
+					} );
 
 				}
 

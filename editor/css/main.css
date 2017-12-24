@@ -1,15 +1,33 @@
 body {
-	background-color: #333;
-	font-family: Arial, sans-serif;
+	font-family: Helvetica, Arial, sans-serif;
 	font-size: 14px;
 	margin: 0;
 	overflow: hidden;
 }
 
 hr {
-	border: 0px;
+	border: 0;
 	border-top: 1px solid #ccc;
 }
+
+button {
+	position: relative;
+}
+
+textarea {
+	tab-size: 4;
+	white-space: pre;
+	word-wrap: normal;
+}
+
+	textarea.success {
+		border-color: #8b8 !important;
+	}
+
+	textarea.fail {
+		border-color: #f00 !important;
+		background-color: rgba(255,0,0,0.05);
+	}
 
 textarea, input { outline: none; } /* osx */
 
@@ -23,38 +41,123 @@ textarea, input { outline: none; } /* osx */
 	user-select: none;
 }
 
-input.Input {
-	color: #3AC785;
-	font-size: 12px;
-	background-color: #444;
-	border: 0px;
-	padding: 2px 4px;
-}
-
-input.Number {
-	color: #3A85C7;
-	font-size: 12px;							/** TODO: Use of !imporant is not ideal **/
-	background-color: transparent!important;	/* For now this is a quick fix a rendering issue due to inherited background */
-	border: 1px solid transparent;
-	padding: 2px;
-	cursor: col-resize;
-}
-
-select.Select {
-	color: #3AC785;
-	font-size: 12px;
-	background-color: #444;
-	border: 0px;
-	padding: 2px 4px;
-}
+/* CodeMirror */
 
 .CodeMirror {
+
 	position: absolute !important;
 	top: 37px;
 	width: 100% !important;
 	height: calc(100% - 37px) !important;
+
 }
 
-.CodeMirror-errorLine {
-	background: rgba(200, 50, 0, 0.2) !important;
+	.CodeMirror .errorLine {
+
+		background: rgba(255,0,0,0.25);
+
+	}
+
+	.CodeMirror .esprima-error {
+
+		color: #f00;
+		text-align: right;
+		padding: 0 20px;
+
+	}
+
+/* outliner */
+
+#outliner .option {
+
+	border: 1px solid transparent;
+}
+
+#outliner .option.drag {
+
+	border: 1px dashed #999;
+
+}
+
+#outliner .option.dragTop {
+
+	border-top: 1px dashed #999;
+
+}
+
+#outliner .option.dragBottom {
+
+	border-bottom: 1px dashed #999;
+
+}
+
+#outliner .type {
+	position:relative;
+	top:-2px;
+	padding: 0 2px;
+	color: #ddd;
+}
+
+#outliner .type:after {
+	content: '■';
+}
+
+#outliner .Scene {
+	color: #ccccff;
+}
+
+#outliner .Object3D {
+	color: #aaaaee;
+}
+
+#outliner .Mesh {
+	color: #8888ee;
+}
+
+#outliner .Line {
+	color: #88ee88;
+}
+
+#outliner .LineSegments {
+	color: #88ee88;
+}
+
+#outliner .Points {
+	color: #ee8888;
+}
+
+/* */
+
+#outliner .PointLight {
+	color: #dddd00;
+}
+
+/* */
+
+#outliner .Geometry {
+	color: #88ff88;
+}
+
+#outliner .BoxGeometry {
+	color: #bbeebb;
+}
+
+#outliner .TorusGeometry {
+	color: #aaeeaa;
+}
+
+/* */
+
+#outliner .Material {
+	color: #ff8888;
+}
+
+#outliner .MeshPhongMaterial {
+	color: #ffaa88;
+}
+
+/* */
+
+#outliner .Script:after {
+	content: '{...}' /* ❮/❯ */
 }
