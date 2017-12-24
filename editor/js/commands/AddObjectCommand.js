@@ -10,7 +10,7 @@
 
 var AddObjectCommand = function ( object ) {
 
-	Command.call( this );
+	Command.call( this ); // inheritance
 
 	this.type = 'AddObjectCommand';
 

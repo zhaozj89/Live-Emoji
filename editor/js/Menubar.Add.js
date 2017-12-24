@@ -350,12 +350,10 @@ Menubar.Add = function (editor) {
 	option.setClass( 'option' );
 	option.setTextContent( 'ImageMesh' );
 	option.onClick( function () {
-		var color = 0x222222;
+		var obj = new Object();
+		obj.name = 'foo';
 
-		var light = new THREE.AmbientLight( color );
-		light.name = 'AmbientLight';
-
-		editor.execute( new AddObjectCommand( light ) );
+		editor.execute( new AddObjectCommand( obj ) );
 	} );
 	options.add( option );
 
