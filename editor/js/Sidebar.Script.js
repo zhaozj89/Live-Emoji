@@ -7,7 +7,7 @@ Sidebar.Script = function ( editor ) {
 	var signals = editor.signals;
 
 	var container = new UI.Panel();
-	container.setDisplay( 'none' );
+	container.setDisplay( 'none' ); // hide the entire element
 
 	container.add( new UI.Text( 'Script' ).setTextTransform( 'uppercase' ) );
 	container.add( new UI.Break() );

@@ -84,6 +84,7 @@
 		<script src="js/libs/app.js"></script>
 		<script src="js/Player.js"></script>
 		<script src="js/Script.js"></script>
+		<script src="js/NodeEditor.js"></script>
 
 		<script src="../examples/js/vr/WebVR.js"></script>
 
@@ -178,8 +179,11 @@
 			var viewport = new Viewport( editor );
 			document.body.appendChild( viewport.dom );
 
-			var script = new Script( editor );
-			document.body.appendChild( script.dom );
+			// var script = new Script( editor );
+			// document.body.appendChild( script.dom );
+
+			var nodeEditor = new NodeEditor( editor );
+			document.body.appendChild( nodeEditor.dom );
 
 			var player = new Player( editor );
 			document.body.appendChild( player.dom );
