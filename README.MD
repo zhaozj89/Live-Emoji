@@ -1,19 +1,33 @@
-# frame.js
+Forked from https://github.com/mrdoob/three.js/tree/master/editor
 
-Work in progress.
+#### App
 
-### Editor
+Pre-authoring for 2D live animation
 
-* [http://mrdoob.github.io/frame.js/editor/](http://mrdoob.github.io/frame.js/editor/)
+#### Usage
 
-### Examples
+There are four branches:
 
-* [http://mrdoob.github.io/frame.js/player/?file=../examples/html_colors.json](http://mrdoob.github.io/frame.js/player/?file=../examples/html_colors.json)
-* [http://mrdoob.github.io/frame.js/player/?file=../examples/threejs_cube.json](http://mrdoob.github.io/frame.js/player/?file=../examples/threejs_cube.json)
-* [http://mrdoob.github.io/frame.js/player/?file=../examples/threejs_shaders.json](http://mrdoob.github.io/frame.js/player/?file=../examples/threejs_shaders.json)
+* `master`
+* `asset` #Meng
+* `face-tracking` #Zhenhui
+* `main-dev` #Zhenjie
 
-### Projects
+e.g., `git checkout asset` to checkout the `asset` branch, put things there, and `git push`
 
-* [https://with.in/watch/under-neon-lights/](https://with.in/watch/under-neon-lights/) ([editor](https://within-unlimited.github.io/under-neon-lights/))
-* [http://fernandojsg.com/lab/thiswayjs/](http://fernandojsg.com/lab/thiswayjs/)
-* [http://xplsv.github.io/obsidian/](http://xplsv.github.io/obsidian/)
+#### Implemented
+
+* Import obj
+
+#### TODO
+
+* Image triangulation
+* BBW
+* Node editor
+* Triggering
+* Asset
+* Face tracking
+
+#### Dependencies
+
+* threejs R89

@@ -291,20 +291,55 @@ var Loader = function (editor) {
 
 					var contents = event.target.result;
 
-					var object = new THREE.OBJLoader().parse( contents ); // this is a group object of threejs
-					object = object.children[0];
-					object.name = filename;
-					object.rotation.x = THREE.Math.degToRad( -90 );
-					object.material.wireframe = true;
-					object.scale.set( 0.01, 0.01, 0.01 );
+					// var object = new THREE.OBJLoader().parse( contents ); // this is a group object of threejs
+					// object = object.children[0];
+					// object.name = filename;
+					// object.rotation.x = THREE.Math.degToRad( -90 );
+					// object.material.wireframe = true;
+					// object.scale.set( 0.01, 0.01, 0.01 );
 
-					var bbox = new THREE.Box3().setFromObject( object );
-					var width = bbox.max.x - bbox.min.x;
-					var height = bbox.max.z - bbox.min.z;
-					var origin = object.position;
-					object.position.set( origin.x - width / 2, 0, origin.z + height / 2 );
+					// var bbox = new THREE.Box3().setFromObject( object );
+					// var width = bbox.max.x - bbox.min.x;
+					// var height = bbox.max.z - bbox.min.z;
+					// var origin = object.position;
+					// object.position.set( origin.x - width / 2, 0, origin.z + height / 2 );
 
-					editor.execute( new AddObjectCommand( object ) );
+					// editor.execute( new AddObjectCommand( object ) );
+
+					// Add a fixed image texture
+					var loader = new THREE.ImageLoader();
+
+					// load a image resource
+					loader.load(
+						// resource URL
+						'../test/woody.png',
+
+						// onLoad callback
+						function ( image ) {
+							// use the image, e.g. draw part of it on a canvas
+							var texture = new THREE.Texture();
+							texture.image = image;
+							texture.needsUpdate = true;
+
+							var object = new THREE.OBJLoader().parse( contents ); // this is a group object of threejs
+							object = object.children[0];
+							object.name = filename;
+							object.rotation.x = THREE.Math.degToRad( -90 );
+							// object.material.wireframe = true;
+							object.material.emissiveMap = texture;
+							object.material.emissive = new THREE.Color( 0xffffff );
+
+							editor.execute( new AddObjectCommand( object ) );
+						},
+
+						// onProgress callback currently not supported
+						undefined,
+
+						// onError callback
+						function () {
+							console.error( 'An error happened.' );
+						}
+					);
 
 				}, false );
 				reader.readAsText( file );
