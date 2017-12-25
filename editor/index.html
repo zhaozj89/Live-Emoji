@@ -6,8 +6,12 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	</head>
 	<body ontouchstart="">
+		<link rel="stylesheet" href="css/NEditor.css">
 		<link href="css/main.css" rel="stylesheet" />
 		<link id="theme" href="css/dark.css" rel="stylesheet" />
+
+		<script src="js/libs/jquery-3.2.1.min.js"></script>
+		<script src="js/libs/jquery-ui.min.js"></script>
 
 		<script src="../build/three.js"></script>
 		<script src="../examples/js/libs/system.min.js"></script>
@@ -84,7 +88,7 @@
 		<script src="js/libs/app.js"></script>
 		<script src="js/Player.js"></script>
 		<script src="js/Script.js"></script>
-		<script src="js/NodeEditor.js"></script>
+		<script src="js/NEditor.js"></script>
 
 		<script src="../examples/js/vr/WebVR.js"></script>
 
@@ -163,6 +167,7 @@
 		<!-- my animation library -->
 		<script src="js/animation/Triangulation.js"></script>
 
+
 		<script>
 
 			window.URL = window.URL || window.webkitURL;
@@ -182,8 +187,8 @@
 			// var script = new Script( editor );
 			// document.body.appendChild( script.dom );
 
-			var nodeEditor = new NodeEditor( editor );
-			document.body.appendChild( nodeEditor.dom );
+			var nEditor = new NEditor( editor );
+			document.body.appendChild( nEditor.dom );
 
 			var player = new Player( editor );
 			document.body.appendChild( player.dom );
