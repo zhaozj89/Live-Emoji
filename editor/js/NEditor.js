@@ -340,6 +340,7 @@ var NEditor = function ( editor ) {
 	container.add( menu );
 
 
+	// jQuery methods go here ...
 	$( function() {
 		$(menu.dom).draggable();
 		$( "#menu" ).menu();
@@ -352,7 +353,7 @@ var NEditor = function ( editor ) {
 	var currentObject;
 
 
-/*
+
 
 	// Node 1
 	var node = new Node({name: 'Node 1'});
@@ -395,7 +396,7 @@ var NEditor = function ( editor ) {
 	node4.inputs[0].value = 'Some String';
 
 
-*/
+
 
 
 	//
@@ -405,7 +406,7 @@ var NEditor = function ( editor ) {
 
 	} );
 
-	signals.editScript.add( function ( object, script ) {
+	signals.editNEditor.add( function ( object, script ) {
 
 		currentObject = object;
 		currentScript = script;
@@ -415,7 +416,7 @@ var NEditor = function ( editor ) {
 
 	} );
 
-	signals.scriptRemoved.add( function ( script ) {
+	signals.nEditorRemoved.add( function ( script ) {
 
 		if ( currentScript === script ) {
 

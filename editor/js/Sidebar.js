@@ -30,6 +30,7 @@ var Sidebar = function ( editor ) {
 		new Sidebar.Scene( editor ),
 		new Sidebar.Properties( editor ),
 		new Sidebar.Animation( editor ),
+		new Sidebar.NEditor( editor ),
 		new Sidebar.Script( editor )
 	);
 	container.add( scene );

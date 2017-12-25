@@ -17,6 +17,10 @@ var Editor = function () {
 
 		editScript: new Signal(),
 
+		// node editor
+
+		editNEditor: new Signal(),
+
 		// player
 
 		startPlayer: new Signal(),
@@ -64,6 +68,11 @@ var Editor = function () {
 		scriptChanged: new Signal(),
 		scriptRemoved: new Signal(),
 
+		// node editor
+		nEditorAdded: new Signal(),
+		nEditorChanged: new Signal(),
+		nEditorRemoved: new Signal(),
+
 		windowResize: new Signal(),
 
 		showGridChanged: new Signal(),
@@ -90,6 +99,8 @@ var Editor = function () {
 	this.materials = {};
 	this.textures = {};
 	this.scripts = {};
+
+	this.nEditor = {};
 
 	this.selected = null;
 	this.helpers = {};

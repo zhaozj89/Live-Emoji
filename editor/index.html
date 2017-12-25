@@ -136,6 +136,7 @@
 		<script src="js/Sidebar.Material.js"></script>
 		<script src="js/Sidebar.Animation.js"></script>
 		<script src="js/Sidebar.Script.js"></script>
+		<script src="js/Sidebar.NEditor.js"></script>
 		<script src="js/Sidebar.History.js"></script>
 		<script src="js/Toolbar.js"></script>
 		<script src="js/Viewport.js"></script>
@@ -155,7 +156,9 @@
 		<script src="js/commands/SetGeometryValueCommand.js"></script>
 		<script src="js/commands/MultiCmdsCommand.js"></script>
 		<script src="js/commands/AddScriptCommand.js"></script>
+		<script src="js/commands/AddNEditorCommand.js"></script>
 		<script src="js/commands/RemoveScriptCommand.js"></script>
+		<script src="js/commands/RemoveNEditorCommand.js"></script>
 		<script src="js/commands/SetScriptValueCommand.js"></script>
 		<script src="js/commands/SetMaterialCommand.js"></script>
 		<script src="js/commands/SetMaterialValueCommand.js"></script>
@@ -188,8 +191,8 @@
 			var viewport = new Viewport( editor );
 			document.body.appendChild( viewport.dom );
 
-			// var script = new Script( editor );
-			// document.body.appendChild( script.dom );
+			var script = new Script( editor );
+			document.body.appendChild( script.dom );
 
 			var nEditor = new NEditor( editor );
 			document.body.appendChild( nEditor.dom );
@@ -197,8 +200,8 @@
 			var player = new Player( editor );
 			document.body.appendChild( player.dom );
 
-			// var toolbar = new Toolbar( editor );
-			// document.body.appendChild( toolbar.dom );
+			var toolbar = new Toolbar( editor );
+			document.body.appendChild( toolbar.dom );
 
 			var menubar = new Menubar( editor );
 			document.body.appendChild( menubar.dom );
