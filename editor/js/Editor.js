@@ -6,7 +6,7 @@ var Editor = function () {
 
 	this.DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.01, 1000 );
 	this.DEFAULT_CAMERA.name = 'Camera';
-	this.DEFAULT_CAMERA.position.set( 20, 10, 20 );
+	this.DEFAULT_CAMERA.position.set( 0, 10, 0 ); // x: red, y: green, z: blue
 	this.DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
 
 	var Signal = signals.Signal;
@@ -16,6 +16,10 @@ var Editor = function () {
 		// script
 
 		editScript: new Signal(),
+
+		// node editor
+
+		editNEditor: new Signal(),
 
 		// player
 
@@ -64,6 +68,11 @@ var Editor = function () {
 		scriptChanged: new Signal(),
 		scriptRemoved: new Signal(),
 
+		// node editor
+		nEditorAdded: new Signal(),
+		nEditorChanged: new Signal(),
+		nEditorRemoved: new Signal(),
+
 		windowResize: new Signal(),
 
 		showGridChanged: new Signal(),
@@ -81,7 +90,7 @@ var Editor = function () {
 
 	this.scene = new THREE.Scene();
 	this.scene.name = 'Scene';
-	this.scene.background = new THREE.Color( 0xaaaaaa );
+	this.scene.background = new THREE.Color( 0x46464646 );
 
 	this.sceneHelpers = new THREE.Scene();
 
@@ -90,6 +99,8 @@ var Editor = function () {
 	this.materials = {};
 	this.textures = {};
 	this.scripts = {};
+
+	this.nEditor = {};
 
 	this.selected = null;
 	this.helpers = {};
