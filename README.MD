@@ -17,17 +17,17 @@ e.g., `git checkout asset` to checkout the `asset` branch, put things there, and
 
 #### Implemented
 
-* Import obj
+* Import OBJ
+* Node Editor UI
 
 #### TODO
 
-* Image triangulation
-* BBW
-* Node editor
-* Triggering
+* Image Triangulation
+* Animation
+* Node Graph Logic
 * Asset
 * Face tracking
 
 #### Dependencies
 
-* threejs R89
+* three.js r89
