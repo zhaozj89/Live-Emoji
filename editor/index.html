@@ -6,9 +6,13 @@
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	</head>
 	<body ontouchstart="">
+		<link rel="stylesheet" href="css/jquery-ui.min.css">
+		<link rel="stylesheet" href="css/jquery-ui.structure.min.css">
+		<link rel="stylesheet" href="css/jquery-ui.theme.min.css">
+		<link id="theme" href="css/dark.css" rel="stylesheet" />
 		<link rel="stylesheet" href="css/NEditor.css">
 		<link href="css/main.css" rel="stylesheet" />
-		<link id="theme" href="css/dark.css" rel="stylesheet" />
+
 
 		<script src="js/libs/jquery-3.2.1.min.js"></script>
 		<script src="js/libs/jquery-ui.min.js"></script>
@@ -193,8 +197,8 @@
 			var player = new Player( editor );
 			document.body.appendChild( player.dom );
 
-			var toolbar = new Toolbar( editor );
-			document.body.appendChild( toolbar.dom );
+			// var toolbar = new Toolbar( editor );
+			// document.body.appendChild( toolbar.dom );
 
 			var menubar = new Menubar( editor );
 			document.body.appendChild( menubar.dom );

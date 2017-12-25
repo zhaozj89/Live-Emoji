@@ -863,9 +863,9 @@ UI.Integer.prototype.setValue = function ( value ) {
 };
 
 UI.Integer.prototype.setStep = function ( step ) {
-	
-	this.step = parseInt( step ); 
-	
+
+	this.step = parseInt( step );
+
 	return this;
 
 };
@@ -945,6 +945,38 @@ UI.Button.prototype.setLabel = function ( value ) {
 
 };
 
+
+// Unordered list
+UI.UList = function () {
+	UI.Element.call( this );
+
+	var dom = document.createElement( 'ul' );
+	dom.className = 'UList';
+
+	this.dom = dom;
+
+	return this;
+}
+
+UI.UList.prototype = Object.create( UI.Element.prototype );
+UI.UList.prototype.constructor = UI.UList;
+
+UI.UList.prototype.setId = function ( value ) {
+	this.dom.id = value;
+};
+
+UI.UList.prototype.addLi = function ( text, className ) {
+	var dom0 = document.createElement( 'li' );
+	var dom1 = document.createElement( 'div' );
+	this.dom.appendChild( dom0 );
+	dom0.appendChild( dom1 );
+	dom1.textContent = text;
+
+	if( className!==null )
+		dom0.className = className;
+
+	return dom0;
+};
 
 // Modal
 
