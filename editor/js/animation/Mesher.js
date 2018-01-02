@@ -8,7 +8,7 @@
 //     while (this.length < size) { this.push(defval); }
 // }
 
-console.assert = function() {};
+// console.assert = function() {};
 
 var ArrCopy = function ( arr ) {
   if (typeof obj !== 'object') return;
@@ -278,15 +278,12 @@ class Triangulation {
 				for( let e=0; e<3; ++e ) {
 					let edge = new Edge(t.indices[e], t.indices[(e+1)%3]);
 
-					let ii=0;
-					for(; ii< edges.length; ++ii) {
-						if(edges[ii].equal(edge) && ii!==(edges.length-1)) {
-							edges.splice(ii, 1);
-							break;
-						}
-					}
+          let idx = edges.findIndex(function (edge) {return this.equal(edge);}, edge);
 
-					if(ii===edges.length) edges.push(edge);
+          if(idx==-1)
+            edges.push(edge);
+          else
+            edges.splice(idx, 1);
 				}
 				this.triangles.splice(j, 1);
 			}
@@ -325,10 +322,10 @@ class Triangulation {
 			for(let j=0; j<this.vertices.length; ++j) {
 				if(t.indices[0]==j || t.indices[1]==j || t.indices[2]==j) continue;
 
-				let eps = 0;
+				let eps = 1.0e-4;
 				let d = ( t.center.sub(this.vertices[j]) ).length();
 
-				if(d-t.radius < eps) return false;
+				if(d < t.radius-eps) return false;
 			}
 		}
 		return true;
@@ -435,33 +432,7 @@ function TriangulateVariational ( points, bpoints, iterations ) {
 }
 
 
-// const assignUVs = function ( geometry ) {
-//   geometry.computeBoundingBox();
-//
-//   const max = geometry.boundingBox.max;
-//   const min = geometry.boundingBox.min;
-//
-//   const offset = new THREE.Vector2(0 - min.x, 0 - min.y);
-//   const range = new THREE.Vector2(max.x - min.x, max.y - min.y);
-//
-//   geometry.faceVertexUvs[0] = [];
-//   const faces = geometry.faces;
-//
-//   for (let i = 0; i < geometry.faces.length; i++) {
-//     const v1 = geometry.vertices[faces[i].a];
-//     const v2 = geometry.vertices[faces[i].b];
-//     const v3 = geometry.vertices[faces[i].c];
-//
-//     geometry.faceVertexUvs[0].push([
-//       new THREE.Vector2((v1.x + offset.x) / range.x, (v1.y + offset.y) / range.y),
-//       new THREE.Vector2((v2.x + offset.x) / range.x, (v2.y + offset.y) / range.y),
-//       new THREE.Vector2((v3.x + offset.x) / range.x, (v3.y + offset.y) / range.y)
-//     ]);
-//   }
-//   geometry.uvsNeedUpdate = true;
-// }
-
-// input: png object, it MUST contain an alpha channel
+// input: png object
 // output: mesh object
 var ZMesher = function ( png ) {
 
