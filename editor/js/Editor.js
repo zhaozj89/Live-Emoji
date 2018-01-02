@@ -4,7 +4,7 @@
 
 var Editor = function () {
 
-	this.DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.01, 1000 );
+	this.DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.001, 10000 );
 	this.DEFAULT_CAMERA.name = 'Camera';
 	this.DEFAULT_CAMERA.position.set( 0, 10, 0 ); // x: red, y: green, z: blue
 	this.DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
@@ -85,6 +85,7 @@ var Editor = function () {
 	this.history = new History( this );
 	this.storage = new Storage();
 	this.loader = new Loader( this );
+	this.loader2 = new Loader2( this );
 
 	this.camera = this.DEFAULT_CAMERA.clone();
 

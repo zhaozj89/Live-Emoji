@@ -74,6 +74,32 @@ Menubar.File = function ( editor ) {
 	} );
 	options.add( option );
 
+	// Smart Import
+
+	var form2 = document.createElement( 'form' );
+	form2.style.display = 'none';
+	document.body.appendChild( form2 );
+
+	var fileInput2 = document.createElement( 'input' );
+	fileInput2.type = 'file';
+	fileInput2.addEventListener( 'change', function ( event ) {
+
+		editor.loader2.loadFile( fileInput2.files[ 0 ] );
+		form.reset();
+
+	} );
+	form2.appendChild( fileInput );
+
+	var option2 = new UI.Row();
+	option2.setClass( 'option' );
+	option2.setTextContent( 'Smart Import' );
+	option2.onClick( function () {
+
+		fileInput2.click();
+
+	} );
+	options.add( option2 );
+
 	//
 
 	options.add( new UI.HorizontalRule() );
