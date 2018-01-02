@@ -57,7 +57,7 @@ var Loader2 = function ( editor ) {
 						console.log( png.getHeight() );
 						console.log( png.getPixel(100, 100) );
 
-						let mesh = MyMesher( png );
+						let mesh = ZMesher( png );
 
 
 /*

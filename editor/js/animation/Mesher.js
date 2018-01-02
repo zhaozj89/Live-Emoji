@@ -10,18 +10,67 @@
 
 console.assert = function() {};
 
+var ArrCopy = function ( arr ) {
+  if (typeof obj !== 'object') return;
+  return JSON.parse( JSON.stringify(arr) );
+}
+
+var ObjShallowCopy = function(obj) {
+    if (typeof obj !== 'object') return;
+    let newObj = obj instanceof Array ? [] : {};
+    for (let key in obj) {
+        // if (obj.hasOwnProperty(key))
+        {
+            newObj[key] = obj[key];
+        }
+    }
+    return newObj;
+}
+
+var ObjDeepCopy = function(obj) {
+    if (typeof obj !== 'object') return;
+    let newObj = obj instanceof Array ? [] : {};
+    for (let key in obj) {
+        // if (obj.hasOwnProperty(key))
+        {
+            newObj[key] = typeof obj[key] === 'object' ? ObjDeepCopy(obj[key]) : obj[key];
+        }
+    }
+    return newObj;
+}
+
+class ZVector2 {
+  constructor(_x, _y) {
+    if(_x instanceof ZVector2) {
+      let res = _x.clone();
+      return res;
+    }
+    else {
+      this.x = _x;
+      this.y = _y;
+    }
+  }
+
+  clone() {
+    let res = new ZVector2(this.x, this.y);
+    return res;
+  }
+};
+
 // macro
-let int32 = Math.floor;
-let MAX = Math.max;
-let MIN = Math.min;
+const int32 = Math.floor;
+const MAX = Math.max;
+const MIN = Math.min;
 
-let MAX_VAL = Number.MAX_VALUE;
-let MIN_VAL = -Number.MAX_VALUE;
+const MAX_VAL = Number.MAX_VALUE;
+const MIN_VAL = -Number.MAX_VALUE;
 
-let Vector2 = THREE.Vector2;
-let Vector3 = THREE.Vector3;
+const Vector2 = THREE.Vector2;
+const Vector3 = THREE.Vector3;
 
-// Vector2.prototype.dot
+Vector2.prototype.dot = function (rhs) {
+  return this.x*rhs.x + this.y*rhs.y;
+}
 
 Vector2.prototype.add = function (rhs) {
 	let res = new Vector2();
@@ -57,11 +106,34 @@ Vector2.prototype.cross = function (rhs) {
   return (this.x*rhs.y - this.y*rhs.x);
 }
 
+var CopyVector2Array = function (arr) {
+  let res = new Array();
+
+  for(let i=0; i<arr.length; ++i) {
+    let el_new = arr[i].clone();
+    res.push(el_new);
+  }
+
+  return res;
+}
+
 // parameters
 const channel = 4;
 const resolution = 0.08;
 
 // functions
+function SampleClamp (png, x, y) {
+  const width = png.getWidth();
+  const height = png.getHeight();
+
+  const ix = MIN( MAX( 0, x ), width-1 );
+  const iy = MIN( MAX( 0, y ), height-1 );
+
+  const pixel = png.getPixel( ix, iy );
+
+  return (pixel[0]+pixel[1]+pixel[2])/3;
+}
+
 function Neighbours ( png, cx, cy, margin ) {
 	const width = png.getWidth();
 	const height = png.getHeight();
@@ -87,39 +159,34 @@ function EdgeDetect ( png, cx, cy ) {
 	const width = png.getWidth();
 	const height = png.getHeight();
 
-	let SampleClamp = function (x, y) {
-		let ix = MIN( MAX( 0, x ), width-1 );
-		let iy = MIN( MAX( 0, y ), height-1 );
-
-		let pixel = png.getPixel( ix, iy );
-
-		return (pixel[0]+pixel[1]+pixel[2])/3;
-	}
-
-	if( Boolean(SampleClamp(cx+1, cy)!==0) !== Boolean(SampleClamp(cx-1, cy)!==0))
+	if( Boolean(SampleClamp(png, cx+1, cy)!==0) !== Boolean(SampleClamp(png, cx-1, cy)!==0))
 		return true;
 
-	if( Boolean(SampleClamp(cx, cy+1)!==0) !== Boolean(SampleClamp(cx, cy-1)!==0))
+	if( Boolean(SampleClamp(png, cx, cy+1)!==0) !== Boolean(SampleClamp(png, cx, cy-1)!==0))
 		return true;
 
 	return false;
 }
 
-function CalculateCircumcircle ( p, q, r ) {
+function CalculateCircumcircle ( _p, _q, _r ) {
+  const p = _p.clone();
+  const q = _q.clone();
+  const r = _r.clone();
+
 	let pq = q.sub(p);
 	let qr = r.sub(q);
 
 	console.assert(pq.cross(qr)>=0);
 
-	let a = (p.add(q)).multiplyScalar(0.5);
-	let b = (q.add(r)).multiplyScalar(0.5);
+	let a = p.add(q).multiplyScalar(0.5);
+	let b = q.add(r).multiplyScalar(0.5);
 	let u = new Vector2(-pq.y, pq.x); // PerpCCW
 
 	let d = u.dot(qr);
 	let t = b.sub(a).dot(qr) / d;
 
 	let center = a.add(u.multiplyScalar(t));
-	let radius = (center.sub(p)).length();
+	let radius = center.sub(p).length();
 
 	return [center, radius];
 }
@@ -165,7 +232,8 @@ class Triangulation {
 		this.vertices = new Array();
 		this.triangles = new Array();
 
-		let lower = new Vector2(MAX_VAL, MAX_VAL), upper = new Vector2(MIN_VAL, MIN_VAL);
+		let lower = new Vector2(MAX_VAL, MAX_VAL);
+    let upper = new Vector2(MIN_VAL, MIN_VAL);
 
 		for( let i=0; i<points.length; ++i ) {
 				lower.x = MIN( lower.x, points[i].x );
@@ -188,14 +256,16 @@ class Triangulation {
 		this.triangles.push(new Triangle(0, 1, 2, this.vertices));
 
 		for(let i=0; i<num_points; ++i) {
-			this.Insert(points[i].clone());
+			this.Insert(points[i]);
 		}
 
 		// assert valid
 		console.assert(this.Valid());
 	}
 
-	Insert( p ) {
+	Insert( _p ) {
+    const p = _p.clone();
+
 		let edges = new Array();
 
 		let i = this.vertices.length;
@@ -204,7 +274,7 @@ class Triangulation {
 		for(let j=0; j<this.triangles.length;) {
 			let t = this.triangles[j];
 
-			if( (t.center.sub(p)).length() < t.radius ) {
+			if( t.center.sub(p).length() < t.radius ) {
 				for( let e=0; e<3; ++e ) {
 					let edge = new Edge(t.indices[e], t.indices[(e+1)%3]);
 
@@ -235,7 +305,7 @@ class Triangulation {
 	}
 
 	TriangleQuality(i) {
-		let t = this.triangles[i];
+		const t = this.triangles[i];
 
 		let MINEdgeLength = MAX_VAL;
 
@@ -258,11 +328,7 @@ class Triangulation {
 				let eps = 0;
 				let d = ( t.center.sub(this.vertices[j]) ).length();
 
-				if(d-t.radius < eps) {
-          console.log('d: ' + d);
-          console.log('t.radius: ' + t.radius);
-          return false;
-        }
+				if(d-t.radius < eps) return false;
 			}
 		}
 		return true;
@@ -282,7 +348,7 @@ function TriangulateVariational ( points, bpoints, iterations ) {
 	let mypoints;
 	let myweights;
 
-	mypoints = points.slice();
+	mypoints = CopyVector2Array(points);
 	for (let k=0; k<iterations; ++k) {
 		 mesh = new Triangulation(mypoints);
 
@@ -337,7 +403,7 @@ function TriangulateVariational ( points, bpoints, iterations ) {
 
 	mesh = new Triangulation(mypoints);
 
-  let mesh_vertices_backup = mesh.vertices.slice();
+  let mesh_vertices_backup = CopyVector2Array(mesh.vertices);
 	mypoints = mesh_vertices_backup.splice(3, mesh.vertices.length-3);
 
 	for(let i=0; i<mesh.triangles.length;) {
@@ -368,9 +434,36 @@ function TriangulateVariational ( points, bpoints, iterations ) {
 	return [points_out, tris_out];
 }
 
+
+// const assignUVs = function ( geometry ) {
+//   geometry.computeBoundingBox();
+//
+//   const max = geometry.boundingBox.max;
+//   const min = geometry.boundingBox.min;
+//
+//   const offset = new THREE.Vector2(0 - min.x, 0 - min.y);
+//   const range = new THREE.Vector2(max.x - min.x, max.y - min.y);
+//
+//   geometry.faceVertexUvs[0] = [];
+//   const faces = geometry.faces;
+//
+//   for (let i = 0; i < geometry.faces.length; i++) {
+//     const v1 = geometry.vertices[faces[i].a];
+//     const v2 = geometry.vertices[faces[i].b];
+//     const v3 = geometry.vertices[faces[i].c];
+//
+//     geometry.faceVertexUvs[0].push([
+//       new THREE.Vector2((v1.x + offset.x) / range.x, (v1.y + offset.y) / range.y),
+//       new THREE.Vector2((v2.x + offset.x) / range.x, (v2.y + offset.y) / range.y),
+//       new THREE.Vector2((v3.x + offset.x) / range.x, (v3.y + offset.y) / range.y)
+//     ]);
+//   }
+//   geometry.uvsNeedUpdate = true;
+// }
+
 // input: png object, it MUST contain an alpha channel
 // output: mesh object
-let MyMesher = function ( png ) {
+var ZMesher = function ( png ) {
 
 	// storage
 	let points = new Array();
@@ -404,20 +497,61 @@ let MyMesher = function ( png ) {
 	let points_out = res[0];
 	let tris_out = res[1];
 
+  // discard triangles whose centroid is not inside the shape
+  for(let i=0; i<tris_out.length;) {
+    const p = points_out[tris_out[i]].clone();
+    const q = points_out[tris_out[i+1]].clone();
+    const r = points_out[tris_out[i+2]].clone();
+
+    const c = p.add(q).add(r).divideScalar(3);
+
+    const x = int32( c.x * width );
+    const y = int32( c.y * height );
+
+    if( SampleClamp(png, x, y)===0 )
+      tris_out.splice(i, 3);
+    else
+      i += 3;
+  }
+
+
 	let geometry = new THREE.Geometry();
 
 	for(let i=0; i<points_out.length; ++i)
 		geometry.vertices.push(new Vector3( points_out[i].x, points_out[i].y, 0 ));
 
 
-	for(let i=0; i<tris_out.length; i+=3)
-		geometry.faces.push( new THREE.Face3(tris_out[i], tris_out[i+1], tris_out[i+2]) );
+	for(let i=0; i<tris_out.length; i+=3){
+    geometry.faces.push( new THREE.Face3(tris_out[i], tris_out[i+1], tris_out[i+2]) );
+    geometry.faceVertexUvs[0].push([
+      new Vector2(points_out[tris_out[i]].x, points_out[tris_out[i]].y),
+      new Vector2(points_out[tris_out[i+1]].x, points_out[tris_out[i+1]].y),
+      new Vector2(points_out[tris_out[i+2]].x, points_out[tris_out[i+2]].y)
+    ]);
+  }
 
-	geometry.computeFaceNormals();
-	geometry.computeVertexNormals();
+  geometry.uvsNeedUpdate = true;
 
-	let material = new THREE.MeshNormalMaterial();
-	let mesh = new THREE.Mesh( geometry, material );
+  const dataTexture = new THREE.DataTexture(
+    png.pixels,
+    width,
+    height,
+    THREE.RGBAFormat,
+    THREE.UnsignedByteType,
+    THREE.UVMapping);
+  dataTexture.needsUpdate = true;
+
+  const dataMaterial = new THREE.MeshBasicMaterial({
+    transparent: true,
+    map: dataTexture
+  });
+  dataMaterial.needsUpdate = true;
+
+	// geometry.computeFaceNormals();
+	// geometry.computeVertexNormals();
+
+	// let material = new THREE.MeshNormalMaterial();
+	let mesh = new THREE.Mesh( geometry, dataMaterial );
 
 	return mesh;
 
