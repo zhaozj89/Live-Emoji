@@ -336,34 +336,49 @@ var ZMesher = function ( png ) {
 	for(let i=0; i<tris_out.length; i+=3){
     geometry.faces.push( new THREE.Face3(tris_out[i], tris_out[i+1], tris_out[i+2]) );
     geometry.faceVertexUvs[0].push([
-      new Vector2(points_out[tris_out[i]].x, points_out[tris_out[i]].y),
-      new Vector2(points_out[tris_out[i+1]].x, points_out[tris_out[i+1]].y),
-      new Vector2(points_out[tris_out[i+2]].x, points_out[tris_out[i+2]].y)
+      new Vector2(points_out[tris_out[i]].x, 1-points_out[tris_out[i]].y),
+      new Vector2(points_out[tris_out[i+1]].x, 1-points_out[tris_out[i+1]].y),
+      new Vector2(points_out[tris_out[i+2]].x, 1-points_out[tris_out[i+2]].y)
     ]);
   }
 
   geometry.uvsNeedUpdate = true;
 
-  const dataTexture = new THREE.DataTexture(
-    png.pixels,
-    width,
-    height,
-    THREE.RGBAFormat,
-    THREE.UnsignedByteType,
-    THREE.UVMapping);
-  dataTexture.needsUpdate = true;
+  // let offscreenImageData = new ImageData(Uint8ClampedArray.from(png.pixels), width, height);
 
-  const dataMaterial = new THREE.MeshBasicMaterial({
+  let texture = new THREE.Texture(
+    ImageData2Image(new ImageData(Uint8ClampedArray.from(png.pixels), width, height))
+  );
+
+  // texture.center.x = 0.5;
+  // texture.center.y = 0.5;
+  // texture.rotation = 3.14;
+
+  // const
+  // let dataTexture = new THREE.DataTexture(
+  //   Uint8ClampedArray.from(png.pixels),
+  //   width,
+  //   height,
+  //   THREE.RGBAFormat,
+  //   THREE.UnsignedByteType,
+  //   THREE.UVMapping);
+
+  // dataTexture.image = offscreenImageData;
+  // dataTexture.needsUpdate = true;
+
+  texture.needsUpdate = true;
+
+  let material = new THREE.MeshBasicMaterial({
     transparent: true,
-    map: dataTexture
+    map: texture
   });
-  dataMaterial.needsUpdate = true;
+  material.needsUpdate = true;
 
 	// geometry.computeFaceNormals();
 	// geometry.computeVertexNormals();
 
 	// let material = new THREE.MeshNormalMaterial();
-	let mesh = new THREE.Mesh( geometry, dataMaterial );
+	let mesh = new THREE.Mesh( geometry, material );
 
 	return mesh;
 

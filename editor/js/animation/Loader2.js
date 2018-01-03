@@ -62,6 +62,9 @@ var Loader2 = function ( editor ) {
 						if (err) throw err;
 
 						let mesh = ZMesher( png );
+
+						mesh.rotation.x = THREE.Math.degToRad( -90 );
+						mesh.rotation.z = THREE.Math.degToRad( 180 );
 						// let mesh = ZContour( png );
 
 /*

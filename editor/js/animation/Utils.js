@@ -162,3 +162,16 @@ function EdgeDetect ( png, cx, cy ) {
 
 	return false;
 }
+
+// TODO, find a better way
+function ImageData2Image( imagedata ) {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    canvas.width = imagedata.width;
+    canvas.height = imagedata.height;
+    ctx.putImageData(imagedata, 0, 0);
+
+    var image = new Image();
+    image.src = canvas.toDataURL();
+    return image;
+}

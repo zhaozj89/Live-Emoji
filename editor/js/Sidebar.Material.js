@@ -1131,8 +1131,7 @@ Sidebar.Material = function ( editor ) {
 
 			if ( material.map !== null || resetTextureSelectors ) {
 
-				// does not work with DataTexture, review it later
-				// materialMap.setValue( material.map );
+				materialMap.setValue( material.map );
 
 			}
 
