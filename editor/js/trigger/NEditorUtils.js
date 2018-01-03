@@ -1,35 +1,41 @@
 "use strict";
 
-function createPath(a, b) {
-	var diff = {
-		x: b.x - a.x,
-		y: b.y - a.y
-	};
+function createPath( a, b ) {
+  var diff = {
+    x: b.x - a.x,
+    y: b.y - a.y
+  };
 
-	var pathStr = [
-		'M' + a.x + ',' + a.y + ' C',
-		a.x + diff.x / 3 * 2 + ',' + a.y + ' ',
-		a.x + diff.x / 3 + ',' + b.y + ' ',
-		b.x + ',' + b.y
-	].join('');
+  var pathStr = [
+    'M' + a.x + ',' + a.y + ' C',
+    a.x + diff.x / 3 * 2 + ',' + a.y + ' ',
+    a.x + diff.x / 3 + ',' + b.y + ' ',
+    b.x + ',' + b.y
+  ].join('');
 
-	return pathStr;
+  return pathStr;
 }
 
-var getFullOffset = function(el){
-	var offset = {
-		top: el.offsetTop,
-		left: el.offsetLeft
-	};
+var getFullOffset = function(el) {
+  function innerRecursive (el){
+  	let offset = {
+  		top: el.offsetTop,
+  		left: el.offsetLeft
+  	};
 
-	if (el.offsetParent){
-		var parentOff = getFullOffset(el.offsetParent);
-		offset.top += parentOff.top;
-		offset.left += parentOff.left;
-	}
+  	if (el.offsetParent){
+  		var parentOff = innerRecursive(el.offsetParent);
+  		offset.top += parentOff.top;
+  		offset.left += parentOff.left;
+  	}
 
-	return offset;
-};
+  	return offset;
+  };
+
+  let offset = innerRecursive(el);
+  offset.top -= 32;
+  return offset;
+}
 
 
 class NodeInput {
@@ -105,30 +111,29 @@ class NodeInput {
 }
 
 
-
 class Node {
-	constructor( options ) {
+	constructor( mouse, options ) {
 		this.name = '';
 		this.value = '';
 		this.isRoot = false;
 
-		for (var prop in options)
-			if (this.hasOwnProperty(prop))
-				this[prop] = options[prop];
+    for (let prop in options)
+      if (this.hasOwnProperty(prop))
+        this[prop] = options[prop];
 
-		this.inputs = [];
-		this.attachedPaths = [];
-		this.connected = false;
+    this.inputs = [];
+    this.attachedPaths = [];
+    this.connected = false;
 
-		this.domElement = document.createElement('div');
-		this.domElement.classList.add('x-node');
-		this.domElement.setAttribute('title', this.name);
+    this.domElement = document.createElement('div');
+    this.domElement.classList.add('x-node');
+    this.domElement.setAttribute('title', this.name);
 
-    var outputDom = document.createElement('span');
+    let outputDom = document.createElement('span');
     outputDom.classList.add('x-output');
     outputDom.textContent = '';
 
-    if (this.isRoot)
+    if ( this.isRoot )
       outputDom.classList.add('hide');
 
     this.domElement.appendChild(outputDom);

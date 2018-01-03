@@ -103,24 +103,24 @@ var NEditor = function ( editor ) {
 
 
 	// Node 1
-	var node = new Node({name: 'Node 1'});
+	var node = new Node(mouse, {name: 'Node 1'});
 	node.addInput(mouse, graphSVG, 'Value1');
 	node.addInput(mouse, graphSVG, 'Value2');
 	node.addInput(mouse, graphSVG, 'Value3');
 
 	// Node 2
-	var node2 = new Node({name: 'Node 2'});
+	var node2 = new Node(mouse, {name: 'Node 2', isRoot: true});
 	node2.addInput(mouse, graphSVG, 'Text In');
 	node2.addInput(mouse, graphSVG, 'Value 5');
 
 	// Node 3
-	var node3 = new Node({name: 'Something Else'});
+	var node3 = new Node(mouse, {name: 'Something Else'});
 	node3.addInput(mouse, graphSVG, 'Color4');
 	node3.addInput(mouse, graphSVG, 'Position');
 	node3.addInput(mouse, graphSVG, 'Noise Octaves');
 
 	// Node 4
-	var node4 = new Node({name: 'TextString'});
+	var node4 = new Node(mouse, {name: 'TextString'});
 	node4.addInput(mouse, graphSVG, 'Value', 'input');
 
 	// Move to initial positions
