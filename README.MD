@@ -19,6 +19,7 @@ e.g., `git checkout asset` to checkout the `asset` branch, put things there, and
 
 * Import OBJ
 * Node Editor UI
+* Segmentation
 
 #### TODO
 
