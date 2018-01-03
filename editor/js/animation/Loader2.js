@@ -20,6 +20,15 @@ var Loader2 = function ( editor ) {
 
 		switch (extension) {
 
+			case 'json':
+
+				reader.addEventListener( 'load', function ( event ) {
+					var loader = JSON.parse( event.target.result );
+					console.log(loader);
+				});
+				reader.readAsText( file );
+				break;
+
 			// case 'jpg':
 			case 'png':
 /*
@@ -51,14 +60,9 @@ var Loader2 = function ( editor ) {
 					var loader = new PNGReader( event.target.result );
 					loader.parse( function ( err, png ) {
 						if (err) throw err;
-						// console.log(png);
-
-						console.log( png.getWidth() );
-						console.log( png.getHeight() );
-						console.log( png.getPixel(100, 100) );
 
 						let mesh = ZMesher( png );
-
+						// let mesh = ZContour( png );
 
 /*
 						const assignUVs = function ( geometry ) {
