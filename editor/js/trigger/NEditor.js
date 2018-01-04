@@ -1,14 +1,14 @@
 "use strict";
 
-var mouse = {
+let mouse = {
 	currentInput: undefined
 };
 
-var NEditor = function ( editor ) {
+let NEditor = function ( editor ) {
 
-	var signals = editor.signals;
+	let signals = editor.signals;
 
-	var container = new UI.Panel();
+	let container = new UI.Panel();
 	container.setId( 'nEditor' );
 	container.setPosition( 'absolute' );
 	container.setTop( '32px' );
@@ -19,7 +19,7 @@ var NEditor = function ( editor ) {
 	container.setBackgroundColor( '#222222' );
 	container.setDisplay( 'none' );
 
-	var renderer;
+	let renderer;
 
 	signals.rendererChanged.add( function ( newRenderer ) {
 
@@ -27,8 +27,8 @@ var NEditor = function ( editor ) {
 
 	} );
 
-	var graphSVG = ( function () {
-		var svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
+	let graphSVG = ( function () {
+		let svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
 		svg.setAttribute( 'position', 'absolute' );
 		svg.setAttribute( 'z-index', 1 );
 		svg.setAttribute( 'width', '100%' );
@@ -38,15 +38,15 @@ var NEditor = function ( editor ) {
 		return svg;
 	} )();
 
-	var graphPanel = new UI.Element( graphSVG );
+	let graphPanel = new UI.Element( graphSVG );
 	container.add(graphPanel);
 
 	graphSVG.onmousemove = function(event) {
 		if (mouse.currentInput){
-			var path = mouse.currentInput.path;
-			var inputPt = mouse.currentInput.getAttachPoint();
-			var outputPt = {x: event.pageX, y: event.pageY};
-			var val = createPath(inputPt, outputPt);
+			let path = mouse.currentInput.path;
+			let inputPt = mouse.currentInput.getAttachPoint();
+			let outputPt = {x: event.pageX, y: event.pageY-32};
+			let val = NEditorCreatePath(inputPt, outputPt);
 			path.setAttributeNS(null, 'd', val); // namespace, name, value
 		}
 	};
@@ -63,23 +63,24 @@ var NEditor = function ( editor ) {
 	};
 
 	// menu
-	var menu = new UI.UList();
+	let menu = new UI.UList();
 	menu.setId( 'menu' );
-	menu.addLi( 'Package Module', 'ui-state-disabled' );
+	menu.addLi( 'Modules', 'ui-state-disabled' );
 
-	var liEmotion = menu.addLi( 'Emotion' );
-	var liSecondary = menu.addLi( 'Secondary Motion' );
+	let liEmotion = menu.addLi( 'Emotion' );
+	// let liSecondary = menu.addLi( 'Secondary Motion' );
+	let liKeyboard = menu.addLi( 'Keyboard' );
 
-	var menuEmotion = new UI.UList();
-	menuEmotion.addLi( 'Happy' );
-	menuEmotion.addLi( 'Angry' );
+	let menuEmotion = new UI.UList();
+	let buttonHappy = menuEmotion.addLi( 'Happy' );
+	let buttonAngry = menuEmotion.addLi( 'Angry' );
 
-	var menuSecondary = new UI.UList();
-	menuSecondary.addLi( 'Hair' );
-	menuSecondary.addLi( '...' );
+	// let menuSecondary = new UI.UList();
+	// menuSecondary.addLi( 'Hair' );
+	// menuSecondary.addLi( '...' );
 
 	liEmotion.appendChild( menuEmotion.dom );
-	liSecondary.appendChild( menuSecondary.dom );
+	// liSecondary.appendChild( menuSecondary.dom );
 
 	menu.dom.style.position = 'absolute';
 	menu.dom.style.left = '80px';
@@ -89,38 +90,65 @@ var NEditor = function ( editor ) {
 
 	// jQuery methods go here ...
 	$( function() {
-		$(menu.dom).draggable();
+		$( menu.dom ).draggable();
 		$( "#menu" ).menu();
+
+		$( buttonHappy ).click(function () {
+			let node = new Node(mouse, {name: 'Happy', isRoot: true});
+			node.addInput(mouse, graphSVG, 'Eye');
+			node.addInput(mouse, graphSVG, 'Mouse');
+			node.addInput(mouse, graphSVG, 'Nose');
+			node.addInput(mouse, graphSVG, 'Hair');
+
+			node.moveTo({x: 300, y: 80});
+			node.initUI(container.dom);
+		});
+
+		$( liKeyboard ).click(function () {
+			let node = new Node(mouse, {'name': 'Keyboard', 'isRoot': true});
+			node.addInput(mouse, graphSVG, {'name': 'Output', 'type': 'input'});
+
+			node.moveTo({x: 300, y: 80});
+			node.initUI(container.dom);
+		});
 	} );
 
 	// real codes
-	var delay;
-	var currentMode;
-	var currentScript;
-	var currentObject;
+	let delay;
+	let currentMode;
+	let currentScript;
+	let currentObject;
 
 
+	// basic pattern
+	// listen to a change event, excute the engine to transform visual logic to scirpt,
+	// and add the script
 
+	var InferanceEngine = function () {
+		// if cannot reason, give up
+		// otherwise, reason and add
+	}
 
+/*
 	// Node 1
-	var node = new Node(mouse, {name: 'Node 1'});
+	let node = new Node(mouse, {name: 'Node 1'});
 	node.addInput(mouse, graphSVG, 'Value1');
 	node.addInput(mouse, graphSVG, 'Value2');
 	node.addInput(mouse, graphSVG, 'Value3');
 
 	// Node 2
-	var node2 = new Node(mouse, {name: 'Node 2', isRoot: true});
+	let node2 = new Node(mouse, {name: 'Node 2', isRoot: true});
 	node2.addInput(mouse, graphSVG, 'Text In');
 	node2.addInput(mouse, graphSVG, 'Value 5');
 
 	// Node 3
-	var node3 = new Node(mouse, {name: 'Something Else'});
+	let node3 = new Node(mouse, {name: 'Something Else'});
 	node3.addInput(mouse, graphSVG, 'Color4');
 	node3.addInput(mouse, graphSVG, 'Position');
 	node3.addInput(mouse, graphSVG, 'Noise Octaves');
 
 	// Node 4
-	var node4 = new Node(mouse, {name: 'TextString'});
+	let node4 = new Node(mouse, {name: 'TextString'});
 	node4.addInput(mouse, graphSVG, 'Value', 'input');
 
 	// Move to initial positions
@@ -142,7 +170,7 @@ var NEditor = function ( editor ) {
 
 	node4.inputs[0].value = 'Some String';
 
-
+*/
 
 
 

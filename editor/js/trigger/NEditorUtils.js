@@ -1,6 +1,6 @@
 "use strict";
 
-function createPath( a, b ) {
+function NEditorCreatePath( a, b ) {
   var diff = {
     x: b.x - a.x,
     y: b.y - a.y
@@ -40,6 +40,8 @@ var getFullOffset = function(el) {
 
 class NodeInput {
   constructor( mouse, svgCanvas, options ) {
+    options = options.name;
+
     if(svgCanvas===null){
       console.alert('Error! No svg canvas is defined');
     }
@@ -200,7 +202,7 @@ class Node {
 
     for (var i = 0; i < this.attachedPaths.length; i++){
       var inputPt = this.attachedPaths[i].input.getAttachPoint();
-      var pathStr = createPath(inputPt, outputPt);
+      var pathStr = NEditorCreatePath(inputPt, outputPt);
       this.attachedPaths[i].path.setAttributeNS(null, 'd', pathStr);
     }
 
@@ -210,7 +212,7 @@ class Node {
       var inputPt = this.inputs[j].getAttachPoint();
       var outputPt = this.inputs[j].node.getOutputPoint();
 
-      var pathStr = createPath(inputPt, outputPt);
+      var pathStr = NEditorCreatePath(inputPt, outputPt);
       this.inputs[j].path.setAttributeNS(null, 'd', pathStr);
     }
   }
@@ -231,7 +233,7 @@ class Node {
     var inputPt = input.getAttachPoint();
     var outputPt = this.getOutputPoint();
 
-    var pathStr = createPath(inputPt, outputPt);
+    var pathStr = NEditorCreatePath( inputPt, outputPt );
     input.path.setAttributeNS(null, 'd', pathStr);
   }
 
