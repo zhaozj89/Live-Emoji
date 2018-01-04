@@ -120,7 +120,6 @@ class NodeInput {
   }
 }
 
-
 class Node {
 	constructor( name, isRoot, value ) {
 		this.name = name;
@@ -263,6 +262,12 @@ class Node {
     my_container.appendChild(this.domElement);
     this.updatePosition();
   }
+}
+
+class Selector extends Node {
+	constructor () {
+		super ( null, false, null );
+	}
 }
 
 class NEditorNodeManager {

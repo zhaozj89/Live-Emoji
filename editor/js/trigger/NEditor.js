@@ -63,19 +63,36 @@ let NEditor = function ( editor ) {
 	menu.setId( 'menu' );
 	menu.addLi( 'Modules', 'ui-state-disabled' );
 
-	let Trigger = menu.addLi( 'Trigger' );
+	let Triggers = menu.addLi( 'Trigger' );
+	let Composites = menu.addLi( 'Composites' );
+	let Decorators = menu.addLi( 'Decorators' );
+	let Conditions = menu.addLi( 'Conditions' );
+	let Actions = menu.addLi( 'Actions' );
 	let Runner = menu.addLi( 'Run' );
 
-	let menuTrigger = new UI.UList();
-	let buttonKeyboard = menuTrigger.addLi( 'Keyboard' );
-	let buttonEmotion = menuTrigger.addLi( 'Emotion' );
+	/////////////////////////////////////////////////////////////////
+	let menuTriggers = new UI.UList();
+	let buttonKeyboard = menuTriggers.addLi( 'Keyboard' );
+	let buttonEmotion = menuTriggers.addLi( 'Emotion' );
 
 	let menuEmotion = new UI.UList();
 	let buttonHappy = menuEmotion.addLi( 'Happy' );
 	let buttonAngry = menuEmotion.addLi( 'Angry' );
 
+	Triggers.appendChild( menuTriggers.dom );
 	buttonEmotion.appendChild( menuEmotion.dom );
-	Trigger.appendChild( menuTrigger.dom );
+
+
+
+	/////////////////////////////////////////////////////////////////
+	let menuComposites = new UI.UList();
+	let buttonSelector = menuComposites.addLi( 'Selector (OR)' );
+	let buttonSequence = menuComposites.addLi( 'Sequence (AND)' );
+
+	Composites.appendChild( menuComposites.dom );
+
+
+	/////////////////////////////////////////////////////////////////
 
 	menu.dom.style.position = 'absolute';
 	menu.dom.style.left = '80px';
@@ -102,7 +119,9 @@ let NEditor = function ( editor ) {
 			manager.addNode({'name': 'Angry', 'type': NEDITOR_NODE_TYPE.EMOTION_TRIGGER});
 		});
 
-		$(  )
+		$( Runner ).click ( function () {
+			manager.infer();
+		});
 	} );
 
 	// real codes
