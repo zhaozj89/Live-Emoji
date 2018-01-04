@@ -1,5 +1,21 @@
 "use strict";
 
+let NEDITOR_MOUSE_INFO = {
+	currentInput: undefined
+};
+
+let NEDITOR_SVG_CANVAS = null;
+
+let NEDITOR_NODE_TYPE = {
+  KEYBOARD_TRIGGER : 0,
+  EMOTION_TRIGGER : 1
+};
+
+let NEDITOR_INPUT_TYPE = {
+  INPUT : 0,
+  CONNECTION : 1
+};
+
 function NEditorCreatePath( a, b ) {
   var diff = {
     x: b.x - a.x,
@@ -39,15 +55,9 @@ var getFullOffset = function(el) {
 
 
 class NodeInput {
-  constructor( mouse, svgCanvas, options ) {
-    options = options.name;
-
-    if(svgCanvas===null){
-      console.alert('Error! No svg canvas is defined');
-    }
-
+  constructor( options ) {
     this.name = '';
-    this.type = 'connection';
+    this.type = '';
 
     for (var prop in options)
       if (this.hasOwnProperty(prop))
@@ -59,11 +69,11 @@ class NodeInput {
     this.domElement.textContent = this.name;
     this.domElement.title = this.name;
 
-    this.domElement.classList.add('x-' + this.type);
+    this.domElement.classList.add('x-connection');
     this.domElement.classList.add('empty');
 
     var that = this;
-    if (this.type == 'input'){
+    if (this.type === NEDITOR_INPUT_TYPE.INPUT){
       var input = document.createElement('input');
       Object.defineProperty(that, 'value', {
         get: function(){ return input.value; },
@@ -74,33 +84,31 @@ class NodeInput {
       this.domElement.appendChild(input);
     }
 
-    this.path = document.createElementNS(svgCanvas.ns, 'path');
+    this.path = document.createElementNS(NEDITOR_SVG_CANVAS.ns, 'path');
     this.path.setAttributeNS(null, 'stroke', '#8e8e8e');
     this.path.setAttributeNS(null, 'stroke-width', '2');
     this.path.setAttributeNS(null, 'fill', 'none');
-    svgCanvas.appendChild(this.path);
+    NEDITOR_SVG_CANVAS.appendChild(this.path);
 
-    if (this.type == 'connection'){
-      this.domElement.onclick = function(event){
-        if (mouse.currentInput){
-          if (mouse.currentInput.path.hasAttribute('d'))
-            mouse.currentInput.path.removeAttribute('d');
-          if (mouse.currentInput.node){
-            mouse.currentInput.node.detachInput(mouse.currentInput);
-            mouse.currentInput.node = undefined;
-          }
+    this.domElement.onclick = function(event){
+      if (NEDITOR_MOUSE_INFO.currentInput){
+        if (NEDITOR_MOUSE_INFO.currentInput.path.hasAttribute('d'))
+          NEDITOR_MOUSE_INFO.currentInput.path.removeAttribute('d');
+        if (NEDITOR_MOUSE_INFO.currentInput.node){
+          NEDITOR_MOUSE_INFO.currentInput.node.detachInput(NEDITOR_MOUSE_INFO.currentInput);
+          NEDITOR_MOUSE_INFO.currentInput.node = undefined;
         }
+      }
 
-        mouse.currentInput = that;
-        if (that.node){
-          that.node.detachInput(that);
-          that.domElement.classList.remove('filled');
-          that.domElement.classList.add('empty');
-        }
+      NEDITOR_MOUSE_INFO.currentInput = that;
+      if (that.node){
+        that.node.detachInput(that);
+        that.domElement.classList.remove('filled');
+        that.domElement.classList.add('empty');
+      }
 
-        event.stopPropagation();
-      };
-    }
+      event.stopPropagation();
+    };
   }
 
   getAttachPoint() {
@@ -114,14 +122,10 @@ class NodeInput {
 
 
 class Node {
-	constructor( mouse, options ) {
-		this.name = '';
-		this.value = '';
-		this.isRoot = false;
-
-    for (let prop in options)
-      if (this.hasOwnProperty(prop))
-        this[prop] = options[prop];
+	constructor( name, isRoot, value ) {
+		this.name = name;
+		this.isRoot = isRoot;
+    this.value = value;
 
     this.inputs = [];
     this.attachedPaths = [];
@@ -131,6 +135,7 @@ class Node {
     this.domElement.classList.add('x-node');
     this.domElement.setAttribute('title', this.name);
 
+    // here ONLY ONE output, refine it later
     let outputDom = document.createElement('span');
     outputDom.classList.add('x-output');
     outputDom.textContent = '';
@@ -142,9 +147,9 @@ class Node {
 
     var that = this;
     outputDom.onclick = function(event){
-      if (mouse.currentInput && !that.ownsInput(mouse.currentInput)){
-        that.connectTo(mouse.currentInput);
-        mouse.currentInput = undefined;
+      if (NEDITOR_MOUSE_INFO.currentInput && !that.ownsInput(NEDITOR_MOUSE_INFO.currentInput)){
+        that.connectTo(NEDITOR_MOUSE_INFO.currentInput);
+        NEDITOR_MOUSE_INFO.currentInput = undefined;
       }
       event.stopPropagation();
     };
@@ -159,14 +164,14 @@ class Node {
     };
   }
 
-  addInput( mouse, svgCanvas, name, type ) {
+  addInput( name, type ) {
     var options = {};
     options.name = name;
     type === undefined ? true : options.type = type;
 
-    var input = new NodeInput(mouse, svgCanvas, options);
-    this.inputs.push(input);
-    this.domElement.appendChild(input.domElement);
+    var input = new NodeInput( options );
+    this.inputs.push( input );
+    this.domElement.appendChild( input.domElement );
 
     return input;
   }
@@ -189,7 +194,7 @@ class Node {
   }
 
   ownsInput( input ) {
-    for (var i = 0; i < this.inputs.length; i++){
+    for (var i = 0; i < this.inputs.length; ++i){
       if (this.inputs[i] == input)
         return true;
     }
@@ -257,5 +262,56 @@ class Node {
     this.domElement.style.position = 'absolute';
     my_container.appendChild(this.domElement);
     this.updatePosition();
+  }
+}
+
+class NEditorNodeManager {
+  constructor ( svgCanvas, container ) {
+    NEDITOR_SVG_CANVAS = svgCanvas;
+    this.container = container;
+
+    this.nodes = new Array();
+  }
+
+  addNode ( options ) {
+
+    let name = options['name'];
+    let isRoot = options['isRoot'];
+    let type = options['type'];
+
+    switch ( type ) {
+      case NEDITOR_NODE_TYPE.KEYBOARD_TRIGGER: {
+        let node = new Node( 'Keyboard', true, null );
+        node.addInput( 'Key', NEDITOR_INPUT_TYPE.INPUT );
+        node.moveTo({x: 300, y: 80});
+        node.initUI(this.container);
+
+        this.nodes.push( node );
+        break;
+      }
+
+      case NEDITOR_NODE_TYPE.EMOTION_TRIGGER: {
+        let node = new Node( 'Emotion', true, name );
+        node.addInput( name, NEDITOR_INPUT_TYPE.CONNECTION );
+        node.moveTo({x: 300, y: 80});
+        node.initUI(this.container);
+
+        this.nodes.push( node );
+        break;
+      }
+
+      default:
+        break;
+    }
+  }
+
+  infer () {
+    for(let i=0; i<this.nodes.length; ++i) {
+      console.log( this.nodes[i].value );
+      console.log('----------------------');
+      for(let j=0; j<this.nodes[i].inputs.length; ++j) {
+        console.log( this.nodes[i].inputs[j].value );
+      }
+    }
   }
 }

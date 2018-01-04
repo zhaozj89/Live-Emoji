@@ -1,9 +1,5 @@
 "use strict";
 
-let mouse = {
-	currentInput: undefined
-};
-
 let NEditor = function ( editor ) {
 
 	let signals = editor.signals;
@@ -42,9 +38,9 @@ let NEditor = function ( editor ) {
 	container.add(graphPanel);
 
 	graphSVG.onmousemove = function(event) {
-		if (mouse.currentInput){
-			let path = mouse.currentInput.path;
-			let inputPt = mouse.currentInput.getAttachPoint();
+		if (NEDITOR_MOUSE_INFO.currentInput){
+			let path = NEDITOR_MOUSE_INFO.currentInput.path;
+			let inputPt = NEDITOR_MOUSE_INFO.currentInput.getAttachPoint();
 			let outputPt = {x: event.pageX, y: event.pageY-32};
 			let val = NEditorCreatePath(inputPt, outputPt);
 			path.setAttributeNS(null, 'd', val); // namespace, name, value
@@ -52,13 +48,13 @@ let NEditor = function ( editor ) {
 	};
 
 	graphSVG.onclick = function(event){
-		if (mouse.currentInput){
-			mouse.currentInput.path.removeAttribute('d');
+		if (NEDITOR_MOUSE_INFO.currentInput){
+			NEDITOR_MOUSE_INFO.currentInput.path.removeAttribute('d');
 
-			if (mouse.currentInput.node)
-				mouse.currentInput.node.detachInput(mouse.currentInput);
+			if (NEDITOR_MOUSE_INFO.currentInput.node)
+				NEDITOR_MOUSE_INFO.currentInput.node.detachInput(NEDITOR_MOUSE_INFO.currentInput);
 
-			mouse.currentInput = undefined;
+			NEDITOR_MOUSE_INFO.currentInput = undefined;
 		}
 	};
 
@@ -67,25 +63,26 @@ let NEditor = function ( editor ) {
 	menu.setId( 'menu' );
 	menu.addLi( 'Modules', 'ui-state-disabled' );
 
-	let liEmotion = menu.addLi( 'Emotion' );
-	// let liSecondary = menu.addLi( 'Secondary Motion' );
-	let liKeyboard = menu.addLi( 'Keyboard' );
+	let Trigger = menu.addLi( 'Trigger' );
+	let Runner = menu.addLi( 'Run' );
+
+	let menuTrigger = new UI.UList();
+	let buttonKeyboard = menuTrigger.addLi( 'Keyboard' );
+	let buttonEmotion = menuTrigger.addLi( 'Emotion' );
 
 	let menuEmotion = new UI.UList();
 	let buttonHappy = menuEmotion.addLi( 'Happy' );
 	let buttonAngry = menuEmotion.addLi( 'Angry' );
 
-	// let menuSecondary = new UI.UList();
-	// menuSecondary.addLi( 'Hair' );
-	// menuSecondary.addLi( '...' );
-
-	liEmotion.appendChild( menuEmotion.dom );
-	// liSecondary.appendChild( menuSecondary.dom );
+	buttonEmotion.appendChild( menuEmotion.dom );
+	Trigger.appendChild( menuTrigger.dom );
 
 	menu.dom.style.position = 'absolute';
 	menu.dom.style.left = '80px';
 	menu.dom.style.top = '300px';
 	container.add( menu );
+
+	let manager = new NEditorNodeManager( graphSVG, container.dom );
 
 
 	// jQuery methods go here ...
@@ -93,24 +90,19 @@ let NEditor = function ( editor ) {
 		$( menu.dom ).draggable();
 		$( "#menu" ).menu();
 
+		$( buttonKeyboard ).click(function () {
+			manager.addNode({'type': NEDITOR_NODE_TYPE.KEYBOARD_TRIGGER});
+		});
+
 		$( buttonHappy ).click(function () {
-			let node = new Node(mouse, {name: 'Happy', isRoot: true});
-			node.addInput(mouse, graphSVG, 'Eye');
-			node.addInput(mouse, graphSVG, 'Mouse');
-			node.addInput(mouse, graphSVG, 'Nose');
-			node.addInput(mouse, graphSVG, 'Hair');
-
-			node.moveTo({x: 300, y: 80});
-			node.initUI(container.dom);
+			manager.addNode({'name': 'Happy', 'type': NEDITOR_NODE_TYPE.EMOTION_TRIGGER});
 		});
 
-		$( liKeyboard ).click(function () {
-			let node = new Node(mouse, {'name': 'Keyboard', 'isRoot': true});
-			node.addInput(mouse, graphSVG, {'name': 'Output', 'type': 'input'});
-
-			node.moveTo({x: 300, y: 80});
-			node.initUI(container.dom);
+		$( buttonAngry ).click(function () {
+			manager.addNode({'name': 'Angry', 'type': NEDITOR_NODE_TYPE.EMOTION_TRIGGER});
 		});
+
+		$(  )
 	} );
 
 	// real codes
