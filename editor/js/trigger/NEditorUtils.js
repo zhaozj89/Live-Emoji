@@ -16,7 +16,7 @@ function NEditorCreatePath( a, b ) {
   return pathStr;
 }
 
-var getFullOffset = function(el) {
+var NEditorGetFullOffset = function(el) {
   function innerRecursive (el){
   	let offset = {
   		top: el.offsetTop,

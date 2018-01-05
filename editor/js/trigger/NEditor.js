@@ -99,7 +99,7 @@ let NEditor = function ( editor ) {
 	menu.dom.style.top = '300px';
 	container.add( menu );
 
-	let manager = new NEditorNodeManager( graphSVG, container.dom );
+	let manager = new NodeManager( graphSVG, container.dom );
 
 
 	// jQuery methods go here ...
@@ -118,6 +118,14 @@ let NEditor = function ( editor ) {
 		$( buttonAngry ).click(function () {
 			manager.addNode({'name': 'Angry', 'type': NEDITOR_NODE_TYPE.EMOTION_TRIGGER});
 		});
+
+		$( buttonSelector ).click( function() {
+			manager.addNode( {'type': NEDITOR_NODE_TYPE.SELECTOR} );
+		} );
+
+		$( buttonSequence ).click( function() {
+			manager.addNode( {'type': NEDITOR_NODE_TYPE.SEQUENCE} );
+		} );
 
 		$( Runner ).click ( function () {
 			manager.infer();

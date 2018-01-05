@@ -1,5 +1,5 @@
 
-class NEditorNodeManager {
+class NodeManager {
 	constructor ( svgCanvas, container ) {
 		NEDITOR_SVG_CANVAS = svgCanvas;
 		this.container = container;
@@ -27,6 +27,24 @@ class NEditorNodeManager {
 			case NEDITOR_NODE_TYPE.EMOTION_TRIGGER: {
 				let node = new Node( 'Emotion', true, name );
 				node.addInput( name, NEDITOR_INPUT_TYPE.CONNECTION );
+				node.moveTo({x: 300, y: 80});
+				node.initUI(this.container);
+
+				this.nodes.push( node );
+				break;
+			}
+
+			case NEDITOR_NODE_TYPE.SELECTOR: {
+				let node = new Selector();
+				node.moveTo({x: 300, y: 80});
+				node.initUI(this.container);
+
+				this.nodes.push( node );
+				break;
+			}
+
+			case NEDITOR_NODE_TYPE.SEQUENCE: {
+				let node = new Sequence();
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
 

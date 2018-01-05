@@ -57,7 +57,7 @@ class NodeInput {
 	}
 
 	getAttachPoint() {
-		var offset = getFullOffset(this.domElement);
+		var offset = NEditorGetFullOffset(this.domElement);
 		return {
 			x: offset.left + this.domElement.offsetWidth - 2,
 			y: offset.top + this.domElement.offsetHeight / 2
@@ -101,7 +101,7 @@ class Node {
 
 	getOutputPoint() {
 		var fchild = this.domElement.firstElementChild;
-		var offset = getFullOffset(fchild);
+		var offset = NEditorGetFullOffset(fchild);
 		return {
 			x: offset.left + fchild.offsetWidth / 2,
 			y: offset.top + fchild.offsetHeight / 2
@@ -118,6 +118,17 @@ class Node {
 		this.domElement.appendChild( input.domElement );
 
 		return input;
+	}
+
+	removeInput( name ) {
+		for(let i=0; i<this.inputs.length; ++i) {
+			let input = this.inputs[i];
+			if( input.name == name ) {
+				this.inputs.splice( i, 1 );
+				input.domElement.parentElement.removeChild( input.domElement );
+			}
+		}
+		return null;
 	}
 
 	detachInput( input ){
