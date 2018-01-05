@@ -15,7 +15,7 @@ class NodeManager {
 
 		switch ( type ) {
 			case NEDITOR_NODE_TYPE.KEYBOARD_TRIGGER: {
-				let node = new Node( 'Keyboard', true, null );
+				let node = new Trigger( 'Keyboard' );
 				node.addInput( 'Key', NEDITOR_INPUT_TYPE.INPUT );
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
@@ -25,7 +25,7 @@ class NodeManager {
 			}
 
 			case NEDITOR_NODE_TYPE.EMOTION_TRIGGER: {
-				let node = new Node( 'Emotion', true, name );
+				let node = new Trigger( 'Emotion' );
 				node.addInput( name, NEDITOR_INPUT_TYPE.CONNECTION );
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
@@ -58,11 +58,11 @@ class NodeManager {
 	}
 
 	infer () {
-		for(let i=0; i<this.nodes.length; ++i) {
-			console.log( this.nodes[i].value );
-			console.log('----------------------');
-			for(let j=0; j<this.nodes[i].inputs.length; ++j) {
-				console.log( this.nodes[i].inputs[j].value );
+		for( let i=0; i<this.nodes.length; ++i ) {
+			if( this.nodes[i] instanceof Trigger ) {
+				for( let j=0; j<this.nodes[i].inputs.length; ++j ) {
+					console.log( this.nodes[i].inputs[j].node.name );
+				}
 			}
 		}
 	}

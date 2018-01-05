@@ -40,7 +40,7 @@ let NEditor = function ( editor ) {
 	graphSVG.onmousemove = function(event) {
 		if (NEDITOR_MOUSE_INFO.currentInput){
 			let path = NEDITOR_MOUSE_INFO.currentInput.path;
-			let inputPt = NEDITOR_MOUSE_INFO.currentInput.getAttachPoint();
+			let inputPt = NEDITOR_MOUSE_INFO.currentInput.getAttachedPoint();
 			let outputPt = {x: event.pageX, y: event.pageY-32};
 			let val = NEditorCreatePath(inputPt, outputPt);
 			path.setAttributeNS(null, 'd', val); // namespace, name, value

@@ -2,6 +2,10 @@ class Composites extends Node {
 	constructor ( name ) {
 		super ( name, false, null );
 
+		this.setUI();
+	}
+
+	setUI() {
 		this.counter = 0;
 
 		let rower = new UI.Row();
