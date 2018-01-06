@@ -21,8 +21,6 @@ class NodeManager {
 		// this.nodes = new Array();
 		this.triggers = new Array();
 		this.AST = new Object();
-
-		this.counter = 0;
 	}
 
 	addNode ( options ) {
@@ -67,8 +65,8 @@ class NodeManager {
 		for(let i=0; i<args.length; ++i) val += args[i];
 
 		let res = {
-			type : node.name,
-			value : val
+			'type' : node.name,
+			'args' : val
 		}
 
 		let children = node.getChildren();
@@ -83,8 +81,73 @@ class NodeManager {
 
 	parser () {
 		for( let i=0; i<this.triggers.length; ++i ) {
-			this.AST[`trigger_${this.counter++}`] = this.parseNode( this.triggers[i] );
+			this.AST['trigger_'+i] = this.parseNode( this.triggers[i] );
 		}
 		return this.AST;
+	}
+
+	generator( node ) {
+		let res = '';
+		if( node['type']==='keyboard' ) {
+			res +=
+			`
+				function keydown ( event ) {
+					var x = event.keyCode || event.which;
+					var y = String.fromCharCode(x);
+					if(y===${node['args']}.toUpperCase()) {
+
+			`;
+
+			for(let body in node) {
+				if(body.slice(0, 4)==='body') {
+					res += this.generator( node[body] );
+				}
+			}
+
+			res +=
+			`
+					return 0;
+				}
+			`;
+		}
+
+		if( node['type'] === 'selector' ) {
+			res +=
+			`
+				for( let i=0; i<${Object.keys(node).length}; ++i ) {
+
+			`;
+
+			for(let body in node) {
+				if(body.slice(0, 4)==='body') {
+					res += this.generator( node[body] );
+				}
+			}
+
+			res +=
+			`
+					return 0;
+				}
+			`;
+		}
+
+		if( node['type'] === 'translation' ) {
+			res +=
+			`
+				excute this node;
+				return 0;
+			`;
+		}
+
+		return res;
+	}
+
+	compiler() {
+		let ast = this.parser();
+		for( let trigger in ast ) {
+			let code = this.generator( ast[trigger] );
+			console.log( code );
+		}
+		console.log( ast );
 	}
 }

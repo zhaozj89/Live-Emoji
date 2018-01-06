@@ -167,7 +167,7 @@ let NEditor = function ( editor ) {
 		} );
 
 		$( Runner ).click ( function () {
-			console.log( manager.parser() );
+			manager.compiler();
 		});
 	} );
 
