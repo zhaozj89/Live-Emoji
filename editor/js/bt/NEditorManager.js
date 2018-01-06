@@ -1,54 +1,58 @@
 
+// class Queue {
+// 	constructor() { this.data = new Array(); }
+// 	push( val ) { this.data.push(val); }
+// 	pop() { return this.data.shift(); }
+// 	top() { return (this.data.length>0 ? this.data[0] : null); }
+// }
+//
+// class Stack {
+// 	constructor() { this.data = new Array(); };
+// 	push( val ) { this.data.push(val); }
+// 	pop() { return this.data.pop(); }
+// 	top() { return (this.data.length>0 ? this.data[this.data.length-1] : null); }
+// }
+
 class NodeManager {
 	constructor ( svgCanvas, container ) {
 		NEDITOR_SVG_CANVAS = svgCanvas;
 		this.container = container;
 
-		this.nodes = new Array();
+		// this.nodes = new Array();
+		this.triggers = new Array();
+		this.AST = new Object();
+
+		this.counter = 0;
 	}
 
 	addNode ( options ) {
 
-		let name = options['name'];
-		let isRoot = options['isRoot'];
 		let type = options['type'];
+		let value = options['value'];
 
 		switch ( type ) {
-			case NEDITOR_NODE_TYPE.KEYBOARD_TRIGGER: {
-				let node = new Trigger( 'Keyboard' );
-				node.addInput( 'Key', NEDITOR_INPUT_TYPE.INPUT );
+			case NODE_TYPE.TRIGGER: {
+				let node = new Trigger( value );
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
-
-				this.nodes.push( node );
+				// this.nodes.push( node );
+				this.triggers.push( node );
 				break;
 			}
 
-			case NEDITOR_NODE_TYPE.EMOTION_TRIGGER: {
-				let node = new Trigger( 'Emotion' );
-				node.addInput( name, NEDITOR_INPUT_TYPE.CONNECTION );
+			case NODE_TYPE.COMPOSITE: {
+				let node = new Composite( value );
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
-
-				this.nodes.push( node );
+				// this.nodes.push( node );
 				break;
 			}
 
-			case NEDITOR_NODE_TYPE.SELECTOR: {
-				let node = new Selector();
+			case NODE_TYPE.ACTION: {
+				let node = new Action( value );
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
-
-				this.nodes.push( node );
-				break;
-			}
-
-			case NEDITOR_NODE_TYPE.SEQUENCE: {
-				let node = new Sequence();
-				node.moveTo({x: 300, y: 80});
-				node.initUI(this.container);
-
-				this.nodes.push( node );
+				// this.nodes.push( node );
 				break;
 			}
 
@@ -57,13 +61,26 @@ class NodeManager {
 		}
 	}
 
-	infer () {
-		for( let i=0; i<this.nodes.length; ++i ) {
-			if( this.nodes[i] instanceof Trigger ) {
-				for( let j=0; j<this.nodes[i].inputs.length; ++j ) {
-					console.log( this.nodes[i].inputs[j].node.name );
-				}
+	parseNode( node ) {
+		let res = {
+			type : node.value,
+			value : node.value
+		}
+
+		let children = node.getChildren();
+		for(let i=0; i<children.length; ++i) {
+			if( children[i]!==null ) {
+				res['body_' + i] = this.parseNode( children[i] );
 			}
 		}
+
+		return res;
+	}
+
+	parser () {
+		for( let i=0; i<this.triggers.length; ++i ) {
+			this.AST[`trigger_${this.counter++}`] = this.parseNode( this.triggers[i] );
+		}
+		return this.AST;
 	}
 }

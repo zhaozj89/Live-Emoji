@@ -65,8 +65,8 @@ let NEditor = function ( editor ) {
 
 	let Triggers = menu.addLi( 'Trigger' );
 	let Composites = menu.addLi( 'Composites' );
-	let Decorators = menu.addLi( 'Decorators' );
-	let Conditions = menu.addLi( 'Conditions' );
+	// let Decorators = menu.addLi( 'Decorators' );
+	// let Conditions = menu.addLi( 'Conditions' );
 	let Actions = menu.addLi( 'Actions' );
 	let Runner = menu.addLi( 'Run' );
 
@@ -74,25 +74,19 @@ let NEditor = function ( editor ) {
 	let menuTriggers = new UI.UList();
 	let buttonKeyboard = menuTriggers.addLi( 'Keyboard' );
 	let buttonEmotion = menuTriggers.addLi( 'Emotion' );
-
-	let menuEmotion = new UI.UList();
-	let buttonHappy = menuEmotion.addLi( 'Happy' );
-	let buttonAngry = menuEmotion.addLi( 'Angry' );
-
 	Triggers.appendChild( menuTriggers.dom );
-	buttonEmotion.appendChild( menuEmotion.dom );
-
-
 
 	/////////////////////////////////////////////////////////////////
 	let menuComposites = new UI.UList();
 	let buttonSelector = menuComposites.addLi( 'Selector (OR)' );
 	let buttonSequence = menuComposites.addLi( 'Sequence (AND)' );
-
 	Composites.appendChild( menuComposites.dom );
 
-
 	/////////////////////////////////////////////////////////////////
+	let menuActions = new UI.UList();
+	let buttonTranslation = menuActions.addLi( 'Translation' );
+	let buttonRotation = menuActions.addLi( 'Rotation' );
+	Actions.appendChild( menuActions.dom );
 
 	menu.dom.style.position = 'absolute';
 	menu.dom.style.left = '80px';
@@ -108,27 +102,31 @@ let NEditor = function ( editor ) {
 		$( "#menu" ).menu();
 
 		$( buttonKeyboard ).click(function () {
-			manager.addNode({'type': NEDITOR_NODE_TYPE.KEYBOARD_TRIGGER});
+			manager.addNode({'type': NODE_TYPE.TRIGGER, 'value': 'keyboard'});
 		});
 
-		$( buttonHappy ).click(function () {
-			manager.addNode({'name': 'Happy', 'type': NEDITOR_NODE_TYPE.EMOTION_TRIGGER});
-		});
-
-		$( buttonAngry ).click(function () {
-			manager.addNode({'name': 'Angry', 'type': NEDITOR_NODE_TYPE.EMOTION_TRIGGER});
+		$( buttonEmotion ).click(function () {
+			manager.addNode({'type': NODE_TYPE.TRIGGER, 'value': 'emotion'});
 		});
 
 		$( buttonSelector ).click( function() {
-			manager.addNode( {'type': NEDITOR_NODE_TYPE.SELECTOR} );
+			manager.addNode( {'type': NODE_TYPE.COMPOSITE, 'value': 'selector'} );
 		} );
 
 		$( buttonSequence ).click( function() {
-			manager.addNode( {'type': NEDITOR_NODE_TYPE.SEQUENCE} );
+			manager.addNode( {'type': NODE_TYPE.COMPOSITE, 'value': 'sequence'} );
+		} );
+
+		$( buttonTranslation ).click( function() {
+			manager.addNode( {'type': NODE_TYPE.ACTION, 'value': 'translation'} );
+		} );
+
+		$( buttonRotation ).click( function() {
+			manager.addNode( {'type': NODE_TYPE.ACTION, 'value': 'rotation'} );
 		} );
 
 		$( Runner ).click ( function () {
-			manager.infer();
+			console.log( manager.parser() );
 		});
 	} );
 

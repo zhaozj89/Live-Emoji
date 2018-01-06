@@ -1,7 +1,6 @@
-class Composites extends Node {
-	constructor ( name ) {
-		super ( name, false, null );
-
+class Composite extends Node {
+	constructor ( value ) {
+		super ( NODE_TYPE.COMPOSITE, value, false );
 		this.setUI();
 	}
 
@@ -26,32 +25,20 @@ class Composites extends Node {
 		this.domElement.appendChild( rower.dom );
 		this.domElement.appendChild( breaker.dom );
 
-		this.addInput( 'Channel '+this.counter, NEDITOR_INPUT_TYPE.CONNECTION );
+		this.addInput( INPUT_TYPE.CONNECTION, 'channel '+this.counter );
 		++this.counter;
 
 		let that = this;
 		$( incrementer.dom ).click( function() {
 
-			that.addInput( 'Channel '+that.counter, NEDITOR_INPUT_TYPE.CONNECTION );
+			that.addInput( INPUT_TYPE.CONNECTION, 'channel '+that.counter );
 			++that.counter;
 		} );
 
 		$( decrementer.dom ).click( function() {
 			if( that.counter<=1 ) return;
 			--that.counter;
-			that.removeInput( 'Channel '+that.counter );
+			that.removeInput( 'channel '+that.counter );
 		} );
-	}
-}
-
-class Selector extends Composites {
-	constructor() {
-		super( 'Selector (OR)' );
-	}
-}
-
-class Sequence extends Composites {
-	constructor() {
-		super( 'Sequence (AND)' );
 	}
 }

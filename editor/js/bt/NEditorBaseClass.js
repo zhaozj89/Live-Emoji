@@ -66,17 +66,18 @@ let CreateOutputDOM = function ( that ) {
 }
 
 class NodeInput {
-	constructor( name, type ) {
-		this.name = name;
+	constructor( type, value ) {
+		this.name = value;
 		this.type = type;
+		this.value = value;
 
-		this.node = undefined;
+		this.node = null;
 
 		let that = this;
 		this.domElement = CreateNodeInputDOM( that );
 		this.path = CreateNodeInputPath( NEDITOR_SVG_CANVAS );
 
-		if (this.type === NEDITOR_INPUT_TYPE.INPUT){
+		if (this.type === INPUT_TYPE.INPUT){
 			var input = document.createElement('input');
 			Object.defineProperty(that, 'value', {
 				get: function(){ return input.value; },
@@ -85,6 +86,12 @@ class NodeInput {
 			});
 			this.domElement.textContent += ' ';
 			this.domElement.appendChild(input);
+		}
+
+		if( this.type === INPUT_TYPE.SELECTMENU ) {
+			let selectMenu = new UI.Select();
+			selectMenu.setOptions( {'Happy' : "Happy", "Angry" : "Angry"} );
+			this.domElement.appendChild( selectMenu.dom );
 		}
 	}
 
@@ -99,10 +106,11 @@ class NodeInput {
 
 
 class Node {
-	constructor( name, isRoot, value ) {
-		this.name = name;
-		this.isRoot = isRoot;
+	constructor( type, value, isRoot ) {
+		this.name = value;
+		this.type = type;
 		this.value = value;
+		this.isRoot = isRoot;
 
 		this.inputs = [];
 		this.attachedPaths = [];
@@ -176,7 +184,7 @@ class Node {
 		}
 
 		for (let j = 0; j < this.inputs.length; ++j) {
-			if (this.inputs[j].node === undefined) continue;
+			if (this.inputs[j].node === null) continue;
 
 			let inputPt = this.inputs[j].getAttachedPoint();
 			let outputPt = this.inputs[j].node.getOutputPoint();
@@ -241,6 +249,7 @@ class Node {
 		for (let k=0; k<this.inputs.length; ++k) {
 			res.push( this.inputs[k].node );
 		}
+		return res;
 	}
 
 
