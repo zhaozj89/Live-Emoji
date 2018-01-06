@@ -55,7 +55,7 @@ let NEditor = function ( editor ) {
 
 
 
-	
+
 	let renderer;
 
 	signals.rendererChanged.add( function ( newRenderer ) {
@@ -82,7 +82,7 @@ let NEditor = function ( editor ) {
 		if (NEDITOR_MOUSE_INFO.currentInput){
 			let path = NEDITOR_MOUSE_INFO.currentInput.path;
 			let inputPt = NEDITOR_MOUSE_INFO.currentInput.getAttachedPoint();
-			let outputPt = {x: event.pageX, y: event.pageY-32};
+			let outputPt = {x: event.pageX, y: event.pageY-68};
 			let val = NEditorCreatePath(inputPt, outputPt);
 			path.setAttributeNS(null, 'd', val); // namespace, name, value
 		}
