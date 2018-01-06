@@ -6,12 +6,12 @@ class Trigger extends Node {
 
     switch ( value ) {
       case 'keyboard': {
-        this.addInput( INPUT_TYPE.INPUT, 'key');
+        this.addInput( INPUT_TYPE.INPUT_KEY, 'key');
         break;
       }
 
       case 'emotion': {
-        this.addInput( INPUT_TYPE.SELECTMENU, 'emotion' );
+        this.addInput( INPUT_TYPE.SELECT_EMOTION, 'emotion' );
         break;
       }
     }

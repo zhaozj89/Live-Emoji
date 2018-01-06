@@ -62,9 +62,13 @@ class NodeManager {
 	}
 
 	parseNode( node ) {
+		let args = node.getArgs();
+		let val = '';
+		for(let i=0; i<args.length; ++i) val += args[i];
+
 		let res = {
-			type : node.value,
-			value : node.value
+			type : node.name,
+			value : val
 		}
 
 		let children = node.getChildren();

@@ -69,7 +69,7 @@ class NodeInput {
 	constructor( type, value ) {
 		this.name = value;
 		this.type = type;
-		this.value = value;
+		this.arg = null;
 
 		this.node = null;
 
@@ -77,21 +77,18 @@ class NodeInput {
 		this.domElement = CreateNodeInputDOM( that );
 		this.path = CreateNodeInputPath( NEDITOR_SVG_CANVAS );
 
-		if (this.type === INPUT_TYPE.INPUT){
+		if (this.type === INPUT_TYPE.INPUT_KEY){
 			var input = document.createElement('input');
-			Object.defineProperty(that, 'value', {
-				get: function(){ return input.value; },
-				set: function(val){ input.value = val },
-				enumerable: true
-			});
 			this.domElement.textContent += ' ';
-			this.domElement.appendChild(input);
+			this.domElement.appendChild( input );
+			$( input ).change( function() {that.arg = input.value;} );
 		}
 
-		if( this.type === INPUT_TYPE.SELECTMENU ) {
+		if( this.type === INPUT_TYPE.SELECT_EMOTION ) {
 			let selectMenu = new UI.Select();
 			selectMenu.setOptions( {'Happy' : "Happy", "Angry" : "Angry"} );
 			this.domElement.appendChild( selectMenu.dom );
+			$( selectMenu.dom ).change( function() { that.arg = selectMenu.getValue(); } );
 		}
 	}
 
@@ -109,7 +106,6 @@ class Node {
 	constructor( type, value, isRoot ) {
 		this.name = value;
 		this.type = type;
-		this.value = value;
 		this.isRoot = isRoot;
 
 		this.inputs = [];
@@ -252,5 +248,11 @@ class Node {
 		return res;
 	}
 
-
+	getArgs() {
+		let res = new Array();
+		for(let i=0; i<this.inputs.length; ++i) {
+			if( this.inputs[i].arg!==null ) res.push( this.inputs[i].arg );
+		}
+		return res;
+	}
 }
