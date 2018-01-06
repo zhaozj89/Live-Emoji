@@ -15,6 +15,47 @@ let NEditor = function ( editor ) {
 	container.setBackgroundColor( '#222222' );
 	container.setDisplay( 'none' );
 
+	var header = new UI.Panel();
+	header.setPadding( '10px' );
+	container.add( header );
+
+	var title = new UI.Text().setColor( '#fff' );
+	header.add( title );
+
+	var buttonSVG = ( function () {
+		var svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
+		svg.setAttribute( 'width', 32 );
+		svg.setAttribute( 'height', 32 );
+		var path = document.createElementNS( 'http://www.w3.org/2000/svg', 'path' );
+		path.setAttribute( 'd', 'M 12,12 L 22,22 M 22,12 12,22' );
+		path.setAttribute( 'stroke', '#fff' );
+		svg.appendChild( path );
+		return svg;
+	} )();
+
+	var close = new UI.Element( buttonSVG );
+	close.setPosition( 'absolute' );
+	close.setTop( '3px' );
+	close.setRight( '1px' );
+	close.setCursor( 'pointer' );
+	close.onClick( function () {
+
+		container.setDisplay( 'none' );
+
+	} );
+	header.add( close );
+
+
+
+
+
+
+
+
+
+
+
+	
 	let renderer;
 
 	signals.rendererChanged.add( function ( newRenderer ) {
