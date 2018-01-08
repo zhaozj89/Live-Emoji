@@ -7,12 +7,12 @@ let NEditor = function ( editor ) {
 	let container = new UI.Panel();
 	container.setId( 'nEditor' );
 	container.setPosition( 'absolute' );
-	container.setTop( '32px' );
-	container.setRight( '300px' );
-	container.setBottom( '32px' );
-	container.setLeft( '0px' );
-	container.setOpacity( 0.8 );
-	container.setBackgroundColor( '#222222' );
+	// container.setTop( '32px' );
+	// container.setRight( '300px' );
+	// container.setBottom( '32px' );
+	// container.setLeft( '0px' );
+	// container.setOpacity( 0.8 );
+	container.setBackgroundColor( '#272822' );
 	container.setDisplay( 'none' );
 
 	var header = new UI.Panel();

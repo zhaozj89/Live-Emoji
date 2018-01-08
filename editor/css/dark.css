@@ -70,6 +70,14 @@ select {
 	opacity: 0.9;
 }
 
+#nEditor {
+	position: absolute;
+	top: 32px;
+	left: 0;
+	right: 300px;
+	bottom: 32px;
+}
+
 #player {
 	position: absolute;
 	top: 32px;
