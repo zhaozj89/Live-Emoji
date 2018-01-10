@@ -132,6 +132,14 @@ properties.forEach( function ( property ) {
 
 } );
 
+UI.Element.prototype.getWidth = function () {
+	return this.dom.style.width;
+}
+
+UI.Element.prototype.getHeight = function () {
+	return this.dom.style.height;
+}
+
 // events
 
 var events = [ 'KeyUp', 'KeyDown', 'MouseOver', 'MouseOut', 'Click', 'DblClick', 'Change' ];
@@ -215,6 +223,66 @@ UI.Panel = function () {
 
 UI.Panel.prototype = Object.create( UI.Element.prototype );
 UI.Panel.prototype.constructor = UI.Panel;
+
+// Video
+
+UI.Video = function () {
+
+	UI.Element.call( this );
+
+	var dom = document.createElement( 'video' );
+	dom.className = 'Video';
+
+	this.dom = dom;
+
+	return this;
+
+}
+
+UI.Video.prototype = Object.create( UI.Element.prototype );
+UI.Video.prototype.constructor = UI.Video;
+
+UI.Video.prototype.setControls = function ( val ) {
+	this.dom.controls = val;
+}
+
+UI.Video.prototype.setPreload = function (val) {
+	this.dom.preload = val;
+}
+
+UI.Video.prototype.setLoop = function (val) {
+	this.dom.loop = val;
+}
+
+UI.Video.prototype.setPlaysinline = function (val) {
+	this.dom.playsinline = val;
+}
+
+UI.Video.prototype.setAutoplay = function (val) {
+	this.dom.autoplay = val;
+}
+
+// Canvas
+
+UI.Canvas = function () {
+	UI.Element.call( this );
+
+	var dom = document.createElement( 'canvas' );
+	dom.className = 'Canvas';
+
+	this.dom = dom;
+
+	return this;
+
+}
+
+UI.Canvas.prototype = Object.create( UI.Element.prototype );
+
+UI.Canvas.prototype.constructor = UI.Canvas;
+
+UI.Canvas.prototype.getContext = function ( val ) {
+	return this.dom.getContext( val );
+}
 
 // Text
 
@@ -945,6 +1013,17 @@ UI.Button.prototype.setLabel = function ( value ) {
 
 };
 
+UI.Button.prototype.setValue = function ( val ) {
+	this.dom.value = val;
+}
+
+UI.Button.prototype.setType = function (val) {
+	this.dom.type = val;
+}
+
+UI.Button.prototype.setDisabled = function (val) {
+	this.dom.disabled = val;
+}
 
 // Unordered list
 UI.UList = function () {
