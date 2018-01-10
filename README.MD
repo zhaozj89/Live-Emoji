@@ -9,13 +9,14 @@ Pre-authoring for 2D live animation
 * Import OBJ
 * Node Editor UI
 * Image Triangulation
+* Face tracking
 
 #### TODO
 
 * Animation
 * Node Graph Logic
 * Asset
-* Face tracking
+
 
 #### Dependencies
 
