@@ -2,6 +2,8 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
+let FaceInfo = {}
+
 Sidebar.Project = function ( editor ) {
 
 	var config = editor.config;
@@ -22,9 +24,6 @@ Sidebar.Project = function ( editor ) {
 	container.setPaddingTop( '20px' );
 
 	var overlayedPanel = new UI.Panel();
-	// overlayedPanel.setPosition( 'absolute' );
-	// overlayedPanel.setWidth( '100%' );
-	// overlayedPanel.setHeight( '100%' );
 	overlayedPanel.setWidth( '250px' );
 	overlayedPanel.setHeight( '200px' );
 
@@ -74,24 +73,19 @@ Sidebar.Project = function ( editor ) {
 
 	var trackingStarted = false;
 
-	function enablestart() {
-		startButton.dom.value = "start";
-		startButton.dom.disabled = null;
-	}
-
-	function adjustVideoProportions() {
-	  var proportion = videoStream.dom.videoWidth / videoStream.dom.videoHeight;
-	  videoStreamWidth = Math.round(videoStreamHeight * proportion);
-	  videoStream.dom.width = videoStreamWidth;
-	  videoStreamOverlay.dom.width = videoStreamWidth;
-	}
-
-	function gumSuccess( stream ) {
+	function GetUserMediaSuccess( stream ) {
 	  if ("srcObject" in videoStream.dom) {
 	    videoStream.dom.srcObject = stream;
 	  } else {
 	    videoStream.dom.src = ( window.URL && window.URL.createObjectURL( stream ) );
 	  }
+
+		function adjustVideoProportions() {
+		  var proportion = videoStream.dom.videoWidth / videoStream.dom.videoHeight;
+		  videoStreamWidth = Math.round(videoStreamHeight * proportion);
+		  videoStream.dom.width = videoStreamWidth;
+		  videoStreamOverlay.dom.width = videoStreamWidth;
+		}
 
 	  videoStream.dom.onloadedmetadata = function() {
 	    adjustVideoProportions();
@@ -110,42 +104,43 @@ Sidebar.Project = function ( editor ) {
 	  }
 	}
 
-	function gumFail() {
-	  // do nothing
-	}
+	function GetUserMediaFail() {}
 
 	if (navigator.mediaDevices) {
-		navigator.mediaDevices.getUserMedia({video : true}).then(gumSuccess).catch(gumFail);
-	}
-	else if (navigator.getUserMedia) {
-		navigator.getUserMedia({video : true}, gumSuccess, gumFail);
-	}
-	else {
+		navigator.mediaDevices.getUserMedia({video : true}).then(GetUserMediaSuccess).catch(GetUserMediaFail);
+	} else if (navigator.getUserMedia) {
+		navigator.getUserMedia({video : true}, GetUserMediaSuccess, GetUserMediaFail);
+	} else {
 		alert("Your browser does not seem to support getUserMedia, using a fallback video instead.");
 	}
 
-	videoStream.dom.addEventListener('canplay', enablestart, false);
+	videoStream.dom.addEventListener('canplay', function(){
+		startButton.dom.value = "start";
+		startButton.dom.disabled = null;
+	}, false);
 
 
 	/*********** setup of emotion detection *************/
 	// set eigenvector 9 and 11 to not be regularized. This is to better detect motion of the eyebrows
 	pModel.shapeModel.nonRegularizedVectors.push(9);
 	pModel.shapeModel.nonRegularizedVectors.push(11);
+
 	var ec = new emotionClassifier();
 	ec.init(emotionModel);
 
 	/*** Code for head tracking ***/
-	var htracker = new headtrackr.Tracker({calcAngles : true, ui : false});
-	htracker.init(videoStream.dom, videoStreamOverlay.dom);
-	htracker.start();
-	document.addEventListener("facetrackingEvent", function(event) {
-		//在这里可以对head的数据进行实时处理，x,y是头（脸）的位置(400 x 300)，width,height是头（脸）的像素长宽，angle是头（脸）的角度（正常情况下为90度，也就是pi/2，往左倾斜，变大）
-		var headInfo = "";
-		headInfo += "Face positon: [" + event.x + ", " + event.y + "]  ";
-		headInfo += "width and height: [" + event.width + ", " + event.height + "]  ";
-		headInfo += "angle: " + event.angle + "<br/>";
-		// console.log( headInfo );
-	});
+	// var htracker = new headtrackr.Tracker({calcAngles : true, ui : false});
+	// htracker.init(videoStream.dom, videoStreamOverlay.dom);
+	// htracker.start();
+
+	// document.addEventListener("facetrackingEvent", function(event) {
+	// 	//在这里可以对head的数据进行实时处理，x,y是头（脸）的位置(400 x 300)，width,height是头（脸）的像素长宽，angle是头（脸）的角度（正常情况下为90度，也就是pi/2，往左倾斜，变大）
+	// 	var headInfo = "";
+	// 	headInfo += "Face positon: [" + event.x + ", " + event.y + "]  ";
+	// 	headInfo += "width and height: [" + event.width + ", " + event.height + "]  ";
+	// 	headInfo += "angle: " + event.angle + "<br/>";
+	// 	// console.log( headInfo );
+	// });
 
 	/*********** Code for face tracking *********/
 	var ctrack = new clm.tracker({searchWindow:11});
@@ -222,6 +217,10 @@ Sidebar.Project = function ( editor ) {
 		// console.log( positionString );
 		// console.log( "Predicted emotions: " + mostPossible );
 		// console.log( "Possibilities of all emotions: " + emotionvalue );
+
+		FaceInfo['emotion'] = emotionvalue;
+
+		console.log( FaceInfo );
 	}
 
 	function drawLoop() {//画出人脸位置，就是那些绿色的线，用ctrack.draw在overlay这个canvas上画出来
