@@ -2,12 +2,33 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-let FaceInfo = {}
+
+function signalLoop( face_info, triggers ) {
+	if( FACE_INFORMATION_PRE['emotion'] !== FACE_INFORMATION['emotion'] ) {
+		triggers.emotion.dispatch( FACE_INFORMATION['emotion'] );
+	}
+
+	if( FACE_INFORMATION_PRE['leftEye'] !== FACE_INFORMATION['leftEye'] ) {
+		triggers.leftEye.dispatch( FACE_INFORMATION['leftEye'] );
+	}
+
+	if( FACE_INFORMATION_PRE['rightEye'] !== FACE_INFORMATION['rightEye'] ) {
+		triggers.rightEye.dispatch( FACE_INFORMATION['rightEye'] );
+	}
+
+	if( FACE_INFORMATION_PRE['mouth'] !== FACE_INFORMATION['mouth'] ) {
+		triggers.mouth.dispatch( FACE_INFORMATION['mouth'] );
+	}
+
+	FACE_INFORMATION_PRE = ObjDeepCopy( FACE_INFORMATION );
+}
 
 Sidebar.Project = function ( editor ) {
 
 	var config = editor.config;
 	var signals = editor.signals;
+
+	var triggers = editor.triggers;
 
 	var rendererTypes = {
 
@@ -126,7 +147,7 @@ Sidebar.Project = function ( editor ) {
 	pModel.shapeModel.nonRegularizedVectors.push(11);
 
 	var ec = new emotionClassifier();
-	ec.init(emotionModel);
+	ec.init( emotionModel );
 
 	/*** Code for head tracking ***/
 	// var htracker = new headtrackr.Tracker({calcAngles : true, ui : false});
@@ -143,71 +164,80 @@ Sidebar.Project = function ( editor ) {
 	// });
 
 	/*********** Code for face tracking *********/
-	var ctrack = new clm.tracker({searchWindow:11});
-	ctrack.init(pModel);
-	ctrack.setResponseMode("single", ["raw"]);
+	var ctrack = new clm.tracker( {searchWindow:11} );
+	ctrack.init( pModel );
+	ctrack.setResponseMode( "single", ["raw"] );
 
-	function startVideo() { //按下按钮之后再开始tracking脸和头
+	function startVideo() {
+
+		//按下按钮之后再开始tracking脸和头
 		// start video
 		videoStream.dom.play();
 		// start tracking
-		ctrack.start(videoStream.dom);
+		ctrack.start( videoStream.dom );
 		//htracker.start();
 		trackingStarted = true;
 		// start loop to draw face and output messages
 		drawLoop();
 		positionLoop();
+
+		signalLoop( FACE_INFORMATION, triggers );
 	}
 
 	/******Code for output positions of face feature points*************************/
 	function positionLoop() {
 		requestAnimFrame(positionLoop);
+
 		var positions = ctrack.getCurrentPosition();//这个函数返回了检测到的所有特征点(70个)的在vid（400 x 300）中的位置，格式是：positions[i][j]代表第i个特征点的位置(j=0代表x，j=1代表y，注意原点在右上方)
-		var positionString = "";
-		if (positions) {//列了一些关键点的位置
-		/********** Output key position ***********/
-			positionString += "left eye: ["+positions[32][0].toFixed(1)+","+positions[32][1].toFixed(1)+"] ";
-			positionString += "right eye: ["+positions[27][0].toFixed(1)+","+positions[27][1].toFixed(1)+"]<br/>";
-			positionString += "chin point: ["+positions[7][0].toFixed(1)+","+positions[7][1].toFixed(1)+"]<br/>";
-			positionString += "nose point: ["+positions[62][0].toFixed(1)+","+positions[62][1].toFixed(1)+"]<br/>";
-			positionString += "feature points of eyebrow: 15 - 18 -> left, 19 - 22 -> right" + "<br/>";
-			for (var p = 15;p < 23;p++) {
-				positionString += "featurepoint "+p+" : ["+positions[p][0].toFixed(1)+","+positions[p][1].toFixed(1)+"]<br/>";
-			}
+		// var positionString = "";
+		if( positions ) {
+			//列了一些关键点的位置
+			/********** Output key position ***********/
+			// positionString += "left eye: ["+positions[32][0].toFixed(1)+","+positions[32][1].toFixed(1)+"] ";
+			// positionString += "right eye: ["+positions[27][0].toFixed(1)+","+positions[27][1].toFixed(1)+"]<br/>";
+			// positionString += "chin point: ["+positions[7][0].toFixed(1)+","+positions[7][1].toFixed(1)+"]<br/>";
+			// positionString += "nose point: ["+positions[62][0].toFixed(1)+","+positions[62][1].toFixed(1)+"]<br/>";
+			// positionString += "feature points of eyebrow: 15 - 18 -> left, 19 - 22 -> right" + "<br/>";
+			// for (var p = 15;p < 23;p++) {
+			// 	positionString += "featurepoint "+p+" : ["+positions[p][0].toFixed(1)+","+positions[p][1].toFixed(1)+"]<br/>";
+			// }
 			/********** decide whether the mouth is open ************/
 			//这里用嘴的上下左右四个点来判断开合，参考https://github.com/douyamv/FaceTracker/blob/master/main.html
 			var mousedist = positions[57][1] - positions[60][1];
 			var mouthwidth = positions[50][0] - positions[44][0];
-			var mouthstate = "";
+			// var mouthstate = "";
 			if(mousedist>mouthwidth*0.2){
-				mouthstate = "open";
+				// mouthstate = "open";
+				FACE_INFORMATION['mouth'] = MOUTH_TYPE.OPEN;
 			}
 			else if(mousedist<mouthwidth*0.2){
-				mouthstate = "close";
+				// mouthstate = "close";
+				FACE_INFORMATION['mouth'] = MOUTH_TYPE.CLOSED;
 			}
 			else {
-				mouthstate = "uncertain";
+				// mouthstate = "uncertain";
+				FACE_INFORMATION['mouth'] = MOUTH_TYPE.CLOSED;
 			}
 
 			//这里是嘴的四个关键点的位置，关注position[i][j]就好
-			positionString += "Mouth: " + mouthstate + "<br/>";
-
-			positionString += "feature points of mouth:" + "<br/>";
-			positionString += "left: ["+positions[50][0].toFixed(1)+","+positions[50][1].toFixed(1)+"] ";
-			positionString += "right: ["+positions[44][0].toFixed(1)+","+positions[44][1].toFixed(1)+"]<br/>";
-			positionString += "top: ["+positions[60][0].toFixed(1)+","+positions[60][1].toFixed(1)+"] ";
-			positionString += "down: ["+positions[57][0].toFixed(1)+","+positions[57][1].toFixed(1)+"]<br/>";
+			// positionString += "Mouth: " + mouthstate + "<br/>";
+      //
+			// positionString += "feature points of mouth:" + "<br/>";
+			// positionString += "left: ["+positions[50][0].toFixed(1)+","+positions[50][1].toFixed(1)+"] ";
+			// positionString += "right: ["+positions[44][0].toFixed(1)+","+positions[44][1].toFixed(1)+"]<br/>";
+			// positionString += "top: ["+positions[60][0].toFixed(1)+","+positions[60][1].toFixed(1)+"] ";
+			// positionString += "down: ["+positions[57][0].toFixed(1)+","+positions[57][1].toFixed(1)+"]<br/>";
 		}
 
 		var cp = ctrack.getCurrentParameters();//这个函数返回追踪到的parameter，用来预测情绪
-		var emotionvalue = "";
+		// var emotionvalue = "";
 		var mostPossible = "";//the max possiblity of all emotions
 		var temp0 = 0;//temp parameter for comparing possiblities
 		var er = ec.meanPredict(cp); //预测情绪
 		//er有两个属性，emotion是情绪名称，value是相应概率，er[0]~er[5]代表angry,disgusted,fear,sad,surprised,happy.
 		/***meanPredict, show possibilities of all emotions***/
 		for (i = 0; i < er.length;i++){
-			emotionvalue += er[i].emotion + ": " + (er[i].value * 100).toFixed(1) + "%<br/>";//e.g. disgusted: 15.1%
+			// emotionvalue += er[i].emotion + ": " + (er[i].value * 100).toFixed(1) + "%<br/>";//e.g. disgusted: 15.1%
 			if (temp0 < er[i].value){ //获取最高概率的情绪mostPossible
 				temp0 = er[i].value;
 				mostPossible = er[i].emotion;
@@ -218,9 +248,23 @@ Sidebar.Project = function ( editor ) {
 		// console.log( "Predicted emotions: " + mostPossible );
 		// console.log( "Possibilities of all emotions: " + emotionvalue );
 
-		FaceInfo['emotion'] = emotionvalue;
-
-		console.log( FaceInfo );
+		switch( mostPossible ) {
+			case 'happy':
+				FACE_INFORMATION['emotion'] = EMOTION_TYPE.HAPPY;
+				break;
+			case 'sad':
+				FACE_INFORMATION['emotion'] = EMOTION_TYPE.SAD;
+				break;
+			case 'surprised':
+				FACE_INFORMATION['emotion'] = EMOTION_TYPE.SURPRISED;
+				break;
+			case 'angry':
+				FACE_INFORMATION['emotion'] = EMOTION_TYPE.ANGRY;
+				break;
+			default:
+				break;
+		}
+		// console.log( FACE_INFORMATION );
 	}
 
 	function drawLoop() {//画出人脸位置，就是那些绿色的线，用ctrack.draw在overlay这个canvas上画出来

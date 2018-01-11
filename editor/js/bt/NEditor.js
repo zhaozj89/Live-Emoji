@@ -7,11 +7,6 @@ let NEditor = function ( editor ) {
 	let container = new UI.Panel();
 	container.setId( 'nEditor' );
 	container.setPosition( 'absolute' );
-	// container.setTop( '32px' );
-	// container.setRight( '300px' );
-	// container.setBottom( '32px' );
-	// container.setLeft( '0px' );
-	// container.setOpacity( 0.8 );
 	container.setBackgroundColor( '#272822' );
 	container.setDisplay( 'none' );
 
@@ -174,63 +169,8 @@ let NEditor = function ( editor ) {
 	// real codes
 	let delay;
 	let currentMode;
-	let currentScript;
+	let currentAST;
 	let currentObject;
-
-
-	// basic pattern
-	// listen to a change event, excute the engine to transform visual logic to scirpt,
-	// and add the script
-
-	var InferanceEngine = function () {
-		// if cannot reason, give up
-		// otherwise, reason and add
-	}
-
-/*
-	// Node 1
-	let node = new Node(mouse, {name: 'Node 1'});
-	node.addInput(mouse, graphSVG, 'Value1');
-	node.addInput(mouse, graphSVG, 'Value2');
-	node.addInput(mouse, graphSVG, 'Value3');
-
-	// Node 2
-	let node2 = new Node(mouse, {name: 'Node 2', isRoot: true});
-	node2.addInput(mouse, graphSVG, 'Text In');
-	node2.addInput(mouse, graphSVG, 'Value 5');
-
-	// Node 3
-	let node3 = new Node(mouse, {name: 'Something Else'});
-	node3.addInput(mouse, graphSVG, 'Color4');
-	node3.addInput(mouse, graphSVG, 'Position');
-	node3.addInput(mouse, graphSVG, 'Noise Octaves');
-
-	// Node 4
-	let node4 = new Node(mouse, {name: 'TextString'});
-	node4.addInput(mouse, graphSVG, 'Value', 'input');
-
-	// Move to initial positions
-	node.moveTo({x: 300, y: 80});
-	node2.moveTo({x: 20, y: 70});
-	node3.moveTo({x:150, y:150});
-	node4.moveTo({x:150, y:20});
-
-	// Add to DOM
-	node.initUI(container.dom);
-	node2.initUI(container.dom);
-	node3.initUI(container.dom);
-	node4.initUI(container.dom);
-
-	// Connect Nodes
-	node.connectTo(node3.inputs[0]);
-	node3.connectTo(node2.inputs[1]);
-	node4.connectTo(node2.inputs[0]);
-
-	node4.inputs[0].value = 'Some String';
-
-*/
-
-
 
 	//
 	signals.editorCleared.add( function () {
@@ -239,17 +179,17 @@ let NEditor = function ( editor ) {
 
 	} );
 
-	signals.editNEditor.add( function ( object, script ) {
+	signals.editAST.add( function ( object, ast ) {
 
 		currentObject = object;
-		currentScript = script;
+		currentAST = ast;
 
 		container.setDisplay( '' );
 
 
 	} );
 
-	signals.nEditorRemoved.add( function ( script ) {
+	signals.astRemoved.add( function ( script ) {
 
 		if ( currentScript === script ) {
 

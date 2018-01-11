@@ -19,7 +19,7 @@ var Editor = function () {
 
 		// node editor
 
-		editNEditor: new Signal(),
+		editAST: new Signal(),
 
 		// player
 
@@ -69,9 +69,9 @@ var Editor = function () {
 		scriptRemoved: new Signal(),
 
 		// node editor
-		nEditorAdded: new Signal(),
-		nEditorChanged: new Signal(),
-		nEditorRemoved: new Signal(),
+		astAdded: new Signal(),
+		astChanged: new Signal(),
+		astRemoved: new Signal(),
 
 		windowResize: new Signal(),
 
@@ -79,6 +79,18 @@ var Editor = function () {
 		refreshSidebarObject3D: new Signal(),
 		historyChanged: new Signal()
 
+	};
+
+	// triggers for live animation
+	this.triggers = {
+		leftEyeMove : new Signal(),
+		rightEyeMove : new Signal(),
+
+		mouthMove : new Signal(),
+
+		emotionChange : new Signal()
+
+		// continue
 	};
 
 	this.config = new Config( 'threejs-editor' );
@@ -101,7 +113,7 @@ var Editor = function () {
 	this.textures = {};
 	this.scripts = {};
 
-	this.nEditor = {};
+	this.asts = {};
 
 	this.selected = null;
 	this.helpers = {};

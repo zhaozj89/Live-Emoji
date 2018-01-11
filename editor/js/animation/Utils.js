@@ -77,7 +77,7 @@ var ObjShallowCopy = function(obj) {
     if (typeof obj !== 'object') return;
     let newObj = obj instanceof Array ? [] : {};
     for (let key in obj) {
-        // if (obj.hasOwnProperty(key))
+        if (obj.hasOwnProperty(key))
         {
             newObj[key] = obj[key];
         }
@@ -89,7 +89,7 @@ var ObjDeepCopy = function(obj) {
     if (typeof obj !== 'object') return;
     let newObj = obj instanceof Array ? [] : {};
     for (let key in obj) {
-        // if (obj.hasOwnProperty(key))
+        if (obj.hasOwnProperty(key))
         {
             newObj[key] = typeof obj[key] === 'object' ? ObjDeepCopy(obj[key]) : obj[key];
         }
