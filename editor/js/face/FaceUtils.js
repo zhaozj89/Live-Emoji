@@ -25,10 +25,11 @@ var MOUTH_TYPE = {
 
 // standard face status
 var FACE_INFORMATION = {
-  emotion : EMOTION_TYPE.NEUTRAL,
-  leftEye : LEFT_EYE_TYPE.OPEN,
-  rightEye : RIGHT_EYE_TYPE.OPEN,
-  mouth : MOUTH_TYPE.CLOSED
+	type : 'face',
+	emotion : EMOTION_TYPE.NEUTRAL,
+	leftEye : LEFT_EYE_TYPE.OPEN,
+	rightEye : RIGHT_EYE_TYPE.OPEN,
+	mouth : MOUTH_TYPE.CLOSED
 };
 
 var FACE_INFORMATION_PRE = ObjDeepCopy( FACE_INFORMATION );

@@ -22,3 +22,13 @@ let NEDITOR_RETURN_TYPE = {
 	SUCCESS : 0,
 	FAILURE : 1
 };
+
+let KEYBOARD_TRIGGER = {
+	type : 'keyboard',
+	KEYCODE : null
+};
+
+let MOUSE_TRIGGER = {
+	type : 'mouse',
+	MOUSECODE : null
+};

@@ -13,6 +13,10 @@ var Editor = function () {
 
 	this.signals = {
 
+		// trigger
+
+		trigger : new Signal(),
+
 		// script
 
 		editScript: new Signal(),
@@ -81,17 +85,17 @@ var Editor = function () {
 
 	};
 
-	// triggers for live animation
-	this.triggers = {
-		leftEyeMove : new Signal(),
-		rightEyeMove : new Signal(),
-
-		mouthMove : new Signal(),
-
-		emotionChange : new Signal()
-
-		// continue
-	};
+	// // triggers for live animation
+	// this.triggers = {
+	// 	leftEyeMove : new Signal(),
+	// 	rightEyeMove : new Signal(),
+	//
+	// 	mouthMove : new Signal(),
+	//
+	// 	emotionChange : new Signal()
+	//
+	// 	// continue
+	// };
 
 	this.config = new Config( 'threejs-editor' );
 	this.history = new History( this );

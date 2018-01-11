@@ -104,7 +104,7 @@ let NEditor = function ( editor ) {
 	// let Decorators = menu.addLi( 'Decorators' );
 	// let Conditions = menu.addLi( 'Conditions' );
 	let Actions = menu.addLi( 'Actions' );
-	let Runner = menu.addLi( 'Run' );
+	// let Runner = menu.addLi( 'Run' );
 
 	/////////////////////////////////////////////////////////////////
 	let menuTriggers = new UI.UList();
@@ -161,14 +161,14 @@ let NEditor = function ( editor ) {
 			manager.addNode( {'type': NODE_TYPE.ACTION, 'value': 'rotation'} );
 		} );
 
-		$( Runner ).click ( function () {
-			manager.compiler();
-		});
+		// $( Runner ).click ( function () {
+		// 	manager.compiler();
+		// });
 	} );
 
 	// real codes
-	let delay;
-	let currentMode;
+	// let delay;
+	// let currentMode;
 	let currentAST;
 	let currentObject;
 
@@ -199,6 +199,20 @@ let NEditor = function ( editor ) {
 
 	} );
 
+	signals.trigger.add( function ( event ) {
+		// evaluate ast
+		let ast = manager.getAST();
+
+		if( event['type'] === 'keyboard' ) {
+			if( event['KEYCODE'] === 32 ) {
+				editor.selected.rotation.x++;
+			}
+		}
+
+
+		editor.signals.sceneGraphChanged.dispatch();
+
+	} );
 	return container;
 
 };

@@ -81,7 +81,7 @@ Sidebar.AST = function ( editor ) {
 
 					astsContainer.add( new UI.Break() );
 
-				} )( object, scripts[ i ] )
+				} )( object, asts[ i ] )
 
 			}
 

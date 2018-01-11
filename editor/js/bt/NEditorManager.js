@@ -86,6 +86,7 @@ class NodeManager {
 		return this.AST;
 	}
 
+/*
 	generator( node ) {
 		let res = '';
 		if( node['type']==='keyboard' ) {
@@ -141,13 +142,14 @@ class NodeManager {
 
 		return res;
 	}
+*/
 
-	compiler() {
-		let ast = this.parser();
-		for( let trigger in ast ) {
-			let code = this.generator( ast[trigger] );
-			console.log( code );
-		}
-		console.log( ast );
+	getAST() {
+		return this.parser();
+		// for( let trigger in ast ) {
+		// 	let code = this.generator( ast[trigger] );
+		// 	console.log( code );
+		// }
+		// console.log( ast );
 	}
 }

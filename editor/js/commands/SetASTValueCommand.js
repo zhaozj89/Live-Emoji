@@ -15,7 +15,7 @@ var SetASTValueCommand = function ( object, ast, attributeName, newValue ) {
 
 };
 
-SetScriptValueCommand.prototype = {
+SetASTValueCommand.prototype = {
 
 	execute: function () {
 

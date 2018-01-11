@@ -1,5 +1,5 @@
 
-var AddNEditorCommand = function ( object, ast ) {
+var AddASTCommand = function ( object, ast ) {
 
 	Command.call( this );
 
@@ -11,7 +11,7 @@ var AddNEditorCommand = function ( object, ast ) {
 
 };
 
-AddNEditorCommand.prototype = {
+AddASTCommand.prototype = {
 
 	execute: function () {
 

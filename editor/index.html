@@ -191,9 +191,10 @@
 		<script src="js/bt/NEditor.js"></script>
 
 
-		<script src="js/Sidebar.AST.js"></script>
 		<script src="js/commands/AddASTCommand.js"></script>
 		<script src="js/commands/RemoveASTCommand.js"></script>
+		<script src="js/Sidebar.AST.js"></script>
+
 
 		<!--face tracking library-->
 		<script src="js/face/FaceUtils.js"></script>
@@ -385,6 +386,11 @@
 			}, false );
 			*/
 
+			// other input triggers
+			document.addEventListener( 'keydown', function (event) {
+				KEYBOARD_TRIGGER.KEYCODE = event.keyCode;
+				editor.signals.trigger.dispatch( KEYBOARD_TRIGGER );
+			} );
 		</script>
 	</body>
 </html>

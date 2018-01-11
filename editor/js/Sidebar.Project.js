@@ -3,32 +3,10 @@
  */
 
 
-function signalLoop( face_info, triggers ) {
-	if( FACE_INFORMATION_PRE['emotion'] !== FACE_INFORMATION['emotion'] ) {
-		triggers.emotion.dispatch( FACE_INFORMATION['emotion'] );
-	}
-
-	if( FACE_INFORMATION_PRE['leftEye'] !== FACE_INFORMATION['leftEye'] ) {
-		triggers.leftEye.dispatch( FACE_INFORMATION['leftEye'] );
-	}
-
-	if( FACE_INFORMATION_PRE['rightEye'] !== FACE_INFORMATION['rightEye'] ) {
-		triggers.rightEye.dispatch( FACE_INFORMATION['rightEye'] );
-	}
-
-	if( FACE_INFORMATION_PRE['mouth'] !== FACE_INFORMATION['mouth'] ) {
-		triggers.mouth.dispatch( FACE_INFORMATION['mouth'] );
-	}
-
-	FACE_INFORMATION_PRE = ObjDeepCopy( FACE_INFORMATION );
-}
-
 Sidebar.Project = function ( editor ) {
 
 	var config = editor.config;
 	var signals = editor.signals;
-
-	var triggers = editor.triggers;
 
 	var rendererTypes = {
 
@@ -181,7 +159,20 @@ Sidebar.Project = function ( editor ) {
 		drawLoop();
 		positionLoop();
 
-		signalLoop( FACE_INFORMATION, triggers );
+		FaceSignalLoop();
+	}
+
+	function FaceSignalLoop() {
+		requestAnimFrame( FaceSignalLoop );
+
+		for( var prop in FACE_INFORMATION ) {
+			if( FACE_INFORMATION_PRE[prop] !== FACE_INFORMATION[prop] ) {
+				console.log( FACE_INFORMATION );
+				signals.trigger.dispatch( FACE_INFORMATION );
+			}
+		}
+
+		FACE_INFORMATION_PRE = ObjDeepCopy( FACE_INFORMATION );
 	}
 
 	/******Code for output positions of face feature points*************************/
