@@ -25,7 +25,6 @@ var MOUTH_TYPE = {
 
 // standard face status
 var FACE_INFORMATION = {
-	type : 'face',
 	emotion : EMOTION_TYPE.NEUTRAL,
 	leftEye : LEFT_EYE_TYPE.OPEN,
 	rightEye : RIGHT_EYE_TYPE.OPEN,
@@ -33,3 +32,32 @@ var FACE_INFORMATION = {
 };
 
 var FACE_INFORMATION_PRE = ObjDeepCopy( FACE_INFORMATION );
+
+
+// helper functions
+
+/**
+ * Provides requestAnimationFrame in a cross browser way.
+ */
+window.requestAnimFrame = (function() {
+	return window.requestAnimationFrame ||
+		window.webkitRequestAnimationFrame ||
+		window.mozRequestAnimationFrame ||
+		window.oRequestAnimationFrame ||
+		window.msRequestAnimationFrame ||
+		function(/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
+			return window.setTimeout(callback, 1000/60);
+		};
+})();
+
+/**
+ * Provides cancelRequestAnimationFrame in a cross browser way.
+ */
+window.cancelRequestAnimFrame = (function() {
+	return window.cancelAnimationFrame ||
+		window.webkitCancelRequestAnimationFrame ||
+		window.mozCancelRequestAnimationFrame ||
+		window.oCancelRequestAnimationFrame ||
+		window.msCancelRequestAnimationFrame ||
+		window.clearTimeout;
+})();

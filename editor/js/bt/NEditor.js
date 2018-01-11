@@ -203,12 +203,19 @@ let NEditor = function ( editor ) {
 		// evaluate ast
 		let ast = manager.getAST();
 
+		// do nothing with ast now
+
 		if( event['type'] === 'keyboard' ) {
 			if( event['KEYCODE'] === 32 ) {
-				editor.selected.rotation.x++;
+				editor.selected.position.x++;
 			}
 		}
 
+		if( event['type'] === 'face' ) {
+			if( event['faceinfo']['emotion'] === EMOTION_TYPE.HAPPY ) {
+				editor.selected.rotation.x++;
+			}
+		}
 
 		editor.signals.sceneGraphChanged.dispatch();
 

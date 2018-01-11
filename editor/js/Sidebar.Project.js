@@ -167,8 +167,9 @@ Sidebar.Project = function ( editor ) {
 
 		for( var prop in FACE_INFORMATION ) {
 			if( FACE_INFORMATION_PRE[prop] !== FACE_INFORMATION[prop] ) {
-				console.log( FACE_INFORMATION );
-				signals.trigger.dispatch( FACE_INFORMATION );
+
+				FACE_TRIGGER.faceinfo = FACE_INFORMATION;
+				signals.trigger.dispatch( FACE_TRIGGER );
 			}
 		}
 
