@@ -1,0 +1,170 @@
+/*<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Store and retrieve data from local storage.</h2>
+
+<p id="demo"></p>
+
+<script>
+var myObj, myJSON, text, obj;
+
+//Storing data:
+myObj = { "name":"John", "age":31, "city":"New York" };
+myJSON = JSON.stringify(myObj);
+localStorage.setItem("testJSON", myJSON);
+
+//Retrieving data:
+text = localStorage.getItem("testJSON");
+obj = JSON.parse(text);
+document.getElementById("demo").innerHTML = obj.name;
+</script>
+
+</body>
+</html>
+*/
+
+/*{"emotions":[
+	{ "neutral":[
+		{"head":"material/qin_emotion/neutral/head.png"},
+		{"left_eye":"material/qin_emotion/neutral/left_eye.png"},
+		{"right_eye":"material/qin_emotion/neutral/right_eye.png"},
+		{"left_eyebrow":"material/qin_emotion/neutral/left_eyebrow.png"},
+		{"right_eyebrow":"material/qin_emotion/neutral/right_eyebrow.png"},
+		{"left_red":"material/qin_emotion/neutral/left_red.png"},
+		{"right_red":"material/qin_emotion/neutral/right_red.png"},
+		{"nose":"material/qin_emotion/neutral/nose.png"},
+		{"mouse":"material/qin_emotion/neutral/mouse.png"},
+		{"hair_a1":"material/qin_emotion/neutral/hair_accesory1.png"},
+		{"hair_a2":"material/qin_emotion/neutral/hair_accesory2.png"},
+		{"hair_a3":"material/qin_emotion/neutral/hair_accesory3.png"},
+		{"hair_a4":"material/qin_emotion/neutral/hair_accesory4.png"},
+		{"hair_a5":"material/qin_emotion/neutral/hair_accesory5.png"},
+		{"hair_a6":"material/qin_emotion/neutral/hair_accesory6.png"},
+		{"hair_a7":"material/qin_emotion/neutral/hair_accesory7.png"}
+	] },
+	{ "happy":null},
+	{ "sad":null },
+	{ "angry":null},
+	{"fearful":null},
+	{"surprised":null},
+	{"disgusted":null}
+]}*/
+
+[
+	{
+	"name":"neutral",
+	"head":"material/qin_emotion/neutral/head.png",
+	"left_eye":"material/qin_emotion/neutral/left_eye.png",
+	"right_eye":"material/qin_emotion/neutral/right_eye.png",
+	"left_eyebrow":"material/qin_emotion/neutral/left_eyebrow.png",
+	"right_eyebrow":"material/qin_emotion/neutral/right_eyebrow.png",
+	"left_red":"material/qin_emotion/neutral/left_red.png",
+	"right_red":"material/qin_emotion/neutral/right_red.png",
+	"nose":"material/qin_emotion/neutral/nose.png",
+	"mouse":"material/qin_emotion/neutral/mouse.png",
+	"hair_a1":"material/qin_emotion/neutral/hair_accesory1.png",
+	"hair_a2":"material/qin_emotion/neutral/hair_accesory2.png",
+	"hair_a3":"material/qin_emotion/neutral/hair_accesory3.png",
+	"hair_a4":"material/qin_emotion/neutral/hair_accesory4.png",
+	"hair_a5":"material/qin_emotion/neutral/hair_accesory5.png",
+	"hair_a6":"material/qin_emotion/neutral/hair_accesory6.png",
+	"hair_a7":"material/qin_emotion/neutral/hair_accesory7.png"
+	},
+	{
+		"name":"happy",
+		"head":"material/qin_emotion/happy/head.png",
+		"left_eye":"material/qin_emotion/happy/left_eye.png",
+		"right_eye":"material/qin_emotion/happy/right_eye.png",
+		"left_eyebrow":"material/qin_emotion/happy/left_eyebrow.png",
+		"right_eyebrow":"material/qin_emotion/happy/right_eyebrow.png",
+		"left_red":"material/qin_emotion/happy/left_red.png",
+		"right_red":"material/qin_emotion/happy/right_red.png",
+		"nose":"material/qin_emotion/happy/nose.png",
+		"mouse":"material/qin_emotion/happy/mouse.png",
+		"hair_a1":"material/qin_emotion/happy/hair_accesory1.png",
+		"hair_a2":"material/qin_emotion/happy/hair_accesory2.png",
+		"hair_a3":"material/qin_emotion/happy/hair_accesory3.png",
+		"hair_a4":"material/qin_emotion/happy/hair_accesory4.png",
+		"hair_a5":"material/qin_emotion/happy/hair_accesory5.png",
+		"hair_a6":"material/qin_emotion/happy/hair_accesory6.png",
+		"hair_a7":"material/qin_emotion/happy/hair_accesory7.png"
+	},
+	{
+		"name":"sad",
+		"head":"material/qin_emotion/sad/head.png",
+		"left_eye":"material/qin_emotion/sad/left_eye.png",
+		"right_eye":"material/qin_emotion/sad/right_eye.png",
+		"left_eyebrow":"material/qin_emotion/sad/left_eyebrow.png",
+		"right_eyebrow":"material/qin_emotion/sad/right_eyebrow.png",
+		"left_red":"material/qin_emotion/sad/left_red.png",
+		"right_red":"material/qin_emotion/sad/right_red.png",
+		"nose":"material/qin_emotion/sad/nose.png",
+		"mouse":"material/qin_emotion/sad/mouse.png",
+		"hair_a1":"material/qin_emotion/sad/hair_accesory1.png",
+		"hair_a2":"material/qin_emotion/sad/hair_accesory2.png",
+		"hair_a3":"material/qin_emotion/sad/hair_accesory3.png",
+		"hair_a4":"material/qin_emotion/sad/hair_accesory4.png",
+		"hair_a5":"material/qin_emotion/sad/hair_accesory5.png",
+		"hair_a6":"material/qin_emotion/sad/hair_accesory6.png",
+		"hair_a7":"material/qin_emotion/sad/hair_accesory7.png"
+	},
+	{
+		"name":"angry",
+		"head":"material/qin_emotion/angry/head.png",
+		"left_eye":"material/qin_emotion/angry/left_eye.png",
+		"right_eye":"material/qin_emotion/angry/right_eye.png",
+		"left_eyebrow":"material/qin_emotion/angry/left_eyebrow.png",
+		"right_eyebrow":"material/qin_emotion/angry/right_eyebrow.png",
+		"left_red":"material/qin_emotion/angry/left_red.png",
+		"right_red":"material/qin_emotion/angry/right_red.png",
+		"nose":"material/qin_emotion/angry/nose.png",
+		"mouse":"material/qin_emotion/angry/mouse.png",
+		"hair_a1":"material/qin_emotion/angry/hair_accesory1.png",
+		"hair_a2":"material/qin_emotion/angry/hair_accesory2.png",
+		"hair_a3":"material/qin_emotion/angry/hair_accesory3.png",
+		"hair_a4":"material/qin_emotion/angry/hair_accesory4.png",
+		"hair_a5":"material/qin_emotion/angry/hair_accesory5.png",
+		"hair_a6":"material/qin_emotion/angry/hair_accesory6.png",
+		"hair_a7":"material/qin_emotion/angry/hair_accesory7.png"
+	},
+	{
+		"name":"fearful",
+		"head":"material/qin_emotion/fearful/head.png",
+		"left_eye":"material/qin_emotion/fearful/left_eye.png",
+		"right_eye":"material/qin_emotion/fearful/right_eye.png",
+		"left_eyebrow":"material/qin_emotion/fearful/left_eyebrow.png",
+		"right_eyebrow":"material/qin_emotion/fearful/right_eyebrow.png",
+		"left_red":"material/qin_emotion/fearful/left_red.png",
+		"right_red":"material/qin_emotion/fearful/right_red.png",
+		"nose":"material/qin_emotion/fearful/nose.png",
+		"mouse":"material/qin_emotion/fearful/mouse.png",
+		"hair_a1":"material/qin_emotion/fearful/hair_accesory1.png",
+		"hair_a2":"material/qin_emotion/fearful/hair_accesory2.png",
+		"hair_a3":"material/qin_emotion/fearful/hair_accesory3.png",
+		"hair_a4":"material/qin_emotion/fearful/hair_accesory4.png",
+		"hair_a5":"material/qin_emotion/fearful/hair_accesory5.png",
+		"hair_a6":"material/qin_emotion/fearful/hair_accesory6.png",
+		"hair_a7":"material/qin_emotion/fearful/hair_accesory7.png"
+	},
+	{
+		"name":"surprised",
+		"head":"material/qin_emotion/surprised/head.png",
+		"left_eye":"material/qin_emotion/surprised/left_eye.png",
+		"right_eye":"material/qin_emotion/surprised/right_eye.png",
+		"left_eyebrow":"material/qin_emotion/surprised/left_eyebrow.png",
+		"right_eyebrow":"material/qin_emotion/surprised/right_eyebrow.png",
+		"left_red":"material/qin_emotion/surprised/left_red.png",
+		"right_red":"material/qin_emotion/surprised/right_red.png",
+		"nose":"material/qin_emotion/surprised/nose.png",
+		"mouse":"material/qin_emotion/surprised/mouse.png",
+		"hair_a1":"material/qin_emotion/surprised/hair_accesory1.png",
+		"hair_a2":"material/qin_emotion/surprised/hair_accesory2.png",
+		"hair_a3":"material/qin_emotion/surprised/hair_accesory3.png",
+		"hair_a4":"material/qin_emotion/surprised/hair_accesory4.png",
+		"hair_a5":"material/qin_emotion/surprised/hair_accesory5.png",
+		"hair_a6":"material/qin_emotion/surprised/hair_accesory6.png",
+		"hair_a7":"material/qin_emotion/surprised/hair_accesory7.png"
+	}
+
+]

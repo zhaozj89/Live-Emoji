@@ -82,9 +82,12 @@ Menubar.File = function ( editor ) {
 
 	var fileInput2 = document.createElement( 'input' );
 	fileInput2.type = 'file';
+	fileInput2.multiple = 'multiple';
 	fileInput2.addEventListener( 'change', function ( event ) {
-
-		editor.loader2.loadFile( fileInput2.files[ 0 ] );
+		var files = fileInput2.files;
+		for(let i=0; i<files.length; ++i) {
+			editor.loader2.loadFile( fileInput2.files[ i ] );
+		}
 		form.reset();
 
 	} );
