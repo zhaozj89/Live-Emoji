@@ -112,34 +112,33 @@ var ZContour = function ( png ) {
   for(let i=0; i<tris_out.length; i+=3){
     geometry.faces.push( new THREE.Face3(tris_out[i], tris_out[i+1], tris_out[i+2]) );
     geometry.faceVertexUvs[0].push([
-      new Vector2(points_out[tris_out[i]][0], points_out[tris_out[i]][1]),
-      new Vector2(points_out[tris_out[i+1]][0], points_out[tris_out[i+1]][1]),
-      new Vector2(points_out[tris_out[i+2]][0], points_out[tris_out[i+2]][1])
+      new Vector2(points_out[tris_out[i]][0], 1-points_out[tris_out[i]][1]),
+      new Vector2(points_out[tris_out[i+1]][0], 1-points_out[tris_out[i+1]][1]),
+      new Vector2(points_out[tris_out[i+2]][0], 1-points_out[tris_out[i+2]][1])
     ]);
   }
 
   geometry.uvsNeedUpdate = true;
 
-  const dataTexture = new THREE.DataTexture(
-    png.pixels,
-    width,
-    height,
-    THREE.RGBAFormat,
-    THREE.UnsignedByteType,
-    THREE.UVMapping);
-  dataTexture.needsUpdate = true;
+	let texture = new THREE.Texture(
+		ImageData2Image(new ImageData(Uint8ClampedArray.from(png.pixels), width, height))
+	);
 
-  const dataMaterial = new THREE.MeshBasicMaterial({
-    transparent: true,
-    map: dataTexture
-  });
-  dataMaterial.needsUpdate = true;
+	texture.needsUpdate = true;
+
+	let material = new THREE.MeshBasicMaterial({
+		transparent: true,
+		map: texture
+	});
+	material.needsUpdate = true;
+
+
 
   // geometry.computeFaceNormals();
   // geometry.computeVertexNormals();
 
   // let material = new THREE.MeshNormalMaterial();
-  let mesh = new THREE.Mesh( geometry, dataMaterial );
+  let mesh = new THREE.Mesh( geometry, material );
 
   return mesh;
 }

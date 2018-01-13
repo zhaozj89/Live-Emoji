@@ -141,11 +141,6 @@ var Loader2 = function ( editor ) {
 						const mesh = new THREE.Mesh(geom, dataMaterial);
 */
 
-
-
-
-
-
 						editor.execute( new AddObjectCommand( mesh ) );
 
 					} );
@@ -165,4 +160,78 @@ var Loader2 = function ( editor ) {
 		}
 	}
 
+}
+
+
+var LoadFileName = function ( name, emotion, filename ) {
+	// let img = new Image();
+	//
+	// img.addEventListener('load', function() {
+	// 	console.log( this );
+	// }, false);
+	//
+	// img.src = '../asset/' + name;
+
+	var xhr = new XMLHttpRequest();
+	xhr.open( 'GET', '../asset/qin/' + filename, true );
+	xhr.responseType = 'arraybuffer';
+
+	xhr.onload = function( event ){
+		if( this.status == 404 ) {
+			console.log( filename );
+		}
+
+		if( this.status == 200 ) {
+			var reader = new PNGReader( this.response );
+			reader.parse( function( err, png ) {
+				if ( err ) throw err;
+				// console.log(png);
+				let mesh = ZContour( png );
+
+				mesh.rotation.x = THREE.Math.degToRad( -90 );
+				mesh.rotation.z = THREE.Math.degToRad( 180 );
+
+				let basicElement = new BasicElement( name, mesh, emotion );
+				characterStructure.addElement( basicElement );
+
+				editor.execute( new AddObjectCommand( mesh ) );
+			});
+		}
+	};
+
+	xhr.send();
+}
+
+
+
+var LoadCharacterJSON = function ( file ) {
+
+	var filename = file.name;
+	var extension = filename.split( '.' ).pop().toLowerCase();
+
+	var reader = new FileReader();
+
+	switch (extension) {
+
+		case 'json':
+
+			reader.addEventListener( 'load', function ( event ) {
+				var loader = JSON.parse( event.target.result );
+
+				for( let prop in loader ) {
+					if( typeof(loader[prop])==='string') LoadFileName( prop, 'neutral', loader[prop] );
+					if( typeof(loader[prop])==='object' ) {
+						for( let prop2 in loader[prop] ) LoadFileName( prop, prop2, loader[prop][prop2] );
+					}
+				}
+			});
+			reader.readAsText( file );
+			break;
+
+		default:
+
+			alert( 'Unsupported file format (' + extension +  ').' );
+
+			break;
+	}
 }
