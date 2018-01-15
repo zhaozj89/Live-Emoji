@@ -13,7 +13,7 @@ Sidebar.History = function ( editor ) {
 
 	var container = new UI.Panel();
 
-	container.add( new UI.Text( 'HISTORY' ) );
+	container.add( new UI.Text( '' ) );
 
 	//
 

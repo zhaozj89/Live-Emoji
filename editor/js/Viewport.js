@@ -37,90 +37,90 @@ var Viewport = function ( editor ) {
 	selectionBox.visible = false;
 	sceneHelpers.add( selectionBox );
 
-	var objectPositionOnDown = null;
-	var objectRotationOnDown = null;
-	var objectScaleOnDown = null;
+	// var objectPositionOnDown = null;
+	// var objectRotationOnDown = null;
+	// var objectScaleOnDown = null;
 
-	var transformControls = new THREE.TransformControls( camera, container.dom );
-	transformControls.addEventListener( 'change', function () {
-
-		var object = transformControls.object;
-
-		if ( object !== undefined ) {
-
-			selectionBox.setFromObject( object );
-
-			if ( editor.helpers[ object.id ] !== undefined ) {
-
-				editor.helpers[ object.id ].update();
-
-			}
-
-			signals.refreshSidebarObject3D.dispatch( object );
-
-		}
-
-		render();
-
-	} );
-	transformControls.addEventListener( 'mouseDown', function () {
-
-		var object = transformControls.object;
-
-		objectPositionOnDown = object.position.clone();
-		objectRotationOnDown = object.rotation.clone();
-		objectScaleOnDown = object.scale.clone();
-
-		controls.enabled = false;
-
-	} );
-	transformControls.addEventListener( 'mouseUp', function () {
-
-		var object = transformControls.object;
-
-		if ( object !== undefined ) {
-
-			switch ( transformControls.getMode() ) {
-
-				case 'translate':
-
-					if ( ! objectPositionOnDown.equals( object.position ) ) {
-
-						editor.execute( new SetPositionCommand( object, object.position, objectPositionOnDown ) );
-
-					}
-
-					break;
-
-				case 'rotate':
-
-					if ( ! objectRotationOnDown.equals( object.rotation ) ) {
-
-						editor.execute( new SetRotationCommand( object, object.rotation, objectRotationOnDown ) );
-
-					}
-
-					break;
-
-				case 'scale':
-
-					if ( ! objectScaleOnDown.equals( object.scale ) ) {
-
-						editor.execute( new SetScaleCommand( object, object.scale, objectScaleOnDown ) );
-
-					}
-
-					break;
-
-			}
-
-		}
-
-		controls.enabled = true;
-
-	} );
-
-	sceneHelpers.add( transformControls );
+	// var transformControls = new THREE.TransformControls( camera, container.dom );
+	// transformControls.addEventListener( 'change', function () {
+	//
+	// 	var object = transformControls.object;
+	//
+	// 	if ( object !== undefined ) {
+	//
+	// 		selectionBox.setFromObject( object );
+	//
+	// 		if ( editor.helpers[ object.id ] !== undefined ) {
+	//
+	// 			editor.helpers[ object.id ].update();
+	//
+	// 		}
+	//
+	// 		signals.refreshSidebarObject3D.dispatch( object );
+	//
+	// 	}
+	//
+	// 	render();
+	//
+	// } );
+	// transformControls.addEventListener( 'mouseDown', function () {
+	//
+	// 	var object = transformControls.object;
+	//
+	// 	objectPositionOnDown = object.position.clone();
+	// 	objectRotationOnDown = object.rotation.clone();
+	// 	objectScaleOnDown = object.scale.clone();
+	//
+	// 	// controls.enabled = false;
+	//
+	// } );
+	// transformControls.addEventListener( 'mouseUp', function () {
+	//
+	// 	var object = transformControls.object;
+	//
+	// 	if ( object !== undefined ) {
+	//
+	// 		switch ( transformControls.getMode() ) {
+	//
+	// 			case 'translate':
+	//
+	// 				if ( ! objectPositionOnDown.equals( object.position ) ) {
+	//
+	// 					editor.execute( new SetPositionCommand( object, object.position, objectPositionOnDown ) );
+	//
+	// 				}
+	//
+	// 				break;
+	//
+	// 			case 'rotate':
+	//
+	// 				if ( ! objectRotationOnDown.equals( object.rotation ) ) {
+	//
+	// 					editor.execute( new SetRotationCommand( object, object.rotation, objectRotationOnDown ) );
+	//
+	// 				}
+	//
+	// 				break;
+	//
+	// 			case 'scale':
+	//
+	// 				if ( ! objectScaleOnDown.equals( object.scale ) ) {
+	//
+	// 					editor.execute( new SetScaleCommand( object, object.scale, objectScaleOnDown ) );
+	//
+	// 				}
+	//
+	// 				break;
+	//
+	// 		}
+	//
+	// 	}
+	//
+	// 	// controls.enabled = true;
+	//
+	// } );
+	//
+	// sceneHelpers.add( transformControls );
 
 	// object picking
 
@@ -254,19 +254,19 @@ var Viewport = function ( editor ) {
 	// controls need to be added *after* main logic,
 	// otherwise controls.enabled doesn't work.
 
-	var controls = new THREE.EditorControls( camera, container.dom );
-	controls.addEventListener( 'change', function () {
-
-		transformControls.update();
-		signals.cameraChanged.dispatch( camera );
-
-	} );
+	// var controls = new THREE.EditorControls( camera, container.dom );
+	// controls.addEventListener( 'change', function () {
+	//
+	// 	transformControls.update();
+	// 	signals.cameraChanged.dispatch( camera );
+	//
+	// } );
 
 	// signals
 
 	signals.editorCleared.add( function () {
 
-		controls.center.set( 0, 0, 0 );
+		// controls.center.set( 0, 0, 0 );
 		render();
 
 	} );
@@ -292,23 +292,23 @@ var Viewport = function ( editor ) {
 
 	} );
 
-	signals.transformModeChanged.add( function ( mode ) {
+	// signals.transformModeChanged.add( function ( mode ) {
+	//
+	// 	transformControls.setMode( mode );
+	//
+	// } );
 
-		transformControls.setMode( mode );
+	// signals.snapChanged.add( function ( dist ) {
+	//
+	// 	transformControls.setTranslationSnap( dist );
+	//
+	// } );
 
-	} );
-
-	signals.snapChanged.add( function ( dist ) {
-
-		transformControls.setTranslationSnap( dist );
-
-	} );
-
-	signals.spaceChanged.add( function ( space ) {
-
-		transformControls.setSpace( space );
-
-	} );
+	// signals.spaceChanged.add( function ( space ) {
+	//
+	// 	transformControls.setSpace( space );
+	//
+	// } );
 
 	signals.rendererChanged.add( function ( newRenderer ) {
 
@@ -346,7 +346,7 @@ var Viewport = function ( editor ) {
 	signals.objectSelected.add( function ( object ) {
 
 		selectionBox.visible = false;
-		transformControls.detach();
+		// transformControls.detach();
 
 		if ( object !== null && object !== scene && object !== camera ) {
 
@@ -359,7 +359,7 @@ var Viewport = function ( editor ) {
 
 			}
 
-			transformControls.attach( object );
+			// transformControls.attach( object );
 
 		}
 
@@ -369,7 +369,7 @@ var Viewport = function ( editor ) {
 
 	signals.objectFocused.add( function ( object ) {
 
-		controls.focus( object );
+		// controls.focus( object );
 
 	} );
 
@@ -400,7 +400,7 @@ var Viewport = function ( editor ) {
 		if ( editor.selected === object ) {
 
 			selectionBox.setFromObject( object );
-			transformControls.update();
+			// transformControls.update();
 
 		}
 
@@ -505,10 +505,26 @@ var Viewport = function ( editor ) {
 
 		// TODO: Move this out?
 
-		editor.DEFAULT_CAMERA.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
+		// editor.DEFAULT_CAMERA.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
+		var viewSize = container.dom.offsetHeight / 200;
+		var aspectRatio = container.dom.offsetWidth / container.dom.offsetHeight;
+
+		var left = -aspectRatio*viewSize / 2;
+		var right = aspectRatio*viewSize / 2;
+		var top = viewSize / 2;
+		var bottom = -viewSize / 2;
+
+		editor.DEFAULT_CAMERA.left = left;
+		editor.DEFAULT_CAMERA.right = right;
+		editor.DEFAULT_CAMERA.top = top;
+		editor.DEFAULT_CAMERA.bottom = bottom;
 		editor.DEFAULT_CAMERA.updateProjectionMatrix();
 
-		camera.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
+		// camera.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
+		camera.left = left;
+		camera.right = right;
+		camera.top = top;
+		camera.bottom = bottom;
 		camera.updateProjectionMatrix();
 
 		renderer.setSize( container.dom.offsetWidth, container.dom.offsetHeight );

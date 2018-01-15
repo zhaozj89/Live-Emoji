@@ -107,23 +107,23 @@ Sidebar.Settings.Shortcuts = function ( editor ) {
 
 				break;
 
-			case config.getKey( 'settings/shortcuts/translate' ):
-
-				signals.transformModeChanged.dispatch( 'translate' );
-
-				break;
-
-			case config.getKey( 'settings/shortcuts/rotate' ):
-
-				signals.transformModeChanged.dispatch( 'rotate' );
-
-				break;
-
-			case config.getKey( 'settings/shortcuts/scale' ):
-
-				signals.transformModeChanged.dispatch( 'scale' );
-
-				break;
+			// case config.getKey( 'settings/shortcuts/translate' ):
+			//
+			// 	signals.transformModeChanged.dispatch( 'translate' );
+			//
+			// 	break;
+			//
+			// case config.getKey( 'settings/shortcuts/rotate' ):
+			//
+			// 	signals.transformModeChanged.dispatch( 'rotate' );
+			//
+			// 	break;
+			//
+			// case config.getKey( 'settings/shortcuts/scale' ):
+			//
+			// 	signals.transformModeChanged.dispatch( 'scale' );
+			//
+			// 	break;
 
 			case config.getKey( 'settings/shortcuts/undo' ):
 

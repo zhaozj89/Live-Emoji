@@ -11,7 +11,7 @@ var Sidebar = function ( editor ) {
 
 	var sceneTab = new UI.Text( 'SCENE' ).onClick( onClick );
 	var projectTab = new UI.Text( 'PROJECT' ).onClick( onClick );
-	var settingsTab = new UI.Text( 'SETTINGS' ).onClick( onClick );
+	var settingsTab = new UI.Text( 'HISTORY' ).onClick( onClick );
 
 	var tabs = new UI.Div();
 	tabs.setId( 'tabs' );
@@ -40,7 +40,7 @@ var Sidebar = function ( editor ) {
 	container.add( project );
 
 	var settings = new UI.Span().add(
-		new Sidebar.Settings( editor ),
+		// new Sidebar.Settings( editor ),
 		new Sidebar.History( editor )
 	);
 	container.add( settings );
@@ -66,7 +66,7 @@ var Sidebar = function ( editor ) {
 				projectTab.setClass( 'selected' );
 				project.setDisplay( '' );
 				break;
-			case 'SETTINGS':
+			case 'HISTORY':
 				settingsTab.setClass( 'selected' );
 				settings.setDisplay( '' );
 				break;

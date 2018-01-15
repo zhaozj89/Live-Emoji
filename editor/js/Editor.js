@@ -4,9 +4,10 @@
 
 var Editor = function () {
 
-	this.DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.001, 10000 );
+	// this.DEFAULT_CAMERA = new THREE.PerspectiveCamera( 50, 1, 0.001, 1000 );
+	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -1, 1, -1, 1, -100, 100 );
 	this.DEFAULT_CAMERA.name = 'Camera';
-	this.DEFAULT_CAMERA.position.set( 0, 5, 0 ); // x: red, y: green, z: blue
+	this.DEFAULT_CAMERA.position.set( 0, 0.5, 0 ); // x: red, y: green, z: blue
 	this.DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
 
 	var Signal = signals.Signal;
@@ -43,9 +44,9 @@ var Editor = function () {
 
 		themeChanged: new Signal(),
 
-		transformModeChanged: new Signal(),
-		snapChanged: new Signal(),
-		spaceChanged: new Signal(),
+		// transformModeChanged: new Signal(),
+		// snapChanged: new Signal(),
+		// spaceChanged: new Signal(),
 		rendererChanged: new Signal(),
 
 		sceneBackgroundChanged: new Signal(),
@@ -84,18 +85,6 @@ var Editor = function () {
 		historyChanged: new Signal()
 
 	};
-
-	// // triggers for live animation
-	// this.triggers = {
-	// 	leftEyeMove : new Signal(),
-	// 	rightEyeMove : new Signal(),
-	//
-	// 	mouthMove : new Signal(),
-	//
-	// 	emotionChange : new Signal()
-	//
-	// 	// continue
-	// };
 
 	this.config = new Config( 'threejs-editor' );
 	this.history = new History( this );
@@ -510,7 +499,7 @@ Editor.prototype = {
 		var camera = loader.parse( json.camera );
 
 		this.camera.copy( camera );
-		this.camera.aspect = this.DEFAULT_CAMERA.aspect;
+		// this.camera.aspect = this.DEFAULT_CAMERA.aspect;
 		this.camera.updateProjectionMatrix();
 
 		this.history.fromJSON( json.history );
