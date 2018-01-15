@@ -15,7 +15,7 @@ class CharacterStructure  {
 		this.add2Scene = new signals.Signal();
 		this.isCompleted = 0;
 
-		this.character_mesh = new THREE.Group();		this.character_mesh.name = 'qin';
+		this.character_mesh = new THREE.Group();
 		this.left_eye_mesh = new THREE.Group();			this.left_eye_mesh.name = 'left_eye';
 		this.left_eyebrow_mesh = new THREE.Group(); 	this.left_eyebrow_mesh.name = 'left_eyebrow';
 		this.right_eye_mesh = new THREE.Group();		this.right_eye_mesh.name = 'right_eye';

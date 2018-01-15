@@ -192,7 +192,7 @@ var LoadFileName = function ( name, emotion, filename ) {
 				mesh.rotation.z = THREE.Math.degToRad( 180 );
 
 				if( emotion==='' ) mesh.name = name;
-				else mesh.name = name + '_' + emotion;
+				else mesh.name = emotion;
 
 				let basicElement = new BasicElement( name, mesh, emotion );
 				characterStructure.addElement( basicElement );
@@ -222,9 +222,19 @@ var LoadCharacterJSON = function ( file ) {
 				var loader = JSON.parse( event.target.result );
 
 				for( let prop in loader ) {
-					if( typeof(loader[prop])==='string') LoadFileName( prop, '', loader[prop] );
+					if( prop === 'name' ) {
+						characterStructure.character_mesh.name = loader[prop];
+						continue;
+					}
+
+					if( typeof(loader[prop])==='string' ) {
+						LoadFileName( prop, '', loader[prop] );
+						continue;
+					}
+
 					if( typeof(loader[prop])==='object' ) {
 						for( let prop2 in loader[prop] ) LoadFileName( prop, prop2, loader[prop][prop2] );
+						continue;
 					}
 				}
 			});
