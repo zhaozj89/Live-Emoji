@@ -21,11 +21,7 @@ var Config = function ( name ) {
 
 		'settings/history': false,
 
-		'settings/shortcuts/translate': 'w',
-		'settings/shortcuts/rotate': 'e',
-		'settings/shortcuts/scale': 'r',
-		'settings/shortcuts/undo': 'z',
-		'settings/shortcuts/focus': 'f'
+		'settings/shortcuts/undo': 'z'
 	};
 
 	if ( window.localStorage[ name ] === undefined ) {

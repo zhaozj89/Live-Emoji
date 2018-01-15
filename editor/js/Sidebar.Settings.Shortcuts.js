@@ -18,7 +18,7 @@ Sidebar.Settings.Shortcuts = function ( editor ) {
 	var container = new UI.Div();
 	container.add( new UI.Break() );
 
-	var shortcuts = [ 'translate', 'rotate', 'scale', 'undo', 'focus' ];
+	var shortcuts = [ 'undo' ];
 
 	for ( var i = 0; i < shortcuts.length; i ++ ) {
 
@@ -107,24 +107,6 @@ Sidebar.Settings.Shortcuts = function ( editor ) {
 
 				break;
 
-			// case config.getKey( 'settings/shortcuts/translate' ):
-			//
-			// 	signals.transformModeChanged.dispatch( 'translate' );
-			//
-			// 	break;
-			//
-			// case config.getKey( 'settings/shortcuts/rotate' ):
-			//
-			// 	signals.transformModeChanged.dispatch( 'rotate' );
-			//
-			// 	break;
-			//
-			// case config.getKey( 'settings/shortcuts/scale' ):
-			//
-			// 	signals.transformModeChanged.dispatch( 'scale' );
-			//
-			// 	break;
-
 			case config.getKey( 'settings/shortcuts/undo' ):
 
 				if ( IS_MAC ? event.metaKey : event.ctrlKey ) {
@@ -140,16 +122,6 @@ Sidebar.Settings.Shortcuts = function ( editor ) {
 						editor.undo();
 
 					}
-
-				}
-
-				break;
-
-			case config.getKey( 'settings/shortcuts/focus' ):
-
-				if ( editor.selected !== null ) {
-
-					editor.focus( editor.selected );
 
 				}
 

@@ -37,91 +37,6 @@ var Viewport = function ( editor ) {
 	selectionBox.visible = false;
 	sceneHelpers.add( selectionBox );
 
-	// var objectPositionOnDown = null;
-	// var objectRotationOnDown = null;
-	// var objectScaleOnDown = null;
-
-	// var transformControls = new THREE.TransformControls( camera, container.dom );
-	// transformControls.addEventListener( 'change', function () {
-	//
-	// 	var object = transformControls.object;
-	//
-	// 	if ( object !== undefined ) {
-	//
-	// 		selectionBox.setFromObject( object );
-	//
-	// 		if ( editor.helpers[ object.id ] !== undefined ) {
-	//
-	// 			editor.helpers[ object.id ].update();
-	//
-	// 		}
-	//
-	// 		signals.refreshSidebarObject3D.dispatch( object );
-	//
-	// 	}
-	//
-	// 	render();
-	//
-	// } );
-	// transformControls.addEventListener( 'mouseDown', function () {
-	//
-	// 	var object = transformControls.object;
-	//
-	// 	objectPositionOnDown = object.position.clone();
-	// 	objectRotationOnDown = object.rotation.clone();
-	// 	objectScaleOnDown = object.scale.clone();
-	//
-	// 	// controls.enabled = false;
-	//
-	// } );
-	// transformControls.addEventListener( 'mouseUp', function () {
-	//
-	// 	var object = transformControls.object;
-	//
-	// 	if ( object !== undefined ) {
-	//
-	// 		switch ( transformControls.getMode() ) {
-	//
-	// 			case 'translate':
-	//
-	// 				if ( ! objectPositionOnDown.equals( object.position ) ) {
-	//
-	// 					editor.execute( new SetPositionCommand( object, object.position, objectPositionOnDown ) );
-	//
-	// 				}
-	//
-	// 				break;
-	//
-	// 			case 'rotate':
-	//
-	// 				if ( ! objectRotationOnDown.equals( object.rotation ) ) {
-	//
-	// 					editor.execute( new SetRotationCommand( object, object.rotation, objectRotationOnDown ) );
-	//
-	// 				}
-	//
-	// 				break;
-	//
-	// 			case 'scale':
-	//
-	// 				if ( ! objectScaleOnDown.equals( object.scale ) ) {
-	//
-	// 					editor.execute( new SetScaleCommand( object, object.scale, objectScaleOnDown ) );
-	//
-	// 				}
-	//
-	// 				break;
-	//
-	// 		}
-	//
-	// 	}
-	//
-	// 	// controls.enabled = true;
-	//
-	// } );
-	//
-	// sceneHelpers.add( transformControls );
-
 	// object picking
 
 	var raycaster = new THREE.Raycaster();
@@ -141,7 +56,6 @@ var Viewport = function ( editor ) {
 
 	var onDownPosition = new THREE.Vector2();
 	var onUpPosition = new THREE.Vector2();
-	var onDoubleClickPosition = new THREE.Vector2();
 
 	function getMousePosition( dom, x, y ) {
 
@@ -230,37 +144,8 @@ var Viewport = function ( editor ) {
 
 	}
 
-	function onDoubleClick( event ) {
-
-		var array = getMousePosition( container.dom, event.clientX, event.clientY );
-		onDoubleClickPosition.fromArray( array );
-
-		var intersects = getIntersects( onDoubleClickPosition, objects );
-
-		if ( intersects.length > 0 ) {
-
-			var intersect = intersects[ 0 ];
-
-			signals.objectFocused.dispatch( intersect.object );
-
-		}
-
-	}
-
 	container.dom.addEventListener( 'mousedown', onMouseDown, false );
 	container.dom.addEventListener( 'touchstart', onTouchStart, false );
-	container.dom.addEventListener( 'dblclick', onDoubleClick, false );
-
-	// controls need to be added *after* main logic,
-	// otherwise controls.enabled doesn't work.
-
-	// var controls = new THREE.EditorControls( camera, container.dom );
-	// controls.addEventListener( 'change', function () {
-	//
-	// 	transformControls.update();
-	// 	signals.cameraChanged.dispatch( camera );
-	//
-	// } );
 
 	// signals
 
@@ -291,24 +176,6 @@ var Viewport = function ( editor ) {
 		render();
 
 	} );
-
-	// signals.transformModeChanged.add( function ( mode ) {
-	//
-	// 	transformControls.setMode( mode );
-	//
-	// } );
-
-	// signals.snapChanged.add( function ( dist ) {
-	//
-	// 	transformControls.setTranslationSnap( dist );
-	//
-	// } );
-
-	// signals.spaceChanged.add( function ( space ) {
-	//
-	// 	transformControls.setSpace( space );
-	//
-	// } );
 
 	signals.rendererChanged.add( function ( newRenderer ) {
 
@@ -346,7 +213,6 @@ var Viewport = function ( editor ) {
 	signals.objectSelected.add( function ( object ) {
 
 		selectionBox.visible = false;
-		// transformControls.detach();
 
 		if ( object !== null && object !== scene && object !== camera ) {
 
@@ -359,19 +225,12 @@ var Viewport = function ( editor ) {
 
 			}
 
-			// transformControls.attach( object );
-
 		}
 
 		render();
 
 	} );
 
-	signals.objectFocused.add( function ( object ) {
-
-		// controls.focus( object );
-
-	} );
 
 	signals.geometryChanged.add( function ( object ) {
 

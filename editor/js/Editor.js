@@ -58,7 +58,6 @@ var Editor = function () {
 		geometryChanged: new Signal(),
 
 		objectSelected: new Signal(),
-		objectFocused: new Signal(),
 
 		objectAdded: new Signal(),
 		objectChanged: new Signal(),
@@ -438,18 +437,6 @@ Editor.prototype = {
 	deselect: function () {
 
 		this.select( null );
-
-	},
-
-	focus: function ( object ) {
-
-		this.signals.objectFocused.dispatch( object );
-
-	},
-
-	focusById: function ( id ) {
-
-		this.focus( this.scene.getObjectById( id, true ) );
 
 	},
 
