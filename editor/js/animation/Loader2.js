@@ -197,7 +197,7 @@ var LoadFileName = function ( name, emotion, filename ) {
 				let basicElement = new BasicElement( name, mesh, emotion );
 				characterStructure.addElement( basicElement );
 
-				editor.execute( new AddObjectCommand( mesh ) );
+				// editor.execute( new AddObjectCommand( mesh ) );
 			});
 		}
 	};

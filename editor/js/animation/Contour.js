@@ -61,20 +61,8 @@ function ContourStart( grid, width, height ) {
 
 var ZContour = function ( png ) {
 
-  let bpoints = new Array();
-
   const width = png.getWidth();
   const height = png.getHeight();
-
-/*
-  // distribute points on the boundary
-  for ( let y=0; y<height; ++y ) {
-    for ( let x=0; x<width; ++x ) {
-      if( EdgeDetect( png, x, y ) )
-        bpoints.push( new Vector2( x/width, y/height ) );
-    }
-  }
-*/
 
   var grid_function = function ( x, y ) {
     let pixel = png.getPixel(x, y);

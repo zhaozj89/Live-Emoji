@@ -506,7 +506,7 @@ var Viewport = function ( editor ) {
 		// TODO: Move this out?
 
 		// editor.DEFAULT_CAMERA.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
-		var viewSize = container.dom.offsetHeight / 200;
+		var viewSize = container.dom.offsetHeight / 300;
 		var aspectRatio = container.dom.offsetWidth / container.dom.offsetHeight;
 
 		var left = -aspectRatio*viewSize / 2;

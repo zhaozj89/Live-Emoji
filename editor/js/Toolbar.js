@@ -67,8 +67,8 @@ var Toolbar = function ( editor ) {
 	// var snap = new UI.THREE.Boolean( false, 'snap' ).onChange( update );
 	// buttons.add( snap );
 
-	var local = new UI.THREE.Boolean( false, 'local' ).onChange( update );
-	buttons.add( local );
+	// var local = new UI.THREE.Boolean( false, 'local' ).onChange( update );
+	// buttons.add( local );
 
 	var showGrid = new UI.THREE.Boolean( true, 'show' ).onChange( update );
 	buttons.add( showGrid );
