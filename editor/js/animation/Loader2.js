@@ -173,7 +173,7 @@ var LoadFileName = function ( name, emotion, filename ) {
 	// img.src = '../asset/' + name;
 
 	var xhr = new XMLHttpRequest();
-	xhr.open( 'GET', '../asset/qin/' + filename, true );
+	xhr.open( 'GET', '../asset/qin_v3/' + filename, true );
 	xhr.responseType = 'arraybuffer';
 
 	xhr.onload = function( event ){
