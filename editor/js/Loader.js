@@ -798,16 +798,16 @@ var LoadCharacterJSON = function ( file ) {
 			reader.addEventListener( 'load', function ( event ) {
 				let loader = JSON.parse( event.target.result );
 
-				let characterStructure = new CharacterStructure();
+				let characterStructure = new CharacterStructure( file.name );
 				characterStructure.add2Scene.add( function ( obj ) {
 					editor.execute( new AddObjectCommand( obj ) );
 				} );
 
 				for( let prop in loader ) {
-					if( prop === 'name' ) {
-						characterStructure.character_mesh.name = loader[prop];
-						continue;
-					}
+					// if( prop === 'name' ) {
+					// 	characterStructure.character_mesh.name = loader[prop];
+					// 	continue;
+					// }
 
 					if( typeof(loader[prop])==='string' ) {
 						LoadFileName( characterStructure, prop, '', loader[prop] );
