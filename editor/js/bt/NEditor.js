@@ -201,7 +201,7 @@ let NEditor = function ( editor ) {
 
 	signals.trigger.add( function ( event ) {
 		// evaluate ast
-		let puppet = editor.selected;
+		let puppet = currentObject;
 
 		let ast = manager.getAST();
 

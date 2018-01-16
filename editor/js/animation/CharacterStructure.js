@@ -187,7 +187,7 @@ class CharacterStructure  {
 
 };
 
-var characterStructure = new CharacterStructure();
-characterStructure.add2Scene.add( function ( obj ) {
-	editor.execute( new AddObjectCommand( obj ) );
-} );
+// var characterStructure = new CharacterStructure();
+// characterStructure.add2Scene.add( function ( obj ) {
+// 	editor.execute( new AddObjectCommand( obj ) );
+// } );

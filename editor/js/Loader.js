@@ -739,7 +739,7 @@ var Loader2 = function ( editor ) {
 }
 
 
-var LoadFileName = function ( name, emotion, filename ) {
+var LoadFileName = function ( characterStructure, name, emotion, filename ) {
 	// let img = new Image();
 	//
 	// img.addEventListener('load', function() {
@@ -796,7 +796,12 @@ var LoadCharacterJSON = function ( file ) {
 		case 'json':
 
 			reader.addEventListener( 'load', function ( event ) {
-				var loader = JSON.parse( event.target.result );
+				let loader = JSON.parse( event.target.result );
+
+				let characterStructure = new CharacterStructure();
+				characterStructure.add2Scene.add( function ( obj ) {
+					editor.execute( new AddObjectCommand( obj ) );
+				} );
 
 				for( let prop in loader ) {
 					if( prop === 'name' ) {
@@ -805,12 +810,12 @@ var LoadCharacterJSON = function ( file ) {
 					}
 
 					if( typeof(loader[prop])==='string' ) {
-						LoadFileName( prop, '', loader[prop] );
+						LoadFileName( characterStructure, prop, '', loader[prop] );
 						continue;
 					}
 
 					if( typeof(loader[prop])==='object' ) {
-						for( let prop2 in loader[prop] ) LoadFileName( prop, prop2, loader[prop][prop2] );
+						for( let prop2 in loader[prop] ) LoadFileName( characterStructure, prop, prop2, loader[prop][prop2] );
 						continue;
 					}
 				}
