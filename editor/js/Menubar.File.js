@@ -76,6 +76,7 @@ Menubar.File = function ( editor ) {
 
 	// Smart Import
 
+
 	var form2 = document.createElement( 'form' );
 	form2.style.display = 'none';
 	document.body.appendChild( form2 );
@@ -94,7 +95,7 @@ Menubar.File = function ( editor ) {
 		form2.reset();
 
 	} );
-	form2.appendChild( fileInput );
+	form2.appendChild( fileInput2 );
 
 	var option2 = new UI.Row();
 	option2.setClass( 'option' );
