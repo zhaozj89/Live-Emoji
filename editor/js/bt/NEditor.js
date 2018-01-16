@@ -220,9 +220,12 @@ let NEditor = function ( editor ) {
 		}
 
 		if( event['type'] === 'face' ) {
-			if( event['faceinfo']['emotion'] === EMOTION_TYPE.HAPPY ) {
-				puppet.rotation.z++;
-			}
+
+
+
+			// if( event['faceinfo']['emotion'] === EMOTION_TYPE.HAPPY ) {
+			// 	puppet.rotation.z++;
+			// }
 		}
 
 		editor.signals.sceneGraphChanged.dispatch();

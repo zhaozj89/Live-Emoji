@@ -23,6 +23,8 @@ var INPUT_TYPE = {
 // 	FAILURE : 1
 // };
 
+/// different trigger / event
+
 var KEYBOARD_TRIGGER = {
 	type : 'keyboard',
 	keycode : null

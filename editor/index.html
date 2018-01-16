@@ -309,7 +309,7 @@
 			*/
 
 			// other input triggers
-			document.addEventListener( 'keydown', function (event) {
+			document.addEventListener( 'keydown', function ( event ) {
 				KEYBOARD_TRIGGER.KEYCODE = event.keyCode;
 				editor.signals.trigger.dispatch( KEYBOARD_TRIGGER );
 			} );
