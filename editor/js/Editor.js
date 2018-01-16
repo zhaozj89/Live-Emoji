@@ -65,15 +65,6 @@ var Editor = function () {
 
 		materialChanged: new Signal(),
 
-		scriptAdded: new Signal(),
-		scriptChanged: new Signal(),
-		scriptRemoved: new Signal(),
-
-		// node editor
-		astAdded: new Signal(),
-		astChanged: new Signal(),
-		astRemoved: new Signal(),
-
 		windowResize: new Signal(),
 
 		showGridChanged: new Signal(),
@@ -86,7 +77,6 @@ var Editor = function () {
 	this.history = new History( this );
 	this.storage = new Storage();
 	this.loader = new Loader( this );
-	this.loader2 = new Loader2( this );
 
 	this.camera = this.DEFAULT_CAMERA.clone();
 
@@ -100,9 +90,6 @@ var Editor = function () {
 	this.geometries = {};
 	this.materials = {};
 	this.textures = {};
-	this.scripts = {};
-
-	this.asts = {};
 
 	this.selected = null;
 	this.helpers = {};
@@ -322,36 +309,6 @@ Editor.prototype = {
 	},
 
 	//
-
-	addScript: function ( object, script ) {
-
-		if ( this.scripts[ object.uuid ] === undefined ) {
-
-			this.scripts[ object.uuid ] = [];
-
-		}
-
-		this.scripts[ object.uuid ].push( script );
-
-		this.signals.scriptAdded.dispatch( script );
-
-	},
-
-	removeScript: function ( object, script ) {
-
-		if ( this.scripts[ object.uuid ] === undefined ) return;
-
-		var index = this.scripts[ object.uuid ].indexOf( script );
-
-		if ( index !== - 1 ) {
-
-			this.scripts[ object.uuid ].splice( index, 1 );
-
-		}
-
-		this.signals.scriptRemoved.dispatch( script );
-
-	},
 
 	getObjectMaterial: function ( object, slot ) {
 

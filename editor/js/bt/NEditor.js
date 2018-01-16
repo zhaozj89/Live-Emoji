@@ -189,16 +189,6 @@ let NEditor = function ( editor ) {
 
 	} );
 
-	signals.astRemoved.add( function ( script ) {
-
-		if ( currentScript === script ) {
-
-			container.setDisplay( 'none' );
-
-		}
-
-	} );
-
 	signals.trigger.add( function ( event ) {
 		// evaluate ast
 		let puppet = currentObject;

@@ -94,10 +94,6 @@
 		<script src="js/commands/SetGeometryCommand.js"></script>
 		<script src="js/commands/SetGeometryValueCommand.js"></script>
 		<script src="js/commands/MultiCmdsCommand.js"></script>
-		<script src="js/commands/AddScriptCommand.js"></script>
-		<script src="js/commands/RemoveScriptCommand.js"></script>
-		<script src="js/commands/SetScriptValueCommand.js"></script>
-		<script src="js/commands/SetASTValueCommand.js"></script>
 		<script src="js/commands/SetMaterialCommand.js"></script>
 		<script src="js/commands/SetMaterialValueCommand.js"></script>
 		<script src="js/commands/SetMaterialColorCommand.js"></script>
@@ -118,11 +114,6 @@
 
 		<script src="js/bt/NEditorManager.js"></script>
 		<script src="js/bt/NEditor.js"></script>
-
-
-		<script src="js/commands/AddASTCommand.js"></script>
-		<script src="js/commands/RemoveASTCommand.js"></script>
-		<script src="js/Sidebar.AST.js"></script>
 
 
 		<!--face tracking library-->
@@ -231,7 +222,6 @@
 				signals.sceneBackgroundChanged.add( saveState );
 				signals.sceneFogChanged.add( saveState );
 				signals.sceneGraphChanged.add( saveState );
-				signals.scriptChanged.add( saveState );
 				signals.historyChanged.add( saveState );
 
 				signals.showModal.add( function ( content ) {

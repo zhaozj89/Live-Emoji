@@ -69,23 +69,10 @@ Sidebar.Scene = function ( editor ) {
 
 		}
 
-		html += getScript( object.uuid );
-
 		return html;
 
 	}
 
-	function getScript( uuid ) {
-
-		if ( editor.scripts[ uuid ] !== undefined ) {
-
-			return ' <span class="type Script"></span>';
-
-		}
-
-		return '';
-
-	}
 
 	var ignoreObjectSelectedSignal = false;
 
