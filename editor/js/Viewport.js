@@ -168,6 +168,11 @@ var Viewport = function ( editor ) {
 			case 'css/dark.css':
 				sceneHelpers.remove( grid );
 				grid = new THREE.GridHelper( 60, 60, 0xbbbbbb, 0x888888 );
+				grid.geometry.rotateX( Math.PI / 2 );
+
+				// var vector = new THREE.Vector3( 1, 1, 1 );
+				// grid.lookAt( vector );
+
 				sceneHelpers.add( grid );
 				break;
 

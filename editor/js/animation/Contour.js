@@ -116,7 +116,8 @@ var ZContour = function ( png ) {
 
 	let material = new THREE.MeshBasicMaterial({
 		transparent: true,
-		map: texture
+		map: texture,
+		side: THREE.BackSide
 	});
 	material.needsUpdate = true;
 

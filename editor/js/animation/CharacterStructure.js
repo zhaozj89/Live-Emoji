@@ -60,7 +60,7 @@ class CharacterStructure  {
 	addElement( basicElement ) {
 		switch( basicElement.name ) {
 			case 'accessory': {
-				basicElement.mesh.position.y += 0.2;
+				basicElement.mesh.position.z -= 0.2;
 				this.accessory = basicElement;
 				this.character_mesh.add( basicElement.mesh );
 
@@ -85,7 +85,7 @@ class CharacterStructure  {
 				break;
 			}
 			case 'left_eye': {
-				basicElement.mesh.position.y += 0.1;
+				basicElement.mesh.position.z -= 0.1;
 				if( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
 				this.left_eye.push( basicElement );
 				this.left_eye_mesh.add( basicElement.mesh );
@@ -95,7 +95,7 @@ class CharacterStructure  {
 				break;
 			}
 			case 'left_eyebrow': {
-				basicElement.mesh.position.y += 0.1;
+				basicElement.mesh.position.z -= 0.1;
 				if( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
 				this.left_eyebrow.push( basicElement );
 				this.left_eyebrow_mesh.add( basicElement.mesh );
@@ -105,7 +105,7 @@ class CharacterStructure  {
 				break;
 			}
 			case 'left_red': {
-				basicElement.mesh.position.y += 0.1;
+				basicElement.mesh.position.z -= 0.1;
 				this.left_red = basicElement;
 				this.character_mesh.add( basicElement.mesh );
 
@@ -114,7 +114,7 @@ class CharacterStructure  {
 				break;
 			}
 			case 'mouth': {
-				basicElement.mesh.position.y += 0.1;
+				basicElement.mesh.position.z -= 0.1;
 				if( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
 				this.mouth.push( basicElement );
 				this.mouth_mesh.add( basicElement.mesh );
@@ -124,7 +124,7 @@ class CharacterStructure  {
 				break;
 			}
 			case 'nose': {
-				basicElement.mesh.position.y += 0.1;
+				basicElement.mesh.position.z -= 0.1;
 				if( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
 				this.nose.push( basicElement );
 				this.nose_mesh.add( basicElement.mesh );
@@ -134,7 +134,7 @@ class CharacterStructure  {
 				break;
 			}
 			case 'right_ear': {
-				basicElement.mesh.position.y += 0.1;
+				basicElement.mesh.position.z -= 0.1;
 				this.right_ear = basicElement;
 				this.character_mesh.add( basicElement.mesh );
 
@@ -143,7 +143,7 @@ class CharacterStructure  {
 				break;
 			}
 			case 'right_eye': {
-				basicElement.mesh.position.y += 0.1;
+				basicElement.mesh.position.z -= 0.1;
 				if( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
 				this.right_eye.push( basicElement );
 				this.right_eye_mesh.add( basicElement.mesh );
@@ -153,7 +153,7 @@ class CharacterStructure  {
 				break;
 			}
 			case 'right_eyebrow': {
-				basicElement.mesh.position.y += 0.1;
+				basicElement.mesh.position.z -= 0.1;
 				if( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
 				this.right_eyebrow.push( basicElement );
 				this.right_eyebrow_mesh.add( basicElement.mesh );
@@ -163,7 +163,7 @@ class CharacterStructure  {
 				break;
 			}
 			case 'right_red': {
-				basicElement.mesh.position.y += 0.1;
+				basicElement.mesh.position.z -= 0.1;
 				this.right_red = basicElement;
 				this.character_mesh.add( basicElement.mesh );
 
