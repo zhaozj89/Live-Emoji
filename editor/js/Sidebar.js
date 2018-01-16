@@ -10,12 +10,12 @@ var Sidebar = function ( editor ) {
 	//
 
 	var sceneTab = new UI.Text( 'SCENE' ).onClick( onClick );
-	var projectTab = new UI.Text( 'PROJECT' ).onClick( onClick );
+	var projectTab = new UI.Text( 'CAMERA' ).onClick( onClick );
 	var settingsTab = new UI.Text( 'HISTORY' ).onClick( onClick );
 
 	var tabs = new UI.Div();
 	tabs.setId( 'tabs' );
-	tabs.add( sceneTab, projectTab, settingsTab );
+	tabs.add( projectTab, settingsTab, sceneTab );
 	container.add( tabs );
 
 	function onClick( event ) {
@@ -28,8 +28,7 @@ var Sidebar = function ( editor ) {
 
 	var scene = new UI.Span().add(
 		new Sidebar.Scene( editor ),
-		new Sidebar.Properties( editor ),
-		new Sidebar.AST( editor )
+		new Sidebar.Properties( editor )
 	);
 	container.add( scene );
 
@@ -39,8 +38,8 @@ var Sidebar = function ( editor ) {
 	container.add( project );
 
 	var settings = new UI.Span().add(
-		new Sidebar.Settings( editor ),
-		new Sidebar.History( editor )
+		new Sidebar.History( editor ),
+		new Sidebar.Settings( editor )
 	);
 	container.add( settings );
 
@@ -61,7 +60,7 @@ var Sidebar = function ( editor ) {
 				sceneTab.setClass( 'selected' );
 				scene.setDisplay( '' );
 				break;
-			case 'PROJECT':
+			case 'CAMERA':
 				projectTab.setClass( 'selected' );
 				project.setDisplay( '' );
 				break;
@@ -73,7 +72,7 @@ var Sidebar = function ( editor ) {
 
 	}
 
-	select( 'SCENE' );
+	select( 'CAMERA' );
 
 	return container;
 

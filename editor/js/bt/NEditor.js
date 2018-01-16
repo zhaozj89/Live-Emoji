@@ -179,10 +179,10 @@ let NEditor = function ( editor ) {
 
 	} );
 
-	signals.editAST.add( function ( object, ast ) {
+	signals.editAST.add( function ( object ) {
 
 		currentObject = object;
-		currentAST = ast;
+		// currentAST = ast;
 
 		container.setDisplay( '' );
 

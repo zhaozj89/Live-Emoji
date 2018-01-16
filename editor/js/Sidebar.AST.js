@@ -61,8 +61,9 @@ Sidebar.AST = function ( editor ) {
 					edit.setMarginLeft( '4px' );
 					edit.onClick( function () {
 
-						signals.editAST.dispatch( object, ast );
+						// signals.editAST.dispatch( object, ast );
 
+						signals.editAST.dispatch( object );
 					} );
 					astsContainer.add( edit );
 
