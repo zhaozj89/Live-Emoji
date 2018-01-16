@@ -55,8 +55,13 @@ class CharacterStructure  {
 	}
 
 	check() {
-		if( this.isCompleted===48 ) this.add2Scene.dispatch( this.character_mesh );
+		if( this.isCompleted===48 ) {
+			// this.character_mesh.position.x -= 0.5;
+			// this.character_mesh.position.y -= 0.5;
+			this.add2Scene.dispatch( this.character_mesh );
+		}
 	}
+
 	addElement( basicElement ) {
 		switch( basicElement.name ) {
 			case 'accessory': {
@@ -173,6 +178,13 @@ class CharacterStructure  {
 			}
 		}
 	}
+
+
+
+	// world2Local( position ) {
+	//
+	// }
+
 };
 
 var characterStructure = new CharacterStructure();

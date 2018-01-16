@@ -639,8 +639,8 @@ var Loader2 = function ( editor ) {
 
 						let mesh = ZContour( png );
 
-						mesh.rotation.x = THREE.Math.degToRad( -90 );
-						mesh.rotation.z = THREE.Math.degToRad( 180 );
+						// mesh.rotation.x = THREE.Math.degToRad( -90 );
+						// mesh.rotation.z = THREE.Math.degToRad( 180 );
 						// let mesh = ZContour( png );
 
 						/*
@@ -763,6 +763,8 @@ var LoadFileName = function ( name, emotion, filename ) {
 				if ( err ) throw err;
 				// console.log(png);
 				let mesh = ZContour( png );
+
+				mesh.geometry.translate( -0.5, -0.5, 0 );
 
 				// mesh.rotation.x = THREE.Math.degToRad( -90 );
 				// mesh.rotation.z = THREE.Math.degToRad( 180 );

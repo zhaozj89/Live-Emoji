@@ -201,19 +201,27 @@ let NEditor = function ( editor ) {
 
 	signals.trigger.add( function ( event ) {
 		// evaluate ast
+		let puppet = editor.selected;
+
 		let ast = manager.getAST();
 
 		// do nothing with ast now
 
 		if( event['type'] === 'keyboard' ) {
 			if( event['KEYCODE'] === 32 ) {
-				editor.selected.position.x++;
+				// puppet.position.x++;
+				// puppet.position.x += 0.5;
+				// puppet.position.y += 0.5;
+				puppet.rotation.z++;
+
+				// puppet.position.x -= 0.5;
+				// puppet.position.y -= 0.5;
 			}
 		}
 
 		if( event['type'] === 'face' ) {
 			if( event['faceinfo']['emotion'] === EMOTION_TYPE.HAPPY ) {
-				editor.selected.rotation.x++;
+				puppet.rotation.z++;
 			}
 		}
 

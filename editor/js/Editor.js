@@ -44,9 +44,6 @@ var Editor = function () {
 
 		themeChanged: new Signal(),
 
-		// transformModeChanged: new Signal(),
-		// snapChanged: new Signal(),
-		// spaceChanged: new Signal(),
 		rendererChanged: new Signal(),
 
 		sceneBackgroundChanged: new Signal(),
