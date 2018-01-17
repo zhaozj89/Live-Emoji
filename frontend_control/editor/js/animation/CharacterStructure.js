@@ -2,8 +2,6 @@ class BasicElement  {
 	constructor( name, mesh, emotion ) {
 		this.name = name;
 		this.mesh = mesh;
-		this.position = null;
-		this.visible = null;
 		this.emotion = emotion;
 	}
 };
@@ -12,12 +10,11 @@ function CharacterStructure ( name ) {
 	THREE.Group.call( this );
 
 	this.name = name;
-	this.emotion = 'sad';
+	this.emotion = 'neutral';
 
 	this.add2Scene = new signals.Signal();
 	this.isCompleted = 0;
 
-	// this.character_mesh = new THREE.Group();
 	this.left_eye_mesh = new THREE.Group();			this.left_eye_mesh.name = 'left_eye';
 	this.left_eyebrow_mesh = new THREE.Group(); 	this.left_eyebrow_mesh.name = 'left_eyebrow';
 	this.right_eye_mesh = new THREE.Group();		this.right_eye_mesh.name = 'right_eye';
@@ -175,5 +172,28 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 			this.check(); // 6+7*6
 			break;
 		}
+	}
+}
+
+
+CharacterStructure.prototype.updateEmotion = function ( emotion ) {
+	for( let i=0; i<Object.keys(EMOTION_TYPE).length; ++i ) {
+		this.left_eye[i].mesh.visible = false;
+		if( this.left_eye[i].emotion===emotion ) this.left_eye[i].mesh.visible = true;
+
+		this.left_eyebrow[i].mesh.visible = false;
+		if( this.left_eyebrow[i].emotion===emotion ) this.left_eyebrow[i].mesh.visible = true;
+
+		this.right_eye[i].mesh.visible = false;
+		if( this.right_eye[i].emotion===emotion ) this.right_eye[i].mesh.visible = true;
+
+		this.right_eyebrow[i].mesh.visible = false;
+		if( this.right_eyebrow[i].emotion===emotion ) this.right_eyebrow[i].mesh.visible = true;
+
+		this.mouth[i].mesh.visible = false;
+		if( this.mouth[i].emotion===emotion ) this.mouth[i].mesh.visible = true;
+
+		this.nose[i].mesh.visible = false;
+		if( this.nose[i].emotion===emotion ) this.nose[i].mesh.visible = true;
 	}
 }

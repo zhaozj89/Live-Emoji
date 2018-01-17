@@ -804,10 +804,6 @@ var LoadCharacterJSON = function ( file ) {
 				} );
 
 				for( let prop in loader ) {
-					// if( prop === 'name' ) {
-					// 	characterStructure.character_mesh.name = loader[prop];
-					// 	continue;
-					// }
 
 					if( typeof(loader[prop])==='string' ) {
 						LoadFileName( characterStructure, prop, '', loader[prop] );

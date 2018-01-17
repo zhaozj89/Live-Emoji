@@ -191,31 +191,54 @@ let NEditor = function ( editor ) {
 
 	signals.trigger.add( function ( event ) {
 		// evaluate ast
-		let puppet = currentObject;
+		let puppet = currentObject || editor.selected || null;
 
 		let ast = manager.getAST();
 
 		// do nothing with ast now
 
-		if( event['type'] === 'keyboard' ) {
-			if( event['KEYCODE'] === 32 ) {
-				// puppet.position.x++;
-				// puppet.position.x += 0.5;
-				// puppet.position.y += 0.5;
-				puppet.rotation.z++;
+		if( puppet===null ) return;
 
-				// puppet.position.x -= 0.5;
-				// puppet.position.y -= 0.5;
+		if( event['type'] === 'keyboard' ) {
+			if( event['KEYCODE'] === 37 ) {
+				puppet.position.x+=0.1;
+			}
+
+			if( event['KEYCODE'] === 39 ) {
+				puppet.position.x-=0.1;
 			}
 		}
 
 		if( event['type'] === 'face' ) {
+			let emotion = null;
+			console.log( event['faceinfo']['emotion'] );
+			switch( event['faceinfo']['emotion'] ) {
+				case EMOTION_TYPE.HAPPY:
+					emotion = 'happy';
+					break;
+				case EMOTION_TYPE.SAD:
+					emotion = 'sad';
+					break;
+				case EMOTION_TYPE.ANGRY:
+					emotion = 'angry';
+					break;
+				case EMOTION_TYPE.FEARFUL:
+					emotion = 'fearful';
+					break;
+				case EMOTION_TYPE.SURPRISED:
+					emotion = 'surprised';
+					break;
+				case EMOTION_TYPE.DISGUSTED:
+					emotion = 'disgusted';
+					break;
+				case EMOTION_TYPE.NEUTRAL:
+					emotion = 'neutral';
+					break;
+			}
 
+			console.log( emotion );
 
-
-			// if( event['faceinfo']['emotion'] === EMOTION_TYPE.HAPPY ) {
-			// 	puppet.rotation.z++;
-			// }
+			puppet.updateEmotion( emotion );
 		}
 
 		editor.signals.sceneGraphChanged.dispatch();
