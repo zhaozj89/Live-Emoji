@@ -2,6 +2,62 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
+// easyrtc
+
+var selfEasyrtcid = "";
+
+function connect() {
+    // easyrtc.setVideoDims(640,480);
+    easyrtc.setRoomOccupantListener(convertListToButtons);
+    easyrtc.easyApp("easyrtc.audioVideoSimple", "selfVideo", ["callerVideo"], loginSuccess, loginFailure);
+}
+
+
+function clearConnectList() {
+    var otherClientDiv = document.getElementById('otherClients');
+    while (otherClientDiv.hasChildNodes()) {
+        otherClientDiv.removeChild(otherClientDiv.lastChild);
+    }
+}
+
+
+function convertListToButtons (roomName, data, isPrimary) {
+    clearConnectList();
+    var otherClientDiv = document.getElementById('otherClients');
+    for(var easyrtcid in data) {
+        var button = document.createElement('button');
+        button.onclick = function(easyrtcid) {
+            return function() {
+                performCall(easyrtcid);
+            };
+        }(easyrtcid);
+
+        // var label = document.createTextNode(easyrtc.idToName(easyrtcid));
+        var label = document.createTextNode( 'Connect' );
+        button.appendChild(label);
+        otherClientDiv.appendChild(button);
+    }
+}
+
+
+function performCall(otherEasyrtcid) {
+    easyrtc.hangupAll();
+
+    var successCB = function() {};
+    var failureCB = function() {};
+    easyrtc.call(otherEasyrtcid, successCB, failureCB);
+}
+
+
+function loginSuccess(easyrtcid) {
+    selfEasyrtcid = easyrtcid;
+    // document.getElementById("iam").innerHTML = "I am " + easyrtc.cleanId(easyrtcid);
+}
+
+
+function loginFailure(errorCode, message) {
+    easyrtc.showError(errorCode, message);
+}
 
 Sidebar.Project = function ( editor ) {
 
@@ -21,7 +77,7 @@ Sidebar.Project = function ( editor ) {
 
 	var videoStream = new UI.Video();
 	videoStream.setPosition( 'absolute' );
-	videoStream.setId( 'videoStream' );
+	videoStream.setId( 'selfVideo' );
 	videoStream.dom.width = 250;
 	videoStream.dom.height = 200;
 	// vid.setControls( true );
@@ -29,6 +85,7 @@ Sidebar.Project = function ( editor ) {
 	videoStream.setLoop( true );
 	videoStream.setPlaysinline( true );
 	videoStream.setAutoplay( true );
+	videoStream.dom.muted = 'muted';
 	var videoStreamWidth = videoStream.dom.width;
 	var videoStreamHeight = videoStream.dom.height;
 
@@ -54,6 +111,28 @@ Sidebar.Project = function ( editor ) {
 
 	container.add( startButton );
 
+    // caller
+
+    var callerPanel = new UI.Panel();
+    callerPanel.setWidth( '250px' );
+    callerPanel.setHeight( '200px' );
+
+    container.add( callerPanel );
+
+    var callerVideoStream = new UI.Video();
+    callerVideoStream.setPosition( 'absolute' );
+    callerVideoStream.setId( 'callerVideo' );
+    callerVideoStream.dom.width = 250;
+    callerVideoStream.dom.height = 200;
+    callerVideoStream.setAutoplay( true );
+
+    callerPanel.add( callerVideoStream );
+
+    var otherClients = new UI.Div();
+    otherClients.setId( 'otherClients' );
+
+    container.add( otherClients );
+
 	var videoStreamOverlayContext = videoStreamOverlay.getContext( '2d' );
 
 	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -73,6 +152,7 @@ Sidebar.Project = function ( editor ) {
 		  videoStreamWidth = Math.round(videoStreamHeight * proportion);
 		  videoStream.dom.width = videoStreamWidth;
 		  videoStreamOverlay.dom.width = videoStreamWidth;
+		  callerVideoStream.dom.width = videoStreamWidth;
 		}
 
 	  videoStream.dom.onloadedmetadata = function() {
@@ -256,6 +336,7 @@ Sidebar.Project = function ( editor ) {
 			ctrack.draw(videoStreamOverlay.dom);
 		}
 	}
+
 
 	return container;
 
