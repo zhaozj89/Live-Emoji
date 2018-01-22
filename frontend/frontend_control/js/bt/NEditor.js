@@ -100,9 +100,8 @@ let NEditor = function ( editor ) {
 	menu.addLi( 'Modules', 'ui-state-disabled' );
 
 	let Triggers = menu.addLi( 'Trigger' );
+	let Objects = menu.addLi( 'Object' );
 	let Composites = menu.addLi( 'Composites' );
-	// let Decorators = menu.addLi( 'Decorators' );
-	// let Conditions = menu.addLi( 'Conditions' );
 	let Actions = menu.addLi( 'Actions' );
 	// let Runner = menu.addLi( 'Run' );
 
@@ -138,62 +137,54 @@ let NEditor = function ( editor ) {
 		$( "#menu" ).menu();
 
 		$( buttonKeyboard ).click(function () {
-			manager.addNode({'type': NODE_TYPE.TRIGGER, 'value': 'keyboard'});
+			manager.addNode( 'key_trigger' );
 		});
 
 		$( buttonEmotion ).click(function () {
-			manager.addNode({'type': NODE_TYPE.TRIGGER, 'value': 'emotion'});
+			manager.addNode( 'emotion_trigger' );
 		});
 
 		$( buttonSelector ).click( function() {
-			manager.addNode( {'type': NODE_TYPE.COMPOSITE, 'value': 'selector'} );
+			manager.addNode( 'selector' );
 		} );
 
 		$( buttonSequence ).click( function() {
-			manager.addNode( {'type': NODE_TYPE.COMPOSITE, 'value': 'sequence'} );
+			manager.addNode( 'sequence' );
 		} );
 
 		$( buttonTranslation ).click( function() {
-			manager.addNode( {'type': NODE_TYPE.ACTION, 'value': 'translation'} );
+			manager.addNode( 'translation' );
 		} );
 
 		$( buttonRotation ).click( function() {
-			manager.addNode( {'type': NODE_TYPE.ACTION, 'value': 'rotation'} );
+			manager.addNode( 'rotation' );
 		} );
 
-		// $( Runner ).click ( function () {
-		// 	manager.compiler();
-		// });
+		$( Objects ).click( function () {
+			if( currentCharacter===null ) alert( 'Please select an object first!' );
+			else manager.addNode( 'object', currentCharacter );
+		} );
 	} );
 
-	// real codes
-	// let delay;
-	// let currentMode;
-	let currentAST;
-	let currentObject;
+	let currentCharacter;
 
 	//
 	signals.editorCleared.add( function () {
-
 		container.setDisplay( 'none' );
-
 	} );
 
-	signals.editAST.add( function ( object ) {
-
-		currentObject = object;
-		// currentAST = ast;
-
+	signals.editAST.add( function ( character ) {
+		currentCharacter = character;
 		container.setDisplay( '' );
-
-
 	} );
 
 	signals.trigger.add( function ( event ) {
 		// evaluate ast
-		let puppet = currentObject || editor.selected || null;
+		let puppet = currentCharacter || editor.selected || null;
 
 		let ast = manager.getAST();
+
+		console.log( ast );
 
 		// do nothing with ast now
 

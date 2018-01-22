@@ -1,19 +1,19 @@
 
 
-class Trigger extends Node {
-  constructor ( value ) {
-    super( NODE_TYPE.TRIGGER, value, true );
+class KeyTriggerNode extends Node {
+	constructor ( type ) {
+		super(type, true);
 
-    switch ( value ) {
-      case 'keyboard': {
-        this.addInput( INPUT_TYPE.INPUT_KEY, 'key');
-        break;
-      }
+		let input = new KeyInput();
+		this.addInput(input);
+	}
+}
 
-      case 'emotion': {
-        this.addInput( INPUT_TYPE.SELECT_EMOTION, 'emotion' );
-        break;
-      }
-    }
-  }
+class EmotionTriggerNode extends Node {
+	constructor ( type ) {
+		super( type, true );
+		
+		let input = new EmotionInput();
+		this.addInput( input );
+	}
 }

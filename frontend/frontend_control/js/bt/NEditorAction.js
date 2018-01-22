@@ -1,6 +1,13 @@
 
-class Action extends Node {
-  constructor ( value ) {
-    super ( NODE_TYPE.ACTION, value, false );
-  }
+
+class TranslationNode extends Node {
+	constructor ( type ) {
+		super( type, false );
+	}
+}
+
+class RotationNode extends Node {
+	constructor ( type ) {
+		super( type, false );
+	}
 }

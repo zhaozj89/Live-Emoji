@@ -23,14 +23,10 @@ class NodeManager {
 		this.AST = new Object();
 	}
 
-	addNode ( options ) {
-
-		let type = options['type'];
-		let value = options['value'];
-
+	addNode ( type, currentCharacter ) {
 		switch ( type ) {
-			case NODE_TYPE.TRIGGER: {
-				let node = new Trigger( value );
+			case 'key_trigger': {
+				let node = new KeyTriggerNode( type );
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
 				// this.nodes.push( node );
@@ -38,19 +34,44 @@ class NodeManager {
 				break;
 			}
 
-			case NODE_TYPE.COMPOSITE: {
-				let node = new Composite( value );
+			case 'emotion_trigger': {
+				let node = new EmotionTriggerNode( type );
+				node.moveTo({x: 300, y: 80});
+				node.initUI(this.container);
+				// this.nodes.push( node );
+				this.triggers.push( node );
+				break;
+			}
+
+			case 'selector':
+			case 'sequence': {
+				let node = new CompositeNode( type );
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
 				// this.nodes.push( node );
 				break;
 			}
 
-			case NODE_TYPE.ACTION: {
-				let node = new Action( value );
+			case 'translation': {
+				let node = new TranslationNode( type );
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
 				// this.nodes.push( node );
+				break;
+			}
+
+			case 'rotation': {
+				let node = new RotationNode( type );
+				node.moveTo({x: 300, y: 80});
+				node.initUI(this.container);
+				// this.nodes.push( node );
+				break;
+			}
+
+			case 'object': {
+				let node = new CharacterNode( type, currentCharacter );
+				node.moveTo({x: 300, y: 80});
+				node.initUI(this.container);
 				break;
 			}
 

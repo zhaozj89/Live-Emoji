@@ -1,8 +1,8 @@
 
 let CreateNodeInputDOM = function ( that ) {
 	let dom = document.createElement('div');
-	dom.textContent = that.name;
-	dom.title = that.name;
+	dom.textContent = that.type;
+	dom.title = that.type;
 	dom.classList.add('x-connection');
 	dom.classList.add('empty');
 
@@ -66,8 +66,7 @@ let CreateOutputDOM = function ( that ) {
 }
 
 class NodeInput {
-	constructor( type, value ) {
-		this.name = value;
+	constructor( type ) {
 		this.type = type;
 		this.arg = null;
 
@@ -76,20 +75,6 @@ class NodeInput {
 		let that = this;
 		this.domElement = CreateNodeInputDOM( that );
 		this.path = CreateNodeInputPath( NEDITOR_SVG_CANVAS );
-
-		if (this.type === INPUT_TYPE.INPUT_KEY){
-			var input = document.createElement('input');
-			this.domElement.textContent += ' ';
-			this.domElement.appendChild( input );
-			$( input ).change( function() {that.arg = input.value;} );
-		}
-
-		if( this.type === INPUT_TYPE.SELECT_EMOTION ) {
-			let selectMenu = new UI.Select();
-			selectMenu.setOptions( {'Happy' : "Happy", "Angry" : "Angry"} );
-			this.domElement.appendChild( selectMenu.dom );
-			$( selectMenu.dom ).change( function() { that.arg = selectMenu.getValue(); } );
-		}
 	}
 
 	getAttachedPoint() {
@@ -103,8 +88,7 @@ class NodeInput {
 
 
 class Node {
-	constructor( type, value, isRoot ) {
-		this.name = value;
+	constructor( type, isRoot ) {
 		this.type = type;
 		this.isRoot = isRoot;
 
@@ -112,30 +96,24 @@ class Node {
 		this.attachedPaths = [];
 		this.connected = false;
 
-		this.domElement = CreateNodeDOM( this.name );
+		this.domElement = CreateNodeDOM( this.type );
 
-		let that = this;
-		let outputDom = CreateOutputDOM( that );
+		let outputDom = CreateOutputDOM( this );
 		this.domElement.appendChild( outputDom );
 		this.output = outputDom;
 	}
 
-	addInput( name, type ) {
-		var input = new NodeInput( name, type );
+	addInput( input ) {
 		this.inputs.push( input );
 		this.domElement.appendChild( input.domElement );
-		return input;
 	}
 
-	removeInput( name ) {
-		for(let i=0; i<this.inputs.length; ++i) {
-			let input = this.inputs[i];
-			if( input.name == name ) {
-				this.inputs.splice( i, 1 );
-				input.domElement.parentElement.removeChild( input.domElement );
-			}
-		}
-		return null;
+	removeInput() {
+		if( this.inputs.length===0 ) return;
+		let input = this.inputs[this.inputs.length-1];
+		this.inputs.splice( this.inputs.length-1, 1 );
+		input.domElement.parentElement.removeChild( input.domElement );
+		return;
 	}
 
 	getOutputPoint() {

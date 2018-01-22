@@ -798,7 +798,7 @@ var LoadCharacterJSON = function ( file ) {
 			reader.addEventListener( 'load', function ( event ) {
 				let loader = JSON.parse( event.target.result );
 
-				let characterStructure = new CharacterStructure( file.name );
+				let characterStructure = new CharacterStructure( file.name.slice(0, -5) );
 				characterStructure.add2Scene.add( function ( obj ) {
 					editor.execute( new AddObjectCommand( obj ) );
 				} );

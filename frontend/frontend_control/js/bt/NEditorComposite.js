@@ -1,6 +1,6 @@
-class Composite extends Node {
-	constructor ( value ) {
-		super ( NODE_TYPE.COMPOSITE, value, false );
+class CompositeNode extends Node {
+	constructor ( type ) {
+		super ( type, false );
 		this.setUI();
 	}
 
@@ -25,20 +25,21 @@ class Composite extends Node {
 		this.domElement.appendChild( rower.dom );
 		this.domElement.appendChild( breaker.dom );
 
-		this.addInput( INPUT_TYPE.CONNECTION, 'channel '+this.counter );
+		let input = new ConnectionInput();
+		this.addInput(input);
 		++this.counter;
 
 		let that = this;
 		$( incrementer.dom ).click( function() {
-
-			that.addInput( INPUT_TYPE.CONNECTION, 'channel '+that.counter );
+			let input = new ConnectionInput();
+			that.addInput( input );
 			++that.counter;
 		} );
 
 		$( decrementer.dom ).click( function() {
 			if( that.counter<=1 ) return;
 			--that.counter;
-			that.removeInput( 'channel '+that.counter );
+			that.removeInput();
 		} );
 	}
 }
