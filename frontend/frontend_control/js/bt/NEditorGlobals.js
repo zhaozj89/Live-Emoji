@@ -32,4 +32,8 @@ var FACE_TRIGGER = {
 	faceinfo : null
 };
 
+var TICK_TRIGGER = {
+	type : 'tick'
+};
+
 

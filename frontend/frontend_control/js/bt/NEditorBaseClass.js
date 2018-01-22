@@ -1,7 +1,7 @@
 
 let CreateNodeInputDOM = function ( that ) {
 	let dom = document.createElement('div');
-	dom.textContent = that.type;
+	dom.textContent = that.type + ':  ';
 	dom.title = that.type;
 	dom.classList.add('x-connection');
 	dom.classList.add('empty');
@@ -221,7 +221,7 @@ class Node {
 	getChildren() {
 		let res = [];
 		for (let k=0; k<this.inputs.length; ++k) {
-			res.push( this.inputs[k].node );
+			if(  this.inputs[k].node!==null ) res.push( this.inputs[k].node );
 		}
 		return res;
 	}

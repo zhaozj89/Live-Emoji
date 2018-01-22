@@ -64,3 +64,23 @@ class CharacterInput extends NodeInput {
 		} );
 	}
 }
+
+class ArgInput extends NodeInput {
+	constructor() {
+		super( 'arg_input' );
+		// this.type = 'arg_input';
+		// this.arg = null;
+		// this.node = null;
+		//
+		// this.domElement = document.createElement('div');
+		// this.domElement.textContent = 'arg_input:  ';
+		// this.domElement.title = 'arg_input';
+		// this.domElement.classList.add('x-connection');
+
+		let that = this;
+		let input = document.createElement( 'input' );
+		this.domElement.textContent += '';
+		this.domElement.appendChild( input );
+		$( input ).change( function() {that.arg = input.value;} );
+	}
+}

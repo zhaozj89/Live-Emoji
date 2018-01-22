@@ -17,3 +17,12 @@ class EmotionTriggerNode extends Node {
 		this.addInput( input );
 	}
 }
+
+class TickTriggerNode extends Node {
+	constructor( type ) {
+		super( type, true );
+
+		let input = new ArgInput();
+		this.addInput( input );
+	}
+}

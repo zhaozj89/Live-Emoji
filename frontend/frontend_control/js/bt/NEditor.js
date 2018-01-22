@@ -103,11 +103,12 @@ let NEditor = function ( editor ) {
 	let Objects = menu.addLi( 'Object' );
 	let Composites = menu.addLi( 'Composites' );
 	let Actions = menu.addLi( 'Actions' );
-	// let Runner = menu.addLi( 'Run' );
+	let Runner = menu.addLi( 'Run' );
 
 	/////////////////////////////////////////////////////////////////
 	let menuTriggers = new UI.UList();
 	let buttonKeyboard = menuTriggers.addLi( 'Keyboard' );
+	let buttonTick = menuTriggers.addLi( 'Tick' );
 	let buttonEmotion = menuTriggers.addLi( 'Emotion' );
 	Triggers.appendChild( menuTriggers.dom );
 
@@ -140,6 +141,10 @@ let NEditor = function ( editor ) {
 			manager.addNode( 'key_trigger' );
 		});
 
+		$( buttonTick ).click(function () {
+			manager.addNode( 'tick_trigger' );
+		});
+
 		$( buttonEmotion ).click(function () {
 			manager.addNode( 'emotion_trigger' );
 		});
@@ -164,9 +169,15 @@ let NEditor = function ( editor ) {
 			if( currentCharacter===null ) alert( 'Please select an object first!' );
 			else manager.addNode( 'object', currentCharacter );
 		} );
+
+		$( Runner ).click( function () {
+			currentAST = manager.getAST();
+			console.log( currentAST );
+		} );
 	} );
 
 	let currentCharacter;
+	let currentAST = null;
 
 	//
 	signals.editorCleared.add( function () {
@@ -182,13 +193,19 @@ let NEditor = function ( editor ) {
 		// evaluate ast
 		let puppet = currentCharacter || editor.selected || null;
 
-		let ast = manager.getAST();
+		// let ast = manager.getAST();
 
-		console.log( ast );
+		// console.log( ast );
 
 		// do nothing with ast now
 
 		if( puppet===null ) return;
+
+		if( event['type']==='tick' ) {
+			if( currentAST!==null ) {
+
+			}
+		}
 
 		if( event['type'] === 'keyboard' ) {
 			if( event['KEYCODE'] === 37 ) {
@@ -202,7 +219,6 @@ let NEditor = function ( editor ) {
 
 		if( event['type'] === 'face' ) {
 			let emotion = null;
-			console.log( event['faceinfo']['emotion'] );
 			switch( event['faceinfo']['emotion'] ) {
 				case EMOTION_TYPE.HAPPY:
 					emotion = 'happy';
@@ -227,12 +243,12 @@ let NEditor = function ( editor ) {
 					break;
 			}
 
-			console.log( emotion );
+			// console.log( emotion );
 
 			puppet.updateEmotion( emotion );
 		}
 
-		editor.signals.sceneGraphChanged.dispatch();
+		// editor.signals.sceneGraphChanged.dispatch();
 
 	} );
 	return container;

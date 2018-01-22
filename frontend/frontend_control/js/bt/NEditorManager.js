@@ -19,8 +19,12 @@ class NodeManager {
 		this.container = container;
 
 		// this.nodes = new Array();
-		this.triggers = new Array();
-		this.AST = new Object();
+		this.tick_triggers = new Array();
+		this.key_triggers = new Array();
+		this.emotion_triggers = new Array();
+		this.AST_Tick = new Object();
+		this.AST_Key = new Object();
+		this.AST_Emotion = new Object();
 	}
 
 	addNode ( type, currentCharacter ) {
@@ -30,7 +34,7 @@ class NodeManager {
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
 				// this.nodes.push( node );
-				this.triggers.push( node );
+				this.key_triggers.push( node );
 				break;
 			}
 
@@ -39,7 +43,15 @@ class NodeManager {
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
 				// this.nodes.push( node );
-				this.triggers.push( node );
+				this.emotion_triggers.push( node );
+				break;
+			}
+
+			case 'tick_trigger': {
+				let node = new TickTriggerNode( type );
+				node.moveTo({x: 300, y: 80});
+				node.initUI(this.container);
+				this.tick_triggers.push( node );
 				break;
 			}
 
@@ -81,13 +93,13 @@ class NodeManager {
 	}
 
 	parseNode( node ) {
+		if(node===undefined || node===null) return;
+
 		let args = node.getArgs();
-		let val = '';
-		for(let i=0; i<args.length; ++i) val += args[i];
 
 		let res = {
-			'type' : node.name,
-			'args' : val
+			'type' : node.type,
+			'args' : args
 		}
 
 		let children = node.getChildren();
