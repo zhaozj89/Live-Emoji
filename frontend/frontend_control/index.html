@@ -302,14 +302,14 @@
 			*/
 
 			// other input triggers
-			document.addEventListener( 'keydown', function ( event ) {
-				KEYBOARD_TRIGGER.KEYCODE = event.keyCode;
-				editor.signals.trigger.dispatch( KEYBOARD_TRIGGER );
-			} );
-
-                        setInterval( function(){
-                                editor.signals.trigger.dispatch( TICK_TRIGGER );
-                        }, 1000 );
+			// document.addEventListener( 'keydown', function ( event ) {
+			// 	KEYBOARD_TRIGGER.KEYCODE = event.keyCode;
+			// 	editor.signals.trigger.dispatch( KEYBOARD_TRIGGER );
+			// } );
+			//
+			// setInterval( function(){
+                         //        editor.signals.trigger.dispatch( TICK_TRIGGER );
+			// }, 1000 );
 
 		</script>
 	</body>
