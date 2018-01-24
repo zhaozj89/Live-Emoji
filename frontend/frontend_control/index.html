@@ -10,8 +10,8 @@
                 <!--<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>-->
 
                 <!-- easyrtc -->
-                <script src="js/easyrtc/socket.io.js"></script>
-                <script src="js/easyrtc/easyrtc.js"></script>
+                <script src="js/rtc/socket.io.js"></script>
+                <script src="js/rtc/easyrtc.js"></script>
 
                 <script src="js/libs/build/three.js"></script>
                 <script src="js/libs/signals.min.js"></script>
@@ -50,7 +50,7 @@
                 <script src="js/Menubar.js"></script>
                 <script src="js/Menubar.File.js"></script>
                 <script src="js/Menubar.Edit.js"></script>
-                <script src="js/Menubar.Add.js"></script>
+                <script src="js/Menubar.View.js"></script>
                 <script src="js/Menubar.Help.js"></script>
                 <script src="js/Menubar.Status.js"></script>
                 <script src="js/Sidebar.js"></script>
@@ -67,15 +67,10 @@
                 <script src="js/Sidebar.Geometry.BoxGeometry.js"></script>
                 <script src="js/Sidebar.Geometry.CircleGeometry.js"></script>
                 <script src="js/Sidebar.Geometry.CylinderGeometry.js"></script>
-                <script src="js/Sidebar.Geometry.IcosahedronGeometry.js"></script>
                 <script src="js/Sidebar.Geometry.PlaneGeometry.js"></script>
                 <script src="js/Sidebar.Geometry.SphereGeometry.js"></script>
-                <script src="js/Sidebar.Geometry.TorusGeometry.js"></script>
-                <script src="js/Sidebar.Geometry.TorusKnotGeometry.js"></script>
-                <script src="js/Sidebar.Geometry.LatheGeometry.js"></script>
                 <script src="js/Sidebar.Material.js"></script>
                 <script src="js/Sidebar.History.js"></script>
-                <script src="js/Toolbar.js"></script>
                 <script src="js/Viewport.js"></script>
                 <script src="js/Viewport.Info.js"></script>
 
@@ -146,9 +141,6 @@
 
 			var nEditor = new NEditor( editor );
 			document.body.appendChild( nEditor.dom );
-
-			var toolbar = new Toolbar( editor );
-			document.body.appendChild( toolbar.dom );
 
 			var menubar = new Menubar( editor );
 			document.body.appendChild( menubar.dom );

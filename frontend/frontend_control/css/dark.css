@@ -53,7 +53,7 @@ select {
 	top: 32px;
 	left: 0;
 	right: 300px;
-	bottom: 32px;
+	bottom: 0px;
 }
 
 	#viewport #info {
@@ -61,30 +61,13 @@ select {
 		pointer-events: none;
 	}
 
-#script {
-	position: absolute;
-	top: 32px;
-	left: 0;
-	right: 300px;
-	bottom: 32px;
-	opacity: 0.9;
-}
-
 #nEditor {
 	position: absolute;
 	top: 32px;
 	left: 0;
 	right: 300px;
-	bottom: 32px;
+	bottom: 0px;
 	opacity: 0.9;
-}
-
-#player {
-	position: absolute;
-	top: 32px;
-	left: 0;
-	right: 300px;
-	bottom: 32px;
 }
 
 #menubar {
@@ -206,29 +189,6 @@ select {
 	#tabs span.selected {
 		color: #888;
 		background-color: #111;
-	}
-
-#toolbar {
-	position: absolute;
-	left: 0;
-	right: 300px;
-	bottom: 0;
-	height: 32px;
-	background-color: #111;
-	color: #333;
-}
-
-	#toolbar * {
-		vertical-align: middle;
-	}
-
-	#toolbar .Panel {
-		padding: 4px;
-		color: #888;
-	}
-
-	#toolbar button {
-		margin-right: 6px;
 	}
 
 .Outliner {
