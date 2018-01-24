@@ -18,7 +18,6 @@ class NodeManager {
 		NEDITOR_SVG_CANVAS = svgCanvas;
 		this.container = container;
 
-		// this.nodes = new Array();
 		this.tick_triggers = new Array();
 		this.key_triggers = new Array();
 		this.emotion_triggers = new Array();
@@ -112,77 +111,50 @@ class NodeManager {
 		return res;
 	}
 
-	parser () {
-		for( let i=0; i<this.triggers.length; ++i ) {
-			this.AST['trigger_'+i] = this.parseNode( this.triggers[i] );
+
+
+	getAST_Tick() {
+		let that = this;
+		let parser = function () {
+			for( let i=0; i<that.tick_triggers.length; ++i ) {
+				that.AST_Tick['tick_trigger_'+i] = that.parseNode( that.tick_triggers[i] );
+			}
+			return that.AST_Tick;
 		}
-		return this.AST;
+
+		return parser();
 	}
 
-/*
-	generator( node ) {
-		let res = '';
-		if( node['type']==='keyboard' ) {
-			res +=
-			`
-				function keydown ( event ) {
-					var x = event.keyCode || event.which;
-					var y = String.fromCharCode(x);
-					if(y===${node['args']}.toUpperCase()) {
-
-			`;
-
-			for(let body in node) {
-				if(body.slice(0, 4)==='body') {
-					res += this.generator( node[body] );
-				}
+	getAST_Key() {
+		let that = this;
+		let parser = function () {
+			for( let i=0; i<that.key_triggers.length; ++i ) {
+				that.AST_Key['key_triggers'+i] = that.parseNode( that.key_triggers[i] );
 			}
-
-			res +=
-			`
-					return 0;
-				}
-			`;
+			return that.AST_Key;
 		}
 
-		if( node['type'] === 'selector' ) {
-			res +=
-			`
-				for( let i=0; i<${Object.keys(node).length}; ++i ) {
-
-			`;
-
-			for(let body in node) {
-				if(body.slice(0, 4)==='body') {
-					res += this.generator( node[body] );
-				}
-			}
-
-			res +=
-			`
-					return 0;
-				}
-			`;
-		}
-
-		if( node['type'] === 'translation' ) {
-			res +=
-			`
-				excute this node;
-				return 0;
-			`;
-		}
-
-		return res;
+		return parser();
 	}
-*/
+
+	getAST_Emotion() {
+		let that = this;
+		let parser = function () {
+			for( let i=0; i<that.emotion_triggers.length; ++i ) {
+				that.AST_Emotion['emotion_triggers'+i] = that.parseNode( that.emotion_triggers[i] );
+			}
+			return that.AST_Emotion;
+		}
+
+		return parser();
+	}
+
 
 	getAST() {
-		return this.parser();
-		// for( let trigger in ast ) {
-		// 	let code = this.generator( ast[trigger] );
-		// 	console.log( code );
-		// }
-		// console.log( ast );
+		let a = this.getAST_Tick();
+		let b = this.getAST_Key();
+		let c = this.getAST_Emotion();
+
+		return [a,b,c];
 	}
 }

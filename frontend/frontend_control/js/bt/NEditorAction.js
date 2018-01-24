@@ -2,18 +2,25 @@
 
 class TranslationNode extends Node {
 	constructor ( type ) {
-		super( type, false );
+		super( type );
 
-		let input = new ArgInput();
+		this.addOutput();
+
+		// this.addTextArg( 'translation: ' );
+
+		let input = new NodeInput();
+		input.addTextInput();
+
 		this.addInput( input );
 	}
 }
 
 class RotationNode extends Node {
 	constructor ( type ) {
-		super( type, false );
+		super( type );
 
-		let input = new ArgInput();
-		this.addInput( input );
+		this.addOutput();
+
+		this.addTextArg( 'rotation: ' );
 	}
 }

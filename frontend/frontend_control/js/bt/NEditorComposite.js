@@ -1,6 +1,9 @@
 class CompositeNode extends Node {
 	constructor ( type ) {
-		super ( type, false );
+		super ( type );
+
+		this.addOutput();
+
 		this.setUI();
 	}
 
@@ -25,13 +28,15 @@ class CompositeNode extends Node {
 		this.domElement.appendChild( rower.dom );
 		this.domElement.appendChild( breaker.dom );
 
-		let input = new ConnectionInput();
+		let input = new NodeInput();
+		input.domElement.textContent = 'channel ' + this.counter + ': ';
 		this.addInput(input);
 		++this.counter;
 
 		let that = this;
 		$( incrementer.dom ).click( function() {
-			let input = new ConnectionInput();
+			let input = new NodeInput();
+			input.domElement.textContent = 'channel ' + that.counter + ': ';
 			that.addInput( input );
 			++that.counter;
 		} );

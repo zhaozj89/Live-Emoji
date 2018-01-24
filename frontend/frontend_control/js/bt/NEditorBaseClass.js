@@ -1,70 +1,4 @@
 
-let CreateNodeInputDOM = function ( that ) {
-	let dom = document.createElement('div');
-	dom.textContent = that.type + ':  ';
-	dom.title = that.type;
-	dom.classList.add('x-connection');
-	dom.classList.add('empty');
-
-	dom.onclick = function(event){
-		if (NEDITOR_MOUSE_INFO.currentInput) {
-			if (NEDITOR_MOUSE_INFO.currentInput.path.hasAttribute('d'))
-				NEDITOR_MOUSE_INFO.currentInput.path.removeAttribute('d');
-			if (NEDITOR_MOUSE_INFO.currentInput.node) {
-				NEDITOR_MOUSE_INFO.currentInput.node.detachInput(NEDITOR_MOUSE_INFO.currentInput);
-				NEDITOR_MOUSE_INFO.currentInput.node = undefined;
-			}
-		}
-
-		NEDITOR_MOUSE_INFO.currentInput = that;
-		if (that.node){
-			that.node.detachInput(that);
-			that.domElement.classList.remove('filled');
-			that.domElement.classList.add('empty');
-		}
-
-		event.stopPropagation();
-	};
-
-	return dom;
-}
-
-let CreateNodeInputPath = function ( canvas ) {
-	let path = document.createElementNS(canvas.ns, 'path');
-	path.setAttributeNS(null, 'stroke', '#8e8e8e');
-	path.setAttributeNS(null, 'stroke-width', '2');
-	path.setAttributeNS(null, 'fill', 'none');
-	canvas.appendChild(path);
-	return path;
-}
-
-
-let CreateNodeDOM = function ( name ) {
-	let dom = document.createElement('div');
-	dom.classList.add('x-node');
-	dom.setAttribute('title', name);
-	return dom;
-}
-
-let CreateOutputDOM = function ( that ) {
-	let dom = document.createElement('span');
-	dom.classList.add('x-output');
-	dom.textContent = '';
-
-	if ( that.isRoot )
-		dom.classList.add('hide');
-
-	dom.onclick = function( event ){
-		if ( NEDITOR_MOUSE_INFO.currentInput && !that.ownsInput(NEDITOR_MOUSE_INFO.currentInput) ) {
-			that.connectFrom(NEDITOR_MOUSE_INFO.currentInput);
-			NEDITOR_MOUSE_INFO.currentInput = undefined;
-		}
-		event.stopPropagation();
-	};
-
-	return dom;
-}
-
 class NodeInput {
 	constructor( type ) {
 		this.type = type;
@@ -72,9 +6,71 @@ class NodeInput {
 
 		this.node = null;
 
+		this.domElement = CreateInput( this );
+		this.path = CreatePath( NEDITOR_SVG_CANVAS );
+	}
+
+	addNumberInput() {
 		let that = this;
-		this.domElement = CreateNodeInputDOM( that );
-		this.path = CreateNodeInputPath( NEDITOR_SVG_CANVAS );
+		let input = document.createElement( 'input' );
+		this.domElement.textContent = 'milliseconds: ';
+		input.setAttribute( 'type', 'text' );
+		this.domElement.textContent += '';
+		this.domElement.appendChild( input );
+		$( input ).change( function() { that.arg = input.value; } );
+	}
+
+	addTextInput() {
+		let that = this;
+		let input = document.createElement( 'input' );
+		this.domElement.textContent = 'key: ';
+		input.setAttribute( 'type', 'text' );
+		this.domElement.textContent += '';
+		this.domElement.appendChild( input );
+		$( input ).change( function() { that.arg = input.value; } );
+	}
+
+	addEmotionInput() {
+		let that = this;
+		this.domElement.textContent = 'emotion: ';
+		let selectMenu = new UI.Select();
+		selectMenu.setOptions( {
+			"Happy" : "happy",
+			"Sad" : "sad",
+			"Disgusted" : "disgusted",
+			"Fearful" : "fearful",
+			"Neutral" : "neutral",
+			"Surprised" : "surprised",
+			"Angry" : "angry"
+		} );
+		this.domElement.appendChild( selectMenu.dom );
+		$( selectMenu.dom ).change( function() { that.arg = selectMenu.getValue(); } );
+	}
+
+	addCharacterInput( obj ) {
+		this.arg = obj;
+
+		this.domElement.textContent = 'object: ';
+
+		let allObjNames = {};
+		let allObjs = {}
+		allObjNames[obj.name] = obj.name;
+		allObjs[obj.name] = obj;
+
+		for(let i=0; i<obj.children.length; ++i) {
+			allObjNames[obj.children[i].name] = obj.children[i].name;
+			allObjs[obj.children[i].name] = obj.children[i];
+		}
+
+		let that = this;
+		let selectMenu = new UI.Select();
+		selectMenu.setOptions( allObjNames );
+
+		this.domElement.appendChild( selectMenu.dom );
+		$( selectMenu.dom ).change( function() {
+			that.arg = allObjs[selectMenu.getValue()];
+			console.log( that.arg );
+		} );
 	}
 
 	getAttachedPoint() {
@@ -88,19 +84,55 @@ class NodeInput {
 
 
 class Node {
-	constructor( type, isRoot ) {
+	constructor( type ) {
 		this.type = type;
-		this.isRoot = isRoot;
+		// this.arg = null;
 
 		this.inputs = [];
+		this.output = null;
+
 		this.attachedPaths = [];
 		this.connected = false;
 
-		this.domElement = CreateNodeDOM( this.type );
+		this.domElement = CreateTitle( this.type );
+	}
 
-		let outputDom = CreateOutputDOM( this );
+	// addTextArg( title ) {
+	// 	let that = this;
+	//
+	// 	let dom = CreateTextArg( title );
+	//
+	// 	let input = document.createElement( 'input' );
+	// 	input.setAttribute( 'type', 'text' );
+	//
+	// 	// input.setAttribute( 'value', '0.5em' );
+	// 	// input.classList.add('x-connection');
+	// 	// input.setAttribute( 'width', '0px' );
+	// 	// input.classList.add('empty');
+	//
+	// 	$( input ).change( function() {
+	// 		that.arg = input.value;
+	// 		console.log( that.arg );
+	// 	} );
+	//
+	//
+	//
+	// 	// console.log( dom );
+	//
+	// 	this.domElement.appendChild( dom );
+	//
+	// 	dom.appendChild( input );
+	// }
+
+	addOutput() {
+		let outputDom = CreateOutput( this );
 		this.domElement.appendChild( outputDom );
 		this.output = outputDom;
+	}
+
+	addPlaceholder() {
+		let dom = CreatePlaceholder();
+		this.domElement.appendChild( dom );
 	}
 
 	addInput( input ) {
@@ -150,19 +182,20 @@ class Node {
 	}
 
 	updatePosition() {
-		var outputPt = this.getOutputPoint();
-
-		for (let i = 0; i < this.attachedPaths.length; ++i) {
-			let inputPt = this.attachedPaths[i].input.getAttachedPoint();
-			this.attachedPaths[i].path.setAttributeNS(null, 'd', NEditorCreatePath(inputPt, outputPt));
-		}
-
 		for (let j = 0; j < this.inputs.length; ++j) {
 			if (this.inputs[j].node === null) continue;
 
 			let inputPt = this.inputs[j].getAttachedPoint();
 			let outputPt = this.inputs[j].node.getOutputPoint();
 			this.inputs[j].path.setAttributeNS(null, 'd', NEditorCreatePath(inputPt, outputPt));
+		}
+
+		if (this.output === null) return;
+		var outputPt = this.getOutputPoint();
+
+		for (let i = 0; i < this.attachedPaths.length; ++i) {
+			let inputPt = this.attachedPaths[i].input.getAttachedPoint();
+			this.attachedPaths[i].path.setAttributeNS(null, 'd', NEditorCreatePath(inputPt, outputPt));
 		}
 	}
 
@@ -227,10 +260,13 @@ class Node {
 	}
 
 	getArgs() {
-		let res = new Array();
+		let res = [];
 		for(let i=0; i<this.inputs.length; ++i) {
 			if( this.inputs[i].arg!==null ) res.push( this.inputs[i].arg );
 		}
+
+		// res.push(this.arg);
+
 		return res;
 	}
 }
