@@ -54,7 +54,7 @@
 		"sad" : "images/right_eye/sad.png",
 		"surprised" : "images/right_eye/surprised.png",
 		"disgusted": "images/right_eye/disgusted.png",
-		"close": "images/left_eye/close.png"
+		"close": "images/right_eye/close.png"
 	},
 	"right_eyebrow" :
 	{
