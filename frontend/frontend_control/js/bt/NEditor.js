@@ -129,7 +129,7 @@ let NEditor = function ( editor ) {
 	menu.dom.style.top = '300px';
 	container.add( menu );
 
-	let manager = new NodeManager( graphSVG, container.dom );
+	let manager = new NodeManager( graphSVG, container.dom, signals );
 
 
 	// jQuery methods go here ...
@@ -248,7 +248,7 @@ let NEditor = function ( editor ) {
 			puppet.updateEmotion( emotion );
 		}
 
-		// editor.signals.sceneGraphChanged.dispatch();
+		editor.signals.sceneGraphChanged.dispatch();
 
 	} );
 	return container;

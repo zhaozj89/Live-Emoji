@@ -14,7 +14,7 @@
 // }
 
 class NodeManager {
-	constructor ( svgCanvas, container ) {
+	constructor ( svgCanvas, container, signals ) {
 		NEDITOR_SVG_CANVAS = svgCanvas;
 		this.container = container;
 
@@ -24,6 +24,8 @@ class NodeManager {
 		this.AST_Tick = new Object();
 		this.AST_Key = new Object();
 		this.AST_Emotion = new Object();
+
+		this.signals = signals;
 	}
 
 	addNode ( type, currentCharacter ) {
@@ -38,7 +40,7 @@ class NodeManager {
 			}
 
 			case 'emotion_trigger': {
-				let node = new EmotionTriggerNode( type );
+				let node = new EmotionTriggerNode( type, this.signals );
 				node.moveTo({x: 300, y: 80});
 				node.initUI(this.container);
 				// this.nodes.push( node );

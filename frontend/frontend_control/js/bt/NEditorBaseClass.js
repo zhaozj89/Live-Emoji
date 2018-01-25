@@ -53,11 +53,17 @@ class NodeInput {
 	addNumberInput() {
 		let that = this;
 		let input = document.createElement( 'input' );
-		this.domElement.textContent = 'milliseconds: ';
+		this.domElement.textContent = 'milliseconds (>0): ';
 		input.setAttribute( 'type', 'text' );
 		this.domElement.textContent += '';
 		this.domElement.appendChild( input );
 		$( input ).change( function() { that.arg = input.value; } );
+	}
+
+	addPlaceholder( name ) {
+		let dom = document.createElement( 'div' );
+		dom.textContent = name;
+		this.domElement.appendChild( dom );
 	}
 
 	addTextInput() {

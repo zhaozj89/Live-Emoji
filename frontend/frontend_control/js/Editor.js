@@ -18,6 +18,8 @@ var Editor = function () {
 
 		trigger : new Signal(),
 
+		turnOnOffFaceTracking: new Signal(),
+
 		// script
 
 		editScript: new Signal(),
@@ -90,7 +92,6 @@ var Editor = function () {
 
 	this.selected = null;
 	this.helpers = {};
-
 };
 
 Editor.prototype = {

@@ -145,17 +145,17 @@
 			var viewport = new Viewport( editor );
 			document.body.appendChild( viewport.dom );
 
-			var nEditor = new NEditor( editor );
-			document.body.appendChild( nEditor.dom );
+			var sidebar = new Sidebar( editor );
+			document.body.appendChild( sidebar.dom );
 
 			var menubar = new Menubar( editor );
 			document.body.appendChild( menubar.dom );
 
-			var sidebar = new Sidebar( editor );
-			document.body.appendChild( sidebar.dom );
-
 			var modal = new UI.Modal();
 			document.body.appendChild( modal.dom );
+
+			var nEditor = new NEditor( editor ); // need face info in sidebar
+			document.body.appendChild( nEditor.dom );
 
 			//
 
@@ -297,7 +297,12 @@
 			}, false );
 			*/
 
-			
+			// document.addEventListener( 'keydown', function ( event ) {
+			// 	KEYBOARD_TRIGGER.KEYCODE = event.keyCode;
+			// 	editor.signals.trigger.dispatch( KEYBOARD_TRIGGER );
+			// } );
+
+
 		</script>
 	</body>
 </html>

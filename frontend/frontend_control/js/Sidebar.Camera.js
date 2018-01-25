@@ -106,8 +106,17 @@ Sidebar.Camera = function ( editor ) {
 	startButton.setDisabled( 'disabled' );
 	startButton.setLeft( '10px' );
 
+	signals.turnOnOffFaceTracking.add( function (on_off) {
+		if( startButton.dom.textContent === 'Start' ) {
+			if( on_off===true ) TurnONOFFFaceTracking();
+		}
+		else {
+			if( on_off===false ) TurnONOFFFaceTracking();
+		}
+	} );
+
 	$( startButton.dom ).click(function(){
-		startVideo();
+		TurnONOFFFaceTracking();
 	});
 
 	container.add( startButton );
@@ -216,7 +225,32 @@ Sidebar.Camera = function ( editor ) {
 	ctrack.init( pModel );
 	ctrack.setResponseMode( "single", ["raw"] );
 
-	function startVideo() {
+	let requestId;
+
+	function loop() {
+		requestId = undefined;
+
+		doDraw();
+		doPosition();
+		doFaceSignal();
+
+		start();
+	}
+
+	function start() {
+		if (!requestId) {
+			requestId = requestAnimationFrame(loop);
+		}
+	}
+
+	function stop() {
+		if (requestId) {
+			cancelAnimationFrame(requestId);
+			requestId = undefined;
+		}
+	}
+
+	function TurnONOFFFaceTracking() {
 
 		if( startButton.dom.textContent === 'Start' ) {
 			startButton.dom.textContent = 'Stop';
@@ -229,10 +263,7 @@ Sidebar.Camera = function ( editor ) {
 			//htracker.start();
 			trackingStarted = true;
 			// start loop to draw face and output messages
-			drawLoop();
-			positionLoop();
-
-			FaceSignalLoop();
+			start();
 		}
 		else {
 			startButton.dom.textContent = 'Start';
@@ -240,14 +271,23 @@ Sidebar.Camera = function ( editor ) {
 			ctrack.stop( videoStream.dom );
 			//htracker.start();
 			trackingStarted = false;
+
+			stop();
 		}
 	}
 
-	function FaceSignalLoop() {
-		requestAnimFrame( FaceSignalLoop );
+	function doFaceSignal() {
+		// requestAnimFrame( FaceSignalLoop );
+
+
+
+		// FACE_TRIGGER.faceinfo = FACE_INFORMATION;
+		// signals.trigger.dispatch( FACE_TRIGGER );
 
 		for( var prop in FACE_INFORMATION ) {
 			if( FACE_INFORMATION_PRE[prop] !== FACE_INFORMATION[prop] ) {
+
+				console.log( 'current emotion is:' + FACE_INFORMATION['emotion'] );
 
 				FACE_TRIGGER.faceinfo = FACE_INFORMATION;
 				signals.trigger.dispatch( FACE_TRIGGER );
@@ -258,8 +298,10 @@ Sidebar.Camera = function ( editor ) {
 	}
 
 	/******Code for output positions of face feature points*************************/
-	function positionLoop() {
-		requestAnimFrame(positionLoop);
+	function doPosition() {
+		// requestAnimFrame(positionLoop);
+
+		// console.log( 'position loop' );
 
 		var positions = ctrack.getCurrentPosition();//这个函数返回了检测到的所有特征点(70个)的在vid（400 x 300）中的位置，格式是：positions[i][j]代表第i个特征点的位置(j=0代表x，j=1代表y，注意原点在右上方)
 		// var positionString = "";
@@ -340,8 +382,8 @@ Sidebar.Camera = function ( editor ) {
 		// console.log( FACE_INFORMATION );
 	}
 
-	function drawLoop() {//画出人脸位置，就是那些绿色的线，用ctrack.draw在overlay这个canvas上画出来
-		requestAnimFrame(drawLoop);
+	function doDraw() {//画出人脸位置，就是那些绿色的线，用ctrack.draw在overlay这个canvas上画出来
+		// requestAnimFrame(drawLoop);
 		videoStreamOverlayContext.clearRect(0, 0, videoStreamWidth, videoStreamHeight);
 		//psrElement.innerHTML = "score :" + ctrack.getScore().toFixed(4);
 		if (ctrack.getCurrentPosition()) {
