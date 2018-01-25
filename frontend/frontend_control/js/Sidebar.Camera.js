@@ -151,51 +151,60 @@ Sidebar.Camera = function ( editor ) {
 	var trackingStarted = false;
 
 	function GetUserMediaSuccess( stream ) {
-	  if ("srcObject" in videoStream.dom) {
-	    videoStream.dom.srcObject = stream;
-	  } else {
-	    videoStream.dom.src = ( window.URL && window.URL.createObjectURL( stream ) );
-	  }
-
-		function adjustVideoProportions() {
-		  var proportion = videoStream.dom.videoWidth / videoStream.dom.videoHeight;
-		  videoStreamWidth = Math.round(videoStreamHeight * proportion);
-		  videoStream.dom.width = videoStreamWidth;
-		  videoStreamOverlay.dom.width = videoStreamWidth;
-		  callerVideoStream.dom.width = videoStreamWidth;
+		if ("srcObject" in videoStream.dom) {
+			videoStream.dom.srcObject = stream;
+		}
+		else {
+			videoStream.dom.src = ( window.URL && window.URL.createObjectURL( stream ) );
 		}
 
-	  videoStream.dom.onloadedmetadata = function() {
-	    adjustVideoProportions();
-	    videoStream.dom.play();
-	  }
+		function adjustVideoProportions() {
+			var proportion = videoStream.dom.videoWidth / videoStream.dom.videoHeight;
+			videoStreamWidth = Math.round(videoStreamHeight * proportion);
+			videoStream.dom.width = videoStreamWidth;
+			videoStreamOverlay.dom.width = videoStreamWidth;
+			callerVideoStream.dom.width = videoStreamWidth;
+		}
 
-	  videoStream.dom.onresize = function() {
-	    adjustVideoProportions();
-	    if( trackingStarted ) {
-	      ctrack.stop();
-	      //htracker.stop();
-	      ctrack.reset();
-	      ctrack.start( videoStream.dom );
-	      //htracker.start();
-	    }
-	  }
+		videoStream.dom.onloadedmetadata = function() {
+			adjustVideoProportions();
+			videoStream.dom.play();
+		}
+
+		videoStream.dom.onresize = function() {
+			adjustVideoProportions();
+			if( trackingStarted ) {
+				ctrack.stop();
+				ctrack.reset();
+				ctrack.start( videoStream.dom );
+
+				// htracker.stop();
+				// htracker.start();
+			}
+		}
 	}
 
 	function GetUserMediaFail() {}
 
 	if (navigator.mediaDevices) {
 		navigator.mediaDevices.getUserMedia({video : true}).then(GetUserMediaSuccess).catch(GetUserMediaFail);
-	} else if (navigator.getUserMedia) {
+	}
+	else if (navigator.getUserMedia) {
 		navigator.getUserMedia({video : true}, GetUserMediaSuccess, GetUserMediaFail);
-	} else {
+	}
+	else {
 		alert("Your browser does not seem to support getUserMedia, using a fallback video instead.");
 	}
 
-	videoStream.dom.addEventListener('canplay', function(){
+	videoStream.dom.addEventListener( 'canplay', function() {
 		startButton.dom.value = "start";
 		startButton.dom.disabled = null;
 	}, false);
+
+
+
+
+
 
 
 	/*********** setup of emotion detection *************/
@@ -206,33 +215,41 @@ Sidebar.Camera = function ( editor ) {
 	var ec = new emotionClassifier();
 	ec.init( emotionModel );
 
+
+
+
+
+
 	/*** Code for head tracking ***/
-	// var htracker = new headtrackr.Tracker({calcAngles : true, ui : false});
-	// htracker.init(videoStream.dom, videoStreamOverlay.dom);
+	var htracker = new headtrackr.Tracker({calcAngles : true, ui : false});
+	htracker.init(videoStream.dom, videoStreamOverlay.dom);
 	// htracker.start();
 
-	// document.addEventListener("facetrackingEvent", function(event) {
-	// 	//在这里可以对head的数据进行实时处理，x,y是头（脸）的位置(400 x 300)，width,height是头（脸）的像素长宽，angle是头（脸）的角度（正常情况下为90度，也就是pi/2，往左倾斜，变大）
-	// 	var headInfo = "";
-	// 	headInfo += "Face positon: [" + event.x + ", " + event.y + "]  ";
-	// 	headInfo += "width and height: [" + event.width + ", " + event.height + "]  ";
-	// 	headInfo += "angle: " + event.angle + "<br/>";
-	// 	// console.log( headInfo );
-	// });
+
+
+
+
+
 
 	/*********** Code for face tracking *********/
 	var ctrack = new clm.tracker( {searchWindow:11} );
 	ctrack.init( pModel );
 	ctrack.setResponseMode( "single", ["raw"] );
 
+
+
+
+
+
+
 	let requestId;
 
 	function loop() {
 		requestId = undefined;
 
-		doDraw();
-		doPosition();
-		doFaceSignal();
+		GetFaceEmotion();
+		// GetFaceLandmark();
+		// DrawLandmark();
 
 		start();
 	}
@@ -260,7 +277,7 @@ Sidebar.Camera = function ( editor ) {
 			videoStream.dom.play();
 			// start tracking
 			ctrack.start( videoStream.dom );
-			//htracker.start();
+			htracker.start();
 			trackingStarted = true;
 			// start loop to draw face and output messages
 			start();
@@ -269,25 +286,19 @@ Sidebar.Camera = function ( editor ) {
 			startButton.dom.textContent = 'Start';
 
 			ctrack.stop( videoStream.dom );
-			//htracker.start();
+			htracker.stop();
 			trackingStarted = false;
 
 			stop();
 		}
 	}
 
-	function doFaceSignal() {
-		// requestAnimFrame( FaceSignalLoop );
-
-
-
-		// FACE_TRIGGER.faceinfo = FACE_INFORMATION;
-		// signals.trigger.dispatch( FACE_TRIGGER );
+	function DispatchFaceSignal() {
 
 		for( var prop in FACE_INFORMATION ) {
 			if( FACE_INFORMATION_PRE[prop] !== FACE_INFORMATION[prop] ) {
 
-				console.log( 'current emotion is:' + FACE_INFORMATION['emotion'] );
+				// console.log( 'current emotion is:' + FACE_INFORMATION['emotion'] );
 
 				FACE_TRIGGER.faceinfo = FACE_INFORMATION;
 				signals.trigger.dispatch( FACE_TRIGGER );
@@ -297,12 +308,9 @@ Sidebar.Camera = function ( editor ) {
 		FACE_INFORMATION_PRE = ObjDeepCopy( FACE_INFORMATION );
 	}
 
-	/******Code for output positions of face feature points*************************/
-	function doPosition() {
-		// requestAnimFrame(positionLoop);
 
-		// console.log( 'position loop' );
-
+	// Deprecated
+	function GetFaceLandmark() {
 		var positions = ctrack.getCurrentPosition();//这个函数返回了检测到的所有特征点(70个)的在vid（400 x 300）中的位置，格式是：positions[i][j]代表第i个特征点的位置(j=0代表x，j=1代表y，注意原点在右上方)
 		// var positionString = "";
 		if( positions ) {
@@ -317,7 +325,7 @@ Sidebar.Camera = function ( editor ) {
 			// 	positionString += "featurepoint "+p+" : ["+positions[p][0].toFixed(1)+","+positions[p][1].toFixed(1)+"]<br/>";
 			// }
 			/********** decide whether the mouth is open ************/
-			//这里用嘴的上下左右四个点来判断开合，参考https://github.com/douyamv/FaceTracker/blob/master/main.html
+				//这里用嘴的上下左右四个点来判断开合，参考https://github.com/douyamv/FaceTracker/blob/master/main.html
 			var mousedist = positions[57][1] - positions[60][1];
 			var mouthwidth = positions[50][0] - positions[44][0];
 			// var mouthstate = "";
@@ -336,14 +344,16 @@ Sidebar.Camera = function ( editor ) {
 
 			//这里是嘴的四个关键点的位置，关注position[i][j]就好
 			// positionString += "Mouth: " + mouthstate + "<br/>";
-      //
+			//
 			// positionString += "feature points of mouth:" + "<br/>";
 			// positionString += "left: ["+positions[50][0].toFixed(1)+","+positions[50][1].toFixed(1)+"] ";
 			// positionString += "right: ["+positions[44][0].toFixed(1)+","+positions[44][1].toFixed(1)+"]<br/>";
 			// positionString += "top: ["+positions[60][0].toFixed(1)+","+positions[60][1].toFixed(1)+"] ";
 			// positionString += "down: ["+positions[57][0].toFixed(1)+","+positions[57][1].toFixed(1)+"]<br/>";
 		}
+	}
 
+	function GetFaceEmotion() {
 		var cp = ctrack.getCurrentParameters();//这个函数返回追踪到的parameter，用来预测情绪
 		// var emotionvalue = "";
 		var mostPossible = "";//the max possiblity of all emotions
@@ -379,18 +389,58 @@ Sidebar.Camera = function ( editor ) {
 			default:
 				break;
 		}
-		// console.log( FACE_INFORMATION );
 	}
 
-	function doDraw() {//画出人脸位置，就是那些绿色的线，用ctrack.draw在overlay这个canvas上画出来
-		// requestAnimFrame(drawLoop);
+	// Deprecated
+	function DrawLandmark() {
+		//画出人脸位置，就是那些绿色的线，用ctrack.draw在overlay这个canvas上画出来
+
 		videoStreamOverlayContext.clearRect(0, 0, videoStreamWidth, videoStreamHeight);
 		//psrElement.innerHTML = "score :" + ctrack.getScore().toFixed(4);
-		if (ctrack.getCurrentPosition()) {
-			ctrack.draw(videoStreamOverlay.dom);
+		if ( ctrack.getCurrentPosition() ) {
+			ctrack.draw( videoStreamOverlay.dom );
 		}
 	}
 
+
+	document.addEventListener( "facetrackingEvent", function( event ) {
+		//在这里可以对head的数据进行实时处理，x,y是头（脸）的位置(400 x 300)，width,height是头（脸）的像素长宽，angle是头（脸）的角度（正常情况下为90度，也就是pi/2，往左倾斜，变大）
+		// var headInfo = "";
+		// headInfo += "Face positon: [" + event.x + ", " + event.y + "]  ";
+		// headInfo += "width and height: [" + event.width + ", " + event.height + "]  ";
+		// headInfo += "angle: " + event.angle + "<br/>";
+
+
+		// write information
+
+		FACE_INFORMATION['x'] = event.x;
+		FACE_INFORMATION['y'] = event.y;
+		FACE_INFORMATION['angle'] = event.angle;
+
+		// console.log( FACE_INFORMATION );
+
+		let res = {};
+		res.x = event.x/videoStreamWidth -  0.5;
+		res.y = event.y/videoStreamWidth -  0.5;
+
+		signals.followFace.dispatch( res );
+
+		// draw
+
+		// clear canvas
+		videoStreamOverlayContext.clearRect(0,0,320,240);
+
+		// once we have stable tracking, draw rectangle
+		if (event.detection == "CS") {
+			videoStreamOverlayContext.translate(event.x, event.y)
+			videoStreamOverlayContext.rotate(event.angle-(Math.PI/2));
+			videoStreamOverlayContext.strokeStyle = "#00CC00";
+			videoStreamOverlayContext.strokeRect((-(event.width/2)) >> 0, (-(event.height/2)) >> 0, event.width, event.height);
+			videoStreamOverlayContext.rotate((Math.PI/2)-event.angle);
+			videoStreamOverlayContext.translate(-event.x, -event.y);
+		}
+
+	} );
 
 	return container;
 

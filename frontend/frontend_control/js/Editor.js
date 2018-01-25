@@ -18,6 +18,8 @@ var Editor = function () {
 
 		trigger : new Signal(),
 
+		followFace: new Signal(),
+
 		turnOnOffFaceTracking: new Signal(),
 
 		// script

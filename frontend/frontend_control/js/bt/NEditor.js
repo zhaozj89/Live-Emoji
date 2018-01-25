@@ -251,6 +251,23 @@ let NEditor = function ( editor ) {
 		editor.signals.sceneGraphChanged.dispatch();
 
 	} );
+
+
+	signals.followFace.add( function ( event ) {
+		let puppet = currentCharacter || editor.selected || null;
+
+		puppet.position.x = event.x;
+		puppet.position.y = event.y;
+
+
+
+		editor.signals.sceneGraphChanged.dispatch();
+
+	} );
+
+
+
+
 	return container;
 
 };
