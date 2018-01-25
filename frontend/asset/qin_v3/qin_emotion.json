@@ -10,7 +10,8 @@
 		"neutral" : "images/left_eye/neutral.png",
 		"sad" : "images/left_eye/sad.png",
 		"surprised" : "images/left_eye/surprised.png",
-		"disgusted": "images/left_eye/disgusted.png"
+		"disgusted": "images/left_eye/disgusted.png",
+		"close": "images/left_eye/close.png"
 	},
 	"left_eyebrow" :
 	{
@@ -52,7 +53,8 @@
 		"neutral" : "images/right_eye/neutral.png",
 		"sad" : "images/right_eye/sad.png",
 		"surprised" : "images/right_eye/surprised.png",
-		"disgusted": "images/right_eye/disgusted.png"
+		"disgusted": "images/right_eye/disgusted.png",
+		"close": "images/left_eye/close.png"
 	},
 	"right_eyebrow" :
 	{

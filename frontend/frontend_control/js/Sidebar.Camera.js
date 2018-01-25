@@ -218,18 +218,29 @@ Sidebar.Camera = function ( editor ) {
 
 	function startVideo() {
 
-		//按下按钮之后再开始tracking脸和头
-		// start video
-		videoStream.dom.play();
-		// start tracking
-		ctrack.start( videoStream.dom );
-		//htracker.start();
-		trackingStarted = true;
-		// start loop to draw face and output messages
-		drawLoop();
-		positionLoop();
+		if( startButton.dom.textContent === 'Start' ) {
+			startButton.dom.textContent = 'Stop';
 
-		FaceSignalLoop();
+			//按下按钮之后再开始tracking脸和头
+			// start video
+			videoStream.dom.play();
+			// start tracking
+			ctrack.start( videoStream.dom );
+			//htracker.start();
+			trackingStarted = true;
+			// start loop to draw face and output messages
+			drawLoop();
+			positionLoop();
+
+			FaceSignalLoop();
+		}
+		else {
+			startButton.dom.textContent = 'Start';
+
+			ctrack.stop( videoStream.dom );
+			//htracker.start();
+			trackingStarted = false;
+		}
 	}
 
 	function FaceSignalLoop() {
