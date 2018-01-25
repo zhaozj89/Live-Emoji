@@ -9,13 +9,13 @@ var Sidebar = function ( editor ) {
 
 	//
 
-	var sceneTab = new UI.Text( 'SCENE' ).onClick( onClick );
-	var projectTab = new UI.Text( 'CAMERA' ).onClick( onClick );
-	var settingsTab = new UI.Text( 'HISTORY' ).onClick( onClick );
+	var sceneTab = new UI.Text( 'Scene' ).onClick( onClick );
+	var cameraTab = new UI.Text( 'Camera' ).onClick( onClick );
+	var historyTab = new UI.Text( 'History' ).onClick( onClick );
 
 	var tabs = new UI.Div();
 	tabs.setId( 'tabs' );
-	tabs.add( projectTab, settingsTab, sceneTab );
+	tabs.add( cameraTab, historyTab, sceneTab );
 	container.add( tabs );
 
 	function onClick( event ) {
@@ -32,47 +32,47 @@ var Sidebar = function ( editor ) {
 	);
 	container.add( scene );
 
-	var project = new UI.Span().add(
-		new Sidebar.Project( editor )
+	var camera = new UI.Span().add(
+		new Sidebar.Camera( editor )
 	);
-	container.add( project );
+	container.add( camera );
 
-	var settings = new UI.Span().add(
+	var history = new UI.Span().add(
 		new Sidebar.History( editor ),
 		new Sidebar.Settings( editor )
 	);
-	container.add( settings );
+	container.add( history );
 
 	//
 
 	function select( section ) {
 
 		sceneTab.setClass( '' );
-		projectTab.setClass( '' );
-		settingsTab.setClass( '' );
+		cameraTab.setClass( '' );
+		historyTab.setClass( '' );
 
 		scene.setDisplay( 'none' );
-		project.setDisplay( 'none' );
-		settings.setDisplay( 'none' );
+		camera.setDisplay( 'none' );
+		history.setDisplay( 'none' );
 
 		switch ( section ) {
-			case 'SCENE':
+			case 'Scene':
 				sceneTab.setClass( 'selected' );
 				scene.setDisplay( '' );
 				break;
-			case 'CAMERA':
-				projectTab.setClass( 'selected' );
-				project.setDisplay( '' );
+			case 'Camera':
+				cameraTab.setClass( 'selected' );
+				camera.setDisplay( '' );
 				break;
-			case 'HISTORY':
-				settingsTab.setClass( 'selected' );
-				settings.setDisplay( '' );
+			case 'History':
+				historyTab.setClass( 'selected' );
+				history.setDisplay( '' );
 				break;
 		}
 
 	}
 
-	select( 'CAMERA' );
+	select( 'Camera' );
 
 	return container;
 

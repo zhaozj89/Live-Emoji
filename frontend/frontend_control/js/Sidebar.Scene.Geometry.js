@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Sidebar.Geometry = function ( editor ) {
+Sidebar.Scene.Geometry = function ( editor ) {
 
 	var signals = editor.signals;
 
@@ -127,11 +127,11 @@ Sidebar.Geometry = function ( editor ) {
 
 	// geometry
 
-	container.add( new Sidebar.Geometry.Geometry( editor ) );
+	container.add( new Sidebar.Scene.Geometry.Geometry( editor ) );
 
 	// buffergeometry
 
-	container.add( new Sidebar.Geometry.BufferGeometry( editor ) );
+	container.add( new Sidebar.Scene.Geometry.BufferGeometry( editor ) );
 
 	// parameters
 
@@ -162,11 +162,11 @@ Sidebar.Geometry = function ( editor ) {
 
 			if ( geometry.type === 'BufferGeometry' || geometry.type === 'Geometry' ) {
 
-				parameters.add( new Sidebar.Geometry.Modifiers( editor, object ) );
+				parameters.add( new Sidebar.Scene.Geometry.Modifiers( editor, object ) );
 
-			} else if ( Sidebar.Geometry[ geometry.type ] !== undefined ) {
+			} else if ( Sidebar.Scene.Geometry[ geometry.type ] !== undefined ) {
 
-				parameters.add( new Sidebar.Geometry[ geometry.type ]( editor, object ) );
+				parameters.add( new Sidebar.Scene.Geometry[ geometry.type ]( editor, object ) );
 
 			}
 

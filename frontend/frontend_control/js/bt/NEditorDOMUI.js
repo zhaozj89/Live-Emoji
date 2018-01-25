@@ -5,6 +5,17 @@ var CreateTitle = function ( name ) {
 	return dom;
 }
 
+var CreateRemoveButton = function ( that ) {
+	let dom = document.createElement( 'button' );
+	dom.classList.add( 'delete' );
+	dom.textContent = 'X';
+
+	$( dom ).on( 'click', function () {
+		that.remove();
+	} );
+	return dom;
+}
+
 var CreateOutput = function ( that ) {
 	let dom = document.createElement( 'span' );
 	dom.classList.add( 'x-output' );
@@ -55,6 +66,10 @@ var CreateInput = function ( that ) {
 		event.stopPropagation();
 	};
 
+	$( dom ).on( 'keydown', function ( evt ) {
+		evt.stopPropagation();
+	} );
+
 	return dom;
 }
 
@@ -66,15 +81,3 @@ var CreatePath = function ( canvas ) {
 	canvas.appendChild(path);
 	return path;
 }
-
-// var CreateTextArg = function ( title ) {
-// 	let dom = document.createElement('div');
-// 	dom.textContent = title;
-//
-// 	dom.onclick = function (event) {
-// 		event.stopPropagation();
-// 	};
-//
-// 	return dom;
-// }
-

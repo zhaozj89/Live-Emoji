@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Sidebar.Geometry.CircleGeometry = function ( editor, object ) {
+Sidebar.Scene.Geometry.CircleGeometry = function ( editor, object ) {
 
 	var signals = editor.signals;
 
@@ -68,4 +68,4 @@ Sidebar.Geometry.CircleGeometry = function ( editor, object ) {
 
 };
 
-Sidebar.Geometry.CircleBufferGeometry = Sidebar.Geometry.CircleGeometry;
+Sidebar.Scene.Geometry.CircleBufferGeometry = Sidebar.Scene.Geometry.CircleGeometry;

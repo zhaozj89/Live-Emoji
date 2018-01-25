@@ -59,7 +59,7 @@ function loginFailure(errorCode, message) {
     easyrtc.showError(errorCode, message);
 }
 
-Sidebar.Project = function ( editor ) {
+Sidebar.Camera = function ( editor ) {
 
 	var signals = editor.signals;
 
@@ -104,6 +104,7 @@ Sidebar.Project = function ( editor ) {
 	startButton.setId( 'startButton' );
 	startButton.setType( 'button' );
 	startButton.setDisabled( 'disabled' );
+	startButton.setLeft( '10px' );
 
 	$( startButton.dom ).click(function(){
 		startVideo();

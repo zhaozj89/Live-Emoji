@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Sidebar.Geometry.BufferGeometry = function ( editor ) {
+Sidebar.Scene.Geometry.BufferGeometry = function ( editor ) {
 
 	var signals = editor.signals;
 

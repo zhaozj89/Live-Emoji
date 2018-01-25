@@ -26,17 +26,17 @@ Sidebar.Properties = function ( editor ) {
 	//
 
 	var object = new UI.Span().add(
-		new Sidebar.Object( editor )
+		new Sidebar.Scene.Object( editor )
 	);
 	container.add( object );
 
 	var geometry = new UI.Span().add(
-		new Sidebar.Geometry( editor )
+		new Sidebar.Scene.Geometry( editor )
 	);
 	container.add( geometry );
 
 	var material = new UI.Span().add(
-		new Sidebar.Material( editor )
+		new Sidebar.Scene.Material( editor )
 	);
 	container.add( material );
 

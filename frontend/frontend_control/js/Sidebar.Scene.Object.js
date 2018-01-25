@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Sidebar.Object = function ( editor ) {
+Sidebar.Scene.Object = function ( editor ) {
 
 	var signals = editor.signals;
 

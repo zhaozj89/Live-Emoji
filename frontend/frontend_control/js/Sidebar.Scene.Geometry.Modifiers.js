@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Sidebar.Geometry.Modifiers = function ( editor, object ) {
+Sidebar.Scene.Geometry.Modifiers = function ( editor, object ) {
 
 	var signals = editor.signals;
 

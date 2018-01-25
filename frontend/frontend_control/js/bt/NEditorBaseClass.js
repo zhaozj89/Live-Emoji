@@ -1,4 +1,44 @@
 
+class LeafInput {
+	constructor(type) {
+		this.type = type;
+		this.arg = null;
+
+		this.node = null;
+
+		this.domElement = this.createInput( this );
+	}
+
+	createInput ( that ) {
+		let dom = document.createElement('div');
+		dom.textContent = that.type + ':  ';
+		dom.title = that.type;
+		dom.classList.add('x-leaf');
+
+		dom.onclick = function(event){
+			event.stopPropagation();
+		};
+
+		$( dom ).on( 'keydown', function ( evt ) {
+			evt.stopPropagation();
+		} );
+
+		return dom;
+	}
+
+	addTextInput( title ) {
+		let that = this;
+		let input = document.createElement('input');
+		this.domElement.textContent = title;
+		input.setAttribute('type', 'text');
+		this.domElement.textContent += '';
+		this.domElement.appendChild(input);
+		$(input).change(function () {
+			that.arg = input.value;
+		});
+	}
+}
+
 class NodeInput {
 	constructor( type ) {
 		this.type = type;
@@ -95,34 +135,10 @@ class Node {
 		this.connected = false;
 
 		this.domElement = CreateTitle( this.type );
-	}
 
-	// addTextArg( title ) {
-	// 	let that = this;
-	//
-	// 	let dom = CreateTextArg( title );
-	//
-	// 	let input = document.createElement( 'input' );
-	// 	input.setAttribute( 'type', 'text' );
-	//
-	// 	// input.setAttribute( 'value', '0.5em' );
-	// 	// input.classList.add('x-connection');
-	// 	// input.setAttribute( 'width', '0px' );
-	// 	// input.classList.add('empty');
-	//
-	// 	$( input ).change( function() {
-	// 		that.arg = input.value;
-	// 		console.log( that.arg );
-	// 	} );
-	//
-	//
-	//
-	// 	// console.log( dom );
-	//
-	// 	this.domElement.appendChild( dom );
-	//
-	// 	dom.appendChild( input );
-	// }
+		let removeButton = CreateRemoveButton( this.domElement );
+		this.domElement.appendChild( removeButton );
+	}
 
 	addOutput() {
 		let outputDom = CreateOutput( this );
@@ -229,7 +245,7 @@ class Node {
 
 		$(this.domElement).draggable({
 			containment: 'window',
-			cancel: '.x-connection, .x-output, .x-input',
+			cancel: '.x-connection, .x-output, .x-input, .x-leaf',
 			drag: function(e, ui){
 				that.updatePosition();
 			}
@@ -239,13 +255,6 @@ class Node {
 		my_container.appendChild(this.domElement);
 		this.updatePosition();
 	}
-
-
-
-
-
-
-
 
 
 	// currently, one input can ONLY connect to one output (but one output can have multiple inputs)
@@ -264,8 +273,6 @@ class Node {
 		for(let i=0; i<this.inputs.length; ++i) {
 			if( this.inputs[i].arg!==null ) res.push( this.inputs[i].arg );
 		}
-
-		// res.push(this.arg);
 
 		return res;
 	}

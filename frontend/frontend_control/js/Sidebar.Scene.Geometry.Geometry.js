@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Sidebar.Geometry.Geometry = function ( editor ) {
+Sidebar.Scene.Geometry.Geometry = function ( editor ) {
 
 	var signals = editor.signals;
 

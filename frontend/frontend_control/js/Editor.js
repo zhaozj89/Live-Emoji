@@ -42,8 +42,6 @@ var Editor = function () {
 		savingStarted: new Signal(),
 		savingFinished: new Signal(),
 
-		themeChanged: new Signal(),
-
 		rendererChanged: new Signal(),
 
 		sceneBackgroundChanged: new Signal(),
@@ -67,7 +65,6 @@ var Editor = function () {
 
 		windowResize: new Signal(),
 
-		showGridChanged: new Signal(),
 		refreshSidebarObject3D: new Signal(),
 		historyChanged: new Signal()
 
@@ -97,16 +94,6 @@ var Editor = function () {
 };
 
 Editor.prototype = {
-
-	setTheme: function ( value ) {
-
-		document.getElementById( 'theme' ).href = value;
-
-		this.signals.themeChanged.dispatch( value );
-
-	},
-
-	//
 
 	setScene: function ( scene ) {
 

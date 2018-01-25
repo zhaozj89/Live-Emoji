@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Sidebar.Geometry.CylinderGeometry = function ( editor, object ) {
+Sidebar.Scene.Geometry.CylinderGeometry = function ( editor, object ) {
 
 	var signals = editor.signals;
 
@@ -90,4 +90,4 @@ Sidebar.Geometry.CylinderGeometry = function ( editor, object ) {
 
 };
 
-Sidebar.Geometry.CylinderBufferGeometry = Sidebar.Geometry.CylinderGeometry;
+Sidebar.Scene.Geometry.CylinderBufferGeometry = Sidebar.Scene.Geometry.CylinderGeometry;

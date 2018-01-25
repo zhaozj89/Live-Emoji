@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Sidebar.Geometry.BoxGeometry = function ( editor, object ) {
+Sidebar.Scene.Geometry.PlaneGeometry = function ( editor, object ) {
 
 	var signals = editor.signals;
 
@@ -31,16 +31,6 @@ Sidebar.Geometry.BoxGeometry = function ( editor, object ) {
 
 	container.add( heightRow );
 
-	// depth
-
-	var depthRow = new UI.Row();
-	var depth = new UI.Number( parameters.depth ).onChange( update );
-
-	depthRow.add( new UI.Text( 'Depth' ).setWidth( '90px' ) );
-	depthRow.add( depth );
-
-	container.add( depthRow );
-
 	// widthSegments
 
 	var widthSegmentsRow = new UI.Row();
@@ -61,15 +51,6 @@ Sidebar.Geometry.BoxGeometry = function ( editor, object ) {
 
 	container.add( heightSegmentsRow );
 
-	// depthSegments
-
-	var depthSegmentsRow = new UI.Row();
-	var depthSegments = new UI.Integer( parameters.depthSegments ).setRange( 1, Infinity ).onChange( update );
-
-	depthSegmentsRow.add( new UI.Text( 'Depth segments' ).setWidth( '90px' ) );
-	depthSegmentsRow.add( depthSegments );
-
-	container.add( depthSegmentsRow );
 
 	//
 
@@ -78,10 +59,8 @@ Sidebar.Geometry.BoxGeometry = function ( editor, object ) {
 		editor.execute( new SetGeometryCommand( object, new THREE[ geometry.type ](
 			width.getValue(),
 			height.getValue(),
-			depth.getValue(),
 			widthSegments.getValue(),
-			heightSegments.getValue(),
-			depthSegments.getValue()
+			heightSegments.getValue()
 		) ) );
 
 	}
@@ -90,4 +69,4 @@ Sidebar.Geometry.BoxGeometry = function ( editor, object ) {
 
 };
 
-Sidebar.Geometry.BoxBufferGeometry = Sidebar.Geometry.BoxGeometry;
+Sidebar.Scene.Geometry.PlaneBufferGeometry = Sidebar.Scene.Geometry.PlaneGeometry;

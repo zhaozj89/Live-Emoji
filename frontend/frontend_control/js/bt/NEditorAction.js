@@ -6,10 +6,8 @@ class TranslationNode extends Node {
 
 		this.addOutput();
 
-		// this.addTextArg( 'translation: ' );
-
-		let input = new NodeInput();
-		input.addTextInput();
+		let input = new LeafInput();
+		input.addTextInput( 'translation (0 - 10): ' );
 
 		this.addInput( input );
 	}
@@ -21,6 +19,9 @@ class RotationNode extends Node {
 
 		this.addOutput();
 
-		this.addTextArg( 'rotation: ' );
+		let input = new LeafInput();
+		input.addTextInput( 'rotation (-180 - 180): ' );
+
+		this.addInput( input );
 	}
 }

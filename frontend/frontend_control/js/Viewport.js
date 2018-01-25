@@ -24,8 +24,8 @@ var Viewport = function ( editor ) {
 
 	// helpers
 
-	var grid = new THREE.GridHelper( 60, 60 );
-	sceneHelpers.add( grid );
+	// var grid = new THREE.GridHelper( 60, 60 );
+	// sceneHelpers.add( grid );
 
 	//
 
@@ -152,27 +152,6 @@ var Viewport = function ( editor ) {
 	signals.editorCleared.add( function () {
 
 		// controls.center.set( 0, 0, 0 );
-		render();
-
-	} );
-
-	signals.themeChanged.add( function ( value ) {
-
-		switch ( value ) {
-
-			case 'css/dark.css':
-				sceneHelpers.remove( grid );
-				grid = new THREE.GridHelper( 60, 60, 0xbbbbbb, 0x888888 );
-				grid.geometry.rotateX( Math.PI / 2 );
-
-				// var vector = new THREE.Vector3( 1, 1, 1 );
-				// grid.lookAt( vector );
-
-				sceneHelpers.add( grid );
-				break;
-
-		}
-
 		render();
 
 	} );
@@ -386,13 +365,6 @@ var Viewport = function ( editor ) {
 
 		renderer.setSize( container.dom.offsetWidth, container.dom.offsetHeight );
 
-		render();
-
-	} );
-
-	signals.showGridChanged.add( function ( showGrid ) {
-
-		grid.visible = showGrid;
 		render();
 
 	} );

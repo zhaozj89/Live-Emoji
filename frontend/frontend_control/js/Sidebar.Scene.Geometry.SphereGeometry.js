@@ -2,7 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Sidebar.Geometry.SphereGeometry = function ( editor, object ) {
+Sidebar.Scene.Geometry.SphereGeometry = function ( editor, object ) {
 
 	var signals = editor.signals;
 
@@ -102,4 +102,4 @@ Sidebar.Geometry.SphereGeometry = function ( editor, object ) {
 
 };
 
-Sidebar.Geometry.SphereBufferGeometry = Sidebar.Geometry.SphereGeometry;
+Sidebar.Scene.Geometry.SphereBufferGeometry = Sidebar.Scene.Geometry.SphereGeometry;
