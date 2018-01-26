@@ -89,9 +89,9 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 			basicElement.mesh.position.z -= 0.1;
 			if( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
 
-			// test
-			if( basicElement.emotion === 'close' ) basicElement.mesh.visible = true;
-			else basicElement.mesh.visible = false;
+			// // test
+			// if( basicElement.emotion === 'close' ) basicElement.mesh.visible = true;
+			// else basicElement.mesh.visible = false;
 
 			this.left_eye.push( basicElement );
 			this.left_eye_mesh.add( basicElement.mesh );
@@ -152,9 +152,9 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 			basicElement.mesh.position.z -= 0.1;
 			if( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
 
-			// test
-			if( basicElement.emotion === 'close' ) basicElement.mesh.visible = true;
-			else basicElement.mesh.visible = false;
+			// // test
+			// if( basicElement.emotion === 'close' ) basicElement.mesh.visible = true;
+			// else basicElement.mesh.visible = false;
 
 			this.right_eye.push( basicElement );
 			this.right_eye_mesh.add( basicElement.mesh );

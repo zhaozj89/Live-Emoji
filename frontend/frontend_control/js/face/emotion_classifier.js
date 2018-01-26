@@ -1,5 +1,5 @@
 "use strict";
-var emotionClassifier = function() {
+var EmotionClassifier = function() {
 
 	var previousParameters = [];
 	var classifier = {};

@@ -20,6 +20,8 @@ var Editor = function () {
 
 		followFace: new Signal(),
 
+		followEmotion: new Signal(),
+
 		turnOnOffFaceTracking: new Signal(),
 
 		// script

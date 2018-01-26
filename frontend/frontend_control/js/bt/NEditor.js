@@ -256,16 +256,48 @@ let NEditor = function ( editor ) {
 	signals.followFace.add( function ( event ) {
 		let puppet = currentCharacter || editor.selected || null;
 
-		puppet.position.x = event.x;
-		puppet.position.y = event.y;
+		if( puppet!==null ) {
+			puppet.position.x = event.x;
+			puppet.position.y = event.y;
 
-
-
-		editor.signals.sceneGraphChanged.dispatch();
+			editor.signals.sceneGraphChanged.dispatch();
+		}
 
 	} );
 
+	signals.followEmotion.add( function ( emotion ) {
+		let puppet = currentCharacter || editor.selected || null;
 
+		if( puppet!==null ) {
+			switch( emotion ) {
+				case EMOTION_TYPE.HAPPY:
+					emotion = 'happy';
+					break;
+				case EMOTION_TYPE.SAD:
+					emotion = 'sad';
+					break;
+				case EMOTION_TYPE.ANGRY:
+					emotion = 'angry';
+					break;
+				case EMOTION_TYPE.FEARFUL:
+					emotion = 'fearful';
+					break;
+				case EMOTION_TYPE.SURPRISED:
+					emotion = 'surprised';
+					break;
+				case EMOTION_TYPE.DISGUSTED:
+					emotion = 'disgusted';
+					break;
+				case EMOTION_TYPE.NEUTRAL:
+					emotion = 'neutral';
+					break;
+			}
+
+			puppet.updateEmotion( emotion );
+			editor.signals.sceneGraphChanged.dispatch();
+		}
+
+	} );
 
 
 	return container;
