@@ -100,13 +100,14 @@ class NodeManager {
 
 		let res = {
 			'type' : node.type,
-			'args' : args
-		}
+			'args' : args,
+			'children' : []
+		};
 
 		let children = node.getChildren();
 		for(let i=0; i<children.length; ++i) {
 			if( children[i]!==null ) {
-				res['body_' + i] = this.parseNode( children[i] );
+				res['children'].push( this.parseNode( children[i] ) );
 			}
 		}
 
@@ -157,6 +158,9 @@ class NodeManager {
 		let b = this.getAST_Key();
 		let c = this.getAST_Emotion();
 
-		return [a,b,c];
+		return {
+			'tick_triggers': a,
+			'key_triggers': b
+		};
 	}
 }

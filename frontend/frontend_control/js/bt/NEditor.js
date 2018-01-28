@@ -103,7 +103,7 @@ let NEditor = function ( editor ) {
 	let Objects = menu.addLi( 'Object' );
 	let Composites = menu.addLi( 'Composites' );
 	let Actions = menu.addLi( 'Actions' );
-	let Runner = menu.addLi( 'Run' );
+	let Runner = menu.addLi( 'Start' );
 
 	/////////////////////////////////////////////////////////////////
 	let menuTriggers = new UI.UList();
@@ -129,8 +129,9 @@ let NEditor = function ( editor ) {
 	menu.dom.style.top = '300px';
 	container.add( menu );
 
-	let manager = new NodeManager( graphSVG, container.dom, signals );
+	let nodeManager = new NodeManager( graphSVG, container.dom, signals );
 
+	let startBehaviorTree = false;
 
 	// jQuery methods go here ...
 	$( function() {
@@ -138,46 +139,116 @@ let NEditor = function ( editor ) {
 		$( "#menu" ).menu();
 
 		$( buttonKeyboard ).click(function () {
-			manager.addNode( 'key_trigger' );
+			nodeManager.addNode( 'key_trigger' );
 		});
 
 		$( buttonTick ).click(function () {
-			manager.addNode( 'tick_trigger' );
+			nodeManager.addNode( 'tick_trigger' );
 		});
 
 		$( buttonEmotion ).click(function () {
-			manager.addNode( 'emotion_trigger' );
+			nodeManager.addNode( 'emotion_trigger' );
 		});
 
 		$( buttonSelector ).click( function() {
-			manager.addNode( 'selector' );
+			nodeManager.addNode( 'selector' );
 		} );
 
 		$( buttonSequence ).click( function() {
-			manager.addNode( 'sequence' );
+			nodeManager.addNode( 'sequence' );
 		} );
 
 		$( buttonTranslation ).click( function() {
-			manager.addNode( 'translation' );
+			nodeManager.addNode( 'translation' );
 		} );
 
 		$( buttonRotation ).click( function() {
-			manager.addNode( 'rotation' );
+			nodeManager.addNode( 'rotation' );
 		} );
 
 		$( Objects ).click( function () {
 			if( currentCharacter===null ) alert( 'Please select an object first!' );
-			else manager.addNode( 'object', currentCharacter );
+			else nodeManager.addNode( 'object', currentCharacter );
 		} );
 
 		$( Runner ).click( function () {
-			currentAST = manager.getAST();
-			console.log( currentAST );
+			// currentAST = nodeManager.getAST();
+			// console.log( currentAST );
+
+			if( startBehaviorTree )
+				Runner.children[0].textContent = 'Start';
+			else
+				Runner.children[0].textContent = ' Stop';
+
+			startBehaviorTree = !startBehaviorTree;
 		} );
 	} );
 
 	let currentCharacter;
 	let currentAST = null;
+
+
+	class ASTInstance {
+		constructor() {}
+
+		runAction( child, object ) {
+			switch ( child['type'] ) {
+				case 'translation': {
+					// object.position.x
+					break;
+				}
+				case 'rotation': {
+					break;
+				}
+				default: {
+					alert( 'Error in Behavior Tree!' );
+					return;
+				}
+			}
+		}
+
+		runAST( child_0 ) {
+			for( let i0=0; i0<child_0.children.length; ++i0 ) {
+
+				let child_1 = child_0.children[i0];
+
+				if( child_1['type']!=='object' ) {
+					alert( 'Error in Behavior Tree!' );
+					return;
+				}
+				else {
+					let object = child_1['args'];
+
+					for( let i1=0; i1<child_1.children.length; ++i1 ) {
+
+						let child_2 = child_1.children[i1];
+
+
+						switch ( child_2['type'] ) {
+							case 'sequence': {
+								for( let i2=0; i2<child_2.children.length; ++i2 ) {
+									let child_3 = child_2.children[i2];
+									this.runAction( child_3, object );
+								}
+							}
+
+							case 'selector': {
+								for( let i2=0; i2<child_2.children.length; ++i2 ) {
+									let child_3 = child_2.children[i2];
+									if( this.runAction( child_3, object )===true ) return;
+								}
+							}
+
+							default: {
+								alert( 'Error in Behavior Tree!' );
+								return;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 	//
 	signals.editorCleared.add( function () {
@@ -190,68 +261,44 @@ let NEditor = function ( editor ) {
 	} );
 
 	signals.trigger.add( function ( event ) {
+
+		if( startBehaviorTree===false ) return;
+
 		// evaluate ast
 		let puppet = currentCharacter || editor.selected || null;
 
-		// let ast = manager.getAST();
+		if( puppet!==null && currentAST!==null ) return;
 
-		// console.log( ast );
 
-		// do nothing with ast now
+		// if( event['type']==='tick' ) {
+		// 	for( let i=0; i<currentAST['tick_triggers'].length; ++i ) {
+		// 		let ast = currentAST['tick_triggers'][i];
+		//
+		//
+		// 	}
+		// }
 
-		if( puppet===null ) return;
+		// if( event['type'] === 'keyboard' ) {
+		// 	for( let i=0; i<currentAST['key_triggers'].length; ++i ) {
+		// 		let ast = currentAST['key_triggers'][i];
+		//
+		// 		let keycode = ast['args'];
+		//
+		// 		if( event['keycode'] === keycode ) {
+		// 			let astInstance = ASTInstance();
+		//
+		// 		}
+		// 	}
+		// }
 
-		if( event['type']==='tick' ) {
-			if( currentAST!==null ) {
 
-			}
-		}
-
-		if( event['type'] === 'keyboard' ) {
-			if( event['KEYCODE'] === 37 ) {
-				puppet.position.x+=0.1;
-			}
-
-			if( event['KEYCODE'] === 39 ) {
-				puppet.position.x-=0.1;
-			}
-		}
-
-		if( event['type'] === 'face' ) {
-			let emotion = null;
-			switch( event['faceinfo']['emotion'] ) {
-				case EMOTION_TYPE.HAPPY:
-					emotion = 'happy';
-					break;
-				case EMOTION_TYPE.SAD:
-					emotion = 'sad';
-					break;
-				case EMOTION_TYPE.ANGRY:
-					emotion = 'angry';
-					break;
-				case EMOTION_TYPE.FEARFUL:
-					emotion = 'fearful';
-					break;
-				case EMOTION_TYPE.SURPRISED:
-					emotion = 'surprised';
-					break;
-				case EMOTION_TYPE.DISGUSTED:
-					emotion = 'disgusted';
-					break;
-				case EMOTION_TYPE.NEUTRAL:
-					emotion = 'neutral';
-					break;
-			}
-
-			// console.log( emotion );
-
-			puppet.updateEmotion( emotion );
-		}
-
-		editor.signals.sceneGraphChanged.dispatch();
+		// editor.signals.sceneGraphChanged.dispatch();
 
 	} );
 
+
+
+	// Tracking
 
 	signals.followFace.add( function ( event ) {
 		let puppet = currentCharacter || editor.selected || null;

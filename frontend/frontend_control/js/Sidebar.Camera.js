@@ -292,18 +292,18 @@ Sidebar.Camera = function ( editor ) {
 
 	// Main Functions
 
-	function DispatchFaceSignal() {
-
-		for( var prop in FACE_INFORMATION ) {
-			if( FACE_INFORMATION_PRE[prop] !== FACE_INFORMATION[prop] ) {
-
-				FACE_TRIGGER.faceinfo = FACE_INFORMATION;
-				signals.trigger.dispatch( FACE_TRIGGER );
-			}
-		}
-
-		FACE_INFORMATION_PRE = ObjDeepCopy( FACE_INFORMATION );
-	}
+	// function DispatchFaceSignal() {
+	//
+	// 	for( var prop in FACE_INFORMATION ) {
+	// 		if( FACE_INFORMATION_PRE[prop] !== FACE_INFORMATION[prop] ) {
+	//
+	// 			FACE_TRIGGER.faceinfo = FACE_INFORMATION;
+	// 			signals.trigger.dispatch( FACE_TRIGGER );
+	// 		}
+	// 	}
+	//
+	// 	FACE_INFORMATION_PRE = ObjDeepCopy( FACE_INFORMATION );
+	// }
 
 
 	function GetFaceLandmark() {
