@@ -278,18 +278,9 @@ let NEditor = function ( editor ) {
 		// 	}
 		// }
 
-		// if( event['type'] === 'keyboard' ) {
-		// 	for( let i=0; i<currentAST['key_triggers'].length; ++i ) {
-		// 		let ast = currentAST['key_triggers'][i];
-		//
-		// 		let keycode = ast['args'];
-		//
-		// 		if( event['keycode'] === keycode ) {
-		// 			let astInstance = ASTInstance();
-		//
-		// 		}
-		// 	}
-		// }
+		if( event['type'] === 'keyboard' ) {
+			nodeManager.runKeyTrigger( event['keycode'] );
+		}
 
 
 		// editor.signals.sceneGraphChanged.dispatch();

@@ -1,46 +1,48 @@
-
 class LeafInput {
-	constructor(type) {
+	constructor ( type ) {
 		this.type = type;
-		this.arg = null;
 
+		// need it for node to work
 		this.node = null;
 
 		this.domElement = this.createInput( this );
 	}
 
 	createInput ( that ) {
-		let dom = document.createElement('div');
-		dom.textContent = that.type + ':  ';
-		dom.title = that.type;
-		dom.classList.add('x-leaf');
+		this.box = new UI.Div();
+		this.box.setTextContent( that.type );
+		this.box.addClass( 'x-leaf' );
 
-		dom.onclick = function(event){
-			event.stopPropagation();
-		};
-
-		$( dom ).on( 'keydown', function ( evt ) {
+		$( this.box.dom ).on( 'click', function ( evt ) {
 			evt.stopPropagation();
 		} );
 
-		return dom;
+		$( this.box.dom ).on( 'keydown', function ( evt ) {
+			evt.stopPropagation();
+		} );
+
+		return this.box.dom;
 	}
 
-	addTextInput( title ) {
+	addTextInput () {
 		let that = this;
-		let input = document.createElement('input');
-		this.domElement.textContent = title;
-		input.setAttribute('type', 'text');
-		this.domElement.textContent += '';
-		this.domElement.appendChild(input);
-		$(input).change(function () {
-			that.arg = input.value;
-		});
+		this.text = new UI.Input();
+		this.text.setValue('');
+
+		this.domElement.appendChild( that.text.dom );
+	}
+
+	addSelectionInput ( options ) {
+		let that = this;
+		this.selectMenu = new UI.Select();
+		this.selectMenu.setOptions( options );
+
+		this.domElement.appendChild( that.selectMenu.dom );
 	}
 }
 
 class NodeInput {
-	constructor( type ) {
+	constructor ( type ) {
 		this.type = type;
 		this.arg = null;
 
@@ -50,62 +52,68 @@ class NodeInput {
 		this.path = CreatePath( NEDITOR_SVG_CANVAS );
 	}
 
-	addNumberInput() {
+	addNumberInput () {
 		let that = this;
 		let input = document.createElement( 'input' );
 		this.domElement.textContent = 'milliseconds (>0): ';
 		input.setAttribute( 'type', 'text' );
 		this.domElement.textContent += '';
 		this.domElement.appendChild( input );
-		$( input ).change( function() { that.arg = input.value; } );
+		$( input ).change( function () {
+			that.arg = input.value;
+		} );
 	}
 
-	addPlaceholder( name ) {
+	addPlaceholder ( name ) {
 		let dom = document.createElement( 'div' );
 		dom.textContent = name;
 		this.domElement.appendChild( dom );
 	}
 
-	addTextInput() {
+	addTextInput () {
 		let that = this;
 		let input = document.createElement( 'input' );
 		this.domElement.textContent = 'key: ';
 		input.setAttribute( 'type', 'text' );
 		this.domElement.textContent += '';
 		this.domElement.appendChild( input );
-		$( input ).change( function() { that.arg = input.value; } );
+		$( input ).change( function () {
+			that.arg = input.value;
+		} );
 	}
 
-	addEmotionInput() {
+	addEmotionInput () {
 		let that = this;
 		this.domElement.textContent = 'emotion: ';
 		let selectMenu = new UI.Select();
 		selectMenu.setOptions( {
-			"Happy" : "happy",
-			"Sad" : "sad",
-			"Disgusted" : "disgusted",
-			"Fearful" : "fearful",
-			"Neutral" : "neutral",
-			"Surprised" : "surprised",
-			"Angry" : "angry"
+			"Happy": "happy",
+			"Sad": "sad",
+			"Disgusted": "disgusted",
+			"Fearful": "fearful",
+			"Neutral": "neutral",
+			"Surprised": "surprised",
+			"Angry": "angry"
 		} );
 		this.domElement.appendChild( selectMenu.dom );
-		$( selectMenu.dom ).change( function() { that.arg = selectMenu.getValue(); } );
+		$( selectMenu.dom ).change( function () {
+			that.arg = selectMenu.getValue();
+		} );
 	}
 
-	addCharacterInput( obj ) {
+	addCharacterInput ( obj ) {
 		this.arg = obj;
 
 		this.domElement.textContent = 'object: ';
 
 		let allObjNames = {};
 		let allObjs = {}
-		allObjNames[obj.name] = obj.name;
-		allObjs[obj.name] = obj;
+		allObjNames[ obj.name ] = obj.name;
+		allObjs[ obj.name ] = obj;
 
-		for(let i=0; i<obj.children.length; ++i) {
-			allObjNames[obj.children[i].name] = obj.children[i].name;
-			allObjs[obj.children[i].name] = obj.children[i];
+		for ( let i = 0; i < obj.children.length; ++i ) {
+			allObjNames[ obj.children[ i ].name ] = obj.children[ i ].name;
+			allObjs[ obj.children[ i ].name ] = obj.children[ i ];
 		}
 
 		let that = this;
@@ -113,14 +121,14 @@ class NodeInput {
 		selectMenu.setOptions( allObjNames );
 
 		this.domElement.appendChild( selectMenu.dom );
-		$( selectMenu.dom ).change( function() {
-			that.arg = allObjs[selectMenu.getValue()];
+		$( selectMenu.dom ).change( function () {
+			that.arg = allObjs[ selectMenu.getValue() ];
 			console.log( that.arg );
 		} );
 	}
 
-	getAttachedPoint() {
-		var offset = NEditorGetFullOffset(this.domElement);
+	getAttachedPoint () {
+		var offset = NEditorGetFullOffset( this.domElement );
 		return {
 			x: offset.left + this.domElement.offsetWidth - 2,
 			y: offset.top + this.domElement.offsetHeight / 2
@@ -130,7 +138,7 @@ class NodeInput {
 
 
 class Node {
-	constructor( type ) {
+	constructor ( type ) {
 		this.type = type;
 		// this.arg = null;
 
@@ -146,31 +154,33 @@ class Node {
 		this.domElement.appendChild( removeButton );
 	}
 
-	addOutput() {
+	addOutput () {
 		let outputDom = CreateOutput( this );
 		this.domElement.appendChild( outputDom );
 		this.output = outputDom;
 	}
 
-	addPlaceholder() {
+	addPlaceholder () {
 		let dom = CreatePlaceholder();
 		this.domElement.appendChild( dom );
 	}
 
-	addInput( input ) {
+	addInput ( input ) {
 		this.inputs.push( input );
+		// let br = new UI.Break();
+		// this.domElement.appendChild( br.dom );
 		this.domElement.appendChild( input.domElement );
 	}
 
-	removeInput() {
-		if( this.inputs.length===0 ) return;
-		let input = this.inputs[this.inputs.length-1];
-		this.inputs.splice( this.inputs.length-1, 1 );
+	removeInput () {
+		if ( this.inputs.length === 0 ) return;
+		let input = this.inputs[ this.inputs.length - 1 ];
+		this.inputs.splice( this.inputs.length - 1, 1 );
 		input.domElement.parentElement.removeChild( input.domElement );
 		return;
 	}
 
-	getOutputPoint() {
+	getOutputPoint () {
 		var offset = NEditorGetFullOffset( this.output );
 		return {
 			x: offset.left + this.output.offsetWidth / 2,
@@ -178,61 +188,61 @@ class Node {
 		};
 	}
 
-	detachInput( input ){
+	detachInput ( input ) {
 		var index = -1;
-		for (var i = 0; i < this.attachedPaths.length; i++){
-			if (this.attachedPaths[i].input == input)
+		for ( var i = 0; i < this.attachedPaths.length; i++ ) {
+			if ( this.attachedPaths[ i ].input == input )
 				index = i;
 		}
 
-		if (index >= 0){
-			this.attachedPaths[index].path.removeAttribute('d');
-			this.attachedPaths[index].input.node = undefined;
-			this.attachedPaths.splice(index, 1);
+		if ( index >= 0 ) {
+			this.attachedPaths[ index ].path.removeAttribute( 'd' );
+			this.attachedPaths[ index ].input.node = undefined;
+			this.attachedPaths.splice( index, 1 );
 		}
 
-		if (this.attachedPaths.length <= 0)
-			this.domElement.classList.remove('connected');
+		if ( this.attachedPaths.length <= 0 )
+			this.domElement.classList.remove( 'connected' );
 	}
 
-	ownsInput( input ) {
-		for (var i = 0; i < this.inputs.length; ++i){
-			if (this.inputs[i] == input)
+	ownsInput ( input ) {
+		for ( var i = 0; i < this.inputs.length; ++i ) {
+			if ( this.inputs[ i ] == input )
 				return true;
 		}
 		return false;
 	}
 
-	updatePosition() {
-		for (let j = 0; j < this.inputs.length; ++j) {
-			if (this.inputs[j].node === null) continue;
+	updatePosition () {
+		for ( let j = 0; j < this.inputs.length; ++j ) {
+			if ( this.inputs[ j ].node === null ) continue;
 
-			let inputPt = this.inputs[j].getAttachedPoint();
-			let outputPt = this.inputs[j].node.getOutputPoint();
-			this.inputs[j].path.setAttributeNS(null, 'd', NEditorCreatePath(inputPt, outputPt));
+			let inputPt = this.inputs[ j ].getAttachedPoint();
+			let outputPt = this.inputs[ j ].node.getOutputPoint();
+			this.inputs[ j ].path.setAttributeNS( null, 'd', NEditorCreatePath( inputPt, outputPt ) );
 		}
 
-		if (this.output === null) return;
+		if ( this.output === null ) return;
 		var outputPt = this.getOutputPoint();
 
-		for (let i = 0; i < this.attachedPaths.length; ++i) {
-			let inputPt = this.attachedPaths[i].input.getAttachedPoint();
-			this.attachedPaths[i].path.setAttributeNS(null, 'd', NEditorCreatePath(inputPt, outputPt));
+		for ( let i = 0; i < this.attachedPaths.length; ++i ) {
+			let inputPt = this.attachedPaths[ i ].input.getAttachedPoint();
+			this.attachedPaths[ i ].path.setAttributeNS( null, 'd', NEditorCreatePath( inputPt, outputPt ) );
 		}
 	}
 
-	connectFrom( input ) {
+	connectFrom ( input ) {
 		input.node = this;
 		this.connected = true;
 
-		this.domElement.classList.add('connected');
-		input.domElement.classList.remove('empty');
-		input.domElement.classList.add('filled');
+		this.domElement.classList.add( 'connected' );
+		input.domElement.classList.remove( 'empty' );
+		input.domElement.classList.add( 'filled' );
 
-		this.attachedPaths.push({
+		this.attachedPaths.push( {
 			input: input,
 			path: input.path
-		});
+		} );
 
 		let inputPt = input.getAttachedPoint();
 		let outputPt = this.getOutputPoint();
@@ -240,25 +250,25 @@ class Node {
 		input.path.setAttributeNS( null, 'd', NEditorCreatePath( inputPt, outputPt ) );
 	}
 
-	moveTo( point ) {
+	moveTo ( point ) {
 		this.domElement.style.top = point.y + 'px';
 		this.domElement.style.left = point.x + 'px';
 		this.updatePosition();
 	}
 
-	initUI( my_container ) {
+	initUI ( my_container ) {
 		var that = this;
 
-		$(this.domElement).draggable({
+		$( this.domElement ).draggable( {
 			containment: 'window',
 			cancel: '.x-connection, .x-output, .x-input, .x-leaf',
-			drag: function(e, ui){
+			drag: function ( e, ui ) {
 				that.updatePosition();
 			}
-		});
+		} );
 
 		this.domElement.style.position = 'absolute';
-		my_container.appendChild(this.domElement);
+		my_container.appendChild( this.domElement );
 		this.updatePosition();
 	}
 
@@ -266,20 +276,29 @@ class Node {
 	// currently, one input can ONLY connect to one output (but one output can have multiple inputs)
 	// AND, no method is provied for getting parent
 	// stay tuned
-	getChildren() {
+	getChildren () {
 		let res = [];
-		for (let k=0; k<this.inputs.length; ++k) {
-			if(  this.inputs[k].node!==null ) res.push( this.inputs[k].node );
+		for ( let k = 0; k < this.inputs.length; ++k ) {
+			if ( this.inputs[ k ].node !== null ) res.push( this.inputs[ k ].node );
 		}
 		return res;
 	}
 
-	getArgs() {
+	getArgs () {
 		let res = [];
-		for(let i=0; i<this.inputs.length; ++i) {
-			if( this.inputs[i].arg!==null ) res.push( this.inputs[i].arg );
+		for ( let i = 0; i < this.inputs.length; ++i ) {
+			if ( this.inputs[ i ].arg !== null ) res.push( this.inputs[ i ].arg );
 		}
 
 		return res;
+	}
+
+	getArg () {
+		if ( this.inputs.length !== 1 ) {
+			alert( 'Error in Node.getArg()! More than one arguments! ' );
+		}
+		else {
+			return this.inputs[ 0 ].arg;
+		}
 	}
 }

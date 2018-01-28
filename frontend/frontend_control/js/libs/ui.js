@@ -82,6 +82,13 @@ UI.Element.prototype = {
 
 	},
 
+	addClass: function ( name ) {
+
+		this.dom.classList.add( name );
+
+		return this;
+	},
+
 	setStyle: function ( style, array ) {
 
 		for ( var i = 0; i < array.length; i ++ ) {
