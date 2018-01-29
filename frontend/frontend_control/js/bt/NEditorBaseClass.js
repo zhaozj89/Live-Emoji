@@ -41,11 +41,17 @@ class LeafInput {
 	}
 }
 
+
+// each Node contains multiple NodeInput
+// @arg contains the argument of this NodeInput
+// @node contains the child Node of this NodeInput / Node
+// @currentNode contains the current Node
 class NodeInput {
-	constructor () {
-		// this.type = type;
+	constructor ( currentNode ) {
 		this.arg = null;
 		this.node = null;
+
+		this.currentNode = currentNode;
 
 		this.domElement = CreateInput( this );
 		this.path = CreatePath( NEDITOR_SVG_CANVAS );
@@ -63,18 +69,11 @@ class NodeInput {
 		} );
 	}
 
-	addPlaceholder ( name ) {
-		let dom = document.createElement( 'div' );
-		dom.textContent = name;
-		this.domElement.appendChild( dom );
-	}
-
 	addTextInput () {
 		let that = this;
 		let input = document.createElement( 'input' );
 		this.domElement.textContent = 'key: ';
-		input.setAttribute( 'type', 'text' );
-		this.domElement.textContent += '';
+		// input.setAttribute( 'type', 'text' );
 		this.domElement.appendChild( input );
 		$( input ).change( function () {
 			that.arg = input.value;
@@ -139,10 +138,11 @@ class NodeInput {
 class Node {
 	constructor ( type ) {
 		this.type = type;
-		// this.arg = null;
 
-		this.inputs = [];
 		this.output = null;
+		this.inputs = [];
+
+		this.parentInput = null;
 
 		this.attachedPaths = [];
 		this.connected = false;
@@ -157,11 +157,6 @@ class Node {
 		let outputDom = CreateOutput( this );
 		this.domElement.appendChild( outputDom );
 		this.output = outputDom;
-	}
-
-	addPlaceholder () {
-		let dom = CreatePlaceholder();
-		this.domElement.appendChild( dom );
 	}
 
 	addInput ( input ) {
@@ -189,8 +184,8 @@ class Node {
 
 	detachInput ( input ) {
 		var index = -1;
-		for ( var i = 0; i < this.attachedPaths.length; i++ ) {
-			if ( this.attachedPaths[ i ].input == input )
+		for ( let i = 0; i < this.attachedPaths.length; ++i ) {
+			if ( this.attachedPaths[ i ].input === input )
 				index = i;
 		}
 
@@ -205,8 +200,8 @@ class Node {
 	}
 
 	ownsInput ( input ) {
-		for ( var i = 0; i < this.inputs.length; ++i ) {
-			if ( this.inputs[ i ] == input )
+		for ( let i = 0; i < this.inputs.length; ++i ) {
+			if ( this.inputs[ i ] === input )
 				return true;
 		}
 		return false;
@@ -274,7 +269,6 @@ class Node {
 
 	// currently, one input can ONLY connect to one output (but one output can have multiple inputs)
 	// AND, no method is provied for getting parent
-	// stay tuned
 	getChildren () {
 		let res = [];
 		for ( let k = 0; k < this.inputs.length; ++k ) {
@@ -293,11 +287,11 @@ class Node {
 	}
 
 	getArg () {
-		if ( this.inputs.length !== 1 ) {
-			alert( 'Error in Node.getArg()! More than one arguments! ' );
-		}
-		else {
+		// if ( this.inputs.length !== 1 ) {
+		// 	alert( 'Error in Node.getArg()! More than one arguments! ' );
+		// }
+		// else {
 			return this.inputs[ 0 ].arg;
-		}
+		// }
 	}
 }

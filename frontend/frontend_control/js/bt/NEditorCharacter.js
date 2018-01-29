@@ -4,7 +4,7 @@ class CharacterNode extends Node {
 
 		this.addOutput();
 
-		let input = new NodeInput();
+		let input = new NodeInput( this );
 		input.addCharacterInput( currentCharacter );
 		this.addInput( input );
 	}

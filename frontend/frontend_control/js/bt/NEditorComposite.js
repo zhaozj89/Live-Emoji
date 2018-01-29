@@ -28,14 +28,14 @@ class CompositeNode extends Node {
 		this.domElement.appendChild( rower.dom );
 		this.domElement.appendChild( breaker.dom );
 
-		let input = new NodeInput();
+		let input = new NodeInput( this );
 		input.domElement.textContent = 'channel ' + this.counter + ': ';
 		this.addInput(input);
 		++this.counter;
 
 		let that = this;
 		$( incrementer.dom ).click( function() {
-			let input = new NodeInput();
+			let input = new NodeInput( this );
 			input.domElement.textContent = 'channel ' + that.counter + ': ';
 			that.addInput( input );
 			++that.counter;
