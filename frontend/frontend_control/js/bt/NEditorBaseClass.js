@@ -150,7 +150,7 @@ class Node {
 
 		this.domElement = CreateTitle( this.type );
 
-		let removeButton = CreateRemoveButton( this.domElement );
+		let removeButton = CreateRemoveButton( this );
 		this.domElement.appendChild( removeButton );
 	}
 

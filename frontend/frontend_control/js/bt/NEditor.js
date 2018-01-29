@@ -109,7 +109,6 @@ let NEditor = function ( editor ) {
 	let menuTriggers = new UI.UList();
 	let buttonKeyboard = menuTriggers.addLi( 'Keyboard' );
 	let buttonTick = menuTriggers.addLi( 'Tick' );
-	let buttonEmotion = menuTriggers.addLi( 'Emotion' );
 	Triggers.appendChild( menuTriggers.dom );
 
 	/////////////////////////////////////////////////////////////////
@@ -122,6 +121,7 @@ let NEditor = function ( editor ) {
 	let menuActions = new UI.UList();
 	let buttonTranslation = menuActions.addLi( 'Translation' );
 	let buttonRotation = menuActions.addLi( 'Rotation' );
+	let buttonSleep = menuActions.addLi( 'Sleep' );
 	Actions.appendChild( menuActions.dom );
 
 	menu.dom.style.position = 'absolute';
@@ -146,10 +146,6 @@ let NEditor = function ( editor ) {
 			nodeManager.addNode( 'tick_trigger' );
 		});
 
-		$( buttonEmotion ).click(function () {
-			nodeManager.addNode( 'emotion_trigger' );
-		});
-
 		$( buttonSelector ).click( function() {
 			nodeManager.addNode( 'selector' );
 		} );
@@ -164,6 +160,10 @@ let NEditor = function ( editor ) {
 
 		$( buttonRotation ).click( function() {
 			nodeManager.addNode( 'rotation' );
+		} );
+
+		$( buttonSleep ).click( function () {
+			nodeManager.addNode( 'sleep' );
 		} );
 
 		$( Objects ).click( function () {
@@ -270,20 +270,13 @@ let NEditor = function ( editor ) {
 		if( puppet!==null && currentAST!==null ) return;
 
 
-		// if( event['type']==='tick' ) {
-		// 	for( let i=0; i<currentAST['tick_triggers'].length; ++i ) {
-		// 		let ast = currentAST['tick_triggers'][i];
-		//
-		//
-		// 	}
-		// }
-
-		if( event['type'] === 'keyboard' ) {
-			nodeManager.runKeyTrigger( event['keycode'] );
+		if( event['type']==='tick' ) {
+			nodeManager.runTickTrigger( editor.signals.sceneGraphChanged );
 		}
 
-
-		// editor.signals.sceneGraphChanged.dispatch();
+		if( event['type'] === 'keyboard' ) {
+			nodeManager.runKeyTrigger( event['keycode'], editor.signals.sceneGraphChanged );
+		}
 
 	} );
 

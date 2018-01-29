@@ -5,10 +5,6 @@ class NodeManager {
 
 		this.tick_triggers = new Array ();
 		this.key_triggers = new Array ();
-		this.emotion_triggers = new Array ();
-		this.AST_Tick = new Object ();
-		this.AST_Key = new Object ();
-		this.AST_Emotion = new Object ();
 
 		this.signals = signals;
 	}
@@ -21,15 +17,6 @@ class NodeManager {
 				node.initUI ( this.container );
 				// this.nodes.push( node );
 				this.key_triggers.push ( node );
-				break;
-			}
-
-			case 'emotion_trigger': {
-				let node = new EmotionTriggerNode ( type, this.signals );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ( this.container );
-				// this.nodes.push( node );
-				this.emotion_triggers.push ( node );
 				break;
 			}
 
@@ -73,82 +60,20 @@ class NodeManager {
 				break;
 			}
 
+			case 'sleep': {
+				let node = new SleepNode( type );
+				node.moveTo ( { x: 300, y: 80 } );
+				node.initUI ( this.container );
+				break;
+			}
+
 			default:
+				alert( type + ', no such node, need to create one!' );
 				break;
 		}
 	}
 
-	// parseNode( node ) {
-	// 	if(node===undefined || node===null) return;
-	//
-	// 	let args = node.getArgs();
-	//
-	// 	let res = {
-	// 		'type' : node.type,
-	// 		'args' : args,
-	// 		'children' : []
-	// 	};
-	//
-	// 	let children = node.getChildren();
-	// 	for(let i=0; i<children.length; ++i) {
-	// 		if( children[i]!==null ) {
-	// 			res['children'].push( this.parseNode( children[i] ) );
-	// 		}
-	// 	}
-	//
-	// 	return res;
-	// }
-
-	// getAST_Tick() {
-	// 	let that = this;
-	// 	let parser = function () {
-	// 		for( let i=0; i<that.tick_triggers.length; ++i ) {
-	// 			that.AST_Tick['tick_trigger_'+i] = that.parseNode( that.tick_triggers[i] );
-	// 		}
-	// 		return that.AST_Tick;
-	// 	}
-	//
-	// 	return parser();
-	// }
-
-	// getAST_Key() {
-	// 	let that = this;
-	// 	let parser = function () {
-	// 		for( let i=0; i<that.key_triggers.length; ++i ) {
-	// 			that.AST_Key['key_triggers'+i] = that.parseNode( that.key_triggers[i] );
-	// 		}
-	// 		return that.AST_Key;
-	// 	}
-	//
-	// 	return parser();
-	// }
-
-	// getAST_Emotion() {
-	// 	let that = this;
-	// 	let parser = function () {
-	// 		for( let i=0; i<that.emotion_triggers.length; ++i ) {
-	// 			that.AST_Emotion['emotion_triggers'+i] = that.parseNode( that.emotion_triggers[i] );
-	// 		}
-	// 		return that.AST_Emotion;
-	// 	}
-	//
-	// 	return parser();
-	// }
-	//
-	//
-	// getAST() {
-	// 	let a = this.getAST_Tick();
-	// 	let b = this.getAST_Key();
-	// 	let c = this.getAST_Emotion();
-	//
-	// 	return {
-	// 		'tick_triggers': a,
-	// 		'key_triggers': b
-	// 	};
-	// }
-
-
-	runKeyTrigger ( keycode ) {
+	runKeyTrigger ( keycode, updateSignal ) {
 		for ( let i = 0; i < this.key_triggers.length; ++i ) {
 
 			let trigger_node = this.key_triggers[ i ];
@@ -164,7 +89,7 @@ class NodeManager {
 					}
 					else {
 
-						let object = child_0.getArgs ();
+						let object = child_0.getArg ();
 						let child_0_children = child_0.getChildren ();
 						for ( let i0 = 0; i0 < child_0_children.length; ++i0 ) {
 
@@ -176,7 +101,11 @@ class NodeManager {
 									for ( let i1 = 0; i1 < child_1_children.length; ++i1 ) {
 										let child_2 = child_1_children[ i1 ];
 										child_2.run ( object );
+
+										updateSignal.dispatch();
 									}
+
+									return;
 								}
 
 								case 'selector': {
@@ -184,14 +113,81 @@ class NodeManager {
 									let child_1_children = child_1.getChildren ();
 									for ( let i1 = 0; i1 < child_1_children.length; ++i1 ) {
 										let child_2 = child_1_children[ i1 ];
-										if ( child_2.run ( object ) === true ) return;
+										if ( child_2.run ( object ) === true ) {
+											updateSignal.dispatch();
+											return;
+										}
 									}
+
+									return;
 								}
 
 								default: {
 									alert ( 'Error in Behavior Tree!' );
 									return;
 								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+
+
+	runTickTrigger ( updateSignal ) {
+		for ( let i = 0; i < this.tick_triggers.length; ++i ) {
+
+			let trigger_node = this.tick_triggers[ i ];
+			let trigger_node_children = trigger_node.getChildren ();
+			for ( let i = 0; i < trigger_node_children.length; ++i ) {
+
+				let child_0 = trigger_node_children[ i ];
+				if ( child_0[ 'type' ] !== 'object' ) {
+					alert ( 'Error in Behavior Tree!' );
+					return;
+				}
+				else {
+
+					let object = child_0.getArg ();
+					let child_0_children = child_0.getChildren ();
+					for ( let i0 = 0; i0 < child_0_children.length; ++i0 ) {
+
+						let child_1 = child_0_children[ i0 ];
+						switch ( child_1[ 'type' ] ) {
+							case 'sequence': {
+
+								let child_1_children = child_1.getChildren ();
+								for ( let i1 = 0; i1 < child_1_children.length; ++i1 ) {
+									let child_2 = child_1_children[ i1 ];
+									child_2.run ( object );
+
+									updateSignal.dispatch();
+								}
+
+								return;
+							}
+
+							case 'selector': {
+
+								let child_1_children = child_1.getChildren ();
+								for ( let i1 = 0; i1 < child_1_children.length; ++i1 ) {
+									let child_2 = child_1_children[ i1 ];
+									if ( child_2.run ( object ) === true ) {
+										updateSignal.dispatch();
+										return;
+									}
+								}
+
+								return;
+							}
+
+							default: {
+								alert ( 'Error in Behavior Tree!' );
+								return;
 							}
 						}
 					}

@@ -11,7 +11,15 @@ var CreateRemoveButton = function ( that ) {
 	dom.textContent = 'X';
 
 	$( dom ).on( 'click', function () {
-		that.remove();
+
+		for ( let i=0; i<that.inputs.length; ++i) {
+			if( that.inputs[i].node!==null )
+				that.inputs[i].node.detachInput( that.inputs[i] );
+		}
+
+		that.detachInput(  )
+
+		that.domElement.remove();
 	} );
 	return dom;
 }
