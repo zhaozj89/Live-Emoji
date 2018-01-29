@@ -187,69 +187,6 @@ let NEditor = function ( editor ) {
 	let currentCharacter;
 	let currentAST = null;
 
-
-	class ASTInstance {
-		constructor() {}
-
-		runAction( child, object ) {
-			switch ( child['type'] ) {
-				case 'translation': {
-					// object.position.x
-					break;
-				}
-				case 'rotation': {
-					break;
-				}
-				default: {
-					alert( 'Error in Behavior Tree!' );
-					return;
-				}
-			}
-		}
-
-		runAST( child_0 ) {
-			for( let i0=0; i0<child_0.children.length; ++i0 ) {
-
-				let child_1 = child_0.children[i0];
-
-				if( child_1['type']!=='object' ) {
-					alert( 'Error in Behavior Tree!' );
-					return;
-				}
-				else {
-					let object = child_1['args'];
-
-					for( let i1=0; i1<child_1.children.length; ++i1 ) {
-
-						let child_2 = child_1.children[i1];
-
-
-						switch ( child_2['type'] ) {
-							case 'sequence': {
-								for( let i2=0; i2<child_2.children.length; ++i2 ) {
-									let child_3 = child_2.children[i2];
-									this.runAction( child_3, object );
-								}
-							}
-
-							case 'selector': {
-								for( let i2=0; i2<child_2.children.length; ++i2 ) {
-									let child_3 = child_2.children[i2];
-									if( this.runAction( child_3, object )===true ) return;
-								}
-							}
-
-							default: {
-								alert( 'Error in Behavior Tree!' );
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
 	//
 	signals.editorCleared.add( function () {
 		container.setDisplay( 'none' );
