@@ -1,6 +1,6 @@
 class CharacterNode extends Node {
 	constructor ( type, currentCharacter ) {
-		super ( type );
+		super ( 'Object: ' + type );
 
 		this.addOutput();
 

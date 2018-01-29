@@ -1,9 +1,9 @@
 
 class KeyTriggerNode extends Node {
 	constructor ( type ) {
-		super( type );
+		super( 'Trigger: ' + type );
 
-		let input = new NodeInput( 'key_trigger' );
+		let input = new NodeInput();
 		input.addTextInput();
 
 		this.addInput( input );
@@ -18,9 +18,9 @@ class KeyTriggerNode extends Node {
 
 class EmotionTriggerNode extends Node {
 	constructor ( type, signals ) {
-		super( type );
+		super( 'Trigger: ' + type );
 
-		let input = new NodeInput( 'emotion' );
+		let input = new NodeInput();
 
 		signals.turnOnOffFaceTracking.dispatch( true );
 
@@ -34,9 +34,9 @@ class EmotionTriggerNode extends Node {
 
 class TickTriggerNode extends Node {
 	constructor( type ) {
-		super( type );
+		super( 'Trigger: ' + type );
 
-		let input = new NodeInput( 'tick_trigger' );
+		let input = new NodeInput();
 		input.addNumberInput();
 
 		this.addInput( input );

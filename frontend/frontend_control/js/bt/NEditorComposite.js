@@ -1,6 +1,6 @@
 class CompositeNode extends Node {
 	constructor ( type ) {
-		super ( type );
+		super ( 'Composite: ' + type );
 
 		this.addOutput();
 

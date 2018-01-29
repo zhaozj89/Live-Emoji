@@ -4,7 +4,7 @@
 
 class TranslationNode extends Node {
 	constructor ( type ) {
-		super( type );
+		super( 'Action: ' + type );
 
 		this.addOutput();
 
@@ -40,7 +40,7 @@ class TranslationNode extends Node {
 
 class RotationNode extends Node {
 	constructor ( type ) {
-		super( type );
+		super( 'Action: ' + type );
 
 		this.addOutput();
 
@@ -63,7 +63,7 @@ class RotationNode extends Node {
 
 class SleepNode extends Node {
 	constructor ( type ) {
-		super( type );
+		super( 'Action: ' + type );
 
 		this.addOutput();
 

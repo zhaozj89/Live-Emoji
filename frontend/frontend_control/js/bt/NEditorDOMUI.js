@@ -17,7 +17,7 @@ var CreateRemoveButton = function ( that ) {
 				that.inputs[i].node.detachInput( that.inputs[i] );
 		}
 
-		that.detachInput(  )
+		// that.detachInput(  )
 
 		that.domElement.remove();
 	} );
@@ -49,8 +49,8 @@ var CreatePlaceholder = function () {
 
 var CreateInput = function ( that ) {
 	let dom = document.createElement('div');
-	dom.textContent = that.type + ':  ';
-	dom.title = that.type;
+	// dom.textContent = that.type + ':  ';
+	// dom.title = that.type;
 	dom.classList.add('x-connection');
 	dom.classList.add('empty');
 

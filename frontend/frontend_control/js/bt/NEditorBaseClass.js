@@ -1,6 +1,6 @@
 class LeafInput {
-	constructor ( type ) {
-		this.type = type;
+	constructor ( title ) {
+		this.title = title;
 
 		// need it for node to work
 		this.node = null;
@@ -10,7 +10,7 @@ class LeafInput {
 
 	createInput ( that ) {
 		this.box = new UI.Div();
-		this.box.setTextContent( that.type );
+		this.box.setTextContent( that.title );
 		this.box.addClass( 'x-leaf' );
 
 		$( this.box.dom ).on( 'click', function ( evt ) {
@@ -42,10 +42,9 @@ class LeafInput {
 }
 
 class NodeInput {
-	constructor ( type ) {
-		this.type = type;
+	constructor () {
+		// this.type = type;
 		this.arg = null;
-
 		this.node = null;
 
 		this.domElement = CreateInput( this );

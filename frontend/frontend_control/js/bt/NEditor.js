@@ -101,8 +101,8 @@ let NEditor = function ( editor ) {
 
 	let Triggers = menu.addLi( 'Trigger' );
 	let Objects = menu.addLi( 'Object' );
-	let Composites = menu.addLi( 'Composites' );
-	let Actions = menu.addLi( 'Actions' );
+	let Composites = menu.addLi( 'Composite' );
+	let Actions = menu.addLi( 'Action' );
 	let Runner = menu.addLi( 'Start' );
 
 	/////////////////////////////////////////////////////////////////
