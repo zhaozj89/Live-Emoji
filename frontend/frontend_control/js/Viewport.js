@@ -44,9 +44,9 @@ var Viewport = function ( editor ) {
 
 	// events
 
-	function getIntersects( point, objects ) {
+	function getIntersects ( point, objects ) {
 
-		mouse.set( ( point.x * 2 ) - 1, - ( point.y * 2 ) + 1 );
+		mouse.set( ( point.x * 2 ) - 1, -( point.y * 2 ) + 1 );
 
 		raycaster.setFromCamera( mouse, camera );
 
@@ -57,14 +57,14 @@ var Viewport = function ( editor ) {
 	var onDownPosition = new THREE.Vector2();
 	var onUpPosition = new THREE.Vector2();
 
-	function getMousePosition( dom, x, y ) {
+	function getMousePosition ( dom, x, y ) {
 
 		var rect = dom.getBoundingClientRect();
 		return [ ( x - rect.left ) / rect.width, ( y - rect.top ) / rect.height ];
 
 	}
 
-	function handleClick() {
+	function handleClick () {
 
 		if ( onDownPosition.distanceTo( onUpPosition ) === 0 ) {
 
@@ -98,7 +98,7 @@ var Viewport = function ( editor ) {
 
 	}
 
-	function onMouseDown( event ) {
+	function onMouseDown ( event ) {
 
 		event.preventDefault();
 
@@ -109,7 +109,7 @@ var Viewport = function ( editor ) {
 
 	}
 
-	function onMouseUp( event ) {
+	function onMouseUp ( event ) {
 
 		var array = getMousePosition( container.dom, event.clientX, event.clientY );
 		onUpPosition.fromArray( array );
@@ -120,7 +120,7 @@ var Viewport = function ( editor ) {
 
 	}
 
-	function onTouchStart( event ) {
+	function onTouchStart ( event ) {
 
 		var touch = event.changedTouches[ 0 ];
 
@@ -131,7 +131,7 @@ var Viewport = function ( editor ) {
 
 	}
 
-	function onTouchEnd( event ) {
+	function onTouchEnd ( event ) {
 
 		var touch = event.changedTouches[ 0 ];
 
@@ -346,8 +346,8 @@ var Viewport = function ( editor ) {
 		var viewSize = container.dom.offsetHeight / 300;
 		var aspectRatio = container.dom.offsetWidth / container.dom.offsetHeight;
 
-		var left = -aspectRatio*viewSize / 2;
-		var right = aspectRatio*viewSize / 2;
+		var left = -aspectRatio * viewSize / 2;
+		var right = aspectRatio * viewSize / 2;
 		var top = viewSize / 2;
 		var bottom = -viewSize / 2;
 
@@ -371,7 +371,7 @@ var Viewport = function ( editor ) {
 
 	//
 
-	function render() {
+	function render () {
 
 		sceneHelpers.updateMatrixWorld();
 		scene.updateMatrixWorld();

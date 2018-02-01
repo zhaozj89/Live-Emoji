@@ -116,7 +116,7 @@ var Loader = function ( editor ) {
 					stream.offset = 0;
 
 					var loader = new THREE.CTMLoader();
-					loader.createModel( new CTM.File( stream ), function( geometry ) {
+					loader.createModel( new CTM.File( stream ), function ( geometry ) {
 
 						geometry.sourceType = "ctm";
 						geometry.sourceFile = file.name;
@@ -203,7 +203,7 @@ var Loader = function ( editor ) {
 
 					// 2.0
 
-					if ( contents.indexOf( 'postMessage' ) !== - 1 ) {
+					if ( contents.indexOf( 'postMessage' ) !== -1 ) {
 
 						var blob = new Blob( [ contents ], { type: 'text/javascript' } );
 						var url = URL.createObjectURL( blob );
@@ -453,7 +453,7 @@ var Loader = function ( editor ) {
 
 			default:
 
-				alert( 'Unsupported file format (' + extension +  ').' );
+				alert( 'Unsupported file format (' + extension + ').' );
 
 				break;
 
@@ -461,7 +461,7 @@ var Loader = function ( editor ) {
 
 	};
 
-	function handleJSON( data, file, filename ) {
+	function handleJSON ( data, file, filename ) {
 
 		if ( data.metadata === undefined ) { // 2.0
 
@@ -594,14 +594,14 @@ var Loader2 = function ( editor ) {
 
 		} );
 
-		switch (extension) {
+		switch ( extension ) {
 
 			case 'json':
 
 				reader.addEventListener( 'load', function ( event ) {
 					var loader = JSON.parse( event.target.result );
-					console.log(loader);
-				});
+					console.log( loader );
+				} );
 				reader.readAsText( file );
 				break;
 
@@ -635,7 +635,7 @@ var Loader2 = function ( editor ) {
 
 					var loader = new PNGReader( event.target.result );
 					loader.parse( function ( err, png ) {
-						if (err) throw err;
+						if ( err ) throw err;
 
 						let mesh = ZContour( png );
 
@@ -730,7 +730,7 @@ var Loader2 = function ( editor ) {
 
 			default:
 
-				alert( 'Unsupported file format (' + extension +  ').' );
+				alert( 'Unsupported file format (' + extension + ').' );
 
 				break;
 		}
@@ -752,14 +752,14 @@ var LoadFileName = function ( characterStructure, name, emotion, filename ) {
 	xhr.open( 'GET', '../asset/qin_v3/' + filename, true );
 	xhr.responseType = 'arraybuffer';
 
-	xhr.onload = function( event ){
-		if( this.status == 404 ) {
+	xhr.onload = function ( event ) {
+		if ( this.status == 404 ) {
 			console.log( filename );
 		}
 
-		if( this.status == 200 ) {
+		if ( this.status == 200 ) {
 			var reader = new PNGReader( this.response );
-			reader.parse( function( err, png ) {
+			reader.parse( function ( err, png ) {
 				if ( err ) throw err;
 				// console.log(png);
 				let mesh = ZContour( png );
@@ -769,14 +769,14 @@ var LoadFileName = function ( characterStructure, name, emotion, filename ) {
 				// mesh.rotation.x = THREE.Math.degToRad( -90 );
 				// mesh.rotation.z = THREE.Math.degToRad( 180 );
 
-				if( emotion==='' ) mesh.name = name;
+				if ( emotion === '' ) mesh.name = name;
 				else mesh.name = emotion;
 
 				let basicElement = new BasicElement( name, mesh, emotion );
 				characterStructure.addElement( basicElement );
 
 				// editor.execute( new AddObjectCommand( mesh ) );
-			});
+			} );
 		}
 	};
 
@@ -786,42 +786,42 @@ var LoadFileName = function ( characterStructure, name, emotion, filename ) {
 
 var LoadCharacterJSON = function ( file ) {
 
-	var filename = file.name;
-	var extension = filename.split( '.' ).pop().toLowerCase();
+	let filename = file.name;
+	let extension = filename.split( '.' ).pop().toLowerCase();
 
-	var reader = new FileReader();
+	let reader = new FileReader();
 
-	switch (extension) {
+	switch ( extension ) {
 
 		case 'json':
 
 			reader.addEventListener( 'load', function ( event ) {
 				let loader = JSON.parse( event.target.result );
 
-				let characterStructure = new CharacterStructure( file.name.slice(0, -5) );
+				let characterStructure = new CharacterStructure( file.name.slice( 0, -5 ) );
 				characterStructure.add2Scene.add( function ( obj ) {
 					editor.execute( new AddObjectCommand( obj ) );
 				} );
 
-				for( let prop in loader ) {
+				for ( let prop in loader ) {
 
-					if( typeof(loader[prop])==='string' ) {
-						LoadFileName( characterStructure, prop, '', loader[prop] );
+					if ( typeof( loader[ prop ] ) === 'string' ) {
+						LoadFileName( characterStructure, prop, '', loader[ prop ] );
 						continue;
 					}
 
-					if( typeof(loader[prop])==='object' ) {
-						for( let prop2 in loader[prop] ) LoadFileName( characterStructure, prop, prop2, loader[prop][prop2] );
+					if ( typeof( loader[ prop ] ) === 'object' ) {
+						for ( let prop2 in loader[ prop ] ) LoadFileName( characterStructure, prop, prop2, loader[ prop ][ prop2 ] );
 						continue;
 					}
 				}
-			});
+			} );
 			reader.readAsText( file );
 			break;
 
 		default:
 
-			alert( 'Unsupported file format (' + extension +  ').' );
+			alert( 'Unsupported file format (' + extension + ').' );
 
 			break;
 	}
