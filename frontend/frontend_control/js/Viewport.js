@@ -22,13 +22,6 @@ var Viewport = function ( editor ) {
 
 	var objects = [];
 
-	// helpers
-
-	// var grid = new THREE.GridHelper( 60, 60 );
-	// sceneHelpers.add( grid );
-
-	//
-
 	var box = new THREE.Box3();
 
 	var selectionBox = new THREE.BoxHelper();
@@ -37,7 +30,7 @@ var Viewport = function ( editor ) {
 	selectionBox.visible = false;
 	sceneHelpers.add( selectionBox );
 
-	// object picking
+	// object picking --> add control point
 
 	var raycaster = new THREE.Raycaster();
 	var mouse = new THREE.Vector2();
@@ -120,38 +113,12 @@ var Viewport = function ( editor ) {
 
 	}
 
-	function onTouchStart ( event ) {
-
-		var touch = event.changedTouches[ 0 ];
-
-		var array = getMousePosition( container.dom, touch.clientX, touch.clientY );
-		onDownPosition.fromArray( array );
-
-		document.addEventListener( 'touchend', onTouchEnd, false );
-
-	}
-
-	function onTouchEnd ( event ) {
-
-		var touch = event.changedTouches[ 0 ];
-
-		var array = getMousePosition( container.dom, touch.clientX, touch.clientY );
-		onUpPosition.fromArray( array );
-
-		handleClick();
-
-		document.removeEventListener( 'touchend', onTouchEnd, false );
-
-	}
-
 	container.dom.addEventListener( 'mousedown', onMouseDown, false );
-	container.dom.addEventListener( 'touchstart', onTouchStart, false );
 
 	// signals
 
 	signals.editorCleared.add( function () {
 
-		// controls.center.set( 0, 0, 0 );
 		render();
 
 	} );
@@ -238,7 +205,6 @@ var Viewport = function ( editor ) {
 		if ( editor.selected === object ) {
 
 			selectionBox.setFromObject( object );
-			// transformControls.update();
 
 		}
 
