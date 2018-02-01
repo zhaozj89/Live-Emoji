@@ -31,6 +31,8 @@ var Viewport = function ( editor ) {
 	sceneHelpers.add( selectionBox );
 
 	// object picking --> add control point
+	let the_mesh = null;
+	let the_handles = [];
 
 	var raycaster = new THREE.Raycaster();
 	var mouse = new THREE.Vector2();
@@ -43,7 +45,7 @@ var Viewport = function ( editor ) {
 
 		raycaster.setFromCamera( mouse, camera );
 
-		return raycaster.intersectObjects( objects );
+		return raycaster.intersectObject( objects );
 
 	}
 
@@ -61,6 +63,7 @@ var Viewport = function ( editor ) {
 
 		if ( onDownPosition.distanceTo( onUpPosition ) === 0 ) {
 
+			/*
 			var intersects = getIntersects( onUpPosition, objects );
 
 			if ( intersects.length > 0 ) {
@@ -84,6 +87,58 @@ var Viewport = function ( editor ) {
 				editor.select( null );
 
 			}
+			*/
+
+			if( editor.selected !== null && ( editor.selected instanceof THREE.Mesh ) ) {
+
+				let intersects = getIntersects( onUpPosition, editor.selected );
+
+				the_mesh = editor.selected;
+				if ( intersects.length > 0 ) {
+					let face = intersects[ 0 ].face;
+					let candidate_vertex_indices = [ face.a, face.b, face.c ];
+					let min_dist2, min_vertex_index;
+					for ( let i = 0; i < candidate_vertex_indices.length; ++i ) {
+						let vertex_index = candidate_vertex_indices[ i ];
+						let vertex_position = the_mesh.geometry.vertices[ vertex_index ];
+
+						let dist2 = numeric.norm2Squared( numeric.sub( [ onUpPosition.x, onUpPosition.y ], [ vertex_position.x, vertex_position.y ] ) );
+
+						if ( min_dist2 === undefined || dist2 < min_dist2 ) {
+							min_dist2 = dist2;
+							min_vertex_index = vertex_index;
+						}
+					}
+					// add_handle( min_vertex_index );
+
+					let geometry = new THREE.BoxGeometry( 0.04, 0.04, 0.04 );
+					let object = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: 0xaa33aa } ) );
+					object.originalColorHex = object.material.color.getHex();
+					object.material.depthTest = false;
+
+					console.log( object );
+
+					let handle_vertex = the_mesh.geometry.vertices[ min_vertex_index ];
+
+					// object.handle_index = the_handles.length - 1;
+					//
+					object.position.x = handle_vertex.x;
+					object.position.y = handle_vertex.y;
+					object.position.z = -10;
+
+					object.original_position = object.position.clone();
+
+					sceneHelpers.add( object );
+
+					the_handles.push( object );
+				}
+				else
+				{
+					alert( 'cannot raycast this mesh' );
+				}
+			}
+			else
+				alert( 'Please select a mesh first!' );
 
 			render();
 
