@@ -12,12 +12,24 @@ Menubar.Tool = function ( editor ) {
 	options.setClass( 'options' );
 	container.add( options );
 
+	// Set current mesh
+
+	var option = new UI.Row();
+	option.setClass( 'option' );
+	option.setTextContent( 'Set Mesh' );
+	option.onClick( function () {
+
+		editor.signals.skinningChangeMode.dispatch( 'set_mesh' );
+
+	} );
+	options.add( option );
+
 	// Add handles
 
 	var option = new UI.Row();
 	option.setClass( 'option' );
 	option.setTextContent( 'Add Handles' );
-	editor.signals.skinningChangeMode.dispatch( 'add_handles' );
+	// editor.signals.skinningChangeMode.dispatch( 'add_handles' );
 	option.onClick( function () {
 
 		editor.signals.skinningChangeMode.dispatch( 'add_handles' );
