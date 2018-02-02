@@ -124,40 +124,6 @@ Sidebar.Scene.Material = function ( editor ) {
 
 	container.add( materialNameRow );
 
-	// program
-
-	var materialProgramRow = new UI.Row();
-	materialProgramRow.add( new UI.Text( 'Program' ).setWidth( '90px' ) );
-
-	var materialProgramInfo = new UI.Button( 'Info' );
-	materialProgramInfo.setMarginLeft( '4px' );
-	materialProgramInfo.onClick( function () {
-
-		signals.editScript.dispatch( currentObject, 'programInfo' );
-
-	} );
-	materialProgramRow.add( materialProgramInfo );
-
-	var materialProgramVertex = new UI.Button( 'Vertex' );
-	materialProgramVertex.setMarginLeft( '4px' );
-	materialProgramVertex.onClick( function () {
-
-		signals.editScript.dispatch( currentObject, 'vertexShader' );
-
-	} );
-	materialProgramRow.add( materialProgramVertex );
-
-	var materialProgramFragment = new UI.Button( 'Fragment' );
-	materialProgramFragment.setMarginLeft( '4px' );
-	materialProgramFragment.onClick( function () {
-
-		signals.editScript.dispatch( currentObject, 'fragmentShader' );
-
-	} );
-	materialProgramRow.add( materialProgramFragment );
-
-	container.add( materialProgramRow );
-
 	// color
 
 	var materialColorRow = new UI.Row();
@@ -978,7 +944,6 @@ Sidebar.Scene.Material = function ( editor ) {
 			'shininess': materialShininessRow,
 			'clearCoat': materialClearCoatRow,
 			'clearCoatRoughness': materialClearCoatRoughnessRow,
-			'vertexShader': materialProgramRow,
 			'vertexColors': materialVertexColorsRow,
 			'skinning': materialSkinningRow,
 			'map': materialMapRow,

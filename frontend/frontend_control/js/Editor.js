@@ -24,18 +24,13 @@ var Editor = function () {
 
 		turnOnOffFaceTracking: new Signal(),
 
-		// script
+		// skinning
 
-		editScript: new Signal(),
+		skinningChangeMode: new Signal(),
 
 		// node editor
 
 		editAST: new Signal(),
-
-		// player
-
-		startPlayer: new Signal(),
-		stopPlayer: new Signal(),
 
 		// actions
 
@@ -85,7 +80,7 @@ var Editor = function () {
 
 	this.scene = new THREE.Scene();
 	this.scene.name = 'Scene';
-	this.scene.background = new THREE.Color( 0x46464646 );
+	this.scene.background = new THREE.Color( 0x464646 );
 
 	this.sceneHelpers = new THREE.Scene();
 
@@ -392,7 +387,7 @@ Editor.prototype = {
 		this.storage.clear();
 
 		this.camera.copy( this.DEFAULT_CAMERA );
-		this.scene.background.setHex( 0xaaaaaa );
+		this.scene.background.setHex( 0x464646 );
 		this.scene.fog = null;
 
 		var objects = this.scene.children;

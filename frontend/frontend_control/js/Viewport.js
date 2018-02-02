@@ -22,15 +22,21 @@ var Viewport = function ( editor ) {
 
 	var objects = [];
 
-	var box = new THREE.Box3();
-
 	var selectionBox = new THREE.BoxHelper();
+	selectionBox.material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
 	selectionBox.material.depthTest = false;
 	selectionBox.material.transparent = true;
 	selectionBox.visible = false;
 	sceneHelpers.add( selectionBox );
 
 	// object picking --> add control point
+
+	let the_mode = null; // 'add_handles' / 'manipulate_handles'
+
+	editor.signals.skinningChangeMode.add( function ( param ) {
+		the_mode = param;
+	} )
+
 	let the_mesh = null;
 	let the_handles = [];
 
@@ -63,33 +69,7 @@ var Viewport = function ( editor ) {
 
 		if ( onDownPosition.distanceTo( onUpPosition ) === 0 ) {
 
-			/*
-			var intersects = getIntersects( onUpPosition, objects );
-
-			if ( intersects.length > 0 ) {
-
-				var object = intersects[ 0 ].object;
-
-				if ( object.userData.object !== undefined ) {
-
-					// helper
-
-					editor.select( object.userData.object );
-
-				} else {
-
-					editor.select( object );
-
-				}
-
-			} else {
-
-				editor.select( null );
-
-			}
-			*/
-
-			if( editor.selected !== null && ( editor.selected instanceof THREE.Mesh ) ) {
+			if( ( editor.selected !== null ) && ( the_mode === 'add_handles' ) && ( editor.selected instanceof THREE.Mesh ) ) {
 
 				let intersects = getIntersects( onUpPosition, editor.selected );
 
@@ -109,24 +89,17 @@ var Viewport = function ( editor ) {
 							min_vertex_index = vertex_index;
 						}
 					}
-					// add_handle( min_vertex_index );
 
 					let geometry = new THREE.BoxGeometry( 0.04, 0.04, 0.04 );
 					let object = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: 0xaa33aa } ) );
 					object.originalColorHex = object.material.color.getHex();
 					object.material.depthTest = false;
 
-					console.log( object );
-
 					let handle_vertex = the_mesh.geometry.vertices[ min_vertex_index ];
 
-					// object.handle_index = the_handles.length - 1;
-					//
 					object.position.x = handle_vertex.x;
 					object.position.y = handle_vertex.y;
 					object.position.z = -10;
-
-					object.original_position = object.position.clone();
 
 					sceneHelpers.add( object );
 
@@ -217,14 +190,8 @@ var Viewport = function ( editor ) {
 
 		if ( object !== null && object !== scene && object !== camera ) {
 
-			box.setFromObject( object );
-
-			if ( box.isEmpty() === false ) {
-
-				selectionBox.setFromObject( object );
-				selectionBox.visible = true;
-
-			}
+			selectionBox.setFromObject( object );
+			selectionBox.visible = true;
 
 		}
 

@@ -101,7 +101,7 @@ Sidebar.Scene = function ( editor ) {
 
 	var backgroundRow = new UI.Row();
 
-	var backgroundColor = new UI.Color().setValue( '#aaaaaa' ).onChange( onBackgroundChanged );
+	var backgroundColor = new UI.Color().setValue( '#464646' ).onChange( onBackgroundChanged );
 
 	backgroundRow.add( new UI.Text( 'Background' ).setWidth( '90px' ) );
 	backgroundRow.add( backgroundColor );
@@ -149,7 +149,7 @@ Sidebar.Scene = function ( editor ) {
 	fogPropertiesRow.setMarginLeft( '90px' );
 	container.add( fogPropertiesRow );
 
-	var fogColor = new UI.Color().setValue( '#aaaaaa' );
+	var fogColor = new UI.Color().setValue( '#464646' );
 	fogColor.onChange( onFogChanged );
 	fogPropertiesRow.add( fogColor );
 
