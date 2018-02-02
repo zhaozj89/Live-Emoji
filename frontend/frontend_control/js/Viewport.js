@@ -31,6 +31,15 @@ var Viewport = function ( editor ) {
 
 	// object picking --> add control point
 
+	let selectionPlane = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2, 0, 0 ), new THREE.MeshBasicMaterial( {
+		color: 0x00ff00,
+		opacity: 0.5,
+		transparent: true,
+		wireframe: true
+	} ) );
+	selectionPlane.visible = true;
+	sceneHelpers.add( selectionPlane );
+
 	let the_mode = null; // 'add_handles' / 'manipulate_handles'
 
 	editor.signals.skinningChangeMode.add( function ( param ) {
@@ -38,12 +47,23 @@ var Viewport = function ( editor ) {
 	} )
 
 	let the_mesh = null;
-	let the_handles = [];
+	let SELECTED = null;
+	let the_handles_objects = [];
 
 	var raycaster = new THREE.Raycaster();
 	var mouse = new THREE.Vector2();
 
 	// events
+
+	function getIntersect ( point, object ) {
+
+		mouse.set( ( point.x * 2 ) - 1, -( point.y * 2 ) + 1 );
+
+		raycaster.setFromCamera( mouse, camera );
+
+		return raycaster.intersectObject( object );
+
+	}
 
 	function getIntersects ( point, objects ) {
 
@@ -51,12 +71,11 @@ var Viewport = function ( editor ) {
 
 		raycaster.setFromCamera( mouse, camera );
 
-		return raycaster.intersectObject( objects );
+		return raycaster.intersectObjects( objects );
 
 	}
 
 	var onDownPosition = new THREE.Vector2();
-	var onUpPosition = new THREE.Vector2();
 
 	function getMousePosition ( dom, x, y ) {
 
@@ -65,16 +84,20 @@ var Viewport = function ( editor ) {
 
 	}
 
-	function handleClick () {
+	function onMouseDown ( event ) {
 
-		if ( onDownPosition.distanceTo( onUpPosition ) === 0 ) {
+		event.preventDefault();
 
-			if( ( editor.selected !== null ) && ( the_mode === 'add_handles' ) && ( editor.selected instanceof THREE.Mesh ) ) {
+		var array = getMousePosition( container.dom, event.clientX, event.clientY );
+		onDownPosition.fromArray( array );
 
-				let intersects = getIntersects( onUpPosition, editor.selected );
+		if( the_mode==='add_handles' ) {
+			if( ( editor.selected !== null ) && ( editor.selected instanceof THREE.Mesh ) ) {
+				let intersects = getIntersect( onDownPosition, editor.selected );
 
-				the_mesh = editor.selected;
 				if ( intersects.length > 0 ) {
+					the_mesh = editor.selected;
+
 					let face = intersects[ 0 ].face;
 					let candidate_vertex_indices = [ face.a, face.b, face.c ];
 					let min_dist2, min_vertex_index;
@@ -82,7 +105,7 @@ var Viewport = function ( editor ) {
 						let vertex_index = candidate_vertex_indices[ i ];
 						let vertex_position = the_mesh.geometry.vertices[ vertex_index ];
 
-						let dist2 = numeric.norm2Squared( numeric.sub( [ onUpPosition.x, onUpPosition.y ], [ vertex_position.x, vertex_position.y ] ) );
+						let dist2 = numeric.norm2Squared( numeric.sub( [ onDownPosition.x, onDownPosition.y ], [ vertex_position.x, vertex_position.y ] ) );
 
 						if ( min_dist2 === undefined || dist2 < min_dist2 ) {
 							min_dist2 = dist2;
@@ -103,45 +126,39 @@ var Viewport = function ( editor ) {
 
 					sceneHelpers.add( object );
 
-					the_handles.push( object );
+					the_handles_objects.push( object );
 				}
-				else
-				{
+				else {
 					alert( 'cannot raycast this mesh' );
 				}
 			}
 			else
 				alert( 'Please select a mesh first!' );
+		}
+		else if( the_mode==='manipulate_handles' ) {
+			let intersects = getIntersects( onDownPosition, the_handles_objects );
+			if( intersects.length>0 ) {
+				SELECTED = intersects[0].object;
 
-			render();
-
+				selectionPlane.position.copy( SELECTED.position );
+			}
 		}
 
-	}
-
-	function onMouseDown ( event ) {
-
-		event.preventDefault();
-
-		var array = getMousePosition( container.dom, event.clientX, event.clientY );
-		onDownPosition.fromArray( array );
-
-		document.addEventListener( 'mouseup', onMouseUp, false );
-
+		render();
 	}
 
 	function onMouseUp ( event ) {
 
-		var array = getMousePosition( container.dom, event.clientX, event.clientY );
-		onUpPosition.fromArray( array );
+	}
 
-		handleClick();
-
-		document.removeEventListener( 'mouseup', onMouseUp, false );
+	function onMouseMove ( event ) {
 
 	}
 
 	container.dom.addEventListener( 'mousedown', onMouseDown, false );
+	container.dom.addEventListener( 'mouseup', onMouseUp, false );
+	container.dom.addEventListener( 'mousemove', onMouseMove, false );
+
 
 	// signals
 
