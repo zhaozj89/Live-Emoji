@@ -18,23 +18,38 @@ class TranslationNode extends Node {
 		this.addInput( this.translation );
 	}
 
-	run ( object ) {
-		// console.log( object );
-		// console.log( this.direction.selectMenu.getValue() );
-		// console.log( this.translation.text.getValue() );
+	run ( object, targetPose ) {
 
 		switch( this.direction.selectMenu.getValue() ) {
 			case 'horizontal': {
-				object.position.x += Number( this.translation.text.getValue() );
-				break;
+				// object.position.x += Number( this.translation.text.getValue() );
+
+				let targetPosition = {
+					x: targetPose.x + Number( this.translation.text.getValue() ),
+					y: targetPose.y,
+					z: targetPose.z
+				};
+
+				let tween = new TWEEN.Tween( object.position ).to( targetPosition, 1000 );
+
+				let res = targetPosition;
+				res.angle = targetPose.angle;
+				return {'tween': tween, 'state': true, 'pose': res};
 			}
 			case 'vertical': {
-				object.position.y += Number( this.translation.text.getValue() );
-				break;
+				let targetPosition = {
+					x: targetPose.x,
+					y: targetPose.y + Number( this.translation.text.getValue() ),
+					z: targetPose.z
+				};
+
+				let tween = new TWEEN.Tween( object.position ).to( targetPosition, 1000 );
+
+				let res = targetPosition;
+				res.angle = targetPose.angle;
+				return {'tween': tween, 'state': true, 'pose': res};
 			}
 		}
-
-		return true;
 	}
 }
 
@@ -50,14 +65,23 @@ class RotationNode extends Node {
 		this.addInput( this.rotation );
 	}
 
-	run ( object ) {
-		// console.log( object );
-		// console.log( this.direction.selectMenu.getValue() );
-		// console.log( this.rotation.text.getValue() );
+	run ( object, targetPose ) {
 
-		object.rotation.z += ( Number( this.rotation.text.getValue() ) * Math.PI / 180 );
+		let targetOrientation = {
+			x: object.rotation.x,
+			y: object.rotation.y,
+			z: targetPose.angle + ( Number( this.rotation.text.getValue() ) * Math.PI / 180 )
+		};
 
-		return true;
+		let tween = new TWEEN.Tween( object.rotation ).to( targetOrientation, 1000 );
+
+		let res = {
+			x: object.position.x,
+			y: object.position.y,
+			z: object.position.z,
+			angle: targetOrientation.z
+		};
+		return {'tween': tween, 'state': true, 'pose': res};
 	}
 }
 
@@ -73,10 +97,15 @@ class SleepNode extends Node {
 		this.addInput( this.sleepTime );
 	}
 
-	run (object) {
+	run ( object, targetPose) {
+		let targetPosition = {
+			x: targetPose.x,
+			y: targetPose.y,
+			z: targetPose.z
+		};
 
-		// TODO, find a way
+		let tween = new TWEEN.Tween( object.position ).to( targetPosition, 1000 ).delay( Number( this.sleepTime.text.getValue() ) );
 
-		return true;
+		return {'tween': tween, 'state': true, 'pose': targetPose};
 	}
 }

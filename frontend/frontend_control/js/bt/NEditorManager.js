@@ -83,11 +83,12 @@ class NodeManager {
 				for ( let i = 0; i < trigger_node_children.length; ++i ) {
 
 					let child_0 = trigger_node_children[ i ];
-					if ( child_0[ 'type' ] !== 'object' ) {
+					if ( child_0[ 'type' ] !== 'Object: object' ) {
 						alert ( 'Error in Behavior Tree!' );
 						return;
 					}
 					else {
+
 
 						let object = child_0.getArg ();
 						let child_0_children = child_0.getChildren ();
@@ -95,31 +96,57 @@ class NodeManager {
 
 							let child_1 = child_0_children[ i0 ];
 							switch ( child_1[ 'type' ] ) {
-								case 'sequence': {
+								case 'Composite: sequence': {
 
 									let child_1_children = child_1.getChildren ();
-									for ( let i1 = 0; i1 < child_1_children.length; ++i1 ) {
-										let child_2 = child_1_children[ i1 ];
-										child_2.run ( object );
 
-										updateSignal.dispatch();
+									let child_2 = child_1_children[ 0 ];
+									let pose = {
+										x: object.position.x,
+										y: object.position.y,
+										z: object.position.z,
+										angle: object.rotation.z
+									};
+
+									let res = child_2.run ( object, pose );
+									let pre_action = res['tween'];
+									let pre_pose = res['pose'];
+									let first_action = pre_action;
+									let cur_action = null;
+									for ( let i1 = 1; i1 < child_1_children.length; ++i1 ) {
+										let child_2 = child_1_children[ i1 ];
+
+										let res = child_2.run ( object, pre_pose );
+										pre_pose = res['pose'];
+										cur_action = res['tween'];
+
+										pre_action.chain( cur_action );
+										pre_action = cur_action;
 									}
 
+									first_action.start();
+
+									first_action.onComplete( function (  ) {
+										TWEEN.removeAll();
+									} );
 									return;
 								}
 
-								case 'selector': {
+								case 'Composite: selector': {
 
-									let child_1_children = child_1.getChildren ();
-									for ( let i1 = 0; i1 < child_1_children.length; ++i1 ) {
-										let child_2 = child_1_children[ i1 ];
-										if ( child_2.run ( object ) === true ) {
-											updateSignal.dispatch();
-											return;
-										}
-									}
+									alert( 'selector is deprecated currently!' );
 
-									return;
+									// let child_1_children = child_1.getChildren ();
+									//
+									// let action = null;
+									// for ( let i1 = 0; i1 < child_1_children.length; ++i1 ) {
+									// 	let child_2 = child_1_children[ i1 ];
+									// 	action = child_2.run ( object );
+									// 	if( action!==false ) {
+									// 		actions.start();
+									// 		return;
+									// 	}
+									// }
 								}
 
 								default: {
@@ -139,62 +166,68 @@ class NodeManager {
 
 
 	runTickTrigger ( updateSignal ) {
-		for ( let i = 0; i < this.tick_triggers.length; ++i ) {
+		alert( 'run tick trigger is deprecated currently!' );
 
-			let trigger_node = this.tick_triggers[ i ];
-			let trigger_node_children = trigger_node.getChildren ();
-			for ( let i = 0; i < trigger_node_children.length; ++i ) {
-
-				let child_0 = trigger_node_children[ i ];
-				if ( child_0[ 'type' ] !== 'object' ) {
-					alert ( 'Error in Behavior Tree!' );
-					return;
-				}
-				else {
-
-					let object = child_0.getArg ();
-					let child_0_children = child_0.getChildren ();
-					for ( let i0 = 0; i0 < child_0_children.length; ++i0 ) {
-
-						let child_1 = child_0_children[ i0 ];
-						switch ( child_1[ 'type' ] ) {
-							case 'sequence': {
-
-								let child_1_children = child_1.getChildren ();
-								for ( let i1 = 0; i1 < child_1_children.length; ++i1 ) {
-									let child_2 = child_1_children[ i1 ];
-									child_2.run ( object );
-
-									updateSignal.dispatch();
-								}
-
-								return;
-							}
-
-							case 'selector': {
-
-								let child_1_children = child_1.getChildren ();
-								for ( let i1 = 0; i1 < child_1_children.length; ++i1 ) {
-									let child_2 = child_1_children[ i1 ];
-									if ( child_2.run ( object ) === true ) {
-										updateSignal.dispatch();
-										return;
-									}
-								}
-
-								return;
-							}
-
-							default: {
-								alert ( 'Error in Behavior Tree!' );
-								return;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return false;
+		// for ( let i = 0; i < this.tick_triggers.length; ++i ) {
+		//
+		// 	let trigger_node = this.tick_triggers[ i ];
+		// 	let trigger_node_children = trigger_node.getChildren ();
+		// 	for ( let i = 0; i < trigger_node_children.length; ++i ) {
+		//
+		// 		let child_0 = trigger_node_children[ i ];
+		// 		if ( child_0[ 'type' ] !== 'Object: object' ) {
+		// 			alert ( 'Error in Behavior Tree!' );
+		// 			return;
+		// 		}
+		// 		else {
+		//
+		// 			let object = child_0.getArg ();
+		// 			let child_0_children = child_0.getChildren ();
+		// 			for ( let i0 = 0; i0 < child_0_children.length; ++i0 ) {
+		//
+		// 				let child_1 = child_0_children[ i0 ];
+		// 				switch ( child_1[ 'type' ] ) {
+		// 					case 'Composite: sequence': {
+		//
+		// 						let child_1_children = child_1.getChildren ();
+		//
+		// 						let child_2 = child_1_children[ 0 ];
+		// 						let actions = child_2.run ( object );
+		//
+		// 						for ( let i1 = 1; i1 < child_1_children.length; ++i1 ) {
+		// 							let child_2 = child_1_children[ i1 ];
+		// 							actions.chain( child_2.run ( object ) );
+		// 						}
+		//
+		// 						actions.start();
+		// 						return;
+		// 					}
+		//
+		// 					case 'Composite: selector': {
+		//
+		// 						let child_1_children = child_1.getChildren ();
+		//
+		// 						let action = null;
+		// 						for ( let i1 = 0; i1 < child_1_children.length; ++i1 ) {
+		// 							let child_2 = child_1_children[ i1 ];
+		// 							action = child_2.run ( object );
+		// 							if( action!==false ) {
+		// 								actions.start();
+		// 								return;
+		// 							}
+		// 						}
+		// 					}
+		//
+		// 					default: {
+		// 						alert ( 'Error in Behavior Tree!' );
+		// 						return;
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
+		//
+		// return false;
 	}
 }
