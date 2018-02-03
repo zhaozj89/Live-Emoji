@@ -306,6 +306,13 @@
 			}, false );
 			*/
 
+			// for animation
+			function animate() {
+				requestAnimationFrame( animate );
+				TWEEN.update();
+
+			    	viewport.render();
+			}
 		</script>
 	</body>
 </html>

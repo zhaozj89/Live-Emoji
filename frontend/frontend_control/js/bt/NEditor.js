@@ -40,25 +40,6 @@ let NEditor = function ( editor ) {
 	} );
 	header.add( close );
 
-
-
-
-
-
-
-
-
-
-
-
-	let renderer;
-
-	signals.rendererChanged.add( function ( newRenderer ) {
-
-		renderer = newRenderer;
-
-	} );
-
 	let graphSVG = ( function () {
 		let svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
 		svg.setAttribute( 'position', 'absolute' );
