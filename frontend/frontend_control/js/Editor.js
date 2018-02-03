@@ -14,6 +14,9 @@ var Editor = function () {
 
 	this.signals = {
 
+		// animation
+		animateRender: new Signal(),
+
 		// trigger
 
 		trigger : new Signal(),

@@ -509,6 +509,10 @@ var Viewport = function ( editor ) {
 
 	}
 
+	editor.signals.animateRender.add( function () {
+		render();
+	} );
+
 	return container;
 
 };

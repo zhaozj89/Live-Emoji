@@ -149,6 +149,7 @@
 
 			//
 
+			// this is the MAIN variable for handling events, signals, etc.
 			var editor = new Editor();
 
 			var viewport = new Viewport( editor );
@@ -308,11 +309,15 @@
 
 			// for animation
 			function animate() {
+
 				requestAnimationFrame( animate );
 				TWEEN.update();
 
-			    	viewport.render();
+			    	editor.signals.animateRender.dispatch();
+
 			}
+
+			animate();
 		</script>
 	</body>
 </html>
