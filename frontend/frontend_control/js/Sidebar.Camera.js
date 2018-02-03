@@ -322,6 +322,9 @@ Sidebar.Camera = function ( editor ) {
 			res.x = res.x/videoStreamWidth -  0.5;
 			res.y = res.y/videoStreamWidth -  0.5;
 
+			res.x *= 10;
+			res.y *= 10;
+
 			FACE_INFORMATION.x = res.x;
 			FACE_INFORMATION.y = res.y;
 

@@ -4,7 +4,7 @@
 
 var Editor = function () {
 
-	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -1, 1, -1, 1, -100, 100 );
+	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -20, 20, -20, 20, -100, 100 );
 	this.DEFAULT_CAMERA.name = 'Camera';
 	this.DEFAULT_CAMERA.position.set( 0, 0, -50 );
 	this.DEFAULT_CAMERA.up.set( 0, -1, 0 );

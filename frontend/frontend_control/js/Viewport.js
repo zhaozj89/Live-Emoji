@@ -31,7 +31,7 @@ var Viewport = function ( editor ) {
 
 	// object picking --> add control point
 
-	let selectionPlane = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2, 0, 0 ), new THREE.MeshBasicMaterial( {
+	let selectionPlane = new THREE.Mesh( new THREE.PlaneGeometry( 10, 10, 0, 0 ), new THREE.MeshBasicMaterial( {
 		color: 0x00ff00,
 		opacity: 0.5,
 		transparent: true,
@@ -123,7 +123,7 @@ var Viewport = function ( editor ) {
 
 		skinning.the_transforms.push( numeric.identity( 3 ) );
 
-		let geometry = new THREE.BoxGeometry( 0.04, 0.04, 0.04 );
+		let geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
 		let object = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { color: 0xaa33aa } ) );
 		object.originalColorHex = object.material.color.getHex();
 		object.material.depthTest = false;
@@ -466,7 +466,7 @@ var Viewport = function ( editor ) {
 
 		// TODO: Move this out?
 
-		var viewSize = container.dom.offsetHeight / 300;
+		var viewSize = container.dom.offsetHeight / 50;
 		var aspectRatio = container.dom.offsetWidth / container.dom.offsetHeight;
 
 		var left = -aspectRatio * viewSize / 2;
