@@ -6,57 +6,59 @@
 
 var selfEasyrtcid = "";
 
-function connect() {
-    // easyrtc.setVideoDims(640,480);
-    easyrtc.setRoomOccupantListener(convertListToButtons);
-    easyrtc.easyApp("easyrtc.audioVideoSimple", "selfVideo", ["callerVideo"], loginSuccess, loginFailure);
+function connect () {
+	// easyrtc.setVideoDims(640,480);
+	easyrtc.setRoomOccupantListener( convertListToButtons );
+	easyrtc.easyApp( "easyrtc.audioVideoSimple", "selfVideo", [ "callerVideo" ], loginSuccess, loginFailure );
 }
 
 
-function clearConnectList() {
-    var otherClientDiv = document.getElementById('otherClients');
-    while (otherClientDiv.hasChildNodes()) {
-        otherClientDiv.removeChild(otherClientDiv.lastChild);
-    }
+function clearConnectList () {
+	var otherClientDiv = document.getElementById( 'otherClients' );
+	while ( otherClientDiv.hasChildNodes() ) {
+		otherClientDiv.removeChild( otherClientDiv.lastChild );
+	}
 }
 
 
-function convertListToButtons (roomName, data, isPrimary) {
-    clearConnectList();
-    var otherClientDiv = document.getElementById('otherClients');
-    for(var easyrtcid in data) {
-        var button = document.createElement('button');
-        button.onclick = function(easyrtcid) {
-            return function() {
-                performCall(easyrtcid);
-            };
-        }(easyrtcid);
+function convertListToButtons ( roomName, data, isPrimary ) {
+	clearConnectList();
+	var otherClientDiv = document.getElementById( 'otherClients' );
+	for ( var easyrtcid in data ) {
+		var button = document.createElement( 'button' );
+		button.onclick = function ( easyrtcid ) {
+			return function () {
+				performCall( easyrtcid );
+			};
+		}( easyrtcid );
 
-        // var label = document.createTextNode(easyrtc.idToName(easyrtcid));
-        var label = document.createTextNode( 'Connect' );
-        button.appendChild(label);
-        otherClientDiv.appendChild(button);
-    }
+		// var label = document.createTextNode(easyrtc.idToName(easyrtcid));
+		var label = document.createTextNode( 'Connect' );
+		button.appendChild( label );
+		otherClientDiv.appendChild( button );
+	}
 }
 
 
-function performCall(otherEasyrtcid) {
-    easyrtc.hangupAll();
+function performCall ( otherEasyrtcid ) {
+	easyrtc.hangupAll();
 
-    var successCB = function() {};
-    var failureCB = function() {};
-    easyrtc.call(otherEasyrtcid, successCB, failureCB);
+	var successCB = function () {
+	};
+	var failureCB = function () {
+	};
+	easyrtc.call( otherEasyrtcid, successCB, failureCB );
 }
 
 
-function loginSuccess(easyrtcid) {
-    selfEasyrtcid = easyrtcid;
-    // document.getElementById("iam").innerHTML = "I am " + easyrtc.cleanId(easyrtcid);
+function loginSuccess ( easyrtcid ) {
+	selfEasyrtcid = easyrtcid;
+	// document.getElementById("iam").innerHTML = "I am " + easyrtc.cleanId(easyrtcid);
 }
 
 
-function loginFailure(errorCode, message) {
-    easyrtc.showError(errorCode, message);
+function loginFailure ( errorCode, message ) {
+	easyrtc.showError( errorCode, message );
 }
 
 Sidebar.Camera = function ( editor ) {
@@ -106,46 +108,44 @@ Sidebar.Camera = function ( editor ) {
 	startButton.setDisabled( 'disabled' );
 	startButton.setLeft( '10px' );
 
-	$( startButton.dom ).click( function() {
+	$( startButton.dom ).click( function () {
 		TurnONOFFFaceTracking();
 	} );
 
-	signals.turnOnOffFaceTracking.add( function (on_off) {
-		if( startButton.dom.textContent === 'Start' ) {
-			if( on_off===true ) TurnONOFFFaceTracking();
+	signals.turnOnOffFaceTracking.add( function ( on_off ) {
+		if ( startButton.dom.textContent === 'Start' ) {
+			if ( on_off === true ) TurnONOFFFaceTracking();
 		}
 		else {
-			if( on_off===false ) TurnONOFFFaceTracking();
+			if ( on_off === false ) TurnONOFFFaceTracking();
 		}
 	} );
 
 	container.add( startButton );
 
-    // caller
+	// caller
 
-    var callerPanel = new UI.Panel();
-    callerPanel.setWidth( '250px' );
-    callerPanel.setHeight( '200px' );
+	var callerPanel = new UI.Panel();
+	callerPanel.setWidth( '250px' );
+	callerPanel.setHeight( '200px' );
 
-    container.add( callerPanel );
+	container.add( callerPanel );
 
-    var callerVideoStream = new UI.Video();
-    callerVideoStream.setPosition( 'absolute' );
-    callerVideoStream.setId( 'callerVideo' );
-    callerVideoStream.dom.width = 250;
-    callerVideoStream.dom.height = 200;
-    callerVideoStream.setAutoplay( true );
+	var callerVideoStream = new UI.Video();
+	callerVideoStream.setPosition( 'absolute' );
+	callerVideoStream.setId( 'callerVideo' );
+	callerVideoStream.dom.width = 250;
+	callerVideoStream.dom.height = 200;
+	callerVideoStream.setAutoplay( true );
 
-    callerPanel.add( callerVideoStream );
+	callerPanel.add( callerVideoStream );
 
-    var otherClients = new UI.Div();
-    otherClients.setId( 'otherClients' );
+	var otherClients = new UI.Div();
+	otherClients.setId( 'otherClients' );
 
-    container.add( otherClients );
+	container.add( otherClients );
 
 	var videoStreamOverlayContext = videoStreamOverlay.getContext( '2d' );
-
-
 
 
 	//
@@ -156,30 +156,30 @@ Sidebar.Camera = function ( editor ) {
 		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
 		window.URL = window.URL || window.webkitURL || window.msURL || window.mozURL;
 
-		function GetUserMediaSuccess( stream ) {
-			if ("srcObject" in videoStream.dom) {
+		function GetUserMediaSuccess ( stream ) {
+			if ( "srcObject" in videoStream.dom ) {
 				videoStream.dom.srcObject = stream;
 			}
 			else {
 				videoStream.dom.src = ( window.URL && window.URL.createObjectURL( stream ) );
 			}
 
-			function adjustVideoProportions() {
+			function adjustVideoProportions () {
 				var proportion = videoStream.dom.videoWidth / videoStream.dom.videoHeight;
-				videoStreamWidth = Math.round(videoStreamHeight * proportion);
+				videoStreamWidth = Math.round( videoStreamHeight * proportion );
 				videoStream.dom.width = videoStreamWidth;
 				videoStreamOverlay.dom.width = videoStreamWidth;
 				callerVideoStream.dom.width = videoStreamWidth;
 			}
 
-			videoStream.dom.onloadedmetadata = function() {
+			videoStream.dom.onloadedmetadata = function () {
 				adjustVideoProportions();
 				videoStream.dom.play();
 			}
 
-			videoStream.dom.onresize = function() {
+			videoStream.dom.onresize = function () {
 				adjustVideoProportions();
-				if( faceTrackingStarted ) {
+				if ( faceTrackingStarted ) {
 					ctrack.stop();
 					ctrack.reset();
 					ctrack.start( videoStream.dom );
@@ -187,37 +187,38 @@ Sidebar.Camera = function ( editor ) {
 			}
 		}
 
-		function GetUserMediaFail() {}
-
-		if( navigator.mediaDevices ) {
-			navigator.mediaDevices.getUserMedia( {video : true} ).then( GetUserMediaSuccess ).catch( GetUserMediaFail );
+		function GetUserMediaFail () {
 		}
-		else if( navigator.getUserMedia ) {
-			navigator.getUserMedia( {video : true}, GetUserMediaSuccess, GetUserMediaFail );
+
+		if ( navigator.mediaDevices ) {
+			navigator.mediaDevices.getUserMedia( { video: true } ).then( GetUserMediaSuccess ).catch( GetUserMediaFail );
+		}
+		else if ( navigator.getUserMedia ) {
+			navigator.getUserMedia( { video: true }, GetUserMediaSuccess, GetUserMediaFail );
 		}
 		else {
-			alert("Your browser does not seem to support getUserMedia, using a fallback video instead.");
+			alert( "Your browser does not seem to support getUserMedia, using a fallback video instead." );
 		}
 
-		videoStream.dom.addEventListener( 'canplay', function() {
+		videoStream.dom.addEventListener( 'canplay', function () {
 			startButton.dom.value = "Start";
 			startButton.dom.disabled = null;
 		}, false );
 
 		// Provides requestAnimationFrame in a cross browser way
-		window.requestAnimFrame = ( function() {
+		window.requestAnimFrame = ( function () {
 			return window.requestAnimationFrame ||
 				window.webkitRequestAnimationFrame ||
 				window.mozRequestAnimationFrame ||
 				window.oRequestAnimationFrame ||
 				window.msRequestAnimationFrame ||
-				function(/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
-					return window.setTimeout(callback, 1000/60);
+				function ( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+					return window.setTimeout( callback, 1000 / 60 );
 				};
 		} )();
 
 		// Provides cancelRequestAnimationFrame in a cross browser way
-		window.cancelRequestAnimFrame = ( function() {
+		window.cancelRequestAnimFrame = ( function () {
 			return window.cancelAnimationFrame ||
 				window.webkitCancelRequestAnimationFrame ||
 				window.mozCancelRequestAnimationFrame ||
@@ -233,40 +234,66 @@ Sidebar.Camera = function ( editor ) {
 	var emotionClassifer = new EmotionClassifier();
 	emotionClassifer.init( EmotionModel );
 
-	var ctrack = new clm.tracker( {useWebGL : true} );
+	var ctrack = new clm.tracker( { useWebGL: true } );
 	ctrack.init();
 
 	// Start Detection / Tracking
 
 	let requestId;
 
-	function MainLoop() {
+	let FaceTracker = new ParticleFilter();
+	FaceTracker.init( videoStreamWidth, videoStreamHeight, 500, 1 );
+
+	let pred = null;
+	let measurement = null;
+	let corr = null;
+	let res = null;
+
+	function MainLoop () {
 		requestId = undefined;
 
+		// predict
+		// pred = FaceTracker.predict();
+
+		// measure
 		GetFaceEmotion();
-		GetFaceLandmark();
+
+		measurement = GetFaceLandmark();
+
+		// // correct
+		// if ( measurement === null ) {
+		// 	res = pred;
+		// }
+		// else {
+		// 	res = FaceTracker.correct( measurement.x, measurement.y, measurement.theta );
+		// }
+		//
+		// // send signal
+		// if ( res!==null ) {
+		// 	signals.followFace.dispatch( res );
+		// }
+
 		DrawLandmark();
-		// DispatchFaceSignal();
 
 		StartMainLoop();
 	}
 
-	function StartMainLoop() {
-		if( !requestId ) {
+	function StartMainLoop () {
+		if ( !requestId ) {
 			requestId = requestAnimationFrame( MainLoop );
 		}
 	}
 
-	function StopMainLoop() {
-		if( requestId ) {
+	function StopMainLoop () {
+		if ( requestId ) {
 			cancelAnimationFrame( requestId );
 			requestId = undefined;
 		}
 	}
 
-	function TurnONOFFFaceTracking() {
+	function TurnONOFFFaceTracking () {
 
-		if( startButton.dom.textContent === 'Start' ) {
+		if ( startButton.dom.textContent === 'Start' ) {
 			startButton.dom.textContent = 'Stop';
 
 			videoStream.dom.play();
@@ -281,92 +308,99 @@ Sidebar.Camera = function ( editor ) {
 			ctrack.stop( videoStream.dom );
 			faceTrackingStarted = false;
 
-			videoStreamOverlayContext.clearRect(0, 0, videoStreamWidth, videoStreamHeight);
+			videoStreamOverlayContext.clearRect( 0, 0, videoStreamWidth, videoStreamHeight );
 
 			StopMainLoop();
 		}
 	}
 
+	function GetFaceLandmark () {
+		let positions = ctrack.getCurrentPosition();
 
+		if ( positions ) {
 
+			let normalizedPositions = positions.map( function( arr ) {
+				return arr.slice();
+			} );
 
-	// Main Functions
-
-	// function DispatchFaceSignal() {
-	//
-	// 	for( var prop in FACE_INFORMATION ) {
-	// 		if( FACE_INFORMATION_PRE[prop] !== FACE_INFORMATION[prop] ) {
-	//
-	// 			FACE_TRIGGER.faceinfo = FACE_INFORMATION;
-	// 			signals.trigger.dispatch( FACE_TRIGGER );
-	// 		}
-	// 	}
-	//
-	// 	FACE_INFORMATION_PRE = ObjDeepCopy( FACE_INFORMATION );
-	// }
-
-
-	function GetFaceLandmark() {
-		var positions = ctrack.getCurrentPosition();
-		if( positions ) {
-			let res = {x: 0, y: 0};
-
-			for( let i=0; i<positions.length; ++i ) {
-				res.x += positions[i][0];
-				res.y += positions[i][1];
+			let resX = 0;
+			let resY = 0;
+			for( let i=0; i<normalizedPositions.length; ++i ) {
+				resX += normalizedPositions[i][0];
+				resY += normalizedPositions[i][1];
 			}
 
-			res.x /= positions.length;
-			res.y /= positions.length;
+			resX /= normalizedPositions.length;
+			resY /= normalizedPositions.length;
 
-			res.x = res.x/videoStreamWidth -  0.5;
-			res.y = res.y/videoStreamWidth -  0.5;
+			for ( let i=0; i<normalizedPositions.length; ++i ) {
+				normalizedPositions[i][0] -= resX;
+				normalizedPositions[i][1] -= resY;
+			}
 
-			res.x *= 10;
-			res.y *= 10;
+			let res = numeric.svd( normalizedPositions );
 
-			FACE_INFORMATION.x = res.x;
-			FACE_INFORMATION.y = res.y;
-
-			signals.followFace.dispatch( res );
+			// res.V[0]
+			console.log( res.V );
+			// console.log( 'S: ' + res.S );
 		}
+		else
+			return null;
+
+		// if ( positions ) {
+		// 	let res = { x: 0, y: 0 };
+		//
+		// 	for ( let i = 0; i < positions.length; ++i ) {
+		// 		res.x += positions[ i ][ 0 ];
+		// 		res.y += positions[ i ][ 1 ];
+		// 	}
+		//
+		// 	res.x /= positions.length;
+		// 	res.y /= positions.length;
+		//
+		// 	res.x = res.x / videoStreamWidth - 0.5;
+		// 	res.y = res.y / videoStreamWidth - 0.5;
+		//
+		// 	res.x *= 10;
+		// 	res.y *= 10;
+		// }
 	}
 
-	function GetFaceEmotion() {
+	function GetFaceEmotion () {
 		var mostPossibleEmotion = "";
 		var highestVal = 0;
 		var emotionRes = emotionClassifer.meanPredict( ctrack.getCurrentParameters() );
 
-		for( let i = 0; i < emotionRes.length; ++i ) {
-			if( highestVal < emotionRes[i].value ){
-				highestVal = emotionRes[i].value;
-				mostPossibleEmotion = emotionRes[i].emotion;
+		for ( let i = 0; i < emotionRes.length; ++i ) {
+			if ( highestVal < emotionRes[ i ].value ) {
+				highestVal = emotionRes[ i ].value;
+				mostPossibleEmotion = emotionRes[ i ].emotion;
 			}
 		}
 
-		switch( mostPossibleEmotion ) {
+		switch ( mostPossibleEmotion ) {
 			case 'happy':
-				FACE_INFORMATION['emotion'] = EMOTION_TYPE.HAPPY;
+				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.HAPPY;
 				break;
 			case 'sad':
-				FACE_INFORMATION['emotion'] = EMOTION_TYPE.SAD;
+				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SAD;
 				break;
 			case 'surprised':
-				FACE_INFORMATION['emotion'] = EMOTION_TYPE.SURPRISED;
+				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SURPRISED;
 				break;
 			case 'angry':
-				FACE_INFORMATION['emotion'] = EMOTION_TYPE.ANGRY;
+				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.ANGRY;
 				break;
 			default:
-				FACE_INFORMATION['emotion'] = EMOTION_TYPE.NEUTRAL;
+				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
 				break;
 		}
 
-		signals.followEmotion.dispatch( FACE_INFORMATION['emotion'] );
+		signals.followEmotion.dispatch( FACE_INFORMATION[ 'emotion' ] );
 	}
 
-	function DrawLandmark() {
-		videoStreamOverlayContext.clearRect(0, 0, videoStreamWidth, videoStreamHeight);
+	function DrawLandmark () {
+		videoStreamOverlayContext.clearRect( 0, 0, videoStreamWidth, videoStreamHeight );
 		if ( ctrack.getCurrentPosition() ) {
 			ctrack.draw( videoStreamOverlay.dom );
 		}
