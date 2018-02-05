@@ -239,6 +239,27 @@ Sidebar.Camera = function ( editor ) {
 
 	// Start Detection / Tracking
 
+	let resVals = [];
+	let bufSize = 20;
+
+	function lpf ( nextValue, smoothing ) {
+		if( resVals.length < bufSize ) {
+			resVals.push(nextValue);
+			return null;
+		}
+		else {
+			let initial = resVals.shift();
+			resVals.push( nextValue );
+
+			return resVals.reduce( function ( last, current ) {
+				let res = {x: 0, y:0};
+				res.x = smoothing * current.x + ( 1 - smoothing ) * last.x;
+				res.y = smoothing * current.y + ( 1 - smoothing ) * last.y;
+				return res;
+			}, initial );
+		}
+	}
+
 	let requestId;
 
 	let FaceTracker = new ParticleFilter();
@@ -247,31 +268,42 @@ Sidebar.Camera = function ( editor ) {
 	let pred = null;
 	let measurement = null;
 	let corr = null;
-	let res = null;
 
 	function MainLoop () {
 		requestId = undefined;
 
 		// predict
-		// pred = FaceTracker.predict();
+		pred = FaceTracker.predict();
 
 		// measure
 		GetFaceEmotion();
 
 		measurement = GetFaceLandmark();
 
-		// // correct
-		// if ( measurement === null ) {
-		// 	res = pred;
-		// }
-		// else {
-		// 	res = FaceTracker.correct( measurement.x, measurement.y, measurement.theta );
-		// }
-		//
-		// // send signal
-		// if ( res!==null ) {
-		// 	signals.followFace.dispatch( res );
-		// }
+		// correct
+		if ( measurement === null ) {
+			corr = pred;
+		}
+		else {
+			corr = FaceTracker.correct( measurement.x, measurement.y );
+		}
+
+		// send signal
+		if ( corr !== null ) {
+
+			let lpfCorr = lpf( corr, 0.6 );
+			if( lpfCorr!==null ) {
+				let res = { x: 0, y: 0 };
+
+				res.x = lpfCorr.x / videoStreamWidth - 0.5;
+				res.y = lpfCorr.y / videoStreamHeight - 0.5;
+
+				res.x *= 10;
+				res.y *= 10;
+
+				signals.followFace.dispatch( res );
+			}
+		}
 
 		DrawLandmark();
 
@@ -319,29 +351,60 @@ Sidebar.Camera = function ( editor ) {
 
 		if ( positions ) {
 
-			let normalizedPositions = positions.map( function( arr ) {
-				return arr.slice();
-			} );
+			// let normalizedPositions = positions.map( function( arr ) {
+			// 	return arr.slice();
+			// } );
 
 			let resX = 0;
 			let resY = 0;
-			for( let i=0; i<normalizedPositions.length; ++i ) {
-				resX += normalizedPositions[i][0];
-				resY += normalizedPositions[i][1];
+			for ( let i = 0; i < positions.length; ++i ) {
+				resX += positions[ i ][ 0 ];
+				resY += positions[ i ][ 1 ];
 			}
 
-			resX /= normalizedPositions.length;
-			resY /= normalizedPositions.length;
+			resX /= positions.length;
+			resY /= positions.length;
 
-			for ( let i=0; i<normalizedPositions.length; ++i ) {
-				normalizedPositions[i][0] -= resX;
-				normalizedPositions[i][1] -= resY;
-			}
+			return {
+				'x': resX,
+				'y': resY
+			};
 
-			let res = numeric.svd( normalizedPositions );
+			// for ( let i=0; i<normalizedPositions.length; ++i ) {
+			// 	normalizedPositions[i][0] -= resX;
+			// 	normalizedPositions[i][1] -= resY;
+			// }
+			//
+			// let res = numeric.svd( normalizedPositions );
+			//
+			// let x0 = res.V[0][0] * videoStreamWidth + videoStreamWidth/2;
+			// let y0 = -res.V[0][1] * videoStreamHeight + videoStreamHeight/2;
+			//
+			// let x1 = res.V[1][0] * videoStreamWidth + videoStreamWidth/2;
+			// let y1 = -res.V[1][1] * videoStreamHeight + videoStreamHeight/2;
+
+			// videoStreamOverlayContext.clearRect( 0, 0, videoStreamWidth, videoStreamHeight );
+
+			// videoStreamOverlayContext.height = videoStreamHeight;
+
+			// videoStreamOverlayContext.strokeStyle = "#FF0000";
+			// videoStreamOverlayContext.moveTo( videoStreamWidth/2, videoStreamHeight/2 );
+			// videoStreamOverlayContext.lineTo( x0, y0 );
+			// videoStreamOverlayContext.stroke();
+
+			// console.log( x0, y0 );
+			//
+			// videoStreamOverlayContext.fillStyle = "#0034ff";
+			// videoStreamOverlayContext.moveTo( videoStreamWidth/2, videoStreamHeight/2 );
+			// videoStreamOverlayContext.lineTo( x1, y1 );
+			// videoStreamOverlayContext.stroke();
+			//
+			// console.log( x1, y1 );
 
 			// res.V[0]
-			console.log( res.V );
+
+			// res.V[0]
+			// console.log( res.V );
 			// console.log( 'S: ' + res.S );
 		}
 		else
@@ -401,6 +464,22 @@ Sidebar.Camera = function ( editor ) {
 
 	function DrawLandmark () {
 		videoStreamOverlayContext.clearRect( 0, 0, videoStreamWidth, videoStreamHeight );
+
+		if ( pred !== null ) {
+			videoStreamOverlayContext.strokeStyle = '#FF0000';
+			videoStreamOverlayContext.strokeRect( pred.x - 5, pred.y - 5, 10, 10 );
+		}
+
+		if ( measurement != null ) {
+			videoStreamOverlayContext.strokeStyle = '#ff6dcb';
+			videoStreamOverlayContext.strokeRect( measurement.x - 5, measurement.y - 5, 10, 10 );
+		}
+
+		if ( corr !== null ) {
+			videoStreamOverlayContext.strokeStyle = '#0004ff';
+			videoStreamOverlayContext.strokeRect( corr.x - 5, corr.y - 5, 10, 10 );
+		}
+
 		if ( ctrack.getCurrentPosition() ) {
 			ctrack.draw( videoStreamOverlay.dom );
 		}
