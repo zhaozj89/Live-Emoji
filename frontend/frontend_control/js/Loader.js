@@ -825,5 +825,27 @@ var LoadCharacterJSON = function ( file ) {
 
 			break;
 	}
+};
+
+var PreLoadCharacterJSON = function () {
+	let loader = JSON.parse( PRELOAD_JSON );
+
+	let characterStructure = new CharacterStructure( 'qin_emotion' );
+	characterStructure.add2Scene.add( function ( obj ) {
+		editor.execute( new AddObjectCommand( obj ) );
+	} );
+
+	for ( let prop in loader ) {
+
+		if ( typeof( loader[ prop ] ) === 'string' ) {
+			LoadFileName( characterStructure, prop, '', loader[ prop ] );
+			continue;
+		}
+
+		if ( typeof( loader[ prop ] ) === 'object' ) {
+			for ( let prop2 in loader[ prop ] ) LoadFileName( characterStructure, prop, prop2, loader[ prop ][ prop2 ] );
+			continue;
+		}
+	}
 }
 
