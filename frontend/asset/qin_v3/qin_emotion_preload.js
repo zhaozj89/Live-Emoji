@@ -1,4 +1,4 @@
-var PRELOAD_JSON = "{
+var PRELOAD_JSON = {
 	"accessory" : "images/accessory.png",
 	"face" : "images/face.png",
 	"left_ear" : "images/left_ear.png",
@@ -67,4 +67,4 @@ var PRELOAD_JSON = "{
 		"disgusted": "images/right_eyebrow/disgusted.png"
 	},
 	"right_red" : "images/right_red.png"
-}";
+};

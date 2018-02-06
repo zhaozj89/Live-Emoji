@@ -828,7 +828,7 @@ var LoadCharacterJSON = function ( file ) {
 };
 
 var PreLoadCharacterJSON = function () {
-	let loader = JSON.parse( PRELOAD_JSON );
+	let loader = PRELOAD_JSON;
 
 	let characterStructure = new CharacterStructure( 'qin_emotion' );
 	characterStructure.add2Scene.add( function ( obj ) {
