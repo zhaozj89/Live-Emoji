@@ -6,8 +6,13 @@
 
 var selfEasyrtcid = "";
 
+function addToConversation ( who, msgType, content ) {
+	alert( 'Received message from ' + who + ', as: ' + content );
+}
+
 function connect () {
 	// easyrtc.setVideoDims(640,480);
+	easyrtc.setPeerListener( addToConversation );
 	easyrtc.setRoomOccupantListener( convertListToButtons );
 	easyrtc.easyApp( "easyrtc.audioVideoSimple", "selfVideo", [ "callerVideo" ], loginSuccess, loginFailure );
 }
@@ -29,16 +34,25 @@ function convertListToButtons ( roomName, data, isPrimary ) {
 		button.onclick = function ( easyrtcid ) {
 			return function () {
 				performCall( easyrtcid );
+
+				sendStuffWS( easyrtcid );
 			};
 		}( easyrtcid );
 
-		// var label = document.createTextNode(easyrtc.idToName(easyrtcid));
-		var label = document.createTextNode( 'Connect' );
+		var label = document.createTextNode( 'Connect/Send to: ' + easyrtc.idToName( easyrtcid ) );
+		// var label = document.createTextNode( 'Connect' );
 		button.appendChild( label );
 		otherClientDiv.appendChild( button );
 	}
 }
 
+function sendStuffWS ( otherEasyrtcid ) {
+	var text = 'Hello World!';
+
+	easyrtc.sendDataWS( otherEasyrtcid, "message", text );
+
+	alert( 'Send to ' + easyrtc.idToName( otherEasyrtcid ) + ': ' + text );
+}
 
 function performCall ( otherEasyrtcid ) {
 	easyrtc.hangupAll();
@@ -48,6 +62,8 @@ function performCall ( otherEasyrtcid ) {
 	var failureCB = function () {
 	};
 	easyrtc.call( otherEasyrtcid, successCB, failureCB );
+
+	//
 }
 
 
@@ -243,8 +259,8 @@ Sidebar.Camera = function ( editor ) {
 	let bufSize = 20;
 
 	function lpf ( nextValue, smoothing ) {
-		if( resVals.length < bufSize ) {
-			resVals.push(nextValue);
+		if ( resVals.length < bufSize ) {
+			resVals.push( nextValue );
 			return null;
 		}
 		else {
@@ -252,7 +268,7 @@ Sidebar.Camera = function ( editor ) {
 			resVals.push( nextValue );
 
 			return resVals.reduce( function ( last, current ) {
-				let res = {x: 0, y:0};
+				let res = { x: 0, y: 0 };
 				res.x = smoothing * current.x + ( 1 - smoothing ) * last.x;
 				res.y = smoothing * current.y + ( 1 - smoothing ) * last.y;
 				return res;
@@ -292,7 +308,7 @@ Sidebar.Camera = function ( editor ) {
 		if ( corr !== null ) {
 
 			let lpfCorr = lpf( corr, 0.6 );
-			if( lpfCorr!==null ) {
+			if ( lpfCorr !== null ) {
 				let res = { x: 0, y: 0 };
 
 				res.x = lpfCorr.x / videoStreamWidth - 0.5;
