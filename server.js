@@ -19,8 +19,7 @@ process.title = "node-easyrtc";
 var app = express();
 // console.log(__dirname);
 app.use(serveStatic('frontend'));
-app.use(serveStatic('frontend/frontend_control', {'index': ['/index.html']}));
-app.use(serveStatic('frontend/frontend_robot', {'index': ['/robot.html']}));
+app.use(serveStatic('frontend', {'index': ['/index.html']}));
 
 // Start Express http server on port 8080
 var webServer = https.createServer(credentials, app).listen(8080);

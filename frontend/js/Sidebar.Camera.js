@@ -6,9 +6,9 @@
 
 var selfEasyrtcid = "";
 
-function addToConversation ( who, msgType, content ) {
-	alert( 'Received message from ' + who + ', as: ' + content );
-}
+// function addToConversation ( who, msgType, content ) {
+// 	alert( 'Received message from ' + who + ', as: ' + content );
+// }
 
 function connect () {
 	// easyrtc.setVideoDims(640,480);
@@ -46,13 +46,13 @@ function convertListToButtons ( roomName, data, isPrimary ) {
 	}
 }
 
-function sendStuffWS ( otherEasyrtcid ) {
-	var text = 'Hello World!';
-
-	easyrtc.sendDataWS( otherEasyrtcid, "message", text );
-
-	alert( 'Send to ' + easyrtc.idToName( otherEasyrtcid ) + ': ' + text );
-}
+// function sendStuffWS ( otherEasyrtcid ) {
+// 	var text = 'Hello World!';
+//
+// 	easyrtc.sendDataWS( otherEasyrtcid, "message", text );
+//
+// 	alert( 'Send to ' + easyrtc.idToName( otherEasyrtcid ) + ': ' + text );
+// }
 
 function performCall ( otherEasyrtcid ) {
 	easyrtc.hangupAll();
