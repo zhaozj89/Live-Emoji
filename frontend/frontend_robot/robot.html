@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href="robot_css/jquery-ui.min.css" />
 		<link rel="stylesheet" href="robot_css/dark.css"  />
 		<link rel="stylesheet" href="robot_css/main.css" />
+		<link rel="stylesheet" href="robot_css/NEditor.css">
 
 		<!--numeric-->
 		<script src="robot_js/libs/numeric-1.2.6.js"></script>
@@ -56,6 +57,14 @@
                 <script src="robot_js/History.js"></script>
                 <script src="robot_js/Loader.js"></script>
 
+                <script src="robot_js/Menubar.js"></script>
+                <script src="robot_js/Menubar.File.js"></script>
+                <script src="robot_js/Menubar.Edit.js"></script>
+                <script src="robot_js/Menubar.View.js"></script>
+		<script src="robot_js/Menubar.Tool.js"></script>
+                <script src="robot_js/Menubar.Help.js"></script>
+                <script src="robot_js/Menubar.Status.js"></script>
+
                 <script src="robot_js/Sidebar.js"></script>
 		<script src="robot_js/Sidebar.History.js"></script>
                 <script src="robot_js/Sidebar.Camera.js"></script>
@@ -67,6 +76,12 @@
                 <script src="robot_js/Sidebar.Scene.Geometry.js"></script>
                 <script src="robot_js/Sidebar.Scene.Geometry.Geometry.js"></script>
                 <script src="robot_js/Sidebar.Scene.Geometry.BufferGeometry.js"></script>
+                <script src="robot_js/Sidebar.Scene.Geometry.Modifiers.js"></script>
+                <script src="robot_js/Sidebar.Scene.Geometry.BoxGeometry.js"></script>
+                <script src="robot_js/Sidebar.Scene.Geometry.CircleGeometry.js"></script>
+                <script src="robot_js/Sidebar.Scene.Geometry.CylinderGeometry.js"></script>
+                <script src="robot_js/Sidebar.Scene.Geometry.PlaneGeometry.js"></script>
+                <script src="robot_js/Sidebar.Scene.Geometry.SphereGeometry.js"></script>
                 <script src="robot_js/Sidebar.Scene.Material.js"></script>
 
                 <script src="robot_js/Viewport.js"></script>
@@ -92,6 +107,7 @@
                 <script src="robot_js/commands/SetMaterialMapCommand.js"></script>
                 <script src="robot_js/commands/SetSceneCommand.js"></script>
 
+
 		<!-- my animation library -->
 		<script src="robot_js/animation/CharacterStructure.js"></script>
 		<script src="robot_js/animation/PNGReader.js"></script>
@@ -99,6 +115,32 @@
 		<script src="robot_js/animation/Utils.js"></script>
 		<script src="robot_js/animation/Contour.js"></script>
 		<script src="robot_js/animation/Mesher.js"></script>
+
+                <!-- my behavior tree library -->
+		<script src="robot_js/bt/NEditorTriggerFunctions.js"></script>
+		<script src="robot_js/bt/NEditorGlobals.js"></script>
+		<script src="robot_js/bt/NEditorUtils.js"></script>
+
+		<script src="robot_js/bt/NEditorDOMUI.js"></script>
+
+
+
+                <script src="robot_js/bt/NEditorBaseClass.js"></script>
+                <script src="robot_js/bt/NEditorCharacter.js"></script>
+                <script src="robot_js/bt/NEditorTrigger.js"></script>
+                <script src="robot_js/bt/NEditorComposite.js"></script>
+                <script src="robot_js/bt/NEditorAction.js"></script>
+
+                <script src="robot_js/bt/NEditorManager.js"></script>
+                <script src="robot_js/bt/NEditor.js"></script>
+
+
+                <!--face tracking library-->
+		<script src="robot_js/face/ParticleFilter.js"></script>
+                <script src="robot_js/face/FaceUtils.js"></script>
+                <script src="robot_js/face/clmtrackr.js"></script>
+                <script src="robot_js/face/emotion_classifier.js"></script>
+                <script src="robot_js/face/emotionmodel.js"></script>
         </head>
 	<body onload="connect();">
 		<script>
@@ -110,6 +152,9 @@
 				return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 			};
 
+			//
+
+			// this is the MAIN variable for handling events, signals, etc.
 			var editor = new Editor();
 
 			var viewport = new Viewport( editor );
@@ -118,6 +163,16 @@
 			var sidebar = new Sidebar( editor );
 			document.body.appendChild( sidebar.dom );
 
+			var menubar = new Menubar( editor );
+			document.body.appendChild( menubar.dom );
+
+			var modal = new UI.Modal();
+			document.body.appendChild( modal.dom );
+
+			var nEditor = new NEditor( editor ); // need face info in sidebar
+			document.body.appendChild( nEditor.dom );
+
+			//
 
 			editor.storage.init( function () {
 
@@ -248,7 +303,26 @@
 
 			}
 
-			PreLoadCharacterJSON();
+			/*
+			window.addEventListener( 'message', function ( event ) {
+
+				editor.clear();
+				editor.fromJSON( event.data );
+
+			}, false );
+			*/
+
+			// for animation
+			function animate() {
+
+				requestAnimationFrame( animate );
+				TWEEN.update();
+
+			    	editor.signals.animateRender.dispatch();
+
+			}
+
+			animate();
 		</script>
 	</body>
 </html>

@@ -6,8 +6,13 @@
 
 var selfEasyrtcid = "";
 
+function addToConversation ( who, msgType, content ) {
+	alert( 'Received message from ' + who + ', as: ' + content );
+}
+
 function connect () {
 	// easyrtc.setVideoDims(640,480);
+	// easyrtc.setPeerListener( addToConversation );
 	easyrtc.setRoomOccupantListener( convertListToButtons );
 	easyrtc.easyApp( "easyrtc.audioVideoSimple", "selfVideo", [ "callerVideo" ], loginSuccess, loginFailure );
 }
@@ -29,16 +34,25 @@ function convertListToButtons ( roomName, data, isPrimary ) {
 		button.onclick = function ( easyrtcid ) {
 			return function () {
 				performCall( easyrtcid );
+
+				// sendStuffWS( easyrtcid );
 			};
 		}( easyrtcid );
 
-		// var label = document.createTextNode(easyrtc.idToName(easyrtcid));
-		var label = document.createTextNode( 'Connect' );
+		var label = document.createTextNode( 'Connect/Send to: ' + easyrtc.idToName( easyrtcid ) );
+		// var label = document.createTextNode( 'Connect' );
 		button.appendChild( label );
 		otherClientDiv.appendChild( button );
 	}
 }
 
+function sendStuffWS ( otherEasyrtcid ) {
+	var text = 'Hello World!';
+
+	easyrtc.sendDataWS( otherEasyrtcid, "message", text );
+
+	alert( 'Send to ' + easyrtc.idToName( otherEasyrtcid ) + ': ' + text );
+}
 
 function performCall ( otherEasyrtcid ) {
 	easyrtc.hangupAll();
@@ -48,6 +62,8 @@ function performCall ( otherEasyrtcid ) {
 	var failureCB = function () {
 	};
 	easyrtc.call( otherEasyrtcid, successCB, failureCB );
+
+	//
 }
 
 
@@ -109,7 +125,7 @@ Sidebar.Camera = function ( editor ) {
 	startButton.setLeft( '10px' );
 
 	$( startButton.dom ).click( function () {
-
+		TurnONOFFFaceTracking();
 	} );
 
 	signals.turnOnOffFaceTracking.add( function ( on_off ) {
@@ -145,6 +161,12 @@ Sidebar.Camera = function ( editor ) {
 
 	container.add( otherClients );
 
+	var videoStreamOverlayContext = videoStreamOverlay.getContext( '2d' );
+
+
+	//
+	var faceTrackingStarted = false;
+
 	// Initialization
 	{
 		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -173,6 +195,11 @@ Sidebar.Camera = function ( editor ) {
 
 			videoStream.dom.onresize = function () {
 				adjustVideoProportions();
+				if ( faceTrackingStarted ) {
+					ctrack.stop();
+					ctrack.reset();
+					ctrack.start( videoStream.dom );
+				}
 			}
 		}
 
@@ -215,6 +242,263 @@ Sidebar.Camera = function ( editor ) {
 				window.msCancelRequestAnimationFrame ||
 				window.clearTimeout;
 		} )();
+	}
+
+
+	// Setup Models
+
+	var emotionClassifer = new EmotionClassifier();
+	emotionClassifer.init( EmotionModel );
+
+	var ctrack = new clm.tracker( { useWebGL: true } );
+	ctrack.init();
+
+	// Start Detection / Tracking
+
+	let resVals = [];
+	let bufSize = 20;
+
+	function lpf ( nextValue, smoothing ) {
+		if ( resVals.length < bufSize ) {
+			resVals.push( nextValue );
+			return null;
+		}
+		else {
+			let initial = resVals.shift();
+			resVals.push( nextValue );
+
+			return resVals.reduce( function ( last, current ) {
+				let res = { x: 0, y: 0 };
+				res.x = smoothing * current.x + ( 1 - smoothing ) * last.x;
+				res.y = smoothing * current.y + ( 1 - smoothing ) * last.y;
+				return res;
+			}, initial );
+		}
+	}
+
+	let requestId;
+
+	let FaceTracker = new ParticleFilter();
+	FaceTracker.init( videoStreamWidth, videoStreamHeight, 500, 1 );
+
+	let pred = null;
+	let measurement = null;
+	let corr = null;
+
+	function MainLoop () {
+		requestId = undefined;
+
+		// predict
+		pred = FaceTracker.predict();
+
+		// measure
+		GetFaceEmotion();
+
+		measurement = GetFaceLandmark();
+
+		// correct
+		if ( measurement === null ) {
+			corr = pred;
+		}
+		else {
+			corr = FaceTracker.correct( measurement.x, measurement.y );
+		}
+
+		// send signal
+		if ( corr !== null ) {
+
+			let lpfCorr = lpf( corr, 0.6 );
+			if ( lpfCorr !== null ) {
+				let res = { x: 0, y: 0 };
+
+				res.x = lpfCorr.x / videoStreamWidth - 0.5;
+				res.y = lpfCorr.y / videoStreamHeight - 0.5;
+
+				res.x *= 10;
+				res.y *= 10;
+
+				signals.followFace.dispatch( res );
+			}
+		}
+
+		DrawLandmark();
+
+		StartMainLoop();
+	}
+
+	function StartMainLoop () {
+		if ( !requestId ) {
+			requestId = requestAnimationFrame( MainLoop );
+		}
+	}
+
+	function StopMainLoop () {
+		if ( requestId ) {
+			cancelAnimationFrame( requestId );
+			requestId = undefined;
+		}
+	}
+
+	function TurnONOFFFaceTracking () {
+
+		if ( startButton.dom.textContent === 'Start' ) {
+			startButton.dom.textContent = 'Stop';
+
+			videoStream.dom.play();
+			ctrack.start( videoStream.dom );
+			faceTrackingStarted = true;
+
+			StartMainLoop();
+		}
+		else {
+			startButton.dom.textContent = 'Start';
+
+			ctrack.stop( videoStream.dom );
+			faceTrackingStarted = false;
+
+			videoStreamOverlayContext.clearRect( 0, 0, videoStreamWidth, videoStreamHeight );
+
+			StopMainLoop();
+		}
+	}
+
+	function GetFaceLandmark () {
+		let positions = ctrack.getCurrentPosition();
+
+		if ( positions ) {
+
+			// let normalizedPositions = positions.map( function( arr ) {
+			// 	return arr.slice();
+			// } );
+
+			let resX = 0;
+			let resY = 0;
+			for ( let i = 0; i < positions.length; ++i ) {
+				resX += positions[ i ][ 0 ];
+				resY += positions[ i ][ 1 ];
+			}
+
+			resX /= positions.length;
+			resY /= positions.length;
+
+			return {
+				'x': resX,
+				'y': resY
+			};
+
+			// for ( let i=0; i<normalizedPositions.length; ++i ) {
+			// 	normalizedPositions[i][0] -= resX;
+			// 	normalizedPositions[i][1] -= resY;
+			// }
+			//
+			// let res = numeric.svd( normalizedPositions );
+			//
+			// let x0 = res.V[0][0] * videoStreamWidth + videoStreamWidth/2;
+			// let y0 = -res.V[0][1] * videoStreamHeight + videoStreamHeight/2;
+			//
+			// let x1 = res.V[1][0] * videoStreamWidth + videoStreamWidth/2;
+			// let y1 = -res.V[1][1] * videoStreamHeight + videoStreamHeight/2;
+
+			// videoStreamOverlayContext.clearRect( 0, 0, videoStreamWidth, videoStreamHeight );
+
+			// videoStreamOverlayContext.height = videoStreamHeight;
+
+			// videoStreamOverlayContext.strokeStyle = "#FF0000";
+			// videoStreamOverlayContext.moveTo( videoStreamWidth/2, videoStreamHeight/2 );
+			// videoStreamOverlayContext.lineTo( x0, y0 );
+			// videoStreamOverlayContext.stroke();
+
+			// console.log( x0, y0 );
+			//
+			// videoStreamOverlayContext.fillStyle = "#0034ff";
+			// videoStreamOverlayContext.moveTo( videoStreamWidth/2, videoStreamHeight/2 );
+			// videoStreamOverlayContext.lineTo( x1, y1 );
+			// videoStreamOverlayContext.stroke();
+			//
+			// console.log( x1, y1 );
+
+			// res.V[0]
+
+			// res.V[0]
+			// console.log( res.V );
+			// console.log( 'S: ' + res.S );
+		}
+		else
+			return null;
+
+		// if ( positions ) {
+		// 	let res = { x: 0, y: 0 };
+		//
+		// 	for ( let i = 0; i < positions.length; ++i ) {
+		// 		res.x += positions[ i ][ 0 ];
+		// 		res.y += positions[ i ][ 1 ];
+		// 	}
+		//
+		// 	res.x /= positions.length;
+		// 	res.y /= positions.length;
+		//
+		// 	res.x = res.x / videoStreamWidth - 0.5;
+		// 	res.y = res.y / videoStreamWidth - 0.5;
+		//
+		// 	res.x *= 10;
+		// 	res.y *= 10;
+		// }
+	}
+
+	function GetFaceEmotion () {
+		var mostPossibleEmotion = "";
+		var highestVal = 0;
+		var emotionRes = emotionClassifer.meanPredict( ctrack.getCurrentParameters() );
+
+		for ( let i = 0; i < emotionRes.length; ++i ) {
+			if ( highestVal < emotionRes[ i ].value ) {
+				highestVal = emotionRes[ i ].value;
+				mostPossibleEmotion = emotionRes[ i ].emotion;
+			}
+		}
+
+		switch ( mostPossibleEmotion ) {
+			case 'happy':
+				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.HAPPY;
+				break;
+			case 'sad':
+				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SAD;
+				break;
+			case 'surprised':
+				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SURPRISED;
+				break;
+			case 'angry':
+				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.ANGRY;
+				break;
+			default:
+				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
+				break;
+		}
+
+		signals.followEmotion.dispatch( FACE_INFORMATION[ 'emotion' ] );
+	}
+
+	function DrawLandmark () {
+		videoStreamOverlayContext.clearRect( 0, 0, videoStreamWidth, videoStreamHeight );
+
+		if ( pred !== null ) {
+			videoStreamOverlayContext.strokeStyle = '#FF0000';
+			videoStreamOverlayContext.strokeRect( pred.x - 5, pred.y - 5, 10, 10 );
+		}
+
+		if ( measurement != null ) {
+			videoStreamOverlayContext.strokeStyle = '#ff6dcb';
+			videoStreamOverlayContext.strokeRect( measurement.x - 5, measurement.y - 5, 10, 10 );
+		}
+
+		if ( corr !== null ) {
+			videoStreamOverlayContext.strokeStyle = '#0004ff';
+			videoStreamOverlayContext.strokeRect( corr.x - 5, corr.y - 5, 10, 10 );
+		}
+
+		if ( ctrack.getCurrentPosition() ) {
+			ctrack.draw( videoStreamOverlay.dom );
+		}
 	}
 
 	return container;
