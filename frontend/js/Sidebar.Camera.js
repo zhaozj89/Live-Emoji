@@ -413,6 +413,16 @@ Sidebar.Camera = function ( editor ) {
 
 		if ( positions ) {
 
+			// open mouth detection
+			let mousedist = positions[57][1] - positions[60][1];
+			let mouthwidth = positions[50][0] - positions[44][0];
+			if(mousedist>mouthwidth*0.18){
+				signals.followMouth.dispatch( 'open' );
+			}
+			else {
+				signals.followMouth.dispatch( 'close' );
+			}
+
 			// let normalizedPositions = positions.map( function( arr ) {
 			// 	return arr.slice();
 			// } );
@@ -476,9 +486,11 @@ Sidebar.Camera = function ( editor ) {
 			.then( outputData => {
 				if ( outputData.output < 0.2 ) {
 					FACE_INFORMATION[ 'left_eye' ] = EYE_STATUS.CLOSE;
+					signals.followLeftEye.dispatch( 'close' );
 				}
 				else {
 					FACE_INFORMATION[ 'left_eye' ] = EYE_STATUS.OPEN;
+					signals.followLeftEye.dispatch( 'open' );
 				}
 			} )
 			.catch( err => {
@@ -502,9 +514,11 @@ Sidebar.Camera = function ( editor ) {
 			.then( outputData => {
 				if ( outputData.output < 0.2 ) {
 					FACE_INFORMATION[ 'right_eye' ] = EYE_STATUS.CLOSE;
+					signals.followRightEye.dispatch( 'close' );
 				}
 				else {
 					FACE_INFORMATION[ 'right_eye' ] = EYE_STATUS.OPEN;
+					signals.followRightEye.dispatch( 'open' );
 				}
 			} )
 			.catch( err => {
@@ -566,7 +580,8 @@ Sidebar.Camera = function ( editor ) {
 						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
 						break;
 				}
-				signals.followEmotion.dispatch( FACE_INFORMATION[ 'emotion' ] );
+				if( FACE_INFORMATION[ 'emotion' ]===EMOTION_TYPE.NEUTRAL ||  FACE_INFORMATION[ 'emotion' ]===EMOTION_TYPE.HAPPY )
+					signals.followEmotion.dispatch( FACE_INFORMATION[ 'emotion' ] );
 
 				//show debug information about eyes and emotion, should delete it after completion
 				debugInf.setValue( 'left:' + FACE_INFORMATION[ 'left_eye' ] + '   right:' + FACE_INFORMATION[ 'right_eye' ] + ' ' +

@@ -52,24 +52,24 @@ let NEditor = function ( editor ) {
 	} )();
 
 	let graphPanel = new UI.Element( graphSVG );
-	container.add(graphPanel);
+	container.add( graphPanel );
 
-	graphSVG.onmousemove = function(event) {
-		if (NEDITOR_MOUSE_INFO.currentInput){
+	graphSVG.onmousemove = function ( event ) {
+		if ( NEDITOR_MOUSE_INFO.currentInput ) {
 			let path = NEDITOR_MOUSE_INFO.currentInput.path;
 			let inputPt = NEDITOR_MOUSE_INFO.currentInput.getAttachedPoint();
-			let outputPt = {x: event.pageX, y: event.pageY-68};
-			let val = NEditorCreatePath(inputPt, outputPt);
-			path.setAttributeNS(null, 'd', val); // namespace, name, value
+			let outputPt = { x: event.pageX, y: event.pageY - 68 };
+			let val = NEditorCreatePath( inputPt, outputPt );
+			path.setAttributeNS( null, 'd', val ); // namespace, name, value
 		}
 	};
 
-	graphSVG.onclick = function(event){
-		if (NEDITOR_MOUSE_INFO.currentInput){
-			NEDITOR_MOUSE_INFO.currentInput.path.removeAttribute('d');
+	graphSVG.onclick = function ( event ) {
+		if ( NEDITOR_MOUSE_INFO.currentInput ) {
+			NEDITOR_MOUSE_INFO.currentInput.path.removeAttribute( 'd' );
 
-			if (NEDITOR_MOUSE_INFO.currentInput.node)
-				NEDITOR_MOUSE_INFO.currentInput.node.detachInput(NEDITOR_MOUSE_INFO.currentInput);
+			if ( NEDITOR_MOUSE_INFO.currentInput.node )
+				NEDITOR_MOUSE_INFO.currentInput.node.detachInput( NEDITOR_MOUSE_INFO.currentInput );
 
 			NEDITOR_MOUSE_INFO.currentInput = undefined;
 		}
@@ -115,31 +115,31 @@ let NEditor = function ( editor ) {
 	let startBehaviorTree = false;
 
 	// jQuery methods go here ...
-	$( function() {
+	$( function () {
 		$( menu.dom ).draggable();
 		$( "#menu" ).menu();
 
-		$( buttonKeyboard ).click(function () {
+		$( buttonKeyboard ).click( function () {
 			nodeManager.addNode( 'key_trigger' );
-		});
+		} );
 
-		$( buttonTick ).click(function () {
+		$( buttonTick ).click( function () {
 			nodeManager.addNode( 'tick_trigger' );
-		});
+		} );
 
-		$( buttonSelector ).click( function() {
+		$( buttonSelector ).click( function () {
 			nodeManager.addNode( 'selector' );
 		} );
 
-		$( buttonSequence ).click( function() {
+		$( buttonSequence ).click( function () {
 			nodeManager.addNode( 'sequence' );
 		} );
 
-		$( buttonTranslation ).click( function() {
+		$( buttonTranslation ).click( function () {
 			nodeManager.addNode( 'translation' );
 		} );
 
-		$( buttonRotation ).click( function() {
+		$( buttonRotation ).click( function () {
 			nodeManager.addNode( 'rotation' );
 		} );
 
@@ -148,7 +148,7 @@ let NEditor = function ( editor ) {
 		} );
 
 		$( Objects ).click( function () {
-			if( currentCharacter===null ) alert( 'Please select an object first!' );
+			if ( currentCharacter === null ) alert( 'Please select an object first!' );
 			else nodeManager.addNode( 'object', currentCharacter );
 		} );
 
@@ -156,10 +156,10 @@ let NEditor = function ( editor ) {
 			// currentAST = nodeManager.getAST();
 			// console.log( currentAST );
 
-			if( startBehaviorTree )
-				Runner.children[0].textContent = 'Start';
+			if ( startBehaviorTree )
+				Runner.children[ 0 ].textContent = 'Start';
 			else
-				Runner.children[0].textContent = ' Stop';
+				Runner.children[ 0 ].textContent = ' Stop';
 
 			startBehaviorTree = !startBehaviorTree;
 		} );
@@ -180,24 +180,23 @@ let NEditor = function ( editor ) {
 
 	signals.trigger.add( function ( event ) {
 
-		if( startBehaviorTree===false ) return;
+		if ( startBehaviorTree === false ) return;
 
 		// evaluate ast
 		let puppet = currentCharacter || editor.selected || null;
 
-		if( puppet!==null && currentAST!==null ) return;
+		if ( puppet !== null && currentAST !== null ) return;
 
 
-		if( event['type']==='tick' ) {
+		if ( event[ 'type' ] === 'tick' ) {
 			nodeManager.runTickTrigger( editor.signals.sceneGraphChanged );
 		}
 
-		if( event['type'] === 'keyboard' ) {
-			nodeManager.runKeyTrigger( event['keycode'], editor.signals.sceneGraphChanged );
+		if ( event[ 'type' ] === 'keyboard' ) {
+			nodeManager.runKeyTrigger( event[ 'keycode' ], editor.signals.sceneGraphChanged );
 		}
 
 	} );
-
 
 
 	// Tracking
@@ -205,7 +204,7 @@ let NEditor = function ( editor ) {
 	signals.followFace.add( function ( event ) {
 		let puppet = currentCharacter || editor.selected || null;
 
-		if( puppet!==null ) {
+		if ( puppet !== null ) {
 			puppet.position.x = event.x;
 			puppet.position.y = event.y;
 
@@ -217,8 +216,8 @@ let NEditor = function ( editor ) {
 	signals.followEmotion.add( function ( emotion ) {
 		let puppet = currentCharacter || editor.selected || null;
 
-		if( puppet!==null ) {
-			switch( emotion ) {
+		if ( puppet !== null ) {
+			switch ( emotion ) {
 				case EMOTION_TYPE.HAPPY:
 					emotion = 'happy';
 					break;
@@ -248,6 +247,35 @@ let NEditor = function ( editor ) {
 
 	} );
 
+	signals.followLeftEye.add( function ( state ) {
+		let puppet = currentCharacter || editor.selected || null;
+
+		if ( puppet !== null ) {
+
+			puppet.updateLeftEye( state );
+			editor.signals.sceneGraphChanged.dispatch();
+		}
+	} );
+
+	signals.followRightEye.add( function ( state ) {
+		let puppet = currentCharacter || editor.selected || null;
+
+		if ( puppet !== null ) {
+
+			puppet.updateRightEye( state );
+			editor.signals.sceneGraphChanged.dispatch();
+		}
+	} );
+
+	signals.followMouth.add( function ( state ) {
+		let puppet = currentCharacter || editor.selected || null;
+
+		if ( puppet !== null ) {
+
+			puppet.updateMouth( state );
+			editor.signals.sceneGraphChanged.dispatch();
+		}
+	} );
 
 	return container;
 

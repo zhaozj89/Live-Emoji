@@ -25,6 +25,11 @@ var Editor = function () {
 
 		followEmotion: new Signal(),
 
+		followLeftEye: new Signal(),
+		followRightEye: new Signal(),
+
+		followMouth: new Signal(),
+
 		turnOnOffFaceTracking: new Signal(),
 
 		// skinning

@@ -32,7 +32,8 @@ var PRELOAD_JSON = {
 		"neutral" : "images/mouth/neutral.png",
 		"sad" : "images/mouth/sad.png",
 		"surprised" : "images/mouth/surprised.png",
-		"disgusted": "images/mouth/disgusted.png"
+		"disgusted": "images/mouth/disgusted.png",
+		"open" : "images/mouth/open.png"
 	},
 	"nose" :
 	{
