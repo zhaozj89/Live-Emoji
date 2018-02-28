@@ -125,8 +125,8 @@ Sidebar.Camera = function ( editor ) {
 
 	overlayedPanel.add( DebugCanvas );
 
-	var debugInf = new UI.Text('For debug usage');
-	debugInf.setId('debugInf');
+	var debugInf = new UI.Text( 'For debug usage' );
+	debugInf.setId( 'debugInf' );
 	container.add( debugInf );
 
 	var startButton = new UI.Button( 'Start' );
@@ -257,10 +257,6 @@ Sidebar.Camera = function ( editor ) {
 
 
 	// Setup Models
-
-	var emotionClassifer = new EmotionClassifier();
-	emotionClassifer.init( EmotionModel );
-
 	var ctrack = new clm.tracker( { useWebGL: true } );
 	ctrack.init();
 
@@ -305,7 +301,7 @@ Sidebar.Camera = function ( editor ) {
 		// measure
 		//GetFaceEmotion();
 
-		measurement = GetFaceLandmark();
+		measurement = GetFaceEmotionAndLandmark();
 
 		// correct
 		if ( measurement === null ) {
@@ -374,45 +370,45 @@ Sidebar.Camera = function ( editor ) {
 	}
 
 	//load models
-	var KerasJS = require("keras-js");
-	var ndarray = require("ndarray");
-	var ops = require("ndarray-ops");
-	const blinkmodelLeft = new KerasJS.Model({
+	var KerasJS = require( "keras-js" );
+	var ndarray = require( "ndarray" );
+	var ops = require( "ndarray-ops" );
+	const blinkmodelLeft = new KerasJS.Model( {
 		filepath: './js/face/blink.bin',
 		gpu: true
-	});
-	const blinkmodelRight = new KerasJS.Model({
+	} );
+	const blinkmodelRight = new KerasJS.Model( {
 		filepath: './js/face/blink.bin',
 		gpu: true
-	});
+	} );
 
-	const emotionmodel = new KerasJS.Model({
+	const emotionmodel = new KerasJS.Model( {
 		filepath: './js/face/emotion.bin',
 		gpu: true
-	});
+	} );
 
 	//define canvas for image processing
-	var captureCanvas = document.createElement('canvas');		// internal canvas for capturing full images from video stream
+	var captureCanvas = document.createElement( 'canvas' );		// internal canvas for capturing full images from video stream
 	captureCanvas.width = 250;  //should be the same as videoStream.dom.width in Camera.js
 	captureCanvas.height = 200; //should be the same as videoStream.dom.height in Camera.js
-	var captureContext = captureCanvas.getContext('2d');
+	var captureContext = captureCanvas.getContext( '2d' );
 
-	var FaceCanvas = document.createElement('canvas');
+	var FaceCanvas = document.createElement( 'canvas' );
 	FaceCanvas.width = 48;
 	FaceCanvas.height = 48;
-	var FaceContext  = FaceCanvas.getContext('2d');
+	var FaceContext = FaceCanvas.getContext( '2d' );
 
-	var LeftEyeCanvas = document.createElement('canvas');
+	var LeftEyeCanvas = document.createElement( 'canvas' );
 	LeftEyeCanvas.width = 24;
 	LeftEyeCanvas.height = 24;
-	var LeftEyeContext  = LeftEyeCanvas.getContext('2d');
+	var LeftEyeContext = LeftEyeCanvas.getContext( '2d' );
 
-	var RightEyeCanvas = document.createElement('canvas');
+	var RightEyeCanvas = document.createElement( 'canvas' );
 	RightEyeCanvas.width = 24;
 	RightEyeCanvas.height = 24;
-	var RightEyeContext  = RightEyeCanvas.getContext('2d');
+	var RightEyeContext = RightEyeCanvas.getContext( '2d' );
 
-	function GetFaceLandmark () {
+	function GetFaceEmotionAndLandmark () {
 		let positions = ctrack.getCurrentPosition();
 
 		if ( positions ) {
@@ -422,15 +418,15 @@ Sidebar.Camera = function ( editor ) {
 			// } );
 
 			//Blink & Emotion detection
-			eyeRectRight.x = positions[23][0] - 5;
-			eyeRectRight.y = positions[24][1] - 7;
-			eyeRectRight.w = positions[25][0] - positions[23][0] + 10;
-			eyeRectRight.h = positions[26][1] - positions[24][1] + 14;
+			eyeRectRight.x = positions[ 23 ][ 0 ] - 5;
+			eyeRectRight.y = positions[ 24 ][ 1 ] - 7;
+			eyeRectRight.w = positions[ 25 ][ 0 ] - positions[ 23 ][ 0 ] + 10;
+			eyeRectRight.h = positions[ 26 ][ 1 ] - positions[ 24 ][ 1 ] + 14;
 
-			eyeRectLeft.x = positions[30][0] - 5;
-			eyeRectLeft.y = positions[29][1] - 7;
-			eyeRectLeft.w = positions[28][0] - positions[30][0] + 10;
-			eyeRectLeft.h = positions[31][1] - positions[29][1] + 14;
+			eyeRectLeft.x = positions[ 30 ][ 0 ] - 5;
+			eyeRectLeft.y = positions[ 29 ][ 1 ] - 7;
+			eyeRectLeft.w = positions[ 28 ][ 0 ] - positions[ 30 ][ 0 ] + 10;
+			eyeRectLeft.h = positions[ 31 ][ 1 ] - positions[ 29 ][ 1 ] + 14;
 
 			/*
 			FaceRect.x = positions[0][0] - 5;
@@ -439,154 +435,150 @@ Sidebar.Camera = function ( editor ) {
 			FaceRect.h = positions[7][1] - positions[20][1] + 14;
 			*/
 
-			FaceRect.x = positions[0][0] - 20;
-			FaceRect.y = positions[20][1] - 30;
+			FaceRect.x = positions[ 0 ][ 0 ] - 20;
+			FaceRect.y = positions[ 20 ][ 1 ] - 30;
 			//FaceRect.w = positions[14][0] - positions[0][0] + 10;
-			FaceRect.w = FaceRect.h = positions[7][1] - positions[20][1] + 30;
+			FaceRect.w = FaceRect.h = positions[ 7 ][ 1 ] - positions[ 20 ][ 1 ] + 30;
 
 			var width = 24;
 			var height = 24;
-			captureContext.drawImage(videoStream.dom, 0, 0, videoStreamWidth, videoStreamHeight);
+			captureContext.drawImage( videoStream.dom, 0, 0, videoStreamWidth, videoStreamHeight );
 
-			LeftEyeContext.drawImage(captureCanvas, eyeRectLeft.x, eyeRectLeft.y, eyeRectLeft.w, eyeRectLeft.h, 0, 0, LeftEyeCanvas.width , LeftEyeCanvas.height);
-			var LeftImageData = LeftEyeContext.getImageData(0,0,LeftEyeCanvas.width , LeftEyeCanvas.height);
-			var LeftImageGray = grayscale(LeftImageData,0.5);
+			LeftEyeContext.drawImage( captureCanvas, eyeRectLeft.x, eyeRectLeft.y, eyeRectLeft.w, eyeRectLeft.h, 0, 0, LeftEyeCanvas.width, LeftEyeCanvas.height );
+			var LeftImageData = LeftEyeContext.getImageData( 0, 0, LeftEyeCanvas.width, LeftEyeCanvas.height );
+			var LeftImageGray = grayscale( LeftImageData, 0.5 );
 			var LeftEyedata = LeftImageGray.data;
 
-			RightEyeContext.drawImage(captureCanvas, eyeRectRight.x, eyeRectRight.y, eyeRectRight.w, eyeRectRight.h, 0, 0, RightEyeCanvas.width , RightEyeCanvas.height);
-			var RightImageData = RightEyeContext.getImageData(0,0,RightEyeCanvas.width , RightEyeCanvas.height);
-			var RightImageGray = grayscale(RightImageData,0.5);
+			RightEyeContext.drawImage( captureCanvas, eyeRectRight.x, eyeRectRight.y, eyeRectRight.w, eyeRectRight.h, 0, 0, RightEyeCanvas.width, RightEyeCanvas.height );
+			var RightImageData = RightEyeContext.getImageData( 0, 0, RightEyeCanvas.width, RightEyeCanvas.height );
+			var RightImageGray = grayscale( RightImageData, 0.5 );
 			var RightEyedata = RightImageGray.data;
 
-			FaceContext.drawImage(captureCanvas,FaceRect.x, FaceRect.y, FaceRect.w, FaceRect.h, 0, 0, FaceCanvas.width, FaceCanvas.height);
-			var FaceImageData = FaceContext.getImageData(0,0,FaceCanvas.width , FaceCanvas.height);
-			var FaceImageGray = grayscale(FaceImageData,0);
+			FaceContext.drawImage( captureCanvas, FaceRect.x, FaceRect.y, FaceRect.w, FaceRect.h, 0, 0, FaceCanvas.width, FaceCanvas.height );
+			var FaceImageData = FaceContext.getImageData( 0, 0, FaceCanvas.width, FaceCanvas.height );
+			var FaceImageGray = grayscale( FaceImageData, 0 );
 			var Facedata = FaceImageGray.data;
 
 			blinkmodelLeft.ready()
-				.then(() => {
-					var dataTensor = ndarray(new Float32Array(LeftEyedata), [width, height, 4])
-					var dataProcessedTensor = ndarray(new Float32Array(width * height * 3), [width, height, 3])
-					ops.divseq(dataTensor, 255)
-					ops.subseq(dataTensor, 0.5)
-					ops.mulseq(dataTensor, 2)
-					ops.assign(dataProcessedTensor.pick(null, null, 0), dataTensor.pick(null, null, 0))
-					ops.assign(dataProcessedTensor.pick(null, null, 1), dataTensor.pick(null, null, 1))
-					ops.assign(dataProcessedTensor.pick(null, null, 2), dataTensor.pick(null, null, 2))
-					var preprocessedData = dataProcessedTensor.data;
-					var inputData = { "input": preprocessedData }
-					return blinkmodelLeft.predict(inputData)
-				})
-				.then(outputData => {
-					if(outputData.output < 0.2) {
-						FACE_INFORMATION['left_eye'] = EYE_STATUS.CLOSE;
-					}
-					else{
-						FACE_INFORMATION['left_eye'] = EYE_STATUS.OPEN;
-					}
-				})
-				.catch(err => {
-					console.log(err)
-				})
+			.then( () => {
+				var dataTensor = ndarray( new Float32Array( LeftEyedata ), [ width, height, 4 ] )
+				var dataProcessedTensor = ndarray( new Float32Array( width * height * 3 ), [ width, height, 3 ] )
+				ops.divseq( dataTensor, 255 )
+				ops.subseq( dataTensor, 0.5 )
+				ops.mulseq( dataTensor, 2 )
+				ops.assign( dataProcessedTensor.pick( null, null, 0 ), dataTensor.pick( null, null, 0 ) )
+				ops.assign( dataProcessedTensor.pick( null, null, 1 ), dataTensor.pick( null, null, 1 ) )
+				ops.assign( dataProcessedTensor.pick( null, null, 2 ), dataTensor.pick( null, null, 2 ) )
+				var preprocessedData = dataProcessedTensor.data;
+				var inputData = { "input": preprocessedData }
+				return blinkmodelLeft.predict( inputData )
+			} )
+			.then( outputData => {
+				if ( outputData.output < 0.2 ) {
+					FACE_INFORMATION[ 'left_eye' ] = EYE_STATUS.CLOSE;
+				}
+				else {
+					FACE_INFORMATION[ 'left_eye' ] = EYE_STATUS.OPEN;
+				}
+			} )
+			.catch( err => {
+				console.log( err )
+			} )
 
 			blinkmodelRight.ready()
-				.then(() => {
-					var dataTensor = ndarray(new Float32Array(RightEyedata), [width, height, 4])
-					var dataProcessedTensor = ndarray(new Float32Array(width * height * 3), [width, height, 3])
-					ops.divseq(dataTensor, 255)
-					ops.subseq(dataTensor, 0.5)
-					ops.mulseq(dataTensor, 2)
-					ops.assign(dataProcessedTensor.pick(null, null, 0), dataTensor.pick(null, null, 0))
-					ops.assign(dataProcessedTensor.pick(null, null, 1), dataTensor.pick(null, null, 1))
-					ops.assign(dataProcessedTensor.pick(null, null, 2), dataTensor.pick(null, null, 2))
-					var preprocessedData = dataProcessedTensor.data;
-					var inputData = { "input": preprocessedData }
-					return blinkmodelRight.predict(inputData)
-				})
-				.then(outputData => {
-					if(outputData.output < 0.2) {
-						FACE_INFORMATION['right_eye'] = EYE_STATUS.CLOSE;
-					}
-					else{
-						FACE_INFORMATION['right_eye'] = EYE_STATUS.OPEN;
-					}
-				})
-				.catch(err => {
-					console.log(err)
-				})
+			.then( () => {
+				var dataTensor = ndarray( new Float32Array( RightEyedata ), [ width, height, 4 ] )
+				var dataProcessedTensor = ndarray( new Float32Array( width * height * 3 ), [ width, height, 3 ] )
+				ops.divseq( dataTensor, 255 )
+				ops.subseq( dataTensor, 0.5 )
+				ops.mulseq( dataTensor, 2 )
+				ops.assign( dataProcessedTensor.pick( null, null, 0 ), dataTensor.pick( null, null, 0 ) )
+				ops.assign( dataProcessedTensor.pick( null, null, 1 ), dataTensor.pick( null, null, 1 ) )
+				ops.assign( dataProcessedTensor.pick( null, null, 2 ), dataTensor.pick( null, null, 2 ) )
+				var preprocessedData = dataProcessedTensor.data;
+				var inputData = { "input": preprocessedData }
+				return blinkmodelRight.predict( inputData )
+			} )
+			.then( outputData => {
+				if ( outputData.output < 0.2 ) {
+					FACE_INFORMATION[ 'right_eye' ] = EYE_STATUS.CLOSE;
+				}
+				else {
+					FACE_INFORMATION[ 'right_eye' ] = EYE_STATUS.OPEN;
+				}
+			} )
+			.catch( err => {
+				console.log( err )
+			} )
 
 
 			emotionmodel.ready()
-				.then(() => {
-					var dataTensor = ndarray(new Float32Array(Facedata), [FaceCanvas.width, FaceCanvas.height, 4]);
-					var dataProcessedTensor = ndarray(new Float32Array(FaceCanvas.width * FaceCanvas.height * 1), [FaceCanvas.width, FaceCanvas.height, 1]);
+			.then( () => {
+				var dataTensor = ndarray( new Float32Array( Facedata ), [ FaceCanvas.width, FaceCanvas.height, 4 ] );
+				var dataProcessedTensor = ndarray( new Float32Array( FaceCanvas.width * FaceCanvas.height * 1 ), [ FaceCanvas.width, FaceCanvas.height, 1 ] );
 
-					ops.divseq(dataTensor, 255)
-					ops.subseq(dataTensor, 0.5)
-					ops.mulseq(dataTensor, 2)
-					ops.assign(dataProcessedTensor.pick(null, null, 0), dataTensor.pick(null, null, 0))
-					var preprocessedData = dataProcessedTensor.data
-					var inputData = { "input": preprocessedData }
-					return emotionmodel.predict(inputData)
-				})
-				.then(outputData => {
-					var emotions = new Array();
-					emotions[0] = {value: outputData.output[0], label: 'angry'};
-					emotions[1] = {value: outputData.output[1], label: 'disgust'};
-					emotions[2] = {value: outputData.output[2], label: 'fear'};
-					emotions[3] = {value: outputData.output[3], label: 'happy'};
-					emotions[4] = {value: outputData.output[4], label: 'sad'};
-					emotions[5] = {value: outputData.output[5], label: 'surprised'};
-					emotions[6] = {value: outputData.output[6], label: 'neutral'};
+				ops.divseq( dataTensor, 255 )
+				ops.subseq( dataTensor, 0.5 )
+				ops.mulseq( dataTensor, 2 )
+				ops.assign( dataProcessedTensor.pick( null, null, 0 ), dataTensor.pick( null, null, 0 ) )
+				var preprocessedData = dataProcessedTensor.data
+				var inputData = { "input": preprocessedData }
+				return emotionmodel.predict( inputData )
+			} )
+			.then( outputData => {
+				var emotions = new Array();
+				emotions[ 0 ] = { value: outputData.output[ 0 ], label: 'angry' };
+				emotions[ 1 ] = { value: outputData.output[ 1 ], label: 'disgust' };
+				emotions[ 2 ] = { value: outputData.output[ 2 ], label: 'fear' };
+				emotions[ 3 ] = { value: outputData.output[ 3 ], label: 'happy' };
+				emotions[ 4 ] = { value: outputData.output[ 4 ], label: 'sad' };
+				emotions[ 5 ] = { value: outputData.output[ 5 ], label: 'surprised' };
+				emotions[ 6 ] = { value: outputData.output[ 6 ], label: 'neutral' };
 
-					var emotionvalue = '';
-					var mostPossible = '';
-					var temp = 0;
-					for (i = 0; i < 7;i++){
-						emotionvalue += emotions[i].label + ": " + (emotions[i].value * 100).toFixed(1) + "% ";//e.g. disgusted: 15.1%
-						if (temp < emotions[i].value){ //获取最高概率的情绪mostPossible
-							temp = emotions[i].value;
-							mostPossible = emotions[i].label;
-						}
+				var emotionvalue = '';
+				var mostPossible = '';
+				var temp = 0;
+				for ( i = 0; i < 7; i++ ) {
+					emotionvalue += emotions[ i ].label + ": " + ( emotions[ i ].value * 100 ).toFixed( 1 ) + "% ";//e.g. disgusted: 15.1%
+					if ( temp < emotions[ i ].value ) { //获取最高概率的情绪mostPossible
+						temp = emotions[ i ].value;
+						mostPossible = emotions[ i ].label;
 					}
+				}
 
-					switch ( mostPossible ) {
-						case 'happy':
-							FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.HAPPY;
-							break;
-						case 'sad':
-							FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SAD;
-							break;
-						case 'surprised':
-							FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SURPRISED;
-							break;
-						case 'angry':
-							FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.ANGRY;
-							break;
-						case 'neutral':
-							FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
-							break;
-						default:
-							FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
-							break;
-					}
-					signals.followEmotion.dispatch( FACE_INFORMATION[ 'emotion' ] );
+				switch ( mostPossible ) {
+					case 'happy':
+						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.HAPPY;
+						break;
+					case 'sad':
+						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SAD;
+						break;
+					case 'surprised':
+						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SURPRISED;
+						break;
+					case 'angry':
+						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.ANGRY;
+						break;
+					case 'neutral':
+						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
+						break;
+					default:
+						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
+						break;
+				}
+				signals.followEmotion.dispatch( FACE_INFORMATION[ 'emotion' ] );
 
-					//show debug information about eyes and emotion, should delete it after completion
-					debugInf.setValue('left:'+ FACE_INFORMATION['left_eye'] + '   right:' + FACE_INFORMATION['right_eye'] + ' ' +
-						"Predicted emotions: " + mostPossible + " " + "Possibilities of all emotions: " + emotionvalue);
-				})
-				.catch(err => {
-					console.log(err)
-				});
+				//show debug information about eyes and emotion, should delete it after completion
+				debugInf.setValue( 'left:' + FACE_INFORMATION[ 'left_eye' ] + '   right:' + FACE_INFORMATION[ 'right_eye' ] + ' ' +
+					"Predicted emotions: " + mostPossible + " " + "Possibilities of all emotions: " + emotionvalue );
+			} )
+			.catch( err => {
+				console.log( err )
+			} );
 
 			//show debug information about eyes, should delete it after completion
 			//debugInf.setValue('left:'+ FACE_INFORMATION['left_eye'] + '   right:' + FACE_INFORMATION['right_eye'] + ' ' +
 			//"Predicted emotions: " + mostPossible + " " + "Possibilities of all emotions: " + emotionvalue);
-
-
-
-
 
 
 			let resX = 0;
@@ -660,43 +652,6 @@ Sidebar.Camera = function ( editor ) {
 		// 	res.x *= 10;
 		// 	res.y *= 10;
 		// }
-	}
-
-	function GetFaceEmotion () {
-
-		//var mostPossibleEmotion = "";
-
-
-		var mostPossibleEmotion = "";
-		var highestVal = 0;
-		var emotionRes = emotionClassifer.meanPredict( ctrack.getCurrentParameters() );
-
-		for ( let i = 0; i < emotionRes.length; ++i ) {
-			if ( highestVal < emotionRes[ i ].value ) {
-				highestVal = emotionRes[ i ].value;
-				mostPossibleEmotion = emotionRes[ i ].emotion;
-			}
-		}
-
-		switch ( mostPossibleEmotion ) {
-			case 'happy':
-				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.HAPPY;
-				break;
-			case 'sad':
-				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SAD;
-				break;
-			case 'surprised':
-				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SURPRISED;
-				break;
-			case 'angry':
-				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.ANGRY;
-				break;
-			default:
-				FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
-				break;
-		}
-
-		signals.followEmotion.dispatch( FACE_INFORMATION[ 'emotion' ] );
 	}
 
 	function DrawLandmark () {
