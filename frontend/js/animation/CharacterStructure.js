@@ -6,6 +6,40 @@ class BasicElement {
 	}
 };
 
+function BackgroundStructure ( name ) {
+	THREE.Group.call( this );
+
+	this.name = name;
+
+	this.add2Scene = new signals.Signal();
+	this.isComplete = 0;
+
+	// this.all_mesh = new THREE.Group();
+	// this.all_mesh.name = 'all_mesh';
+	// this.add( this.all_mesh );
+
+	this.all = [];
+}
+
+BackgroundStructure.prototype = Object.create( THREE.Group.prototype );
+BackgroundStructure.prototype.constructor = BackgroundStructure;
+
+BackgroundStructure.prototype.check = function () {
+	if( this.isComplete === 1 ) {
+		this.add2Scene.dispatch( this );
+	}
+}
+
+BackgroundStructure.prototype.addElement = function ( basicElement ) {
+	this.all.push( basicElement );
+
+	// basicElement.mesh.visible = false;
+	this.add( basicElement.mesh );
+
+	this.isComplete++;
+	this.check();
+}
+
 function CharacterStructure ( name ) {
 	THREE.Group.call( this );
 
