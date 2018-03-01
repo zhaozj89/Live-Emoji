@@ -33,7 +33,7 @@ BackgroundStructure.prototype.check = function () {
 BackgroundStructure.prototype.addElement = function ( basicElement ) {
 	this.all.push( basicElement );
 
-	// basicElement.mesh.visible = false;
+	basicElement.mesh.visible = false;
 	this.add( basicElement.mesh );
 
 	this.isComplete++;
