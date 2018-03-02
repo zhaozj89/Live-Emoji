@@ -827,10 +827,12 @@ var LoadCharacterJSON = function ( file ) {
 	}
 };
 
+var characterStructure = null;
+
 var PreLoadCharacterJSON = function () {
 	let loader = PRELOAD_JSON;
 
-	let characterStructure = new CharacterStructure( 'qin_emotion' );
+	characterStructure = new CharacterStructure( 'qin_emotion' );
 	characterStructure.add2Scene.add( function ( obj ) {
 		editor.execute( new AddObjectCommand( obj ) );
 	} );
@@ -849,10 +851,12 @@ var PreLoadCharacterJSON = function () {
 	}
 };
 
+var backgroundStructure = null;
+
 var PreLoadBackgroundJSON = function () {
 	let loader = PRELOAD_BACKGROUND_JSON;
 
-	let backgroundStructure = new BackgroundStructure( 'background' );
+	backgroundStructure = new BackgroundStructure( 'background' );
 	backgroundStructure.add2Scene.add( function ( obj ) {
 		editor.execute( new AddObjectCommand( obj ) );
 	} );

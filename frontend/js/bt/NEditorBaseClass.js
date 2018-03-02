@@ -32,6 +32,21 @@ class LeafInput {
 		this.domElement.appendChild( that.text.dom );
 	}
 
+	addObjectInput () {
+		let that = this;
+		this.domElement.textContent = 'object: ';
+		let selectMenu = new UI.Select();
+		selectMenu.setOptions( {
+			"Character": "character",
+			"Texture": "texture",
+			"Text": "text"
+		} );
+		this.domElement.appendChild( selectMenu.dom );
+		$( selectMenu.dom ).change( function () {
+			that.arg = selectMenu.getValue();
+		} );
+	}
+
 	addSelectionInput ( options ) {
 		let that = this;
 		this.selectMenu = new UI.Select();
@@ -107,10 +122,10 @@ class NodeInput {
 		let allEmotions = {
 			'Happy': 'happy',
 			'Sad': 'sad',
-			'Surprise': 'surprise',
-			'Disgust': 'disgust',
+			'Surprise': 'surprised',
+			'Disgust': 'disgusted',
 			'Angry': 'angry',
-			'Fear': 'fear',
+			'Fear': 'fearful',
 			'Neutral': 'neutral'
 		};
 

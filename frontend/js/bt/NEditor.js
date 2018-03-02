@@ -110,6 +110,7 @@ let NEditor = function ( editor ) {
 	let buttonTranslation = menuActions.addLi( 'Translation' );
 	let buttonRotation = menuActions.addLi( 'Rotation' );
 	let buttonSleep = menuActions.addLi( 'Sleep' );
+	let buttonSwap = menuActions.addLi( 'Swap' );
 	Actions.appendChild( menuActions.dom );
 
 	menu.dom.style.position = 'absolute';
@@ -135,7 +136,7 @@ let NEditor = function ( editor ) {
 		// } );
 
 		$( Composite ).click( function () {
-			nodeManager.addNode( 'selector' );
+			nodeManager.addNode( 'sequence' );
 		} );
 
 		// $( buttonSequence ).click( function () {
@@ -166,6 +167,9 @@ let NEditor = function ( editor ) {
 			nodeManager.addNode( 'text' );
 		} );
 
+		$( buttonSwap ).click( function () {
+			nodeManager.addNode( 'swap' );
+		} );
 
 		$( Runner ).click( function () {
 			// currentAST = nodeManager.getAST();

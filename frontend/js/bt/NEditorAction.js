@@ -109,3 +109,24 @@ class SleepNode extends Node {
 		return {'tween': tween, 'state': true, 'pose': targetPose};
 	}
 }
+
+class SwapNode extends Node {
+	constructor ( type ) {
+		super( 'Action: ' + type );
+
+		// this.objectOptions = new LeafInput( 'Object: ' );
+		// this.objectOptions.addObjectInput();
+		//
+		// this.addInput( this.objectOptions );
+
+		this.addOutput();
+	}
+
+	run( obj, info ) {
+		// let val = this.objectOptions.arg;
+		// console.log( val );
+
+		obj.updateEmotion( info );
+		editor.signals.sceneGraphChanged.dispatch();
+	}
+}
