@@ -9,7 +9,7 @@ class NodeManager {
 		this.signals = signals;
 	}
 
-	addNode ( type, currentCharacter ) {
+	addNode ( type ) {
 		switch ( type ) {
 			case 'key_trigger': {
 				let node = new KeyTriggerNode ( type );
@@ -53,8 +53,22 @@ class NodeManager {
 				break;
 			}
 
-			case 'object': {
-				let node = new CharacterNode ( type, currentCharacter );
+			case 'character': {
+				let node = new CharacterNode ( type );
+				node.moveTo ( { x: 300, y: 80 } );
+				node.initUI ( this.container );
+				break;
+			}
+
+			case 'texture': {
+				let node = new TextureNode ( type );
+				node.moveTo ( { x: 300, y: 80 } );
+				node.initUI ( this.container );
+				break;
+			}
+
+			case 'text': {
+				let node = new TextNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ( this.container );
 				break;

@@ -80,23 +80,30 @@ let NEditor = function ( editor ) {
 	menu.setId( 'menu' );
 	menu.addLi( 'Modules', 'ui-state-disabled' );
 
-	let Triggers = menu.addLi( 'Trigger' );
+	let Trigger = menu.addLi( 'Trigger' );
 	let Objects = menu.addLi( 'Object' );
-	let Composites = menu.addLi( 'Composite' );
+	let Composite = menu.addLi( 'Composite' );
 	let Actions = menu.addLi( 'Action' );
 	let Runner = menu.addLi( 'Start' );
 
 	/////////////////////////////////////////////////////////////////
-	let menuTriggers = new UI.UList();
-	let buttonKeyboard = menuTriggers.addLi( 'Keyboard' );
-	let buttonTick = menuTriggers.addLi( 'Tick' );
-	Triggers.appendChild( menuTriggers.dom );
+	// let menuTriggers = new UI.UList();
+	// let buttonKeyboard = menuTriggers.addLi( 'Keyboard' );
+	// let buttonTick = menuTriggers.addLi( 'Tick' );
+	// Triggers.appendChild( menuTriggers.dom );
+
+	let menuObjects = new UI.UList();
+	let characterObject = menuObjects.addLi( 'Character' );
+	let textureObject = menuObjects.addLi( 'Texture' );
+	let textObject = menuObjects.addLi( 'Text' );
+	Objects.appendChild( menuObjects.dom );
+
 
 	/////////////////////////////////////////////////////////////////
-	let menuComposites = new UI.UList();
-	let buttonSelector = menuComposites.addLi( 'Selector (OR)' );
-	let buttonSequence = menuComposites.addLi( 'Sequence (AND)' );
-	Composites.appendChild( menuComposites.dom );
+	// let menuComposites = new UI.UList();
+	// let buttonSelector = menuComposites.addLi( 'Selector (OR)' );
+	// let buttonSequence = menuComposites.addLi( 'Sequence (AND)' );
+	// Composites.appendChild( menuComposites.dom );
 
 	/////////////////////////////////////////////////////////////////
 	let menuActions = new UI.UList();
@@ -119,21 +126,21 @@ let NEditor = function ( editor ) {
 		$( menu.dom ).draggable();
 		$( "#menu" ).menu();
 
-		$( buttonKeyboard ).click( function () {
+		$( Trigger ).click( function () {
 			nodeManager.addNode( 'key_trigger' );
 		} );
 
-		$( buttonTick ).click( function () {
-			nodeManager.addNode( 'tick_trigger' );
-		} );
+		// $( buttonTick ).click( function () {
+		// 	nodeManager.addNode( 'tick_trigger' );
+		// } );
 
-		$( buttonSelector ).click( function () {
+		$( Composite ).click( function () {
 			nodeManager.addNode( 'selector' );
 		} );
 
-		$( buttonSequence ).click( function () {
-			nodeManager.addNode( 'sequence' );
-		} );
+		// $( buttonSequence ).click( function () {
+		// 	nodeManager.addNode( 'sequence' );
+		// } );
 
 		$( buttonTranslation ).click( function () {
 			nodeManager.addNode( 'translation' );
@@ -147,10 +154,18 @@ let NEditor = function ( editor ) {
 			nodeManager.addNode( 'sleep' );
 		} );
 
-		$( Objects ).click( function () {
-			if ( currentCharacter === null ) alert( 'Please select an object first!' );
-			else nodeManager.addNode( 'object', currentCharacter );
+		$( characterObject ).click( function () {
+			nodeManager.addNode( 'character' );
 		} );
+
+		$( textureObject ).click( function () {
+			nodeManager.addNode( 'texture' );
+		} );
+
+		$( textObject ).click( function () {
+			nodeManager.addNode( 'text' );
+		} );
+
 
 		$( Runner ).click( function () {
 			// currentAST = nodeManager.getAST();

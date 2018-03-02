@@ -9,7 +9,7 @@ var Sidebar2 = function ( editor ) {
 
 	var heartValueText = new UI.Div();
 	heartValueText.setId( 'heartValueText' );
-	heartValueText.setWidth( '20px' );
+	heartValueText.setWidth( '50px' );
 	heartValueText.setHeight( '20px' );
 	heartValueText.setTextContent( '1' );
 	heartValueText.dom.style.backgroundColor = 'white';

@@ -99,28 +99,48 @@ class NodeInput {
 		} );
 	}
 
-	addCharacterInput ( obj ) {
-		this.arg = obj;
+	addCharacterInput () {
+		this.arg = '';
 
-		this.domElement.textContent = 'object: ';
+		this.domElement.textContent = 'character: ';
 
-		let allObjNames = {};
-		let allObjs = {}
-		allObjNames[ obj.name ] = obj.name;
-		allObjs[ obj.name ] = obj;
-
-		for ( let i = 0; i < obj.children.length; ++i ) {
-			allObjNames[ obj.children[ i ].name ] = obj.children[ i ].name;
-			allObjs[ obj.children[ i ].name ] = obj.children[ i ];
-		}
+		let allEmotions = {
+			'Happy': 'happy',
+			'Sad': 'sad',
+			'Surprise': 'surprise',
+			'Disgust': 'disgust',
+			'Angry': 'angry',
+			'Fear': 'fear',
+			'Neutral': 'neutral'
+		};
 
 		let that = this;
 		let selectMenu = new UI.Select();
-		selectMenu.setOptions( allObjNames );
+		selectMenu.setOptions( allEmotions );
 
 		this.domElement.appendChild( selectMenu.dom );
 		$( selectMenu.dom ).change( function () {
-			that.arg = allObjs[ selectMenu.getValue() ];
+			that.arg = allEmotions[ selectMenu.getValue() ];
+			console.log( that.arg );
+		} );
+	}
+
+	addTextureInput () {
+		this.arg = '';
+
+		this.domElement.textContent = 'texture: ';
+
+		let allEmotions = {
+			'Fire': 'fire'
+		};
+
+		let that = this;
+		let selectMenu = new UI.Select();
+		selectMenu.setOptions( allEmotions );
+
+		this.domElement.appendChild( selectMenu.dom );
+		$( selectMenu.dom ).change( function () {
+			that.arg = allEmotions[ selectMenu.getValue() ];
 			console.log( that.arg );
 		} );
 	}

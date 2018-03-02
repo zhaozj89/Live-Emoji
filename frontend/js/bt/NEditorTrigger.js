@@ -2,6 +2,24 @@ class KeyTriggerNode extends Node {
 	constructor ( type ) {
 		super( 'Trigger: ' + type );
 
+		this.semanticName = new LeafInput( 'Emotion: ' );
+		this.semanticName.addTextInput();
+
+		this.addInput( this.semanticName );
+
+		this.valence = new LeafInput( 'Happiness: ' );
+		this.valence.addTextInput();
+
+		this.addInput( this.valence );
+
+		this.arousal = new LeafInput( 'Heartbeat: ' );
+		this.arousal.addTextInput();
+
+		this.addInput( this.arousal );
+
+		let breaker2 = new UI.Break();
+		this.domElement.appendChild( breaker2.dom );
+
 		// UI
 
 		this.counter = 1;
