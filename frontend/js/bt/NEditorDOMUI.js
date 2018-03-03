@@ -3,7 +3,7 @@ var CreateTitle = function ( name ) {
 	dom.classList.add( 'x-node' );
 	dom.setAttribute( 'title', name );
 	return dom;
-}
+};
 
 var CreateRemoveButton = function ( that ) {
 	let dom = document.createElement( 'button' );
@@ -29,7 +29,7 @@ var CreateRemoveButton = function ( that ) {
 		that.domElement.remove();
 	} );
 	return dom;
-}
+};
 
 var CreateOutput = function ( that ) {
 	let dom = document.createElement( 'span' );
@@ -46,7 +46,7 @@ var CreateOutput = function ( that ) {
 	};
 
 	return dom;
-}
+};
 
 var CreateInput = function ( that ) {
 	let dom = document.createElement( 'div' );
@@ -78,7 +78,7 @@ var CreateInput = function ( that ) {
 	} );
 
 	return dom;
-}
+};
 
 var CreatePath = function ( canvas ) {
 	let path = document.createElementNS( canvas.ns, 'path' );
@@ -87,4 +87,4 @@ var CreatePath = function ( canvas ) {
 	path.setAttributeNS( null, 'fill', 'none' );
 	canvas.appendChild( path );
 	return path;
-}
+};

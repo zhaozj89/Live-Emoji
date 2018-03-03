@@ -20,15 +20,15 @@ class NodeManager {
 				break;
 			}
 
-			case 'tick_trigger': {
-				let node = new TickTriggerNode ( type );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ( this.container );
-				this.tick_triggers.push ( node );
-				break;
-			}
+			// case 'tick_trigger': {
+			// 	let node = new TickTriggerNode ( type );
+			// 	node.moveTo ( { x: 300, y: 80 } );
+			// 	node.initUI ( this.container );
+			// 	this.tick_triggers.push ( node );
+			// 	break;
+			// }
 
-			case 'selector':
+			// case 'selector':
 			case 'sequence': {
 				let node = new CompositeNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
@@ -37,16 +37,24 @@ class NodeManager {
 				break;
 			}
 
-			case 'translation': {
-				let node = new TranslationNode ( type );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ( this.container );
-				// this.nodes.push( node );
-				break;
-			}
+			// case 'translation': {
+			// 	let node = new TranslationNode ( type );
+			// 	node.moveTo ( { x: 300, y: 80 } );
+			// 	node.initUI ( this.container );
+			// 	// this.nodes.push( node );
+			// 	break;
+			// }
+			//
+			// case 'rotation': {
+			// 	let node = new RotationNode ( type );
+			// 	node.moveTo ( { x: 300, y: 80 } );
+			// 	node.initUI ( this.container );
+			// 	// this.nodes.push( node );
+			// 	break;
+			// }
 
-			case 'rotation': {
-				let node = new RotationNode ( type );
+			case 'particle': {
+				let node = new ParticleNode( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ( this.container );
 				// this.nodes.push( node );
@@ -83,12 +91,12 @@ class NodeManager {
 				break;
 			}
 
-			case 'sleep': {
-				let node = new SleepNode( type );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ( this.container );
-				break;
-			}
+			// case 'sleep': {
+			// 	let node = new SleepNode( type );
+			// 	node.moveTo ( { x: 300, y: 80 } );
+			// 	node.initUI ( this.container );
+			// 	break;
+			// }
 
 			default:
 				alert( type + ', no such node, need to create one!' );

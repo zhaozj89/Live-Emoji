@@ -47,6 +47,19 @@ class LeafInput {
 		} );
 	}
 
+	addColorInput () {
+		let that = this;
+
+		let inp = new UI.Input( '' );
+		inp.dom.type = 'color';
+		inp.setId( 'html5colorpicker' );
+		inp.setValue( '#ff0000' );
+
+		this.domElement.appendChild( inp.dom );
+
+		return inp;
+	}
+
 	addSelectionInput ( options ) {
 		let that = this;
 		this.selectMenu = new UI.Select();
@@ -172,6 +185,7 @@ class NodeInput {
 
 class Node {
 	constructor ( type ) {
+		if( type===null ) return;
 		this.type = type;
 
 		this.output = null;

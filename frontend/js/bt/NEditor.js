@@ -10,6 +10,8 @@ let NEditor = function ( editor ) {
 	container.setBackgroundColor( '#272822' );
 	container.setDisplay( 'none' );
 
+	container.dom.style.zIndex = "5";
+
 	var header = new UI.Panel();
 	header.setPadding( '10px' );
 	container.add( header );
@@ -43,7 +45,7 @@ let NEditor = function ( editor ) {
 	let graphSVG = ( function () {
 		let svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
 		svg.setAttribute( 'position', 'absolute' );
-		svg.setAttribute( 'z-index', 1 );
+		svg.setAttribute( 'z-index', 5 );
 		svg.setAttribute( 'width', '100%' );
 		svg.setAttribute( 'height', '100%' );
 		svg.setAttribute( 'id', 'node-graph' );
@@ -107,10 +109,11 @@ let NEditor = function ( editor ) {
 
 	/////////////////////////////////////////////////////////////////
 	let menuActions = new UI.UList();
-	let buttonTranslation = menuActions.addLi( 'Translation' );
-	let buttonRotation = menuActions.addLi( 'Rotation' );
-	let buttonSleep = menuActions.addLi( 'Sleep' );
+	// let buttonTranslation = menuActions.addLi( 'Translation' );
+	// let buttonRotation = menuActions.addLi( 'Rotation' );
+	// let buttonSleep = menuActions.addLi( 'Sleep' );
 	let buttonSwap = menuActions.addLi( 'Swap' );
+	let buttonParticle = menuActions.addLi( 'Texture Motion' );
 	Actions.appendChild( menuActions.dom );
 
 	menu.dom.style.position = 'absolute';
@@ -143,16 +146,20 @@ let NEditor = function ( editor ) {
 		// 	nodeManager.addNode( 'sequence' );
 		// } );
 
-		$( buttonTranslation ).click( function () {
-			nodeManager.addNode( 'translation' );
-		} );
+		// $( buttonTranslation ).click( function () {
+		// 	nodeManager.addNode( 'translation' );
+		// } );
 
-		$( buttonRotation ).click( function () {
-			nodeManager.addNode( 'rotation' );
-		} );
+		// $( buttonRotation ).click( function () {
+		// 	nodeManager.addNode( 'rotation' );
+		// } );
 
-		$( buttonSleep ).click( function () {
-			nodeManager.addNode( 'sleep' );
+		// $( buttonSleep ).click( function () {
+		// 	nodeManager.addNode( 'sleep' );
+		// } );
+
+		$( buttonParticle ).click( function (  ) {
+			nodeManager.addNode( 'particle' );
 		} );
 
 		$( characterObject ).click( function () {
