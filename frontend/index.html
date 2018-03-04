@@ -22,6 +22,12 @@
 	<script src="./asset/qin_v3/qin_emotion_preload.js"></script>
 	<script src="./asset/background/background_preload.js"></script>
 
+	<script src="js/libs/p5/p5.js"></script>
+	<script src="js/libs/p5/p5.dom.js"></script>
+	<script src="js/libs/p5/p5.sound.js"></script>
+	<script src="js/P5Canvas.js"></script>
+	<script src="js/P5Code.js"></script>
+
 	<!--skinning-->
 	<script src="js/animation/BBW.js"></script>
 	<script src="js/animation/Skinning.js"></script>
@@ -121,6 +127,7 @@
 	<script src="js/animation/Mesher.js"></script>
 
 	<!-- my behavior tree library -->
+	<script src="js/bt/ParticleSystem.js"></script>
 	<script src="js/bt/NEditorBindedKeys.js"></script>
 
 	<script src="js/bt/NEditorTriggerFunctions.js"></script>
@@ -164,6 +171,9 @@
 
 	var viewport = new Viewport( editor );
 	document.body.appendChild( viewport.dom );
+
+	var p5canvas = new P5Canvas( editor );
+	document.body.appendChild( p5canvas.dom );
 
 	var sidebar = new Sidebar( editor );
 	document.body.appendChild( sidebar.dom );

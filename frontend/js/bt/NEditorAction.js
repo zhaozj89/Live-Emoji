@@ -122,12 +122,12 @@ class SwapNode extends Node {
 		this.addOutput();
 	}
 
-	run( obj, info ) {
+	run( obj, info, extra_info ) {
 		// let val = this.objectOptions.arg;
 		// console.log( val );
 
 		obj.updateEmotion( info );
-		editor.signals.sceneGraphChanged.dispatch();
+		extra_info.editor.signals.sceneGraphChanged.dispatch();
 	}
 }
 
@@ -231,20 +231,42 @@ class ParticleNode extends Node {
 
 
 	run ( obj, info, extra_info ) {
-		console.log( this.sourceStrokes );
-		console.log( this.travelStrokes );
-		console.log( obj );
-		console.log( info );
-		console.log( this.canvasWidth );
-		console.log(this.canvasHeight);
-		console.log( extra_info );
+		// console.log( this.sourceStrokes );
+		// console.log( this.travelStrokes );
+		// console.log( obj );
+		// console.log( info );
+		// console.log( this.canvasWidth );
+		// console.log(this.canvasHeight);
+		// console.log( extra_info );
 
-		for( let i=0; i<obj.all.length; ++i ) {
-			console.log( obj.all[i] );
-			if(obj.all[i].name === info ) {
-				obj.all[i].mesh.visible = true;
-			}
-		}
+		let sourceStrokes = this.sourceStrokes;
+		let travelStrokes = this.travelStrokes;
+		// let canvasWidth = this.canvasWidth;
+		// let canvasHeight = this.canvasHeight;
+
+		// function animate () {
+		//
+		// }
+
+		// for( let i=0; i<obj.all.length; ++i ) {
+		//
+		// 	if(obj.all[i].name === info ) {
+		// 		let cur_obj = obj.all[i].mesh;
+		// 		extra_info.editor.execute( new SetScaleCommand( cur_obj, new THREE.Vector3( 0.5, 0.5, 0.5 ) ) );
+		// 		extra_info.editor.execute( new SetPositionCommand( cur_obj, new THREE.Vector3( 0, 0, 5 ) ) );
+		// 		// cur_obj.visible = true;
+		//
+		// 		let particleSystem = new ParticleSystem( sourceStrokes, travelStrokes, cur_obj, extra_info.editor );
+		//
+		// 		for( let k=0; k<100; ++k ) {
+		//
+		// 			particleSystem.addParticle();
+		// 			particleSystem.run();
+		// 		}
+		//
+		// 		extra_info.editor.signals.sceneGraphChanged.dispatch();
+		// 	}
+		// }
 	}
 }
 

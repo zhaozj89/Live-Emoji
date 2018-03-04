@@ -49,6 +49,19 @@ Vector2.prototype.cross = function (rhs) {
   return (this.x*rhs.y - this.y*rhs.x);
 }
 
+Vector2.prototype.normalize = function (  ) {
+	let dist = Math.sqrt( this.x*this.x + this.y*this.y );
+	this.x /= dist;
+	this.y /= dist;
+	return;
+}
+
+
+Vector2.prototype.length = function (  ) {
+	let dist = Math.sqrt( this.x*this.x + this.y*this.y );
+	return dist;
+}
+
 var CopyVector2Array = function (arr) {
   let res = new Array();
 
