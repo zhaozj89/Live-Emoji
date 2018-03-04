@@ -32,6 +32,12 @@ var Editor = function () {
 
 		turnOnOffFaceTracking: new Signal(),
 
+
+		// action signals
+
+		runBackgroundTexturePattern: new Signal(),
+		runBackgroundText: new Signal(),
+
 		// skinning
 
 		skinningChangeMode: new Signal(),

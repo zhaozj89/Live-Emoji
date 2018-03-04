@@ -221,6 +221,14 @@ class ParticleNode extends Node {
 		let sourceStrokes = this.sourceStrokes;
 		let travelStrokes = this.travelStrokes;
 
+		let msg = {
+			sourceStrokes: sourceStrokes,
+			travelStrokes: travelStrokes,
+			textureName: info
+		};
+
+		extra_info.editor.signals.runBackgroundTexturePattern.dispatch( msg );
+
 		// for( let i=0; i<obj.all.length; ++i ) {
 		//
 		// 	if(obj.all[i].name === info ) {
