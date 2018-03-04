@@ -1,4 +1,4 @@
-class Particle {
+class MyParticle {
 	constructor ( x, y, /*theta,*/ dx, dy, /*dtheta,*/ numParticles ) {
 		this.x = x;
 		this.y = y;
@@ -22,7 +22,7 @@ class Particle {
 	}
 
 	clone () {
-		let copy = new Particle( this.x, this.y, /*this.theta,*/ this.dx, this.dy, /*this.dtheta,*/ this.numParticles );
+		let copy = new MyParticle( this.x, this.y, /*this.theta,*/ this.dx, this.dy, /*this.dtheta,*/ this.numParticles );
 		return copy;
 	}
 }
@@ -47,7 +47,7 @@ class ParticleFilter {
 
 		this.particles = [];
 		for ( let i = 0; i < numParticles; ++i ) {
-			let particle = new Particle( this.x, this.y, /*this.theta,*/ 0, 0, /*this.dtheta,*/ this.numParticles );
+			let particle = new MyParticle( this.x, this.y, /*this.theta,*/ 0, 0, /*this.dtheta,*/ this.numParticles );
 			this.particles.push( particle );
 		}
 	}

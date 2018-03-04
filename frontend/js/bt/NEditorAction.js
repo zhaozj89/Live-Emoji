@@ -228,7 +228,10 @@ class ParticleNode extends Node {
 				extra_info.editor.execute( new SetScaleCommand( cur_obj, new THREE.Vector3( 0.5, 0.5, 0.5 ) ) );
 				extra_info.editor.execute( new SetPositionCommand( cur_obj, new THREE.Vector3( 0, 0, 5 ) ) );
 
-				let particleSystem = new ParticleSystem( sourceStrokes, travelStrokes, cur_obj, extra_info.editor );
+				let particleSystem = new ParticleSystem( sourceStrokes, travelStrokes, cur_obj, extra_info.editor,
+					this.canvasWidth, this.canvasHeight,
+					extra_info.right - extra_info.left,
+					extra_info.bottom - extra_info.top );
 
 				for( let k=0; k<100; ++k ) {
 

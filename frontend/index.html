@@ -40,6 +40,12 @@
 	<script src="js/libs/three.js"></script>
 	<script src="js/libs/ui.three.js"></script>
 
+	<script src="js/libs/p5/p5.js"></script>
+	<script src="js/libs/p5/p5.dom.js"></script>
+	<script src="js/libs/p5/p5.sound.js"></script>
+	<script src="js/P5Code.js"></script>
+
+
 	<!--other threejs modules-->
 	<script src="js/libs/examples/js/libs/system.min.js"></script>
 	<script src="js/libs/examples/js/renderers/Projector.js"></script>
@@ -165,9 +171,6 @@
 
 	var viewport = new Viewport( editor );
 	document.body.appendChild( viewport.dom );
-
-	var p5canvas = new P5Canvas( editor );
-	document.body.appendChild( p5canvas.dom );
 
 	var sidebar = new Sidebar( editor );
 	document.body.appendChild( sidebar.dom );
@@ -328,7 +331,7 @@
 	function animate () {
 
 		requestAnimationFrame( animate );
-		TWEEN.update();
+		// TWEEN.update();
 
 		editor.signals.animateRender.dispatch();
 

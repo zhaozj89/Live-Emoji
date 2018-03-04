@@ -8,7 +8,8 @@ class MyParticle {
 		this.editor = editor;
 
 		this.obj.visible = true;
-		this.editor.execute( new SetPositionCommand( this.obj, new THREE.Vector3( this.position.x, this.position.y, 5 ) ) );
+		this.editor.execute( new AddObjectCommand( this.obj ) );
+		this.editor.execute( new SetPositionCommand( this.obj, new THREE.Vector3( this.position.x, this.position.y, -5 ) ) );
 	}
 
 	run( velocityPathes ) {
@@ -17,7 +18,7 @@ class MyParticle {
 			let path = velocityPathes[prop];
 
 			for( let i=0; i<path.length; ++i ) {
-				let dist = Math.pow( path[i].position.sub( this.position ).dist, 0.2 );
+				let dist = Math.pow( path[i].position.sub( this.position ).length(), 0.2 );
 				resVel.x += path[i].vx / dist;
 				resVel.y += path[i].vy / dist;
 			}
@@ -27,7 +28,7 @@ class MyParticle {
 		this.position.add(resVel);
 		this.lifespan -= 1.0;
 
-		this.editor.signals.sceneGraphChanged.dispatch();
+		this.editor.signals.animateRender.dispatch();
 	}
 
 
@@ -47,7 +48,9 @@ class VelocityPathElement {
 	}
 }
 
-function VelocityPath ( points ) {
+function VelocityPath ( points,
+						canvasWidth, canvasHeight,
+						width, height) {
 	// this.points = points;
 
 	let res=[];
@@ -63,29 +66,12 @@ function VelocityPath ( points ) {
 			let pre_point = points[idx-1];
 
 			let velocity = new Vector2(0,0);
-			velocity.x = cur_point.x - pre_point.x;
-			velocity.y = cur_point.y - pre_point.y;
+			velocity.x = ( cur_point.x - pre_point.x )*width / canvasWidth;
+			velocity.y = ( cur_point.y - pre_point.y )*height / canvasHeight;
 
 			velocity.normalize();
 
-			let el = new VelocityPathElement(cur_point.x, cur_point.y, velocity.x, velocity.y);
-			res.push(el);
-		}
-	}
-	else {
-		for (let k=1; k<points.length; ++k) {
-			let idx = Math.floor( k );
-
-			let cur_point = points[idx];
-			let pre_point = points[idx-1];
-
-			let velocity = new Vector2(0,0);
-			velocity.x = cur_point.x - pre_point.x;
-			velocity.y = cur_point.y - pre_point.y;
-
-			velocity.normalize();
-
-			let el = new VelocityPathElement(cur_point.x, cur_point.y, velocity.x, velocity.y);
+			let el = new VelocityPathElement(cur_point.x*width/canvasWidth, cur_point.y*height/canvasHeight, velocity.x, velocity.y);
 			res.push(el);
 		}
 	}
@@ -96,7 +82,9 @@ function VelocityPath ( points ) {
 
 class ParticleSystem {
 
-	constructor ( sourceStrokes, travelStrokes, obj, editor ) {
+	constructor ( sourceStrokes, travelStrokes, obj, editor,
+				  canvasWidth, canvasHeight,
+				  width, height) {
 		this.particles = [];
 		this.obj = obj;
 
@@ -105,8 +93,8 @@ class ParticleSystem {
 			let current_stroke = sourceStrokes[prop];
 			for(let i=0; i<current_stroke.length; ++i) {
 				let current_point = current_stroke[i];
-				start_point.x += current_point.x;
-				start_point.y += current_point.y;
+				start_point.x += ( current_point.x * width) /canvasWidth;
+				start_point.y += ( current_point.y * height) / canvasHeight;
 			}
 			start_point = start_point.divideScalar( current_stroke.length );
 			console.log( 'start point: ' + start_point );
@@ -121,7 +109,10 @@ class ParticleSystem {
 		this.velocityPathes = {};
 		for (let prop in travelStrokes) {
 			let current_stroke = travelStrokes[prop];
-			let path = VelocityPath( current_stroke );
+			let path = VelocityPath( current_stroke,
+				canvasWidth, canvasHeight,
+				width, height );
+			if(path.length===[]) continue;
 			this.velocityPathes[prop] = path;
 		}
 	}

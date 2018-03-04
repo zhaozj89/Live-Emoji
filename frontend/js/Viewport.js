@@ -14,6 +14,11 @@ var Viewport = function ( editor ) {
 
 	//
 
+	$( function (  ) {
+		console.log( 'view port width: ' + container.dom.clientWidth );
+		console.log( 'view port height: ' + container.dom.clientHeight );
+	} );
+
 	var renderer = null;
 
 	var camera = editor.camera;

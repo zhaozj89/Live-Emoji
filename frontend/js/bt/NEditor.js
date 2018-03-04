@@ -127,6 +127,7 @@ let NEditor = function ( editor ) {
 
 	// jQuery methods go here ...
 	$( function () {
+
 		$( menu.dom ).draggable();
 		$( "#menu" ).menu();
 
