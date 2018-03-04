@@ -206,7 +206,6 @@ class ParticleNode extends Node {
 		this.brushCanvas = new BrushCanvas( this.sourceStrokes, this.travelStrokes, this, source, travel );
 		document.body.appendChild( this.brushCanvas.dom );
 
-
 		this.sourceStrokeCounter = 0;
 		this.travelStrokeCounter = 0;
 
@@ -216,57 +215,30 @@ class ParticleNode extends Node {
 			that.canvasWidth = canvas.width;
 			that.canvasHeight = canvas.height;
 		} );
-
-		// let canvas = this.brushCanvas.dom.firstChild;
-		// let ctx = canvas.getContext( '2d' );
-
-		// $( source.dom ).change( function () {
-		// 	ctx.strokeStyle = source.getValue();
-		// } );
-		//
-		// $( travel.dom ).change( function () {
-		// 	ctx.strokeStyle = travel.getValue();
-		// } );
 	}
 
-
 	run ( obj, info, extra_info ) {
-		// console.log( this.sourceStrokes );
-		// console.log( this.travelStrokes );
-		// console.log( obj );
-		// console.log( info );
-		// console.log( this.canvasWidth );
-		// console.log(this.canvasHeight);
-		// console.log( extra_info );
-
 		let sourceStrokes = this.sourceStrokes;
 		let travelStrokes = this.travelStrokes;
-		// let canvasWidth = this.canvasWidth;
-		// let canvasHeight = this.canvasHeight;
 
-		// function animate () {
-		//
-		// }
+		for( let i=0; i<obj.all.length; ++i ) {
 
-		// for( let i=0; i<obj.all.length; ++i ) {
-		//
-		// 	if(obj.all[i].name === info ) {
-		// 		let cur_obj = obj.all[i].mesh;
-		// 		extra_info.editor.execute( new SetScaleCommand( cur_obj, new THREE.Vector3( 0.5, 0.5, 0.5 ) ) );
-		// 		extra_info.editor.execute( new SetPositionCommand( cur_obj, new THREE.Vector3( 0, 0, 5 ) ) );
-		// 		// cur_obj.visible = true;
-		//
-		// 		let particleSystem = new ParticleSystem( sourceStrokes, travelStrokes, cur_obj, extra_info.editor );
-		//
-		// 		for( let k=0; k<100; ++k ) {
-		//
-		// 			particleSystem.addParticle();
-		// 			particleSystem.run();
-		// 		}
-		//
-		// 		extra_info.editor.signals.sceneGraphChanged.dispatch();
-		// 	}
-		// }
+			if(obj.all[i].name === info ) {
+				let cur_obj = obj.all[i].mesh;
+				extra_info.editor.execute( new SetScaleCommand( cur_obj, new THREE.Vector3( 0.5, 0.5, 0.5 ) ) );
+				extra_info.editor.execute( new SetPositionCommand( cur_obj, new THREE.Vector3( 0, 0, 5 ) ) );
+
+				let particleSystem = new ParticleSystem( sourceStrokes, travelStrokes, cur_obj, extra_info.editor );
+
+				for( let k=0; k<100; ++k ) {
+
+					particleSystem.addParticle();
+					particleSystem.run();
+				}
+
+				extra_info.editor.signals.sceneGraphChanged.dispatch();
+			}
+		}
 	}
 }
 
@@ -297,9 +269,6 @@ var BrushCanvas = function ( sourceStrokes, travelStrokes, that, source, travel 
 		let isDrawing = false;
 
 		resizeCanvasToDisplaySize( canvas.dom );
-
-		// console.log( 'canvas width: ' + canvasWidth);
-		// console.log( 'canvas height: ' + canvasHeight);
 
 		$( canvas.dom ).mousedown( function ( event ) {
 			isDrawing = true;
