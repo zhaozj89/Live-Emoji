@@ -108,7 +108,7 @@ Menubar.File = function ( editor ) {
 	options.add( option2 );
 
 	PreLoadCharacterJSON();
-	PreLoadBackgroundJSON();
+	// PreLoadBackgroundJSON();
 
 	return container;
 

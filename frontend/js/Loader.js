@@ -851,59 +851,59 @@ var PreLoadCharacterJSON = function () {
 	}
 };
 
-var backgroundStructure = null;
-
-var PreLoadBackgroundJSON = function () {
-	let loader = PRELOAD_BACKGROUND_JSON;
-
-	backgroundStructure = new BackgroundStructure( 'background' );
-	backgroundStructure.add2Scene.add( function ( obj ) {
-		editor.execute( new AddObjectCommand( obj ) );
-	} );
-
-	for ( let prop in loader ) {
-
-		if ( typeof( loader[ prop ] ) === 'string' ) {
-			LoadFileNameofBackground( backgroundStructure, prop, '', loader[ prop ] );
-			continue;
-		}
-
-		// if ( typeof( loader[ prop ] ) === 'object' ) {
-		// 	for ( let prop2 in loader[ prop ] ) LoadFileName( characterStructure, prop, prop2, loader[ prop ][ prop2 ] );
-		// 	continue;
-		// }
-	}
-};
-
-var LoadFileNameofBackground = function ( backgroundStructure, name, emotion, filename ) {
-
-	var xhr = new XMLHttpRequest();
-	xhr.open( 'GET', './asset/background/' + filename, true );
-	xhr.responseType = 'arraybuffer';
-
-	xhr.onload = function ( event ) {
-		if ( this.status == 404 ) {
-			console.log( filename );
-		}
-
-		if ( this.status == 200 ) {
-			var reader = new PNGReader( this.response );
-			reader.parse( function ( err, png ) {
-				if ( err ) throw err;
-				let mesh = ZContour( png );
-
-				mesh.geometry.translate( -5, -5, 0 );
-
-				if ( emotion === '' ) mesh.name = name;
-				else mesh.name = emotion;
-
-				let basicElement = new BasicElement( name, mesh, emotion );
-				backgroundStructure.addElement( basicElement );
-			} );
-		}
-	};
-
-	xhr.send();
-};
-
-
+// var backgroundStructure = null;
+//
+// var PreLoadBackgroundJSON = function () {
+// 	let loader = PRELOAD_BACKGROUND_JSON;
+//
+// 	backgroundStructure = new BackgroundStructure( 'background' );
+// 	backgroundStructure.add2Scene.add( function ( obj ) {
+// 		editor.execute( new AddObjectCommand( obj ) );
+// 	} );
+//
+// 	for ( let prop in loader ) {
+//
+// 		if ( typeof( loader[ prop ] ) === 'string' ) {
+// 			LoadFileNameofBackground( backgroundStructure, prop, '', loader[ prop ] );
+// 			continue;
+// 		}
+//
+// 		// if ( typeof( loader[ prop ] ) === 'object' ) {
+// 		// 	for ( let prop2 in loader[ prop ] ) LoadFileName( characterStructure, prop, prop2, loader[ prop ][ prop2 ] );
+// 		// 	continue;
+// 		// }
+// 	}
+// };
+//
+// var LoadFileNameofBackground = function ( backgroundStructure, name, emotion, filename ) {
+//
+// 	var xhr = new XMLHttpRequest();
+// 	xhr.open( 'GET', './asset/background/' + filename, true );
+// 	xhr.responseType = 'arraybuffer';
+//
+// 	xhr.onload = function ( event ) {
+// 		if ( this.status == 404 ) {
+// 			console.log( filename );
+// 		}
+//
+// 		if ( this.status == 200 ) {
+// 			var reader = new PNGReader( this.response );
+// 			reader.parse( function ( err, png ) {
+// 				if ( err ) throw err;
+// 				let mesh = ZContour( png );
+//
+// 				mesh.geometry.translate( -5, -5, 0 );
+//
+// 				if ( emotion === '' ) mesh.name = name;
+// 				else mesh.name = emotion;
+//
+// 				let basicElement = new BasicElement( name, mesh, emotion );
+// 				backgroundStructure.addElement( basicElement );
+// 			} );
+// 		}
+// 	};
+//
+// 	xhr.send();
+// };
+//
+//

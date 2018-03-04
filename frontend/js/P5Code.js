@@ -6,7 +6,7 @@ var particle_texture = null;
 var ps = null;
 
 function preload() {
-	particle_texture = loadImage("./asset/particle_texture.png");
+	particle_texture = loadImage("./asset/background/images/fire_small.png");
 }
 function setup() {
 
@@ -28,6 +28,9 @@ function setup() {
 
 	//initialize our particle system
 	ps = new ParticleSystem(0,createVector(width / 2, height - 60),particle_texture);
+
+	max_size = 10;
+	counter = 0;
 }
 
 // function draw() {
@@ -38,38 +41,23 @@ function setup() {
 // }
 
 function draw() {
-	// background('rgba(46,46,46, 0)');
+	clear();
+	background('rgba(46,46,46, 0)');
 
-	background(0);
+	// background(0);
 	var dx = map(mouseX,0,width,-0.2,0.2);
 	var wind = createVector(dx,0);
 
 	ps.applyForce(wind);
 	ps.run();
-	for (var i = 0; i < 2; i++) {
+
+	console.log('current particle number: ' + ps.particles.length);
+	if (counter<max_size) {
 		ps.addParticle();
+		counter++;
 	}
-
-	// Draw an arrow representing the wind force
-	drawVector(wind, createVector(width/2,50,0),500);
 }
 
-/**
- *  This function draws an arrow showing the direction our "wind" is blowing.
- */
-function drawVector(v,loc,scale){
-	push();
-	var arrowsize = 4;
-	translate(loc.x,loc.y);
-	stroke(255);
-	rotate(v.heading());
-
-	var len = v.mag() * scale;
-	line(0,0,len,0);
-	line(len,0,len-arrowsize,+arrowsize/2);
-	line(len,0,len-arrowsize,-arrowsize/2);
-	pop();
-}
 //========= PARTICLE SYSTEM ===========
 
 /**
@@ -83,7 +71,7 @@ var ParticleSystem = function(num,v,img_) {
 
 	this.particles = [];
 	this.origin = v.copy(); // we make sure to copy the vector value in case we accidentally mutate the original by accident
-	this.img = img_
+	this.img = img_;
 	for(var i = 0; i < num; ++i){
 		this.particles.push(new Particle(this.origin,this.img));
 	}
@@ -144,7 +132,7 @@ var Particle = function (pos, img_) {
 
 	this.vel = createVector(vx,vy);
 	this.acc = createVector();
-	this.lifespan = 100.0;
+	this.lifespan = 1000.0;
 	this.texture = img_;
 }
 

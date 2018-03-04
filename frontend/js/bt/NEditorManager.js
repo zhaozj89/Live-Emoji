@@ -142,8 +142,11 @@ class NodeManager {
 					let obj = null;
 					if(child_0['type']==='Character: character')
 						obj = characterStructure;
-					else if(child_0['type']==='Texture: texture')
-						obj = backgroundStructure;
+					else if(child_0['type']==='Texture: texture') {
+						// obj = backgroundStructure;
+
+						// DO something better
+					}
 					else {
 						alert ( 'Error in Behavior Tree!' );
 						return;
