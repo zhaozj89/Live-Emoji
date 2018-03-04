@@ -1,12 +1,16 @@
 class NodeManager {
-	constructor ( svgCanvas, container, signals ) {
+	constructor ( svgCanvas, container, editor ) {
 		NEDITOR_SVG_CANVAS = svgCanvas;
 		this.container = container;
 
-		this.tick_triggers = new Array ();
+		// this.tick_triggers = new Array ();
 		this.key_triggers = new Array ();
 
-		this.signals = signals;
+		this.signals = editor.signals;
+		this.left = editor.camera.left;
+		this.right = editor.camera.right;
+		this.top = editor.camera.top;
+		this.bottom = editor.camera.bottom;
 	}
 
 	addNode ( type ) {
@@ -105,6 +109,19 @@ class NodeManager {
 	}
 
 	runKeyTrigger ( keycode, updateSignal ) {
+
+		let left = this.left;
+		let right = this.right;
+		let top = this.top;
+		let bottom = this.bottom;
+
+		let extra_info = {
+			left: left,
+			right: right,
+			top: top,
+			bottom: bottom
+		};
+
 		for ( let i = 0; i < this.key_triggers.length; ++i ) {
 
 			let trigger_node = this.key_triggers[ i ];
@@ -143,7 +160,7 @@ class NodeManager {
 								for ( let i1 = 0; i1 < child_1_children.length; ++i1 ) {
 									let child_2 = child_1_children[ i1 ];
 
-									let res = child_2.run( obj, info );
+									let res = child_2.run( obj, info, extra_info );
 
 								}
 

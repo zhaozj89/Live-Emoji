@@ -196,12 +196,26 @@ class ParticleNode extends Node {
 
 		this.addOutput();
 
-		this.sourcePionts = [];
-		this.travelPoints = [];
+		this.sourceStrokes = {};
+		this.travelStrokes = {};
+
+		this.canvasWidth = 0;
+		this.canvasHeight = 0;
 
 		// add a canvas here
-		this.brushCanvas = new BrushCanvas( this.sourcePionts, this.travelPoints, this, source, travel );
+		this.brushCanvas = new BrushCanvas( this.sourceStrokes, this.travelStrokes, this, source, travel );
 		document.body.appendChild( this.brushCanvas.dom );
+
+
+		this.sourceStrokeCounter = 0;
+		this.travelStrokeCounter = 0;
+
+		let that = this;
+		$( function (  ) {
+			let canvas = that.brushCanvas.dom.firstChild;
+			that.canvasWidth = canvas.width;
+			that.canvasHeight = canvas.height;
+		} );
 
 		// let canvas = this.brushCanvas.dom.firstChild;
 		// let ctx = canvas.getContext( '2d' );
@@ -216,13 +230,26 @@ class ParticleNode extends Node {
 	}
 
 
-	run ( obj ) {
+	run ( obj, info, extra_info ) {
+		console.log( this.sourceStrokes );
+		console.log( this.travelStrokes );
+		console.log( obj );
+		console.log( info );
+		console.log( this.canvasWidth );
+		console.log(this.canvasHeight);
+		console.log( extra_info );
 
+		for( let i=0; i<obj.all.length; ++i ) {
+			console.log( obj.all[i] );
+			if(obj.all[i].name === info ) {
+				obj.all[i].mesh.visible = true;
+			}
+		}
 	}
 }
 
 
-var BrushCanvas = function ( sourcePoints, travelPoints, that, source, travel ) {
+var BrushCanvas = function ( sourceStrokes, travelStrokes, that, source, travel ) {
 	var container = new UI.Panel();
 	container.setId( 'brushCanvas' );
 	container.setPosition( 'absolute' );
@@ -245,26 +272,29 @@ var BrushCanvas = function ( sourcePoints, travelPoints, that, source, travel ) 
 	$( function () {
 		let ctx = canvas.dom.getContext( '2d' );
 
-		let flag = false,
-			prevX = 0,
-			currX = 0,
-			prevY = 0,
-			currY = 0;
-
 		let isDrawing = false;
 
 		resizeCanvasToDisplaySize( canvas.dom );
+
+		// console.log( 'canvas width: ' + canvasWidth);
+		// console.log( 'canvas height: ' + canvasHeight);
 
 		$( canvas.dom ).mousedown( function ( event ) {
 			isDrawing = true;
 
 			if ( that.strokeInput.selectMenu.getValue()==='SourceStroke' ) {
-				sourcePoints.push( (event.clientX, event.clientY - 32) );
+				let newStroke = [];
+				let name = 'SourceStroke' + that.sourceStrokeCounter;
+				sourceStrokes[name] = newStroke;
 				ctx.strokeStyle = source.getValue();
+				that.sourceStrokeCounter++;
 			}
 			else if ( that.strokeInput.selectMenu.getValue()==='TravelStroke' ) {
-				travelPoints.push( (event.clientX, event.clientY - 32) );
+				let newStroke = [];
+				let name = 'TravelStroke' + that.travelStrokeCounter;
+				travelStrokes[name] = newStroke;
 				ctx.strokeStyle = travel.getValue();
+				that.travelStrokeCounter++;
 			}
 			else {
 				isDrawing = false;
@@ -277,11 +307,15 @@ var BrushCanvas = function ( sourcePoints, travelPoints, that, source, travel ) 
 
 		$( canvas.dom ).mousemove( function ( event ) {
 			if ( isDrawing ) {
-				if ( that.strokeInput.selectMenu.getValue()==='source_stroke' ) {
-					sourcePoints.push( (event.clientX, event.clientY - 32) );
+				if ( that.strokeInput.selectMenu.getValue()==='SourceStroke' ) {
+					let tmp = new Vector2(event.clientX, event.clientY - 32);
+					let name = 'SourceStroke' + (that.sourceStrokeCounter-1);
+					sourceStrokes[name].push( tmp );
 				}
-				else if ( that.strokeInput.selectMenu.getValue()==='travel_stroke' ) {
-					travelPoints.push( (event.clientX, event.clientY - 32) );
+				else if ( that.strokeInput.selectMenu.getValue()==='TravelStroke' ) {
+					let tmp = new Vector2(event.clientX, event.clientY - 32);
+					let name = 'TravelStroke' + (that.travelStrokeCounter-1);
+					travelStrokes[name].push( tmp );
 				}
 
 				ctx.lineTo( event.clientX, event.clientY - 32 );

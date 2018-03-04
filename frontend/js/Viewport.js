@@ -480,6 +480,11 @@ var Viewport = function ( editor ) {
 		editor.DEFAULT_CAMERA.bottom = bottom;
 		editor.DEFAULT_CAMERA.updateProjectionMatrix();
 
+		console.log( 'camera left: ' + left );
+		console.log( 'camera right: ' + right );
+		console.log( 'camera top: ' + top );
+		console.log( 'camera bottom: ' + bottom );
+
 		camera.left = left;
 		camera.right = right;
 		camera.top = top;

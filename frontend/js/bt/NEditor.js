@@ -121,7 +121,7 @@ let NEditor = function ( editor ) {
 	menu.dom.style.top = '300px';
 	container.add( menu );
 
-	let nodeManager = new NodeManager( graphSVG, container.dom, signals );
+	let nodeManager = new NodeManager( graphSVG, container.dom, editor );
 
 	let startBehaviorTree = false;
 
@@ -214,9 +214,9 @@ let NEditor = function ( editor ) {
 		if ( puppet !== null && currentAST !== null ) return;
 
 
-		if ( event[ 'type' ] === 'tick' ) {
-			nodeManager.runTickTrigger( editor.signals.sceneGraphChanged );
-		}
+		// if ( event[ 'type' ] === 'tick' ) {
+		// 	nodeManager.runTickTrigger( editor.signals.sceneGraphChanged );
+		// }
 
 		if ( event[ 'type' ] === 'keyboard' ) {
 			nodeManager.runKeyTrigger( event[ 'keycode' ], editor.signals.sceneGraphChanged );
