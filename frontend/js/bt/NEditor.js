@@ -189,6 +189,8 @@ let NEditor = function ( editor ) {
 				Runner.children[ 0 ].textContent = ' Stop';
 
 			startBehaviorTree = !startBehaviorTree;
+
+			signals.runBackground.dispatch( startBehaviorTree );
 		} );
 	} );
 

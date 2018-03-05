@@ -227,7 +227,7 @@ class ParticleNode extends Node {
 			textureName: info
 		};
 
-		extra_info.editor.signals.runBackgroundTexturePattern.dispatch( msg );
+		extra_info.editor.signals.msgBackgroundTexturePattern.dispatch( msg );
 
 		// for( let i=0; i<obj.all.length; ++i ) {
 		//

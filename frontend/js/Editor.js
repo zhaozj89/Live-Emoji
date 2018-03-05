@@ -35,8 +35,8 @@ var Editor = function () {
 
 		// action signals
 
-		runBackgroundTexturePattern: new Signal(),
-		runBackgroundText: new Signal(),
+		msgBackgroundTexturePattern: new Signal(),
+		runBackground: new Signal(),
 
 		// skinning
 
