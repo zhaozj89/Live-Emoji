@@ -13,15 +13,15 @@ class CompositeNode extends Node {
 		let rower = new UI.Row();
 		let spanner0 = new UI.Span();
 		let spanner1 = new UI.Span();
-		let incrementer = new UI.Button( '+' );
-		let decrementer = new UI.Button( '-' );
+		this.incrementer = new UI.Button( '+' );
+		this.decrementer = new UI.Button( '-' );
 		let breaker = new UI.Break();
 
-		incrementer.setWidth( '50%' );
-		decrementer.setWidth( '50%' );
+		this.incrementer.setWidth( '50%' );
+		this.decrementer.setWidth( '50%' );
 
-		spanner0.add( incrementer );
-		spanner1.add( decrementer );
+		spanner0.add( this.incrementer );
+		spanner1.add( this.decrementer );
 
 		rower.add( spanner0 );
 		rower.add( spanner1 );
@@ -34,17 +34,34 @@ class CompositeNode extends Node {
 		++this.counter;
 
 		let that = this;
-		$( incrementer.dom ).click( function() {
+		$( this.incrementer.dom ).click( function() {
 			let input = new NodeInput( this );
 			input.domElement.textContent = 'channel ' + that.counter + ': ';
 			that.addInput( input );
 			++that.counter;
 		} );
 
-		$( decrementer.dom ).click( function() {
+		$( this.decrementer.dom ).click( function() {
 			if( that.counter<=1 ) return;
 			--that.counter;
 			that.removeInput();
 		} );
+	}
+
+	toJSON () {
+		return {
+			counter: this.counter
+		};
+	}
+
+	fromJSON (state) {
+		this.counter = state.counter;
+
+		for (let i=0; i<state.counter; ++i) {
+			let input = new NodeInput( this );
+
+			input.domElement.textContent = 'channel ' + i + ': ';
+			this.addInput( input );
+		}
 	}
 }

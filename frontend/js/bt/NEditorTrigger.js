@@ -121,7 +121,7 @@ class TriggerNode extends Node {
 			arousal: this.getArousal(),
 			key: this.getKey(),
 			counter: this.getCounter()
-		}
+		};
 	}
 
 	fromJSON (state) {

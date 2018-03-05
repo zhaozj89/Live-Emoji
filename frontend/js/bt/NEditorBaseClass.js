@@ -49,14 +49,14 @@ class LeafInput {
 	addColorInput () {
 		let that = this;
 
-		let inp = new UI.Input( '' );
-		inp.dom.type = 'color';
-		inp.setId( 'html5colorpicker' );
-		inp.setValue( '#ff0000' );
+		this.inp = new UI.Input( '' );
+		this.inp.dom.type = 'color';
+		// inp.setId( 'html5colorpicker' );
+		this.inp.setValue( '#ff0000' );
 
-		this.domElement.appendChild( inp.dom );
+		this.domElement.appendChild( this.inp.dom );
 
-		return inp;
+		return this.inp;
 	}
 
 	addSelectionInput ( options ) {
@@ -148,7 +148,7 @@ class NodeInput {
 		this.domElement.appendChild( selectMenu.dom );
 		$( selectMenu.dom ).change( function () {
 			that.arg = allEmotions[ selectMenu.getValue() ];
-			console.log( that.arg );
+			// console.log( that.arg );
 		} );
 	}
 

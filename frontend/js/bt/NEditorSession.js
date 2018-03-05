@@ -8,19 +8,59 @@ class NodeSession {
 
 	toJSON () {
 		return {
-			triggerNode: this.triggerNode.toJSON()
-			// objectNode: this.objectNode.toJSON(),
-			// sequenceNode: this.sequenceNode.toJSON(),
-			// actionNode: this.actionNode.toJSON()
+			triggerNode: this.triggerNode.toJSON(),
+			objectNode: this.objectNode.toJSON(),
+			sequenceNode: this.sequenceNode.toJSON(),
+			actionNode: this.actionNode.toJSON()
 		}
 	}
 
 	fromJSON ( state ) {
-		let node = new TriggerNode( 'trigger' );
-		node.fromJSON( state.triggerNode );
-		node.moveTo ( { x: 300, y: 80 } );
-		node.initUI ();
 
+		let node0 = new TriggerNode( 'trigger' );
+		node0.fromJSON( state.triggerNode );
+		node0.moveTo ( { x: 300, y: 80 } );
+		node0.initUI ();
+
+		switch (state.objectNode.type) {
+			case 'character': {
+				let node = new CharacterNode( 'character' );
+				node.fromJSON( state.objectNode );
+				node.moveTo ( { x: 300, y: 80 } );
+				node.initUI ();
+				break;
+			}
+
+			case 'texture': {
+				let node = new TextureNode ( 'texture' );
+				node.fromJSON( state.objectNode );
+				node.moveTo ( { x: 300, y: 80 } );
+				node.initUI ();
+				break;
+			}
+		}
+
+		let node1 = new CompositeNode( 'sequence' );
+		node1.fromJSON( state.sequenceNode );
+		node1.moveTo ( { x: 300, y: 80 } );
+		node1.initUI ();
+
+		switch (state.actionNode.type) {
+			case 'swap': {
+				let node = new SwapNode( 'swap' );
+				node.fromJSON( state.actionNode );
+				node.moveTo ( { x: 300, y: 80 } );
+				node.initUI ();
+				break;
+			}
+			case 'particle': {
+				let node = new ParticleNode( 'particle' );
+				node.fromJSON( state.actionNode );
+				node.moveTo ( { x: 300, y: 80 } );
+				node.initUI ();
+				break;
+			}
+		}
 	}
 
 	addNode ( type ) {
@@ -65,16 +105,16 @@ class NodeSession {
 				break;
 			}
 
-			case 'particle': {
-				let node = new ParticleNode( type );
+			case 'swap': {
+				let node = new SwapNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
 				this.actionNode = node;
 				break;
 			}
 
-			case 'swap': {
-				let node = new SwapNode ( type );
+			case 'particle': {
+				let node = new ParticleNode( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
 				this.actionNode = node;
