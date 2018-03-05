@@ -59,27 +59,31 @@ var P5Layer = function ( p ) {
 		container.dom.appendChild( canvasObj.canvas );
 
 		//initialize our particle system
-		ps = new ParticleSystem(0,p.createVector(p.width / 2, p.height - 60),fire_texture);
+		ps = new ParticleSystem();
 	}
 
-	// function draw() {
-	// 	background('rgba(46,46,46, 0)');
-	// 	frameRate( 30 );
-	// 	system.addParticle();
-	// 	system.run();
-	// }
-
 	p.draw = function () {
+		// 	frameRate( 30 );
 		p.clear();
 		p.background('rgba(46,46,46, 0)');
 
 		if( runBackground===true ) {
-			var dx = p.map(p.mouseX,0,p.width,-0.2,0.2);
-			var wind = p.createVector(dx,0);
+			if(sourceStrokes!==null) {
+				let texture = null;
+				switch (textureName) {
+					case 'fire':
+						texture = fire_texture;
+						break;
+				}
+				ps.updateSystemInfo( sourceStrokes, texture );
 
-			ps.applyForce(wind);
-			ps.run();
-			ps.addParticle();
+				var dx = p.map(p.mouseX,0,p.width,-0.2,0.2);
+				var wind = new Vector2(dx,0);
+
+				ps.applyForce(wind);
+				ps.run();
+				ps.addParticle();
+			}
 		}
 	}
 
@@ -87,15 +91,32 @@ var P5Layer = function ( p ) {
 	class ParticleSystem {
 		constructor ( num,v,img_ ) {
 			this.particles = [];
-			this.origin = v.copy(); // we make sure to copy the vector value in case we accidentally mutate the original by accident
-			this.img = img_;
-			for(let i = 0; i < num; ++i){
-				this.particles.push(new Particle(this.origin,this.img));
-			}
+		}
+
+		updateSystemInfo ( sourceStrokes, image ) {
+			this.sourceStrokes = sourceStrokes;
+			this.img = image;
 		}
 
 		addParticle () {
-			this.particles.push(new Particle(this.origin,this.img));
+			for (let prop in this.sourceStrokes) {
+				let strokePoints = sourceStrokes[prop];
+
+				// sampling
+				let sample_size = 21;
+				if( strokePoints.length>sample_size ) {
+					let step = strokePoints.length / sample_size;
+
+					for (let k=1; k<sample_size; ++k) {
+						let idx = Math.floor( k*step );
+
+						let cur_point = strokePoints[idx];
+
+						if( this.particles.length<50 )
+							this.particles.push(new Particle(cur_point, this.img));
+					}
+				}
+			}
 		}
 
 		run () {
@@ -128,16 +149,16 @@ var P5Layer = function ( p ) {
 
 
 	class Particle {
-		constructor ( pos, img_ ) {
-			this.loc = pos.copy();
+		constructor ( pos, image ) {
+			this.loc = pos.clone();
 
 			let vx = p.randomGaussian() * 0.3;
 			let vy = p.randomGaussian() * 0.3 - 1.0;
 
-			this.vel = p.createVector(vx,vy);
-			this.acc = p.createVector();
-			this.lifespan = 1000.0;
-			this.texture = img_;
+			this.vel = new Vector2(vx,vy);
+			this.acc = new Vector2(0,0);
+			this.lifespan = 800.0;
+			this.texture = image;
 		}
 
 		run () {
@@ -152,7 +173,7 @@ var P5Layer = function ( p ) {
 		}
 
 		applyForce (f) {
-			this.acc.add(f);
+			this.acc = this.acc.add(f);
 		}
 
 		isDead() {
@@ -164,10 +185,10 @@ var P5Layer = function ( p ) {
 		}
 
 		update () {
-			this.vel.add(this.acc);
-			this.loc.add(this.vel);
+			this.vel = this.vel.add(this.acc);
+			this.loc = this.loc.add(this.vel);
 			this.lifespan -= 2.5;
-			this.acc.mult(0);
+			this.acc = this.acc.multiplyScalar(0);
 		}
 	}
 };
