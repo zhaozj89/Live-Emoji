@@ -25,11 +25,10 @@ class LeafInput {
 	}
 
 	addTextInput () {
-		let that = this;
 		this.text = new UI.Input();
 		this.text.setValue('');
 
-		this.domElement.appendChild( that.text.dom );
+		this.domElement.appendChild( this.text.dom );
 	}
 
 	addObjectInput () {
@@ -82,7 +81,7 @@ class NodeInput {
 		this.currentNode = currentNode;
 
 		this.domElement = CreateInput( this );
-		this.path = CreatePath( NEDITOR_SVG_CANVAS );
+		this.path = CreatePath( Global_Graph_SVG );
 	}
 
 	addNumberInput () {
@@ -299,7 +298,7 @@ class Node {
 		this.updatePosition();
 	}
 
-	initUI ( my_container ) {
+	initUI () {
 		var that = this;
 
 		$( this.domElement ).draggable( {
@@ -311,7 +310,7 @@ class Node {
 		} );
 
 		this.domElement.style.position = 'absolute';
-		my_container.appendChild( this.domElement );
+		Global_NEditor_Container.appendChild( this.domElement );
 		this.updatePosition();
 	}
 

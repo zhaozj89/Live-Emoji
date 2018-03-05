@@ -1,4 +1,45 @@
-class KeyTriggerNode extends Node {
+class TriggerNode extends Node {
+
+	setSemanticName (name) {
+		this.semanticName.text.setValue( name );
+	}
+
+	getSemanticName() {
+		return this.semanticName.text.getValue();
+	}
+
+	setValence (valence) {
+		this.valence.text.setValue(valence);
+	}
+
+	getValence() {
+		return this.valence.text.getValue();
+	}
+
+	setArousal (arousal) {
+		this.arousal.text.setValue(arousal);
+	}
+
+	getArousal() {
+		return this.arousal.text.getValue();
+	}
+
+	setCounter(counter) {
+		this.counter = counter;
+	}
+
+	getCounter () {
+		return this.counter;
+	}
+
+	setKey(key) {
+		this.key.arg = key;
+	}
+
+	getKey() {
+		return this.key.arg;
+	}
+
 	constructor ( type ) {
 		super( 'Trigger: ' + type );
 
@@ -27,28 +68,28 @@ class KeyTriggerNode extends Node {
 		let rower = new UI.Row();
 		let spanner0 = new UI.Span();
 		let spanner1 = new UI.Span();
-		let incrementer = new UI.Button( '+' );
-		let decrementer = new UI.Button( '-' );
+		this.incrementer = new UI.Button( '+' );
+		this.decrementer = new UI.Button( '-' );
 		let breaker = new UI.Break();
 
-		incrementer.setWidth( '50%' );
-		decrementer.setWidth( '50%' );
+		this.incrementer.setWidth( '50%' );
+		this.decrementer.setWidth( '50%' );
 
-		spanner0.add( incrementer );
-		spanner1.add( decrementer );
+		spanner0.add( this.incrementer );
+		spanner1.add( this.decrementer );
 
 		rower.add( spanner0 );
 		rower.add( spanner1 );
 		this.domElement.appendChild( rower.dom );
 		this.domElement.appendChild( breaker.dom );
 
-		let input = new NodeInput( this );
-		input.addTextInput();
+		this.key = new NodeInput( this );
+		this.key.addTextInput();
 
-		this.addInput( input );
+		this.addInput( this.key );
 
 		let that = this;
-		$( incrementer.dom ).click( function() {
+		$( that.incrementer.dom ).click( function() {
 			let input = new NodeInput( this );
 
 			input.domElement.textContent = 'channel ' + that.counter + ': ';
@@ -56,7 +97,7 @@ class KeyTriggerNode extends Node {
 			++that.counter;
 		} );
 
-		$( decrementer.dom ).click( function() {
+		$( that.decrementer.dom ).click( function() {
 			if( that.counter<=1 ) return;
 			--that.counter;
 			that.removeInput();
@@ -72,87 +113,31 @@ class KeyTriggerNode extends Node {
 			document.removeEventListener( 'keydown', KeyboardTriggerFunction );
 		} );
 	}
-}
 
-class EmotionTriggerNode extends Node {
-	constructor ( type, signals ) {
-		super( 'Trigger: ' + type );
-
-		let input = new NodeInput( this );
-
-		signals.turnOnOffFaceTracking.dispatch( true );
-
-		this.addInput( input );
-
-		$( this.domElement ).find( "button.delete" ).on( 'click', function () {
-			signals.turnOnOffFaceTracking.dispatch( false );
-		} );
+	toJSON () {
+		return {
+			semanticName: this.getSemanticName(),
+			valence: this.getValence(),
+			arousal: this.getArousal(),
+			key: this.getKey(),
+			counter: this.getCounter()
+		}
 	}
-}
 
-class TickTriggerNode extends Node {
-	constructor ( type ) {
-		super( 'Trigger: ' + type );
+	fromJSON (state) {
+		this.setSemanticName(state.semanticName);
+		this.setValence(state.valence);
+		this.setArousal(state.arousal);
+		this.setKey(state.key);
+		this.setCounter(state.counter);
 
-
-		// UI
-
-		this.counter = 1;
-
-		let rower = new UI.Row();
-		let spanner0 = new UI.Span();
-		let spanner1 = new UI.Span();
-		let incrementer = new UI.Button( '+' );
-		let decrementer = new UI.Button( '-' );
-		let breaker = new UI.Break();
-
-		incrementer.setWidth( '50%' );
-		decrementer.setWidth( '50%' );
-
-		spanner0.add( incrementer );
-		spanner1.add( decrementer );
-
-		rower.add( spanner0 );
-		rower.add( spanner1 );
-		this.domElement.appendChild( rower.dom );
-		this.domElement.appendChild( breaker.dom );
-
-		let input = new NodeInput( this );
-		input.addNumberInput();
-
-		this.addInput( input );
-
-		let that = this;
-		$( incrementer.dom ).click( function() {
+		for (let i=0; i<state.counter; ++i) {
 			let input = new NodeInput( this );
 
-			input.domElement.textContent = 'channel ' + that.counter + ': ';
-			that.addInput( input );
-			++that.counter;
-		} );
-
-		$( decrementer.dom ).click( function() {
-			if( that.counter<=1 ) return;
-			--that.counter;
-			that.removeInput();
-		} );
-
-
-		// Dynamic
-
-		this.handle = TickTriggerFunction( 1000 );
-
-		$( input.domElement ).find( "input" ).change( function () {
-			clearInterval( that.handle );
-			let time_interval = Number( input.arg );
-			if ( time_interval > 0 )
-				that.handle = TickTriggerFunction( time_interval );
-			else
-				alert( 'The input must be a number!' );
-		} );
-
-		$( this.domElement ).find( "button.delete" ).on( 'click', function () {
-			clearInterval( that.handle );
-		} );
+			input.domElement.textContent = 'channel ' + i + ': ';
+			this.addInput( input );
+		}
 	}
 }
+
+

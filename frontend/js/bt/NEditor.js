@@ -1,6 +1,43 @@
 "use strict";
 
-let NEditor = function ( editor ) {
+var Global_Graph_SVG = null;
+var Global_NEditor_Container = null;
+
+class CMDManager {
+	constructor () {
+		this.ALL_DOM_IN_SVG = [];
+
+		this.currentNodeSession = null;
+	}
+
+	newCMD () {
+		this.cleanSVG ();
+
+		let nodeSession = new NodeSession();
+		this.currentNodeSession = nodeSession;
+	}
+
+	cleanSVG () {
+		for(let i=0; i<this.ALL_DOM_IN_SVG.length; ++i) {
+			this.ALL_DOM_IN_SVG[i].remove();
+		}
+		$(this.graphSVG).empty();
+	}
+
+	addNode( type ) {
+		this.currentNodeSession.addNode( type );
+	}
+
+	toJSON () {
+		return this.currentNodeSession.toJSON();
+	}
+
+	fromJSON ( state ) {
+		this.currentNodeSession.fromJSON( state );
+	}
+}
+
+var NEditor = function ( editor ) {
 
 	let signals = editor.signals;
 
@@ -77,6 +114,10 @@ let NEditor = function ( editor ) {
 		}
 	};
 
+
+
+
+
 	// menu
 	let menu = new UI.UList();
 	menu.setId( 'menu' );
@@ -88,11 +129,9 @@ let NEditor = function ( editor ) {
 	let Actions = menu.addLi( 'Action' );
 	let Runner = menu.addLi( 'Start' );
 
-	/////////////////////////////////////////////////////////////////
-	// let menuTriggers = new UI.UList();
-	// let buttonKeyboard = menuTriggers.addLi( 'Keyboard' );
-	// let buttonTick = menuTriggers.addLi( 'Tick' );
-	// Triggers.appendChild( menuTriggers.dom );
+	let Newer = menu.addLi( 'New Command' );
+	let Cleaner = menu.addLi( 'Clean All Nodes' );
+	let Test = menu.addLi( 'Test' );
 
 	let menuObjects = new UI.UList();
 	let characterObject = menuObjects.addLi( 'Character' );
@@ -100,18 +139,7 @@ let NEditor = function ( editor ) {
 	let textObject = menuObjects.addLi( 'Text' );
 	Objects.appendChild( menuObjects.dom );
 
-
-	/////////////////////////////////////////////////////////////////
-	// let menuComposites = new UI.UList();
-	// let buttonSelector = menuComposites.addLi( 'Selector (OR)' );
-	// let buttonSequence = menuComposites.addLi( 'Sequence (AND)' );
-	// Composites.appendChild( menuComposites.dom );
-
-	/////////////////////////////////////////////////////////////////
 	let menuActions = new UI.UList();
-	// let buttonTranslation = menuActions.addLi( 'Translation' );
-	// let buttonRotation = menuActions.addLi( 'Rotation' );
-	// let buttonSleep = menuActions.addLi( 'Sleep' );
 	let buttonSwap = menuActions.addLi( 'Swap' );
 	let buttonParticle = menuActions.addLi( 'Texture Motion' );
 	Actions.appendChild( menuActions.dom );
@@ -121,68 +149,64 @@ let NEditor = function ( editor ) {
 	menu.dom.style.top = '300px';
 	container.add( menu );
 
-	let nodeManager = new NodeManager( graphSVG, container.dom, editor );
+	Global_Graph_SVG = graphSVG;
+	Global_NEditor_Container = container.dom;
+
+	let cmdManager = new CMDManager();
 
 	let startBehaviorTree = false;
 
-	// jQuery methods go here ...
 	$( function () {
 
 		$( menu.dom ).draggable();
 		$( "#menu" ).menu();
 
+		$( Newer ).click(function (  ) {
+			cmdManager.newCMD();
+		});
+
+		$( Cleaner ).click(function (  ) {
+			cmdManager.cleanSVG();
+		});
+
+		$(Test).click(function (  ) {
+			let res = JSON.stringify( cmdManager.toJSON() );
+			console.log(res);
+
+			cmdManager.fromJSON( JSON.parse(res) );
+		});
+
 		$( Trigger ).click( function () {
-			nodeManager.addNode( 'key_trigger' );
-		} );
-
-		// $( buttonTick ).click( function () {
-		// 	nodeManager.addNode( 'tick_trigger' );
-		// } );
-
-		$( Composite ).click( function () {
-			nodeManager.addNode( 'sequence' );
-		} );
-
-		// $( buttonSequence ).click( function () {
-		// 	nodeManager.addNode( 'sequence' );
-		// } );
-
-		// $( buttonTranslation ).click( function () {
-		// 	nodeManager.addNode( 'translation' );
-		// } );
-
-		// $( buttonRotation ).click( function () {
-		// 	nodeManager.addNode( 'rotation' );
-		// } );
-
-		// $( buttonSleep ).click( function () {
-		// 	nodeManager.addNode( 'sleep' );
-		// } );
-
-		$( buttonParticle ).click( function (  ) {
-			nodeManager.addNode( 'particle' );
+			cmdManager.addNode( 'trigger' );
 		} );
 
 		$( characterObject ).click( function () {
-			nodeManager.addNode( 'character' );
+			cmdManager.addNode( 'character' );
 		} );
 
 		$( textureObject ).click( function () {
-			nodeManager.addNode( 'texture' );
+			cmdManager.addNode( 'texture' );
 		} );
 
 		$( textObject ).click( function () {
-			nodeManager.addNode( 'text' );
+			cmdManager.addNode( 'text' );
 		} );
+		
+		
+		$( Composite ).click( function () {
+			cmdManager.addNode( 'sequence' );
+		} );
+		
 
 		$( buttonSwap ).click( function () {
-			nodeManager.addNode( 'swap' );
+			cmdManager.addNode( 'swap' );
 		} );
 
+		$( buttonParticle ).click( function (  ) {
+			cmdManager.addNode( 'particle' );
+		} );
+		
 		$( Runner ).click( function () {
-			// currentAST = nodeManager.getAST();
-			// console.log( currentAST );
-
 			if ( startBehaviorTree )
 				Runner.children[ 0 ].textContent = 'Start';
 			else
@@ -191,11 +215,13 @@ let NEditor = function ( editor ) {
 			startBehaviorTree = !startBehaviorTree;
 
 			signals.runBackground.dispatch( startBehaviorTree );
+
+
 		} );
 	} );
 
 	let currentCharacter;
-	let currentAST = null;
+	// let currentAST = null;
 
 	//
 	signals.editorCleared.add( function () {
@@ -207,25 +233,20 @@ let NEditor = function ( editor ) {
 		container.setDisplay( '' );
 	} );
 
-	signals.trigger.add( function ( event ) {
-
-		if ( startBehaviorTree === false ) return;
-
-		// evaluate ast
-		let puppet = currentCharacter || editor.selected || null;
-
-		if ( puppet !== null && currentAST !== null ) return;
-
-
-		// if ( event[ 'type' ] === 'tick' ) {
-		// 	nodeManager.runTickTrigger( editor.signals.sceneGraphChanged );
-		// }
-
-		if ( event[ 'type' ] === 'keyboard' ) {
-			nodeManager.runKeyTrigger( event[ 'keycode' ], editor.signals.sceneGraphChanged );
-		}
-
-	} );
+	// signals.trigger.add( function ( event ) {
+	//
+	// 	if ( startBehaviorTree === false ) return;
+	//
+	// 	// evaluate ast
+	// 	let puppet = currentCharacter || editor.selected || null;
+	//
+	// 	if ( puppet !== null && currentAST !== null ) return;
+	//
+	// 	if ( event[ 'type' ] === 'keyboard' ) {
+	// 		nodeSession.runKeyTrigger( event[ 'keycode' ], editor.signals.sceneGraphChanged );
+	// 	}
+	//
+	// } );
 
 
 	// Tracking

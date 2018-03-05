@@ -122,12 +122,12 @@ class SwapNode extends Node {
 		this.addOutput();
 	}
 
-	run( obj, info, extra_info ) {
+	run( obj, info ) {
 		// let val = this.objectOptions.arg;
 		// console.log( val );
 
 		obj.updateEmotion( info );
-		extra_info.editor.signals.sceneGraphChanged.dispatch();
+		editor.signals.sceneGraphChanged.dispatch();
 	}
 }
 
@@ -215,9 +215,16 @@ class ParticleNode extends Node {
 			that.canvasWidth = canvas.width;
 			that.canvasHeight = canvas.height;
 		} );
+
+		editor.signals.runBackground.add( function ( boo ) {
+			if(boo===true)
+				that.brushCanvas.dom.style.display = 'none';
+			else
+				that.brushCanvas.dom.style.display = '';
+		} );
 	}
 
-	run ( obj, info, extra_info ) {
+	run ( obj, info ) {
 		let sourceStrokes = this.sourceStrokes;
 		let travelStrokes = this.travelStrokes;
 
@@ -227,7 +234,7 @@ class ParticleNode extends Node {
 			textureName: info
 		};
 
-		extra_info.editor.signals.msgBackgroundTexturePattern.dispatch( msg );
+		editor.signals.msgBackgroundTexturePattern.dispatch( msg );
 
 		// for( let i=0; i<obj.all.length; ++i ) {
 		//
