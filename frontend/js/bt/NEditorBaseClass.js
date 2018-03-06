@@ -54,8 +54,6 @@ class LeafInput {
 	}
 
 	addColorInput () {
-		let that = this;
-
 		this.inp = new UI.Input( '' );
 		this.inp.dom.type = 'color';
 		// inp.setId( 'html5colorpicker' );
@@ -72,7 +70,6 @@ class LeafInput {
 	}
 
 	addSelectionInput ( options ) {
-		let that = this;
 		this.selectMenu = new UI.Select();
 		this.selectMenu.setOptions( options );
 

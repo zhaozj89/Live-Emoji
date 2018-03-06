@@ -37,6 +37,7 @@ class EmotionCMD {
 		editButton.setPadding('5px');
 		rowDiv.add(editButton);
 
+		let that = this;
 		$( editButton.dom ).click(function (  ) {
 			for(let i=0; i<Global_All_DOM_In_SVG.length; ++i) {
 				Global_All_DOM_In_SVG[i].remove();
@@ -44,7 +45,7 @@ class EmotionCMD {
 			$(Global_Graph_SVG).empty();
 
 			let nodeSession = new NodeSession();
-			nodeSession.fromJSON( this.nodeString );
+			nodeSession.fromJSON( JSON.parse( that.nodeString ) );
 
 		});
 
@@ -79,14 +80,16 @@ class EmotionCMDManager {
 
 	save () {
 		let info = this.currentNodeSession.getInfo();
-		let nodeString = this.currentNodeSession.toJSON();
+		let nodeString = JSON.stringify( this.currentNodeSession );
 
-		let emotionCMD = new EmotionCMD( info.key, info.semantic, info.valence, info.arousal, nodeString );
+		if( this.allSerializedCMDs[info.key]!==null ) {
+			let emotionCMD = new EmotionCMD( info.key, info.semantic, info.valence, info.arousal, nodeString );
 
-		editor.signals.saveEmotionCMD.dispatch( emotionCMD.getDOM() );
+			editor.signals.saveEmotionCMD.dispatch( emotionCMD.getDOM() );
 
-		this.allSerializedCMDs[info.key] = nodeString;
-		this.allCMDs[info.key] = this.currentNodeSession;
+			this.allSerializedCMDs[info.key] = nodeString;
+			this.allCMDs[info.key] = this.currentNodeSession;
+		}
 	}
 
 	toJSON () {
