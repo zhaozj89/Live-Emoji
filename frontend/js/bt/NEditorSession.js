@@ -1,35 +1,62 @@
 class NodeSession {
 	constructor () {
 		this.triggerNode = null;
-		this.objectNode = null;
-		this.sequenceNode = null;
-		this.actionNode = null;
 	}
 
 	toJSON () {
+
+		if( this.triggerNode===null ) return {};
+
+		let vertices = [];
+		let adjacencyMatrix = [];
+
+		let parentIdx = 0;
+		let idxCounter = 1;
+
+		vertices.push( this.triggerNode.toJSON() );
+
+		let queue = [];
+		queue.push( this.triggerNode );
+		while( queue.length !== 0 ) {
+			let node = queue.shift();
+			let node_children = node.getChildren();
+
+			for(let i=0; i<node_children.length; ++i) {
+				let child_node = node_children[ i ];
+				adjacencyMatrix.push( [parentIdx, idxCounter] );
+				idxCounter++;
+				vertices.push( child_node.toJSON() );
+
+				queue.push( child_node );
+			}
+			parentIdx++;
+		}
+
 		return {
 			key: this.getInfo().key,
-			triggerNode: this.triggerNode.toJSON(),
-			objectNode: this.objectNode.toJSON(),
-			sequenceNode: this.sequenceNode.toJSON(),
-			actionNode: this.actionNode.toJSON()
+			V: vertices,
+			A: adjacencyMatrix
 		}
 	}
 
 	fromJSON ( state ) {
-		this.addNode( 'trigger' );
-		this.addNode( state.objectNode.type );
-		this.addNode( 'sequence' );
-		this.addNode( state.actionNode.type );
+		if( state.V.length===0 ) return;
 
-		this.triggerNode.fromJSON( state.triggerNode );
-		this.objectNode.fromJSON( state.objectNode );
-		this.sequenceNode.fromJSON( state.sequenceNode );
-		this.actionNode.fromJSON( state.actionNode );
+		let nodes = []; // only used for indexing
 
-		this.objectNode.connectFrom( this.triggerNode.key );
-		this.sequenceNode.connectFrom( this.objectNode.input );
-		this.actionNode.connectFrom( this.sequenceNode.input );
+		let node = this.addNode( state.V[0].type );
+		this.triggerNode = node;
+		node.fromJSON( state.V[0] );
+		nodes.push( node );
+		for(let i=1; i<state.V.length; ++i) {
+			let node = this.addNode( state.V[i].type );
+			node.fromJSON( state.V[i] );
+			nodes.push( node );
+		}
+
+		for( let i=0; i<state.A.length; ++i ) {
+			nodes[state.A[i][1]].connectFrom( nodes[state.A[i][0]].getInputForSerializationOnly() );
+		}
 	}
 
 	addNode ( type ) {
@@ -47,7 +74,6 @@ class NodeSession {
 				node = new CharacterNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
-				this.objectNode = node;
 				break;
 			}
 
@@ -55,7 +81,6 @@ class NodeSession {
 				node = new TextureNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
-				this.objectNode = node;
 				break;
 			}
 
@@ -71,7 +96,6 @@ class NodeSession {
 				node = new CompositeNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
-				this.sequenceNode = node;
 				break;
 			}
 
@@ -79,7 +103,6 @@ class NodeSession {
 				node = new SwapNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
-				this.actionNode = node;
 				break;
 			}
 
@@ -87,12 +110,13 @@ class NodeSession {
 				node = new ParticleNode( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
-				this.actionNode = node;
 				break;
 			}
 		}
 
 		Global_All_DOM_In_SVG.push( node.domElement );
+
+		return node;
 	}
 
 	getInfo () {

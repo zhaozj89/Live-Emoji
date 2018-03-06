@@ -2,6 +2,8 @@ class LeafInput {
 	constructor ( title ) {
 		this.title = title;
 
+		this.type="LeafInput";
+
 		// need it for node to work
 		this.node = null;
 
@@ -43,9 +45,9 @@ class LeafInput {
 		this.domElement.textContent = 'object: ';
 		let selectMenu = new UI.Select();
 		selectMenu.setOptions( {
-			"Character": "character",
-			"Texture": "texture",
-			"Text": "text"
+			"character": "character",
+			"texture": "texture",
+			"text": "text"
 		} );
 		this.domElement.appendChild( selectMenu.dom );
 		$( selectMenu.dom ).change( function () {
@@ -92,6 +94,8 @@ class NodeInput {
 		this.arg = null;
 		this.node = null;
 
+		this.type="NodeInput";
+
 		this.currentNode = currentNode;
 
 		this.domElement = CreateInput( this );
@@ -111,32 +115,33 @@ class NodeInput {
 	}
 
 	addTextInput () {
+		this.text = new UI.Input();
+		this.text.setValue('');
+
 		let that = this;
-		let input = document.createElement( 'input' );
-		this.domElement.textContent = 'key: ';
-		// input.setAttribute( 'type', 'text' );
-		this.domElement.appendChild( input );
-		$( input ).change( function () {
-			that.arg = input.value;
-		} );
+		$( that.text.dom ).change(function (  ) {
+			that.arg = that.text.getValue();
+		});
+
+		this.domElement.appendChild( this.text.dom );
 	}
 
 	addEmotionInput () {
 		let that = this;
 		this.domElement.textContent = 'emotion: ';
-		let selectMenu = new UI.Select();
-		selectMenu.setOptions( {
-			"Happy": "happy",
-			"Sad": "sad",
-			"Disgusted": "disgusted",
-			"Fearful": "fearful",
-			"Neutral": "neutral",
-			"Surprised": "surprised",
-			"Angry": "angry"
+		this.selectMenu = new UI.Select();
+		this.selectMenu.setOptions( {
+			"happy": "happy",
+			"sad": "sad",
+			"disgusted": "disgusted",
+			"fearful": "fearful",
+			"neutral": "neutral",
+			"surprised": "surprised",
+			"angry": "angry"
 		} );
-		this.domElement.appendChild( selectMenu.dom );
-		$( selectMenu.dom ).change( function () {
-			that.arg = selectMenu.getValue();
+		this.domElement.appendChild( this.selectMenu.dom );
+		$( that.selectMenu.dom ).change( function () {
+			that.arg = that.selectMenu.getValue();
 		} );
 	}
 
@@ -146,22 +151,22 @@ class NodeInput {
 		this.domElement.textContent = 'character: ';
 
 		let allEmotions = {
-			'Happy': 'happy',
-			'Sad': 'sad',
-			'Surprise': 'surprised',
-			'Disgust': 'disgusted',
-			'Angry': 'angry',
-			'Fear': 'fearful',
-			'Neutral': 'neutral'
+			'happy': 'happy',
+			'sad': 'sad',
+			'surprised': 'surprised',
+			'disgusted': 'disgusted',
+			'angry': 'angry',
+			'fearful': 'fearful',
+			'neutral': 'neutral'
 		};
 
 		let that = this;
-		let selectMenu = new UI.Select();
-		selectMenu.setOptions( allEmotions );
+		this.selectMenu = new UI.Select();
+		this.selectMenu.setOptions( allEmotions );
 
-		this.domElement.appendChild( selectMenu.dom );
-		$( selectMenu.dom ).change( function () {
-			that.arg = allEmotions[ selectMenu.getValue() ];
+		this.domElement.appendChild( this.selectMenu.dom );
+		$( that.selectMenu.dom ).change( function () {
+			that.arg = allEmotions[ that.selectMenu.getValue() ];
 			// console.log( that.arg );
 		} );
 	}
@@ -172,16 +177,16 @@ class NodeInput {
 		this.domElement.textContent = 'texture: ';
 
 		let allEmotions = {
-			'Fire': 'fire'
+			'fire': 'fire'
 		};
 
 		let that = this;
-		let selectMenu = new UI.Select();
-		selectMenu.setOptions( allEmotions );
+		this.selectMenu = new UI.Select();
+		this.selectMenu.setOptions( allEmotions );
 
-		this.domElement.appendChild( selectMenu.dom );
-		$( selectMenu.dom ).change( function () {
-			that.arg = allEmotions[ selectMenu.getValue() ];
+		this.domElement.appendChild( this.selectMenu.dom );
+		$( that.selectMenu.dom ).change( function () {
+			that.arg = allEmotions[ that.selectMenu.getValue() ];
 			console.log( that.arg );
 		} );
 	}
@@ -219,6 +224,13 @@ class Node {
 		let outputDom = CreateOutput( this );
 		this.domElement.appendChild( outputDom );
 		this.output = outputDom;
+	}
+
+	getInputForSerializationOnly() {
+		for(let i=0; i<this.inputs.length; ++i) {
+			if(this.inputs[i].domElement.classList.contains('filled')===true || this.inputs[i].type==='LeafInput') continue;
+			else return this.inputs[i];
+		}
 	}
 
 	addInput ( input ) {
