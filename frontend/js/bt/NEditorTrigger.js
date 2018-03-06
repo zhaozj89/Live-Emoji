@@ -33,7 +33,7 @@ class TriggerNode extends Node {
 	}
 
 	setKey(key) {
-		this.key.arg = key;
+		this.key.text.setValue( key );
 	}
 
 	getKey() {
@@ -116,6 +116,7 @@ class TriggerNode extends Node {
 
 	toJSON () {
 		return {
+			type: 'trigger',
 			semanticName: this.getSemanticName(),
 			valence: this.getValence(),
 			arousal: this.getArousal(),
@@ -131,7 +132,7 @@ class TriggerNode extends Node {
 		this.setKey(state.key);
 		this.setCounter(state.counter);
 
-		for (let i=0; i<state.counter; ++i) {
+		for (let i=1; i<state.counter; ++i) {
 			let input = new NodeInput( this );
 
 			input.domElement.textContent = 'channel ' + i + ': ';

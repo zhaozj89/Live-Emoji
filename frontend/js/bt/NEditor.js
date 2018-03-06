@@ -92,7 +92,7 @@ var NEditor = function ( editor ) {
 	let Actions = menu.addLi( 'Action' );
 	let Runner = menu.addLi( 'Start' );
 
-	let Breaker = menu.addLi('*************************');
+	let Breaker = menu.addLi('***********************');
 
 	let Newer = menu.addLi( 'New Command' );
 	let Saver = menu.addLi( 'Save Command' );
@@ -121,7 +121,7 @@ var NEditor = function ( editor ) {
 	let emotionCMDManager = editor.emotionCMDManager;
 
 	signals.editEmotionCMD.add(function (  ) {
-		emotionCMDManager.newCMD();
+		if( editor.emotionCMDManager.currentNodeSession===null ) emotionCMDManager.newCMD();
 	});
 
 	let startBehaviorTree = false;
@@ -194,40 +194,38 @@ var NEditor = function ( editor ) {
 		} );
 	} );
 
-	let currentCharacter;
-	// let currentAST = null;
-
-	//
 	signals.editorCleared.add( function () {
 		container.setDisplay( 'none' );
 	} );
 
 	signals.editEmotionCMD.add( function ( character ) {
-		currentCharacter = character;
 		container.setDisplay( '' );
 	} );
 
-	// signals.trigger.add( function ( event ) {
-	//
-	// 	if ( startBehaviorTree === false ) return;
-	//
-	// 	// evaluate ast
-	// 	let puppet = currentCharacter || editor.selected || null;
-	//
-	// 	if ( puppet !== null && currentAST !== null ) return;
-	//
-	// 	if ( event[ 'type' ] === 'keyboard' ) {
-	// 		nodeSession.runKeyTrigger( event[ 'keycode' ], editor.signals.sceneGraphChanged );
-	// 	}
-	//
-	// } );
+	// Keyboard trigger
+
+	signals.trigger.add( function ( event ) {
+
+		if ( startBehaviorTree === false ) return;
+
+		if ( event[ 'type' ] === 'keyboard' ) {
+			if( editor.emotionCMDManager.saved===true ) {
+				for( let prop in editor.emotionCMDManager.allCMDs ) {
+					if ( event[ 'keycode' ]===prop ) {
+						editor.emotionCMDManager.allCMDs[prop].run( prop );
+					}
+				}
+			}
+			else {
+				editor.emotionCMDManager.currentNodeSession.run( event[ 'keycode' ] );
+			}
+		}
+	} );
 
 
 	// Tracking
 
 	signals.followFace.add( function ( event ) {
-		let puppet = currentCharacter || editor.selected || null;
-
 		if ( puppet !== null ) {
 			puppet.position.x = event.x;
 			puppet.position.y = event.y;
@@ -238,8 +236,6 @@ var NEditor = function ( editor ) {
 	} );
 
 	signals.followEmotion.add( function ( emotion ) {
-		let puppet = currentCharacter || editor.selected || null;
-
 		if ( puppet !== null ) {
 			switch ( emotion ) {
 				case EMOTION_TYPE.HAPPY:
@@ -272,8 +268,6 @@ var NEditor = function ( editor ) {
 	} );
 
 	signals.followLeftEye.add( function ( state ) {
-		let puppet = currentCharacter || editor.selected || null;
-
 		if ( puppet !== null ) {
 
 			puppet.updateLeftEye( state );
@@ -282,8 +276,6 @@ var NEditor = function ( editor ) {
 	} );
 
 	signals.followRightEye.add( function ( state ) {
-		let puppet = currentCharacter || editor.selected || null;
-
 		if ( puppet !== null ) {
 
 			puppet.updateRightEye( state );
@@ -292,8 +284,6 @@ var NEditor = function ( editor ) {
 	} );
 
 	signals.followMouth.add( function ( state ) {
-		let puppet = currentCharacter || editor.selected || null;
-
 		if ( puppet !== null ) {
 
 			puppet.updateMouth( state );

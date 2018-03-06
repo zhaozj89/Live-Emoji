@@ -50,6 +50,7 @@ class CompositeNode extends Node {
 
 	toJSON () {
 		return {
+			type: 'sequence',
 			counter: this.counter
 		};
 	}

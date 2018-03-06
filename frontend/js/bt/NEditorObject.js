@@ -4,7 +4,7 @@ class CharacterNode extends Node {
 	}
 
 	setEmotion (emotion) {
-		this.input.arg = emotion;
+		this.input.selectMenu.setValue( emotion );
 	}
 
 	constructor ( type ) {
@@ -36,7 +36,7 @@ class TextureNode extends Node {
 	}
 
 	setTextureName (textureName) {
-		this.input.arg = textureName;
+		this.input.selectMenu.setValue( textureName );
 	}
 
 	constructor ( type ) {

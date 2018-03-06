@@ -58,6 +58,9 @@ class EmotionCMDManager {
 		this.currentNodeSession = null;
 		this.allSerializedCMDs = {};
 		this.allCMDs = {};
+
+
+		this.saved = false;
 	}
 
 	newCMD () {
@@ -79,6 +82,8 @@ class EmotionCMDManager {
 	}
 
 	save () {
+		this.saved = true;
+
 		let info = this.currentNodeSession.getInfo();
 		let nodeString = JSON.stringify( this.currentNodeSession );
 
@@ -87,6 +92,10 @@ class EmotionCMDManager {
 
 			editor.signals.saveEmotionCMD.dispatch( emotionCMD.getDOM() );
 
+			this.allSerializedCMDs[info.key] = nodeString;
+			this.allCMDs[info.key] = this.currentNodeSession;
+		}
+		else {
 			this.allSerializedCMDs[info.key] = nodeString;
 			this.allCMDs[info.key] = this.currentNodeSession;
 		}

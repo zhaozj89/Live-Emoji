@@ -288,6 +288,7 @@ class Node {
 	}
 
 	connectFrom ( input ) {
+
 		input.node = this;
 		this.connected = true;
 
