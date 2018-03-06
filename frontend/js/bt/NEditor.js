@@ -1,42 +1,5 @@
 "use strict";
 
-var Global_Graph_SVG = null;
-var Global_NEditor_Container = null;
-
-class CMDManager {
-	constructor () {
-		this.ALL_DOM_IN_SVG = [];
-
-		this.currentNodeSession = null;
-	}
-
-	newCMD () {
-		this.cleanSVG ();
-
-		let nodeSession = new NodeSession();
-		this.currentNodeSession = nodeSession;
-	}
-
-	cleanSVG () {
-		for(let i=0; i<this.ALL_DOM_IN_SVG.length; ++i) {
-			this.ALL_DOM_IN_SVG[i].remove();
-		}
-		$(this.graphSVG).empty();
-	}
-
-	addNode( type ) {
-		this.currentNodeSession.addNode( type );
-	}
-
-	toJSON () {
-		return this.currentNodeSession.toJSON();
-	}
-
-	fromJSON ( state ) {
-		this.currentNodeSession.fromJSON( state );
-	}
-}
-
 var NEditor = function ( editor ) {
 
 	let signals = editor.signals;
@@ -129,9 +92,12 @@ var NEditor = function ( editor ) {
 	let Actions = menu.addLi( 'Action' );
 	let Runner = menu.addLi( 'Start' );
 
+	let Breaker = menu.addLi('*************************');
+
 	let Newer = menu.addLi( 'New Command' );
+	let Saver = menu.addLi( 'Save Command' );
 	let Cleaner = menu.addLi( 'Clean All Nodes' );
-	let Test = menu.addLi( 'Test' );
+	// let Test = menu.addLi( 'Test' );
 
 	let menuObjects = new UI.UList();
 	let characterObject = menuObjects.addLi( 'Character' );
@@ -152,7 +118,11 @@ var NEditor = function ( editor ) {
 	Global_Graph_SVG = graphSVG;
 	Global_NEditor_Container = container.dom;
 
-	let cmdManager = new CMDManager();
+	let emotionCMDManager = editor.emotionCMDManager;
+
+	signals.editEmotionCMD.add(function (  ) {
+		emotionCMDManager.newCMD();
+	});
 
 	let startBehaviorTree = false;
 
@@ -162,48 +132,52 @@ var NEditor = function ( editor ) {
 		$( "#menu" ).menu();
 
 		$( Newer ).click(function (  ) {
-			cmdManager.newCMD();
+			emotionCMDManager.newCMD();
+		});
+
+		$( Saver ).click(function (  ) {
+			emotionCMDManager.save();
 		});
 
 		$( Cleaner ).click(function (  ) {
-			cmdManager.cleanSVG();
+			emotionCMDManager.cleanSVG();
 		});
-
-		$(Test).click(function (  ) {
-			let res = JSON.stringify( cmdManager.toJSON() );
-			console.log(res);
-
-			cmdManager.fromJSON( JSON.parse(res) );
-		});
+		//
+		// $(Test).click(function (  ) {
+		// 	let res = JSON.stringify( emotionCMDManager.toJSON() );
+		// 	console.log(res);
+		//
+		// 	emotionCMDManager.fromJSON( JSON.parse(res) );
+		// });
 
 		$( Trigger ).click( function () {
-			cmdManager.addNode( 'trigger' );
+			emotionCMDManager.addNode( 'trigger' );
 		} );
 
 		$( characterObject ).click( function () {
-			cmdManager.addNode( 'character' );
+			emotionCMDManager.addNode( 'character' );
 		} );
 
 		$( textureObject ).click( function () {
-			cmdManager.addNode( 'texture' );
+			emotionCMDManager.addNode( 'texture' );
 		} );
 
 		$( textObject ).click( function () {
-			cmdManager.addNode( 'text' );
+			emotionCMDManager.addNode( 'text' );
 		} );
 		
 		
 		$( Composite ).click( function () {
-			cmdManager.addNode( 'sequence' );
+			emotionCMDManager.addNode( 'sequence' );
 		} );
 		
 
 		$( buttonSwap ).click( function () {
-			cmdManager.addNode( 'swap' );
+			emotionCMDManager.addNode( 'swap' );
 		} );
 
 		$( buttonParticle ).click( function (  ) {
-			cmdManager.addNode( 'particle' );
+			emotionCMDManager.addNode( 'particle' );
 		} );
 		
 		$( Runner ).click( function () {
@@ -228,7 +202,7 @@ var NEditor = function ( editor ) {
 		container.setDisplay( 'none' );
 	} );
 
-	signals.editAST.add( function ( character ) {
+	signals.editEmotionCMD.add( function ( character ) {
 		currentCharacter = character;
 		container.setDisplay( '' );
 	} );

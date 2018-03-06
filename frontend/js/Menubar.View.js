@@ -22,13 +22,11 @@ Menubar.View = function ( editor ) {
 
 	var option = new UI.Row();
 	option.setClass( 'option' );
-	option.setTextContent( 'Behavior Tree' );
+	option.setTextContent( 'Semantic Emotion' );
 	option.onClick( function () {
 
 		var object = editor.selected;
-		// if( object!==null ) signals.editAST.dispatch( object );
-
-		signals.editAST.dispatch( object );
+		signals.editEmotionCMD.dispatch( object );
 	} );
 	options.add( option );
 

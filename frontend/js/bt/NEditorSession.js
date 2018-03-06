@@ -8,6 +8,7 @@ class NodeSession {
 
 	toJSON () {
 		return {
+			key: this.getInfo().key,
 			triggerNode: this.triggerNode.toJSON(),
 			objectNode: this.objectNode.toJSON(),
 			sequenceNode: this.sequenceNode.toJSON(),
@@ -16,63 +17,26 @@ class NodeSession {
 	}
 
 	fromJSON ( state ) {
+		this.addNode( 'trigger' );
+		this.addNode( state.objectNode.type );
+		this.addNode( 'sequence' );
+		this.addNode( state.actionNode.type );
 
-		let node0 = new TriggerNode( 'trigger' );
-		node0.fromJSON( state.triggerNode );
-		node0.moveTo ( { x: 300, y: 80 } );
-		node0.initUI ();
+		this.triggerNode.fromJSON( state.triggerNode );
+		this.objectNode.fromJSON( state.objectNode );
+		this.sequenceNode.fromJSON( state.sequenceNode );
+		this.actionNode.fromJSON( state.actionNode );
 
-		let node1 = null;
-		switch (state.objectNode.type) {
-			case 'character': {
-				node1 = new CharacterNode( 'character' );
-				node1.fromJSON( state.objectNode );
-				node1.moveTo ( { x: 300, y: 80 } );
-				node1.initUI ();
-				break;
-			}
-
-			case 'texture': {
-				node1 = new TextureNode ( 'texture' );
-				node1.fromJSON( state.objectNode );
-				node1.moveTo ( { x: 300, y: 80 } );
-				node1.initUI ();
-				break;
-			}
-		}
-
-		let node2 = new CompositeNode( 'sequence' );
-		node2.fromJSON( state.sequenceNode );
-		node2.moveTo ( { x: 300, y: 80 } );
-		node2.initUI ();
-
-		let node3 = null;
-		switch (state.actionNode.type) {
-			case 'swap': {
-				node3 = new SwapNode( 'swap' );
-				node3.fromJSON( state.actionNode );
-				node3.moveTo ( { x: 300, y: 80 } );
-				node3.initUI ();
-				break;
-			}
-			case 'particle': {
-				node3 = new ParticleNode( 'particle' );
-				node3.fromJSON( state.actionNode );
-				node3.moveTo ( { x: 300, y: 80 } );
-				node3.initUI ();
-				break;
-			}
-		}
-
-		node1.connectFrom( node0.key );
-		node2.connectFrom( node1.input );
-		node3.connectFrom( node2.input );
+		this.objectNode.connectFrom( this.triggerNode.key );
+		this.sequenceNode.connectFrom( this.objectNode.input );
+		this.actionNode.connectFrom( this.sequenceNode.input );
 	}
 
 	addNode ( type ) {
+		let node = null;
 		switch ( type ) {
 			case 'trigger': {
-				let node = new TriggerNode ( type );
+				node = new TriggerNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
 				this.triggerNode = node;
@@ -80,7 +44,7 @@ class NodeSession {
 			}
 
 			case 'character': {
-				let node = new CharacterNode ( type );
+				node = new CharacterNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
 				this.objectNode = node;
@@ -88,7 +52,7 @@ class NodeSession {
 			}
 
 			case 'texture': {
-				let node = new TextureNode ( type );
+				node = new TextureNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
 				this.objectNode = node;
@@ -104,7 +68,7 @@ class NodeSession {
 			// }
 
 			case 'sequence': {
-				let node = new CompositeNode ( type );
+				node = new CompositeNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
 				this.sequenceNode = node;
@@ -112,7 +76,7 @@ class NodeSession {
 			}
 
 			case 'swap': {
-				let node = new SwapNode ( type );
+				node = new SwapNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
 				this.actionNode = node;
@@ -120,17 +84,19 @@ class NodeSession {
 			}
 
 			case 'particle': {
-				let node = new ParticleNode( type );
+				node = new ParticleNode( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
 				this.actionNode = node;
 				break;
 			}
 		}
+
+		Global_All_DOM_In_SVG.push( node.domElement );
 	}
 
 	getInfo () {
-		let args = this.trigger.getArgs ();
+		let args = this.triggerNode.getArgs ();
 		return {
 			semantic: args[0],
 			valence: args[1],
@@ -144,7 +110,7 @@ class NodeSession {
 
 		if ( key === keycode ) {
 
-			let trigger_node_children = this.trigger.getChildren ();
+			let trigger_node_children = this.triggerNode.getChildren ();
 			for ( let i = 0; i < trigger_node_children.length; ++i ) {
 
 				let object_node = trigger_node_children[ i ];
@@ -152,7 +118,7 @@ class NodeSession {
 				let obj = null;
 				if(object_node['type']==='Character: character')
 					obj = characterStructure;
-				else if(child_0['type']==='Texture: texture') {
+				else if(object_node['type']==='Texture: texture') {
 					// obj = backgroundStructure;
 					// DO something better
 				}

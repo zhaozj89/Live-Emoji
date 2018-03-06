@@ -44,7 +44,9 @@ var Editor = function () {
 
 		// node editor
 
-		editAST: new Signal(),
+		editEmotionCMD: new Signal(),
+
+		saveEmotionCMD: new Signal(),
 
 		// actions
 
@@ -105,6 +107,8 @@ var Editor = function () {
 
 	this.selected = null;
 	this.helpers = {};
+
+	this.emotionCMDManager = new EmotionCMDManager();
 };
 
 Editor.prototype = {

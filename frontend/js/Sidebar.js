@@ -12,10 +12,11 @@ var Sidebar = function ( editor ) {
 	var sceneTab = new UI.Text( 'Scene' ).onClick( onClick );
 	var cameraTab = new UI.Text( 'Camera' ).onClick( onClick );
 	var historyTab = new UI.Text( 'History' ).onClick( onClick );
+	var emotionTab = new UI.Text( 'Emotion' ).onClick( onClick );
 
 	var tabs = new UI.Div();
 	tabs.setId( 'tabs' );
-	tabs.add( cameraTab, historyTab, sceneTab );
+	tabs.add( cameraTab, historyTab, sceneTab, emotionTab );
 	container.add( tabs );
 
 	function onClick( event ) {
@@ -43,6 +44,11 @@ var Sidebar = function ( editor ) {
 	);
 	container.add( history );
 
+	var emotion = new UI.Span().add(
+		new Sidebar.EmotionCMD( editor )
+	);
+	container.add( emotion );
+
 	//
 
 	function select( section ) {
@@ -50,10 +56,12 @@ var Sidebar = function ( editor ) {
 		sceneTab.setClass( '' );
 		cameraTab.setClass( '' );
 		historyTab.setClass( '' );
+		emotionTab.setClass( '' );
 
 		scene.setDisplay( 'none' );
 		camera.setDisplay( 'none' );
 		history.setDisplay( 'none' );
+		emotion.setDisplay( 'none' );
 
 		switch ( section ) {
 			case 'Scene':
@@ -67,6 +75,10 @@ var Sidebar = function ( editor ) {
 			case 'History':
 				historyTab.setClass( 'selected' );
 				history.setDisplay( '' );
+				break;
+			case 'Emotion':
+				emotionTab.setClass( 'selected' );
+				emotion.setDisplay( '' );
 				break;
 		}
 

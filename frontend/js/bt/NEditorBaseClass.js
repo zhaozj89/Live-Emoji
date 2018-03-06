@@ -5,6 +5,8 @@ class LeafInput {
 		// need it for node to work
 		this.node = null;
 
+		this.arg = null;
+
 		this.domElement = this.createInput( this );
 	}
 
@@ -27,6 +29,11 @@ class LeafInput {
 	addTextInput () {
 		this.text = new UI.Input();
 		this.text.setValue('');
+
+		let that = this;
+		$( that.text.dom ).change(function (  ) {
+			that.arg = that.text.getValue();
+		});
 
 		this.domElement.appendChild( this.text.dom );
 	}
@@ -56,6 +63,11 @@ class LeafInput {
 
 		this.domElement.appendChild( this.inp.dom );
 
+		let that = this;
+		$( that.inp.dom ).change(function (  ) {
+			that.arg = that.inp.getValue();
+		});
+
 		return this.inp;
 	}
 
@@ -63,6 +75,11 @@ class LeafInput {
 		let that = this;
 		this.selectMenu = new UI.Select();
 		this.selectMenu.setOptions( options );
+
+		let that = this;
+		$( that.selectMenu.dom ).change(function (  ) {
+			that.arg = that.selectMenu.getValue();
+		});
 
 		this.domElement.appendChild( that.selectMenu.dom );
 	}
