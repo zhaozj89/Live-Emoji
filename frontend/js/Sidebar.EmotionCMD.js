@@ -1,42 +1,40 @@
 
 Sidebar.EmotionCMD = function ( editor ) {
 
-	var signals = editor.signals;
-	var emotionCMDManager = editor.emotionCMDManager;
+	let signals = editor.signals;
+	let emotionCMDManager = editor.emotionCMDManager;
 
-	var container = new UI.Panel();
+	let container = new UI.Panel();
 
 	container.setBorderTop( '0' );
-	container.setPaddingTop( '20px' );
+	container.setPaddingTop( '10px' );
 
-	container.add( new UI.Text( '' ) );
+	let newCMD = new UI.Button( 'New' );
+	let saveCMD = new UI.Button( 'Save' );
+	let cleanCMD = new UI.Button( 'Clean' );
 
-	container.add( new UI.Break(), new UI.Break() );
+	let cmdHelper = new UI.Div();
+	cmdHelper.setClass( 'EmotionCMD' );
+	cmdHelper.add( newCMD, saveCMD, cleanCMD );
 
+	container.add( cmdHelper );
 
-	let rowDiv = new UI.Row();
+	let outliner = new UI.Outliner( editor );
 
 	let keyDiv = new UI.Text( 'Key' );
-	keyDiv.setPadding('5px');
-	rowDiv.add( keyDiv );
-
 	let semanticDiv = new UI.Text( 'Meaning' );
-	semanticDiv.setPadding('5px');
-	rowDiv.add( semanticDiv );
-
 	let valenceDiv = new UI.Text( 'Valence' );
-	valenceDiv.setPadding('5px');
-	rowDiv.add( valenceDiv );
-
 	let arousalDiv = new UI.Text( 'Arousal' );
-	arousalDiv.setPadding('5px');
-	rowDiv.add( arousalDiv );
 
-	container.add( rowDiv );
+	let rowDiv = new UI.Div();
+	rowDiv.setClass( 'EmotionHeader' );
+	rowDiv.add( keyDiv, semanticDiv, valenceDiv, arousalDiv );
 
+	container.add( outliner );
+	outliner.add( rowDiv );
 
 	signals.saveEmotionCMD.add( function ( dom ) {
-		container.add( dom );
+		outliner.add( dom );
 	} );
 
 	return container;

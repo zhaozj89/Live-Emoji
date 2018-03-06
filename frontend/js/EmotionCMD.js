@@ -15,27 +15,12 @@ class EmotionCMD {
 	}
 
 	getDOM () {
-		let rowDiv = new UI.Row();
-
 		let keyDiv = new UI.Text( this.key );
-		keyDiv.setPadding('5px');
-		rowDiv.add( keyDiv );
-
 		let semanticDiv = new UI.Text( this.name );
-		semanticDiv.setPadding('5px');
-		rowDiv.add( semanticDiv );
-
 		let valenceDiv = new UI.Text( this.valence );
-		valenceDiv.setPadding('5px');
-		rowDiv.add( valenceDiv );
-
 		let arousalDiv = new UI.Text( this.arousal );
-		arousalDiv.setPadding('5px');
-		rowDiv.add( arousalDiv );
-
 		let editButton = new UI.Button( 'Edit' );
-		editButton.setPadding('5px');
-		rowDiv.add(editButton);
+		editButton.setClass( 'EmotionTableEditor' );
 
 		let that = this;
 		$( editButton.dom ).click(function (  ) {
@@ -48,6 +33,10 @@ class EmotionCMD {
 			nodeSession.fromJSON( JSON.parse( that.nodeString ) );
 
 		});
+
+		let rowDiv = new UI.Div();
+		rowDiv.setClass( 'EmotionTable' );
+		rowDiv.add( keyDiv, semanticDiv, valenceDiv, arousalDiv, editButton );
 
 		return rowDiv;
 	}

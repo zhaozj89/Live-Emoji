@@ -1,0 +1,46 @@
+.EmotionCMD {
+    background-color: #1b1b1b;
+    border-top: 1px solid #222;
+}
+
+#EmotionCMD span {
+    color: #555;
+    border-right: 1px solid #222;
+    padding: 10px;
+}
+
+#EmotionCMD span.selected {
+    color: #888;
+    background-color: #111;
+}
+
+
+.EmotionHeader {
+    background-color: #250cae;
+    height: 30px;
+}
+
+.EmotionHeader span {
+    magin: auto;
+    vertical-align: middle;
+    padding: 5px;
+    font-size: large
+}
+
+.EmotionTable {
+    background-color: #aeaeae;
+    height: 30px;
+}
+
+.EmotionTable span {
+    magin: auto;
+    padding: 5px;
+    vertical-align:middle;
+    font-size: large
+}
+
+button.EmotionTableEditor {
+    position: absolute;
+    right: 20px;
+    margin: 4px
+}

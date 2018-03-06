@@ -4,6 +4,8 @@
 
 var UI = {};
 
+// Base class
+
 UI.Element = function ( dom ) {
 
 	this.dom = dom;
