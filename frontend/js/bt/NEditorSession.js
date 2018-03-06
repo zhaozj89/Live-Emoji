@@ -22,45 +22,51 @@ class NodeSession {
 		node0.moveTo ( { x: 300, y: 80 } );
 		node0.initUI ();
 
+		let node1 = null;
 		switch (state.objectNode.type) {
 			case 'character': {
-				let node = new CharacterNode( 'character' );
-				node.fromJSON( state.objectNode );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ();
+				node1 = new CharacterNode( 'character' );
+				node1.fromJSON( state.objectNode );
+				node1.moveTo ( { x: 300, y: 80 } );
+				node1.initUI ();
 				break;
 			}
 
 			case 'texture': {
-				let node = new TextureNode ( 'texture' );
-				node.fromJSON( state.objectNode );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ();
+				node1 = new TextureNode ( 'texture' );
+				node1.fromJSON( state.objectNode );
+				node1.moveTo ( { x: 300, y: 80 } );
+				node1.initUI ();
 				break;
 			}
 		}
 
-		let node1 = new CompositeNode( 'sequence' );
-		node1.fromJSON( state.sequenceNode );
-		node1.moveTo ( { x: 300, y: 80 } );
-		node1.initUI ();
+		let node2 = new CompositeNode( 'sequence' );
+		node2.fromJSON( state.sequenceNode );
+		node2.moveTo ( { x: 300, y: 80 } );
+		node2.initUI ();
 
+		let node3 = null;
 		switch (state.actionNode.type) {
 			case 'swap': {
-				let node = new SwapNode( 'swap' );
-				node.fromJSON( state.actionNode );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ();
+				node3 = new SwapNode( 'swap' );
+				node3.fromJSON( state.actionNode );
+				node3.moveTo ( { x: 300, y: 80 } );
+				node3.initUI ();
 				break;
 			}
 			case 'particle': {
-				let node = new ParticleNode( 'particle' );
-				node.fromJSON( state.actionNode );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ();
+				node3 = new ParticleNode( 'particle' );
+				node3.fromJSON( state.actionNode );
+				node3.moveTo ( { x: 300, y: 80 } );
+				node3.initUI ();
 				break;
 			}
 		}
+
+		node1.connectFrom( node0.key );
+		node2.connectFrom( node1.input );
+		node3.connectFrom( node2.input );
 	}
 
 	addNode ( type ) {

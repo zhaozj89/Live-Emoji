@@ -28,9 +28,9 @@ class CompositeNode extends Node {
 		this.domElement.appendChild( rower.dom );
 		this.domElement.appendChild( breaker.dom );
 
-		let input = new NodeInput( this );
-		input.domElement.textContent = 'channel ' + this.counter + ': ';
-		this.addInput(input);
+		this.input = new NodeInput( this );
+		this.input.domElement.textContent = 'channel ' + this.counter + ': ';
+		this.addInput(this.input);
 		++this.counter;
 
 		let that = this;
@@ -57,7 +57,7 @@ class CompositeNode extends Node {
 	fromJSON (state) {
 		this.counter = state.counter;
 
-		for (let i=0; i<state.counter; ++i) {
+		for (let i=1; i<state.counter; ++i) {
 			let input = new NodeInput( this );
 
 			input.domElement.textContent = 'channel ' + i + ': ';
