@@ -92,13 +92,6 @@ var NEditor = function ( editor ) {
 	let Actions = menu.addLi( 'Action' );
 	let Runner = menu.addLi( 'Start' );
 
-	let Breaker = menu.addLi('***********************');
-
-	let Newer = menu.addLi( 'New Command' );
-	let Saver = menu.addLi( 'Save Command' );
-	let Cleaner = menu.addLi( 'Clean All Nodes' );
-	// let Test = menu.addLi( 'Test' );
-
 	let menuObjects = new UI.UList();
 	let characterObject = menuObjects.addLi( 'Character' );
 	let textureObject = menuObjects.addLi( 'Texture' );
@@ -131,26 +124,11 @@ var NEditor = function ( editor ) {
 		$( menu.dom ).draggable();
 		$( "#menu" ).menu();
 
-		$( Newer ).click(function (  ) {
-			emotionCMDManager.newCMD();
-		});
-
-		$( Saver ).click(function (  ) {
-			emotionCMDManager.save();
-		});
-
-		$( Cleaner ).click(function (  ) {
-			emotionCMDManager.cleanSVG();
-		});
-		//
-		// $(Test).click(function (  ) {
-		// 	let res = JSON.stringify( emotionCMDManager.toJSON() );
-		// 	console.log(res);
-		//
-		// 	emotionCMDManager.fromJSON( JSON.parse(res) );
-		// });
-
 		$( Trigger ).click( function () {
+			if(emotionCMDManager.currentNodeSession.triggerNode!==null) {
+				alert('Currently ONLY one trigger node is allowed!');
+				return;
+			}
 			emotionCMDManager.addNode( 'trigger' );
 		} );
 
@@ -209,7 +187,7 @@ var NEditor = function ( editor ) {
 		if ( startBehaviorTree === false ) return;
 
 		if ( event[ 'type' ] === 'keyboard' ) {
-			if( editor.emotionCMDManager.saved===true ) {
+			if( editor.emotionCMDManager.currentNodeSession!==null ) {
 				for( let prop in editor.emotionCMDManager.allCMDs ) {
 					if ( event[ 'keycode' ]===prop ) {
 						editor.emotionCMDManager.allCMDs[prop].run( prop );

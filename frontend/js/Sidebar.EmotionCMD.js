@@ -1,3 +1,48 @@
+class EmotionCMDThreeDOM {
+	constructor (info, nodeString) {
+		this.keyDiv = new UI.Text( info.key );
+		this.semanticDiv = new UI.Text( info.semantic );
+		this.valenceDiv = new UI.Text( info.valence );
+		this.arousalDiv = new UI.Text( info.arousal );
+		this.editButton = new UI.Button( 'Edit' );
+		this.nodeString = nodeString;
+	}
+
+	updateInfo(info) {
+		this.keyDiv.setValue(info.key);
+		this.semanticDiv.setValue(info.semantic);
+		this.valenceDiv.setValue(info.valence);
+		this.arousalDiv.setValue(info.arousal);
+	}
+
+	updateNodeString(nodeString) {
+		this.nodeString = nodeString;
+	}
+
+	createEmotionCMDThreeDOM () {
+
+		this.editButton.setClass( 'EmotionTableEditor' );
+
+		let that = this;
+		this.editButton.onClick(function (  ) {
+			for(let i=0; i<Global_All_DOM_In_SVG.length; ++i) {
+				Global_All_DOM_In_SVG[i].remove();
+			}
+			$(Global_Graph_SVG).empty();
+
+			let nodeSession = new NodeSession();
+			nodeSession.fromJSON( JSON.parse( that.nodeString ) );
+
+		});
+
+		let rowDiv = new UI.Div();
+		rowDiv.setClass( 'EmotionTable' );
+		rowDiv.add( this.keyDiv, this.semanticDiv, this.valenceDiv, this.arousalDiv, this.editButton );
+
+		return rowDiv;
+	}
+}
+
 
 Sidebar.EmotionCMD = function ( editor ) {
 
@@ -12,6 +57,22 @@ Sidebar.EmotionCMD = function ( editor ) {
 	let newCMD = new UI.Button( 'New' );
 	let saveCMD = new UI.Button( 'Save' );
 	let cleanCMD = new UI.Button( 'Clean' );
+
+
+	var allUIThreeDOMInfo = {};
+
+	newCMD.onClick(function (  ) {
+		emotionCMDManager.newCMD();
+	});
+
+	saveCMD.onClick(function (  ) {
+		emotionCMDManager.save();
+	});
+
+	cleanCMD.onClick(function (  ) {
+		emotionCMDManager.cleanSVG();
+		emotionCMDManager.newCMD();
+	});
 
 	let cmdHelper = new UI.Div();
 	cmdHelper.setClass( 'EmotionCMD' );
@@ -33,8 +94,16 @@ Sidebar.EmotionCMD = function ( editor ) {
 	container.add( outliner );
 	outliner.add( rowDiv );
 
-	signals.saveEmotionCMD.add( function ( dom ) {
-		outliner.add( dom );
+	signals.saveEmotionCMD.add( function ( msg ) {
+		if( allUIThreeDOMInfo[msg.info.key] === undefined) {
+			let threeDOM = new EmotionCMDThreeDOM(msg.info, msg.nodeString);
+			outliner.add( threeDOM.createEmotionCMDThreeDOM() );
+			allUIThreeDOMInfo[msg.info.key] = threeDOM;
+		}
+		else {
+			allUIThreeDOMInfo[msg.info.key].updateInfo(msg.info);
+			allUIThreeDOMInfo[msg.info.key].updateNodeString(msg.nodeString);
+		}
 	} );
 
 	return container;

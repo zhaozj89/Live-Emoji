@@ -5,51 +5,13 @@ var Global_NEditor_Container = null;
 
 var Global_All_DOM_In_SVG = [];
 
-class EmotionCMD {
-	constructor (key, name, valence, arousal, nodeString) {
-		this.key = key;
-		this.name = name;
-		this.valence = valence;
-		this.arousal = arousal;
-		this.nodeString = nodeString;
-	}
-
-	getDOM () {
-		let keyDiv = new UI.Text( this.key );
-		let semanticDiv = new UI.Text( this.name );
-		let valenceDiv = new UI.Text( this.valence );
-		let arousalDiv = new UI.Text( this.arousal );
-		let editButton = new UI.Button( 'Edit' );
-		editButton.setClass( 'EmotionTableEditor' );
-
-		let that = this;
-		$( editButton.dom ).click(function (  ) {
-			for(let i=0; i<Global_All_DOM_In_SVG.length; ++i) {
-				Global_All_DOM_In_SVG[i].remove();
-			}
-			$(Global_Graph_SVG).empty();
-
-			let nodeSession = new NodeSession();
-			nodeSession.fromJSON( JSON.parse( that.nodeString ) );
-
-		});
-
-		let rowDiv = new UI.Div();
-		rowDiv.setClass( 'EmotionTable' );
-		rowDiv.add( keyDiv, semanticDiv, valenceDiv, arousalDiv, editButton );
-
-		return rowDiv;
-	}
-}
-
 class EmotionCMDManager {
 	constructor () {
 		this.currentNodeSession = null;
+
+
 		this.allSerializedCMDs = {};
 		this.allCMDs = {};
-
-
-		this.saved = false;
 	}
 
 	newCMD () {
@@ -64,6 +26,16 @@ class EmotionCMDManager {
 			Global_All_DOM_In_SVG[i].remove();
 		}
 		$(Global_Graph_SVG).empty();
+
+		this.currentNodeSession = null;
+	}
+
+	deleteCMD(key) {
+		if(this.currentNodeSession!==null && key===this.currentNodeSession.getInfo().key)
+			this.cleanSVG();
+
+		delete this.allSerializedCMDs[key];
+		delete this.allCMDs[key];
 	}
 
 	addNode( type ) {
@@ -71,20 +43,20 @@ class EmotionCMDManager {
 	}
 
 	save () {
-		this.saved = true;
-
-		let info = this.currentNodeSession.getInfo();
-		let nodeString = JSON.stringify( this.currentNodeSession );
-
-		if( this.allSerializedCMDs[info.key]!==null ) {
-			let emotionCMD = new EmotionCMD( info.key, info.semantic, info.valence, info.arousal, nodeString );
-
-			editor.signals.saveEmotionCMD.dispatch( emotionCMD.getDOM() );
-
-			this.allSerializedCMDs[info.key] = nodeString;
-			this.allCMDs[info.key] = this.currentNodeSession;
+		if( this.currentNodeSession===null ) {
+			return;
 		}
 		else {
+			let info = this.currentNodeSession.getInfo();
+			let nodeString = JSON.stringify( this.currentNodeSession );
+
+			let msg = {
+				'info': info,
+				'nodeString': nodeString
+			};
+
+			editor.signals.saveEmotionCMD.dispatch( msg );
+
 			this.allSerializedCMDs[info.key] = nodeString;
 			this.allCMDs[info.key] = this.currentNodeSession;
 		}
