@@ -15,35 +15,35 @@ class EmotionCMDManager {
 	}
 
 	newCMD () {
-		this.cleanSVG ();
+		this.cleanSVG();
 
 		let nodeSession = new NodeSession();
 		this.currentNodeSession = nodeSession;
 	}
 
 	cleanSVG () {
-		for(let i=0; i<Global_All_DOM_In_SVG.length; ++i) {
-			Global_All_DOM_In_SVG[i].remove();
+		for ( let i = 0; i < Global_All_DOM_In_SVG.length; ++i ) {
+			Global_All_DOM_In_SVG[ i ].remove();
 		}
-		$(Global_Graph_SVG).empty();
+		$( Global_Graph_SVG ).empty();
 
 		this.currentNodeSession = null;
 	}
 
-	deleteCMD(key) {
-		if(this.currentNodeSession!==null && key===this.currentNodeSession.getInfo().key)
+	deleteCMD ( key ) {
+		if ( this.currentNodeSession !== null && key === this.currentNodeSession.getInfo().key )
 			this.cleanSVG();
 
-		delete this.allSerializedCMDs[key];
-		delete this.allCMDs[key];
+		delete this.allSerializedCMDs[ key ];
+		delete this.allCMDs[ key ];
 	}
 
-	addNode( type ) {
+	addNode ( type ) {
 		this.currentNodeSession.addNode( type );
 	}
 
 	save () {
-		if( this.currentNodeSession===null ) {
+		if ( this.currentNodeSession === null ) {
 			return;
 		}
 		else {
@@ -57,8 +57,8 @@ class EmotionCMDManager {
 
 			editor.signals.saveEmotionCMD.dispatch( msg );
 
-			this.allSerializedCMDs[info.key] = nodeString;
-			this.allCMDs[info.key] = this.currentNodeSession;
+			this.allSerializedCMDs[ info.key ] = nodeString;
+			this.allCMDs[ info.key ] = this.currentNodeSession;
 		}
 	}
 
@@ -68,10 +68,10 @@ class EmotionCMDManager {
 
 	fromJSON ( state ) {
 		this.allSerializedCMDs = state;
-		for(let prop in this.allSerializedCMDs ) {
-			let currentState = this.allSerializedCMDs[prop];
+		for ( let prop in this.allSerializedCMDs ) {
+			let currentState = this.allSerializedCMDs[ prop ];
 			let nodeSession = new NodeSession();
-			this.allCMDs[currentState.key] = nodeSession.fromJSON( currentState );
+			this.allCMDs[ currentState.key ] = nodeSession.fromJSON( currentState );
 		}
 	}
 }

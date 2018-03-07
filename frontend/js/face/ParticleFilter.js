@@ -105,7 +105,7 @@ class ParticleFilter {
 		let i = 0;
 		let u0 = Math.random() / this.numParticles;
 		for ( let j = 0; j < this.numParticles; ++j ) {
-			let uj = u0 + j/this.numParticles;
+			let uj = u0 + j / this.numParticles;
 
 			while ( uj > cumprob[ i ] ) {
 				i = i + 1;

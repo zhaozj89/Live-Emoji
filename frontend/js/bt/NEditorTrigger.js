@@ -1,30 +1,30 @@
 class TriggerNode extends Node {
 
-	setSemanticName (name) {
+	setSemanticName ( name ) {
 		this.semanticName.text.setValue( name );
 	}
 
-	getSemanticName() {
+	getSemanticName () {
 		return this.semanticName.text.getValue();
 	}
 
-	setValence (valence) {
-		this.valence.text.setValue(valence);
+	setValence ( valence ) {
+		this.valence.text.setValue( valence );
 	}
 
-	getValence() {
+	getValence () {
 		return this.valence.text.getValue();
 	}
 
-	setArousal (arousal) {
-		this.arousal.text.setValue(arousal);
+	setArousal ( arousal ) {
+		this.arousal.text.setValue( arousal );
 	}
 
-	getArousal() {
+	getArousal () {
 		return this.arousal.text.getValue();
 	}
 
-	setCounter(counter) {
+	setCounter ( counter ) {
 		this.counter = counter;
 	}
 
@@ -32,11 +32,11 @@ class TriggerNode extends Node {
 		return this.counter;
 	}
 
-	setKey(key) {
+	setKey ( key ) {
 		this.key.text.setValue( key );
 	}
 
-	getKey() {
+	getKey () {
 		return this.key.arg;
 	}
 
@@ -89,7 +89,7 @@ class TriggerNode extends Node {
 		this.addInput( this.key );
 
 		let that = this;
-		$( that.incrementer.dom ).click( function() {
+		$( that.incrementer.dom ).click( function () {
 			let input = new NodeInput( this );
 
 			input.domElement.textContent = 'channel ' + that.counter + ': ';
@@ -97,12 +97,11 @@ class TriggerNode extends Node {
 			++that.counter;
 		} );
 
-		$( that.decrementer.dom ).click( function() {
-			if( that.counter<=1 ) return;
+		$( that.decrementer.dom ).click( function () {
+			if ( that.counter <= 1 ) return;
 			--that.counter;
 			that.removeInput();
 		} );
-
 
 
 		// Dynamic
@@ -125,14 +124,14 @@ class TriggerNode extends Node {
 		};
 	}
 
-	fromJSON (state) {
-		this.setSemanticName(state.semanticName);
-		this.setValence(state.valence);
-		this.setArousal(state.arousal);
-		this.setKey(state.key);
-		this.setCounter(state.counter);
+	fromJSON ( state ) {
+		this.setSemanticName( state.semanticName );
+		this.setValence( state.valence );
+		this.setArousal( state.arousal );
+		this.setKey( state.key );
+		this.setCounter( state.counter );
 
-		for (let i=1; i<state.counter; ++i) {
+		for ( let i = 1; i < state.counter; ++i ) {
 			let input = new NodeInput( this );
 
 			input.domElement.textContent = 'channel ' + i + ': ';

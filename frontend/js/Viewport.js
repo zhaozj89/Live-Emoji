@@ -14,7 +14,7 @@ var Viewport = function ( editor ) {
 
 	//
 
-	$( function (  ) {
+	$( function () {
 		console.log( 'view port width: ' + container.dom.clientWidth );
 		console.log( 'view port height: ' + container.dom.clientHeight );
 	} );

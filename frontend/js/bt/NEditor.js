@@ -78,9 +78,6 @@ var NEditor = function ( editor ) {
 	};
 
 
-
-
-
 	// menu
 	let menu = new UI.UList();
 	menu.setId( 'menu' );
@@ -113,9 +110,9 @@ var NEditor = function ( editor ) {
 
 	let emotionCMDManager = editor.emotionCMDManager;
 
-	signals.editEmotionCMD.add(function (  ) {
-		if( editor.emotionCMDManager.currentNodeSession===null ) emotionCMDManager.newCMD();
-	});
+	signals.editEmotionCMD.add( function () {
+		if ( editor.emotionCMDManager.currentNodeSession === null ) emotionCMDManager.newCMD();
+	} );
 
 	let startBehaviorTree = false;
 
@@ -125,8 +122,8 @@ var NEditor = function ( editor ) {
 		$( "#menu" ).menu();
 
 		$( Trigger ).click( function () {
-			if(emotionCMDManager.currentNodeSession.triggerNode!==null) {
-				alert('Currently ONLY one trigger node is allowed!');
+			if ( emotionCMDManager.currentNodeSession.triggerNode !== null ) {
+				alert( 'Currently ONLY one trigger node is allowed!' );
 				return;
 			}
 			emotionCMDManager.addNode( 'trigger' );
@@ -143,21 +140,21 @@ var NEditor = function ( editor ) {
 		$( textObject ).click( function () {
 			emotionCMDManager.addNode( 'text' );
 		} );
-		
-		
+
+
 		$( Composite ).click( function () {
 			emotionCMDManager.addNode( 'sequence' );
 		} );
-		
+
 
 		$( buttonSwap ).click( function () {
 			emotionCMDManager.addNode( 'swap' );
 		} );
 
-		$( buttonParticle ).click( function (  ) {
+		$( buttonParticle ).click( function () {
 			emotionCMDManager.addNode( 'particle' );
 		} );
-		
+
 		$( Runner ).click( function () {
 			if ( startBehaviorTree )
 				Runner.children[ 0 ].textContent = 'Start';
@@ -187,10 +184,10 @@ var NEditor = function ( editor ) {
 		if ( startBehaviorTree === false ) return;
 
 		if ( event[ 'type' ] === 'keyboard' ) {
-			if( editor.emotionCMDManager.currentNodeSession!==null ) {
-				for( let prop in editor.emotionCMDManager.allCMDs ) {
-					if ( event[ 'keycode' ]===prop ) {
-						editor.emotionCMDManager.allCMDs[prop].run( prop );
+			if ( editor.emotionCMDManager.currentNodeSession !== null ) {
+				for ( let prop in editor.emotionCMDManager.allCMDs ) {
+					if ( event[ 'keycode' ] === prop ) {
+						editor.emotionCMDManager.allCMDs[ prop ].run( prop );
 					}
 				}
 			}

@@ -5,7 +5,7 @@ class NodeSession {
 
 	toJSON () {
 
-		if( this.triggerNode===null ) return {};
+		if ( this.triggerNode === null ) return {};
 
 		let vertices = [];
 		let adjacencyMatrix = [];
@@ -17,13 +17,13 @@ class NodeSession {
 
 		let queue = [];
 		queue.push( this.triggerNode );
-		while( queue.length !== 0 ) {
+		while ( queue.length !== 0 ) {
 			let node = queue.shift();
 			let node_children = node.getChildren();
 
-			for(let i=0; i<node_children.length; ++i) {
+			for ( let i = 0; i < node_children.length; ++i ) {
 				let child_node = node_children[ i ];
-				adjacencyMatrix.push( [parentIdx, idxCounter] );
+				adjacencyMatrix.push( [ parentIdx, idxCounter ] );
 				idxCounter++;
 				vertices.push( child_node.toJSON() );
 
@@ -40,22 +40,22 @@ class NodeSession {
 	}
 
 	fromJSON ( state ) {
-		if( state.V.length===0 ) return;
+		if ( state.V.length === 0 ) return;
 
 		let nodes = []; // only used for indexing
 
-		let node = this.addNode( state.V[0].type );
+		let node = this.addNode( state.V[ 0 ].type );
 		this.triggerNode = node;
-		node.fromJSON( state.V[0] );
+		node.fromJSON( state.V[ 0 ] );
 		nodes.push( node );
-		for(let i=1; i<state.V.length; ++i) {
-			let node = this.addNode( state.V[i].type );
-			node.fromJSON( state.V[i] );
+		for ( let i = 1; i < state.V.length; ++i ) {
+			let node = this.addNode( state.V[ i ].type );
+			node.fromJSON( state.V[ i ] );
 			nodes.push( node );
 		}
 
-		for( let i=0; i<state.A.length; ++i ) {
-			nodes[state.A[i][1]].connectFrom( nodes[state.A[i][0]].getInputForSerializationOnly() );
+		for ( let i = 0; i < state.A.length; ++i ) {
+			nodes[ state.A[ i ][ 1 ] ].connectFrom( nodes[ state.A[ i ][ 0 ] ].getInputForSerializationOnly() );
 		}
 	}
 
@@ -63,24 +63,24 @@ class NodeSession {
 		let node = null;
 		switch ( type ) {
 			case 'trigger': {
-				node = new TriggerNode ( type );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ();
+				node = new TriggerNode( type );
+				node.moveTo( { x: 300, y: 80 } );
+				node.initUI();
 				this.triggerNode = node;
 				break;
 			}
 
 			case 'character': {
-				node = new CharacterNode ( type );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ();
+				node = new CharacterNode( type );
+				node.moveTo( { x: 300, y: 80 } );
+				node.initUI();
 				break;
 			}
 
 			case 'texture': {
-				node = new TextureNode ( type );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ();
+				node = new TextureNode( type );
+				node.moveTo( { x: 300, y: 80 } );
+				node.initUI();
 				break;
 			}
 
@@ -93,23 +93,23 @@ class NodeSession {
 			// }
 
 			case 'sequence': {
-				node = new CompositeNode ( type );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ();
+				node = new CompositeNode( type );
+				node.moveTo( { x: 300, y: 80 } );
+				node.initUI();
 				break;
 			}
 
 			case 'swap': {
-				node = new SwapNode ( type );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ();
+				node = new SwapNode( type );
+				node.moveTo( { x: 300, y: 80 } );
+				node.initUI();
 				break;
 			}
 
 			case 'particle': {
 				node = new ParticleNode( type );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ();
+				node.moveTo( { x: 300, y: 80 } );
+				node.initUI();
 				break;
 			}
 		}
@@ -120,39 +120,39 @@ class NodeSession {
 	}
 
 	getInfo () {
-		let args = this.triggerNode.getArgs ();
+		let args = this.triggerNode.getArgs();
 		return {
-			semantic: args[0],
-			valence: args[1],
-			arousal: args[2],
-			key: args[3]
+			semantic: args[ 0 ],
+			valence: args[ 1 ],
+			arousal: args[ 2 ],
+			key: args[ 3 ]
 		}
 	}
 
 	run ( keycode ) {
-		let key = this.getInfo ().key;
+		let key = this.getInfo().key;
 
 		if ( key === keycode ) {
 
-			let trigger_node_children = this.triggerNode.getChildren ();
+			let trigger_node_children = this.triggerNode.getChildren();
 			for ( let i = 0; i < trigger_node_children.length; ++i ) {
 
 				let object_node = trigger_node_children[ i ];
 
 				let obj = null;
-				if(object_node['type']==='Character: character')
+				if ( object_node[ 'type' ] === 'Character: character' )
 					obj = characterStructure;
-				else if(object_node['type']==='Texture: texture') {
+				else if ( object_node[ 'type' ] === 'Texture: texture' ) {
 					// obj = backgroundStructure;
 					// DO something better
 				}
 				else {
-					alert ( 'Error in Behavior Tree!' );
+					alert( 'Error in Behavior Tree!' );
 					return;
 				}
 
-				let info = object_node.getArg ();
-				let object_node_children = object_node.getChildren ();
+				let info = object_node.getArg();
+				let object_node_children = object_node.getChildren();
 				for ( let j = 0; j < object_node_children.length; ++j ) {
 
 					let sequence_node = object_node_children[ j ];

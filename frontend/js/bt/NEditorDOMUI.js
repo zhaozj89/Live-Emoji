@@ -17,7 +17,7 @@ var CreateRemoveButton = function ( that ) {
 				that.inputs[ i ].node.detachInput( that.inputs[ i ] );
 		}
 
-		if( that.parentInput!==null ) {
+		if ( that.parentInput !== null ) {
 			that.parentInput.domElement.classList.remove( 'filled' );
 			that.parentInput.domElement.classList.add( 'empty' );
 			that.parentInput.currentNode.inputs = [];

@@ -56,23 +56,23 @@ function VelocityPath ( points,
 	let res=[];
 
 	let sample_size = 21;
-	if( points.length>sample_size ) {
+	if ( points.length > sample_size ) {
 		let step = points.length / sample_size;
 
-		for (let k=1; k<sample_size; ++k) {
-			let idx = Math.floor( k*step );
+		for ( let k = 1; k < sample_size; ++k ) {
+			let idx = Math.floor( k * step );
 
-			let cur_point = points[idx];
-			let pre_point = points[idx-1];
+			let cur_point = points[ idx ];
+			let pre_point = points[ idx - 1 ];
 
-			let velocity = new Vector2(0,0);
-			velocity.x = ( cur_point.x - pre_point.x )*width / canvasWidth;
-			velocity.y = ( cur_point.y - pre_point.y )*height / canvasHeight;
+			let velocity = new Vector2( 0, 0 );
+			velocity.x = ( cur_point.x - pre_point.x ) * width / canvasWidth;
+			velocity.y = ( cur_point.y - pre_point.y ) * height / canvasHeight;
 
 			velocity.normalize();
 
-			let el = new VelocityPathElement(cur_point.x*width/canvasWidth, cur_point.y*height/canvasHeight, velocity.x, velocity.y);
-			res.push(el);
+			let el = new VelocityPathElement( cur_point.x * width / canvasWidth, cur_point.y * height / canvasHeight, velocity.x, velocity.y );
+			res.push( el );
 		}
 	}
 

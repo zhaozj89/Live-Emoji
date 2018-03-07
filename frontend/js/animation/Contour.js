@@ -93,7 +93,7 @@ var ZContour = function ( png ) {
 	let geometry = new THREE.Geometry();
 
 	for ( let i = 0; i < points_out.length; ++i )
-		geometry.vertices.push( new Vector3( 10*points_out[ i ][ 0 ], 10*points_out[ i ][ 1 ], 0 ) );
+		geometry.vertices.push( new Vector3( 10 * points_out[ i ][ 0 ], 10 * points_out[ i ][ 1 ], 0 ) );
 
 
 	for ( let i = 0; i < tris_out.length; i += 3 ) {
@@ -128,4 +128,4 @@ var ZContour = function ( png ) {
 	let mesh = new THREE.Mesh( geometry, material );
 
 	return mesh;
-}
+};

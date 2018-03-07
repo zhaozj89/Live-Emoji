@@ -1,23 +1,21 @@
-
-
 class SwapNode extends Node {
 	constructor ( type ) {
 		super( 'Action: ' + type );
 		this.addOutput();
 	}
 
-	run( obj, info ) {
+	run ( obj, info ) {
 		obj.updateEmotion( info );
 		editor.signals.sceneGraphChanged.dispatch();
 	}
 
-	toJSON() {
+	toJSON () {
 		return {
 			type: 'swap'
 		};
 	}
 
-	fromJSON( state ) {
+	fromJSON ( state ) {
 
 	}
 }
@@ -34,7 +32,7 @@ var CreateRemoveButton2 = function ( that ) {
 				that.inputs[ i ].node.detachInput( that.inputs[ i ] );
 		}
 
-		if( that.parentInput!==null ) {
+		if ( that.parentInput !== null ) {
 			that.parentInput.domElement.classList.remove( 'filled' );
 			that.parentInput.domElement.classList.add( 'empty' );
 			that.parentInput.currentNode.inputs = [];
@@ -51,11 +49,11 @@ var CreateRemoveButton2 = function ( that ) {
 
 class ParticleNode extends Node {
 
-	getStrokeInput() {
+	getStrokeInput () {
 		return this.strokeInput.selectMenu.getValue();
 	}
 
-	setStrokeInput( whichStroke ) {
+	setStrokeInput ( whichStroke ) {
 		this.strokeInput.selectMenu.setValue( whichStroke );
 	}
 
@@ -63,7 +61,7 @@ class ParticleNode extends Node {
 		return this.sourceStrokeColor.inp.getValue();
 	}
 
-	setSourceStrokeColor(color) {
+	setSourceStrokeColor ( color ) {
 		this.sourceStrokeColor.inp.setValue( color );
 	}
 
@@ -71,7 +69,7 @@ class ParticleNode extends Node {
 		return this.travelStrokeColor.inp.getValue();
 	}
 
-	setTravelStrokeColor(color) {
+	setTravelStrokeColor ( color ) {
 		this.travelStrokeColor.inp.setValue( color );
 	}
 
@@ -79,7 +77,7 @@ class ParticleNode extends Node {
 		return this.sourceStrokes;
 	}
 
-	setSourceStrokes(strokes) {
+	setSourceStrokes ( strokes ) {
 		this.sourceStrokes = strokes;
 	}
 
@@ -87,7 +85,7 @@ class ParticleNode extends Node {
 		return this.travelStrokes;
 	}
 
-	setTravelStrokes(strokes) {
+	setTravelStrokes ( strokes ) {
 		this.travelStrokes = strokes;
 	}
 
@@ -102,25 +100,25 @@ class ParticleNode extends Node {
 		};
 	}
 
-	fromJSON( state ) {
-		this.setStrokeInput(state.strokeInput);
-		this.setSourceStrokeColor(state.sourceStrokeColor);
-		this.setTravelStrokeColor(state.travelStrokeColor);
-		this.setSourceStrokes(state.sourceStrokes);
-		this.setTravelStrokes(state.travelStrokes);
+	fromJSON ( state ) {
+		this.setStrokeInput( state.strokeInput );
+		this.setSourceStrokeColor( state.sourceStrokeColor );
+		this.setTravelStrokeColor( state.travelStrokeColor );
+		this.setSourceStrokes( state.sourceStrokes );
+		this.setTravelStrokes( state.travelStrokes );
 
 		this.updateCanvas();
 	}
 
-	updateCanvas(sourceStrokeColor, travelStrokeColor, sourceStrokes, travelStrokes) {
+	updateCanvas ( sourceStrokeColor, travelStrokeColor, sourceStrokes, travelStrokes ) {
 
 		let ctx = this.brushCanvas.dom.firstChild.getContext( '2d' );
-		for(prop in sourceStrokes) {
-			let stroke = sourceStrokes[prop];
+		for ( prop in sourceStrokes ) {
+			let stroke = sourceStrokes[ prop ];
 			ctx.beginPath();
 			ctx.strokeStyle = sourceStrokeColor;
-			for(let k=0; k<stroke.length; ++k) {
-				let point = stroke[i];
+			for ( let k = 0; k < stroke.length; ++k ) {
+				let point = stroke[ i ];
 				ctx.moveTo( point.x, point.y );
 				ctx.lineTo( point.x, point.y );
 				ctx.stroke();
@@ -128,12 +126,12 @@ class ParticleNode extends Node {
 			ctx.closePath();
 		}
 
-		for(prop in travelStrokes) {
-			let stroke = travelStrokes[prop];
+		for ( prop in travelStrokes ) {
+			let stroke = travelStrokes[ prop ];
 			ctx.beginPath();
 			ctx.strokeStyle = travelStrokeColor;
-			for(let k=0; k<stroke.length; ++k) {
-				let point = stroke[i];
+			for ( let k = 0; k < stroke.length; ++k ) {
+				let point = stroke[ i ];
 				ctx.moveTo( point.x, point.y );
 				ctx.lineTo( point.x, point.y );
 				ctx.stroke();
@@ -161,9 +159,6 @@ class ParticleNode extends Node {
 		this.domElement.appendChild( removeButton );
 
 
-
-
-
 		// add select menu
 		this.strokeInput = new LeafInput( 'Select stroke: ' );
 		this.strokeInput.addSelectionInput( {
@@ -185,9 +180,6 @@ class ParticleNode extends Node {
 		this.sourceStrokes = {};
 		this.travelStrokes = {};
 
-		// this.canvasWidth = 0;
-		// this.canvasHeight = 0;
-
 		// add a canvas here
 		this.brushCanvas = new BrushCanvas( this.sourceStrokes, this.travelStrokes, this, sourceColor, travelColor );
 		document.body.appendChild( this.brushCanvas.dom );
@@ -196,14 +188,9 @@ class ParticleNode extends Node {
 		this.travelStrokeCounter = 0;
 
 		let that = this;
-		// $( function (  ) {
-		// 	let canvas = that.brushCanvas.dom.firstChild;
-		// 	that.canvasWidth = canvas.width;
-		// 	that.canvasHeight = canvas.height;
-		// } );
 
 		editor.signals.runBackground.add( function ( boo ) {
-			if(boo===true)
+			if ( boo === true )
 				that.brushCanvas.dom.style.display = 'none';
 			else
 				that.brushCanvas.dom.style.display = '';
@@ -255,17 +242,17 @@ var BrushCanvas = function ( sourceStrokes, travelStrokes, that, source, travel 
 		$( canvas.dom ).mousedown( function ( event ) {
 			isDrawing = true;
 
-			if ( that.strokeInput.selectMenu.getValue()==='SourceStroke' ) {
+			if ( that.strokeInput.selectMenu.getValue() === 'SourceStroke' ) {
 				let newStroke = [];
 				let name = 'SourceStroke' + that.sourceStrokeCounter;
-				sourceStrokes[name] = newStroke;
+				sourceStrokes[ name ] = newStroke;
 				ctx.strokeStyle = source.getValue();
 				that.sourceStrokeCounter++;
 			}
-			else if ( that.strokeInput.selectMenu.getValue()==='TravelStroke' ) {
+			else if ( that.strokeInput.selectMenu.getValue() === 'TravelStroke' ) {
 				let newStroke = [];
 				let name = 'TravelStroke' + that.travelStrokeCounter;
-				travelStrokes[name] = newStroke;
+				travelStrokes[ name ] = newStroke;
 				ctx.strokeStyle = travel.getValue();
 				that.travelStrokeCounter++;
 			}
@@ -280,15 +267,15 @@ var BrushCanvas = function ( sourceStrokes, travelStrokes, that, source, travel 
 
 		$( canvas.dom ).mousemove( function ( event ) {
 			if ( isDrawing ) {
-				if ( that.strokeInput.selectMenu.getValue()==='SourceStroke' ) {
-					let tmp = new Vector2(event.clientX, event.clientY - 32);
-					let name = 'SourceStroke' + (that.sourceStrokeCounter-1);
-					sourceStrokes[name].push( tmp );
+				if ( that.strokeInput.selectMenu.getValue() === 'SourceStroke' ) {
+					let tmp = new Vector2( event.clientX, event.clientY - 32 );
+					let name = 'SourceStroke' + ( that.sourceStrokeCounter - 1 );
+					sourceStrokes[ name ].push( tmp );
 				}
-				else if ( that.strokeInput.selectMenu.getValue()==='TravelStroke' ) {
-					let tmp = new Vector2(event.clientX, event.clientY - 32);
-					let name = 'TravelStroke' + (that.travelStrokeCounter-1);
-					travelStrokes[name].push( tmp );
+				else if ( that.strokeInput.selectMenu.getValue() === 'TravelStroke' ) {
+					let tmp = new Vector2( event.clientX, event.clientY - 32 );
+					let name = 'TravelStroke' + ( that.travelStrokeCounter - 1 );
+					travelStrokes[ name ].push( tmp );
 				}
 
 				ctx.lineTo( event.clientX, event.clientY - 32 );

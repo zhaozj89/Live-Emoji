@@ -1,13 +1,13 @@
 class CompositeNode extends Node {
 	constructor ( type ) {
-		super ( 'Composite: ' + type );
+		super( 'Composite: ' + type );
 
 		this.addOutput();
 
 		this.setUI();
 	}
 
-	setUI() {
+	setUI () {
 		this.counter = 0;
 
 		let rower = new UI.Row();
@@ -30,19 +30,19 @@ class CompositeNode extends Node {
 
 		this.input = new NodeInput( this );
 		this.input.domElement.textContent = 'channel ' + this.counter + ': ';
-		this.addInput(this.input);
+		this.addInput( this.input );
 		++this.counter;
 
 		let that = this;
-		$( this.incrementer.dom ).click( function() {
+		$( this.incrementer.dom ).click( function () {
 			let input = new NodeInput( this );
 			input.domElement.textContent = 'channel ' + that.counter + ': ';
 			that.addInput( input );
 			++that.counter;
 		} );
 
-		$( this.decrementer.dom ).click( function() {
-			if( that.counter<=1 ) return;
+		$( this.decrementer.dom ).click( function () {
+			if ( that.counter <= 1 ) return;
 			--that.counter;
 			that.removeInput();
 		} );
@@ -55,10 +55,10 @@ class CompositeNode extends Node {
 		};
 	}
 
-	fromJSON (state) {
+	fromJSON ( state ) {
 		this.counter = state.counter;
 
-		for (let i=1; i<state.counter; ++i) {
+		for ( let i = 1; i < state.counter; ++i ) {
 			let input = new NodeInput( this );
 
 			input.domElement.textContent = 'channel ' + i + ': ';

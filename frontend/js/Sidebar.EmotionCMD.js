@@ -1,5 +1,5 @@
 class EmotionCMDThreeDOM {
-	constructor (info, nodeString) {
+	constructor ( info, nodeString ) {
 		this.keyDiv = new UI.Text( info.key );
 		this.semanticDiv = new UI.Text( info.semantic );
 		this.valenceDiv = new UI.Text( info.valence );
@@ -8,14 +8,14 @@ class EmotionCMDThreeDOM {
 		this.nodeString = nodeString;
 	}
 
-	updateInfo(info) {
-		this.keyDiv.setValue(info.key);
-		this.semanticDiv.setValue(info.semantic);
-		this.valenceDiv.setValue(info.valence);
-		this.arousalDiv.setValue(info.arousal);
+	updateInfo ( info ) {
+		this.keyDiv.setValue( info.key );
+		this.semanticDiv.setValue( info.semantic );
+		this.valenceDiv.setValue( info.valence );
+		this.arousalDiv.setValue( info.arousal );
 	}
 
-	updateNodeString(nodeString) {
+	updateNodeString ( nodeString ) {
 		this.nodeString = nodeString;
 	}
 
@@ -24,16 +24,16 @@ class EmotionCMDThreeDOM {
 		this.editButton.setClass( 'EmotionTableEditor' );
 
 		let that = this;
-		this.editButton.onClick(function (  ) {
-			for(let i=0; i<Global_All_DOM_In_SVG.length; ++i) {
-				Global_All_DOM_In_SVG[i].remove();
+		this.editButton.onClick( function () {
+			for ( let i = 0; i < Global_All_DOM_In_SVG.length; ++i ) {
+				Global_All_DOM_In_SVG[ i ].remove();
 			}
-			$(Global_Graph_SVG).empty();
+			$( Global_Graph_SVG ).empty();
 
 			let nodeSession = new NodeSession();
 			nodeSession.fromJSON( JSON.parse( that.nodeString ) );
 
-		});
+		} );
 
 		let rowDiv = new UI.Div();
 		rowDiv.setClass( 'EmotionTable' );
@@ -61,18 +61,18 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 	var allUIThreeDOMInfo = {};
 
-	newCMD.onClick(function (  ) {
+	newCMD.onClick( function () {
 		emotionCMDManager.newCMD();
-	});
+	} );
 
-	saveCMD.onClick(function (  ) {
+	saveCMD.onClick( function () {
 		emotionCMDManager.save();
-	});
+	} );
 
-	cleanCMD.onClick(function (  ) {
+	cleanCMD.onClick( function () {
 		emotionCMDManager.cleanSVG();
 		emotionCMDManager.newCMD();
-	});
+	} );
 
 	let cmdHelper = new UI.Div();
 	cmdHelper.setClass( 'EmotionCMD' );
@@ -95,14 +95,14 @@ Sidebar.EmotionCMD = function ( editor ) {
 	outliner.add( rowDiv );
 
 	signals.saveEmotionCMD.add( function ( msg ) {
-		if( allUIThreeDOMInfo[msg.info.key] === undefined) {
-			let threeDOM = new EmotionCMDThreeDOM(msg.info, msg.nodeString);
+		if ( allUIThreeDOMInfo[ msg.info.key ] === undefined ) {
+			let threeDOM = new EmotionCMDThreeDOM( msg.info, msg.nodeString );
 			outliner.add( threeDOM.createEmotionCMDThreeDOM() );
-			allUIThreeDOMInfo[msg.info.key] = threeDOM;
+			allUIThreeDOMInfo[ msg.info.key ] = threeDOM;
 		}
 		else {
-			allUIThreeDOMInfo[msg.info.key].updateInfo(msg.info);
-			allUIThreeDOMInfo[msg.info.key].updateNodeString(msg.nodeString);
+			allUIThreeDOMInfo[ msg.info.key ].updateInfo( msg.info );
+			allUIThreeDOMInfo[ msg.info.key ].updateNodeString( msg.nodeString );
 		}
 	} );
 

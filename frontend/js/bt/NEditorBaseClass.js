@@ -2,7 +2,7 @@ class LeafInput {
 	constructor ( title ) {
 		this.title = title;
 
-		this.type="LeafInput";
+		this.type = "LeafInput";
 
 		// need it for node to work
 		this.node = null;
@@ -30,12 +30,12 @@ class LeafInput {
 
 	addTextInput () {
 		this.text = new UI.Input();
-		this.text.setValue('');
+		this.text.setValue( '' );
 
 		let that = this;
-		$( that.text.dom ).change(function (  ) {
+		$( that.text.dom ).change( function () {
 			that.arg = that.text.getValue();
-		});
+		} );
 
 		this.domElement.appendChild( this.text.dom );
 	}
@@ -64,9 +64,9 @@ class LeafInput {
 		this.domElement.appendChild( this.inp.dom );
 
 		let that = this;
-		$( that.inp.dom ).change(function (  ) {
+		$( that.inp.dom ).change( function () {
 			that.arg = that.inp.getValue();
-		});
+		} );
 
 		return this.inp;
 	}
@@ -76,9 +76,9 @@ class LeafInput {
 		this.selectMenu.setOptions( options );
 
 		let that = this;
-		$( that.selectMenu.dom ).change(function (  ) {
+		$( that.selectMenu.dom ).change( function () {
 			that.arg = that.selectMenu.getValue();
-		});
+		} );
 
 		this.domElement.appendChild( that.selectMenu.dom );
 	}
@@ -94,7 +94,7 @@ class NodeInput {
 		this.arg = null;
 		this.node = null;
 
-		this.type="NodeInput";
+		this.type = "NodeInput";
 
 		this.currentNode = currentNode;
 
@@ -116,12 +116,12 @@ class NodeInput {
 
 	addTextInput () {
 		this.text = new UI.Input();
-		this.text.setValue('');
+		this.text.setValue( '' );
 
 		let that = this;
-		$( that.text.dom ).change(function (  ) {
+		$( that.text.dom ).change( function () {
 			that.arg = that.text.getValue();
-		});
+		} );
 
 		this.domElement.appendChild( this.text.dom );
 	}
@@ -203,7 +203,7 @@ class NodeInput {
 
 class Node {
 	constructor ( type ) {
-		if( type===null ) return;
+		if ( type === null ) return;
 		this.type = type;
 
 		this.output = null;
@@ -226,10 +226,10 @@ class Node {
 		this.output = outputDom;
 	}
 
-	getInputForSerializationOnly() {
-		for(let i=0; i<this.inputs.length; ++i) {
-			if(this.inputs[i].domElement.classList.contains('filled')===true || this.inputs[i].type==='LeafInput') continue;
-			else return this.inputs[i];
+	getInputForSerializationOnly () {
+		for ( let i = 0; i < this.inputs.length; ++i ) {
+			if ( this.inputs[ i ].domElement.classList.contains( 'filled' ) === true || this.inputs[ i ].type === 'LeafInput' ) continue;
+			else return this.inputs[ i ];
 		}
 	}
 
@@ -362,11 +362,6 @@ class Node {
 	}
 
 	getArg () {
-		// if ( this.inputs.length !== 1 ) {
-		// 	alert( 'Error in Node.getArg()! More than one arguments! ' );
-		// }
-		// else {
-			return this.inputs[ 0 ].arg;
-		// }
+		return this.inputs[ 0 ].arg;
 	}
 }

@@ -3,12 +3,12 @@ class CharacterNode extends Node {
 		return this.input.arg;
 	}
 
-	setEmotion (emotion) {
+	setEmotion ( emotion ) {
 		this.input.selectMenu.setValue( emotion );
 	}
 
 	constructor ( type ) {
-		super ( 'Character: ' + type );
+		super( 'Character: ' + type );
 
 		this.addOutput();
 
@@ -24,8 +24,8 @@ class CharacterNode extends Node {
 		};
 	}
 
-	fromJSON (state) {
-		this.setEmotion(state.emotion);
+	fromJSON ( state ) {
+		this.setEmotion( state.emotion );
 	}
 }
 
@@ -35,12 +35,12 @@ class TextureNode extends Node {
 		return this.input.arg;
 	}
 
-	setTextureName (textureName) {
+	setTextureName ( textureName ) {
 		this.input.selectMenu.setValue( textureName );
 	}
 
 	constructor ( type ) {
-		super ( 'Texture: ' + type );
+		super( 'Texture: ' + type );
 
 		this.addOutput();
 
@@ -56,8 +56,8 @@ class TextureNode extends Node {
 		};
 	}
 
-	fromJSON (state) {
-		this.setTextureName(state.textureName);
+	fromJSON ( state ) {
+		this.setTextureName( state.textureName );
 	}
 }
 
