@@ -32,7 +32,7 @@ class EmotionCMDThreeDOM {
 
 			let nodeSession = new NodeSession();
 			nodeSession.fromJSON( JSON.parse( that.nodeString ) );
-
+			editor.emotionCMDManager.currentNodeSession = nodeSession;
 		} );
 
 		let rowDiv = new UI.Div();

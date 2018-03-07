@@ -356,6 +356,7 @@ class Node {
 		let res = [];
 		for ( let i = 0; i < this.inputs.length; ++i ) {
 			if ( this.inputs[ i ].arg !== null ) res.push( this.inputs[ i ].arg );
+			else res.push( null );
 		}
 
 		return res;

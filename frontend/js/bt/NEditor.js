@@ -184,15 +184,19 @@ var NEditor = function ( editor ) {
 		if ( startBehaviorTree === false ) return;
 
 		if ( event[ 'type' ] === 'keyboard' ) {
+			let already_run = false;
 			if ( editor.emotionCMDManager.currentNodeSession !== null ) {
+				if( editor.emotionCMDManager.currentNodeSession.getInfo().key===event[ 'keycode' ] )
+					already_run = true;
+				editor.emotionCMDManager.currentNodeSession.run( event[ 'keycode' ] );
+			}
+
+			if(already_run===false) {
 				for ( let prop in editor.emotionCMDManager.allCMDs ) {
 					if ( event[ 'keycode' ] === prop ) {
 						editor.emotionCMDManager.allCMDs[ prop ].run( prop );
 					}
 				}
-			}
-			else {
-				editor.emotionCMDManager.currentNodeSession.run( event[ 'keycode' ] );
 			}
 		}
 	} );
