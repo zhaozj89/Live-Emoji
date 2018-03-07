@@ -107,12 +107,12 @@ class ParticleNode extends Node {
 		this.setSourceStrokes( state.sourceStrokes );
 		this.setTravelStrokes( state.travelStrokes );
 
-		this.updateCanvas();
+		this.updateCanvas(state.sourceStrokeColor, state.travelStrokeColor, state.sourceStrokes, state.travelStrokes);
 	}
 
 	updateCanvas ( sourceStrokeColor, travelStrokeColor, sourceStrokes, travelStrokes ) {
 
-		let ctx = this.brushCanvas.dom.firstChild.getContext( '2d' );
+		let ctx = editor.brushCanvas.getContext( '2d' );
 		for ( prop in sourceStrokes ) {
 			let stroke = sourceStrokes[ prop ];
 			ctx.beginPath();
@@ -140,8 +140,10 @@ class ParticleNode extends Node {
 		}
 	}
 
-	constructor ( type ) {
+	constructor ( type, editor ) {
 		super( null );
+
+		this.editor = editor;
 
 		this.type = 'Action: ' + type;
 
@@ -163,31 +165,27 @@ class ParticleNode extends Node {
 		this.strokeInput = new LeafInput( 'Select stroke: ' );
 		this.strokeInput.addSelectionInput( {
 			'SourceStroke': 'source_stroke',
-			'TravelStroke': 'travel_stroke',
+			'TravelStroke': 'travel_stroke'
 		} );
 		this.addInput( this.strokeInput );
 
-		this.sourceStrokeColor = new LeafInput( 'Source stroke: ' );
-		let sourceColor = this.sourceStrokeColor.addColorInput();
-		this.addInput( this.sourceStrokeColor );
+		let sourceColor = new LeafInput( 'Source stroke: ' );
+		this.sourceStrokeColor = sourceColor.addColorInput();
+		this.addInput( sourceColor );
 
-		this.travelStrokeColor = new LeafInput( 'Travel stroke: ' );
-		let travelColor = this.travelStrokeColor.addColorInput();
-		this.addInput( this.travelStrokeColor );
+		let travelColor = new LeafInput( 'Travel stroke: ' );
+		this.travelStrokeColor = travelColor.addColorInput();
+		this.addInput( travelColor );
 
 		this.addOutput();
 
 		this.sourceStrokes = {};
 		this.travelStrokes = {};
 
-		// add a canvas here
-		this.brushCanvas = new BrushCanvas( this.sourceStrokes, this.travelStrokes, this, sourceColor, travelColor );
-		document.body.appendChild( this.brushCanvas.dom );
-
 		this.sourceStrokeCounter = 0;
 		this.travelStrokeCounter = 0;
 
-		let that = this;
+		this.editor.currentParticleNode = this;
 	}
 
 	run ( obj, info ) {
@@ -204,98 +202,3 @@ class ParticleNode extends Node {
 		editor.signals.displayP5Canvas.dispatch( true );
 	}
 }
-
-
-var BrushCanvas = function ( sourceStrokes, travelStrokes, that, source, travel ) {
-	let container = new UI.Panel();
-	container.setId( 'brushCanvas' );
-	container.setPosition( 'absolute' );
-	container.setTop( '32px' );
-	container.setRight( '600px' );
-	container.setBottom( '32px' );
-	container.setLeft( '0px' );
-	container.setOpacity( 0.9 );
-	container.dom.style.zIndex = "1";
-
-	let canvas = new UI.Canvas();
-	canvas.setId( 'mainCanvas' );
-	canvas.setPosition( 'absolute' );
-	canvas.dom.style.width = '100%';
-	canvas.dom.style.height = '100%';
-
-	container.add( canvas );
-
-
-	$( function () {
-		let ctx = canvas.dom.getContext( '2d' );
-
-		let isDrawing = false;
-
-		resizeCanvasToDisplaySize( canvas.dom );
-
-		$( canvas.dom ).mousedown( function ( event ) {
-			isDrawing = true;
-
-			if ( that.strokeInput.selectMenu.getValue() === 'SourceStroke' ) {
-				let newStroke = [];
-				let name = 'SourceStroke' + that.sourceStrokeCounter;
-				sourceStrokes[ name ] = newStroke;
-				ctx.strokeStyle = source.getValue();
-				that.sourceStrokeCounter++;
-			}
-			else if ( that.strokeInput.selectMenu.getValue() === 'TravelStroke' ) {
-				let newStroke = [];
-				let name = 'TravelStroke' + that.travelStrokeCounter;
-				travelStrokes[ name ] = newStroke;
-				ctx.strokeStyle = travel.getValue();
-				that.travelStrokeCounter++;
-			}
-			else {
-				isDrawing = false;
-				return;
-			}
-
-			ctx.beginPath();
-			ctx.moveTo( event.clientX, event.clientY - 32 );
-		} );
-
-		$( canvas.dom ).mousemove( function ( event ) {
-			if ( isDrawing ) {
-				if ( that.strokeInput.selectMenu.getValue() === 'SourceStroke' ) {
-					let tmp = new Vector2( event.clientX, event.clientY - 32 );
-					let name = 'SourceStroke' + ( that.sourceStrokeCounter - 1 );
-					sourceStrokes[ name ].push( tmp );
-				}
-				else if ( that.strokeInput.selectMenu.getValue() === 'TravelStroke' ) {
-					let tmp = new Vector2( event.clientX, event.clientY - 32 );
-					let name = 'TravelStroke' + ( that.travelStrokeCounter - 1 );
-					travelStrokes[ name ].push( tmp );
-				}
-
-				ctx.lineTo( event.clientX, event.clientY - 32 );
-				ctx.stroke();
-			}
-		} );
-
-		$( canvas.dom ).mouseup( function () {
-			isDrawing = false;
-			ctx.closePath();
-		} );
-
-		function resizeCanvasToDisplaySize ( canv ) {
-			const width = canv.clientWidth;
-			const height = canv.clientHeight;
-
-			if ( canv.width !== width || canv.height !== height ) {
-				canv.width = width;
-				canv.height = height;
-				return true;
-			}
-			return false;
-		}
-	} );
-
-
-	return container;
-
-};

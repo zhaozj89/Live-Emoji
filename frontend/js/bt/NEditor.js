@@ -181,7 +181,7 @@ var NEditor = function ( editor ) {
 
 		if ( event[ 'type' ] === 'keyboard' ) {
 			let already_run = false;
-			if ( editor.emotionCMDManager.currentNodeSession !== null ) {
+			if ( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode!==null) {
 				if( editor.emotionCMDManager.currentNodeSession.getInfo().key===event[ 'keycode' ] )
 					already_run = true;
 				editor.emotionCMDManager.currentNodeSession.run( event[ 'keycode' ] );

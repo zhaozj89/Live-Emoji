@@ -88,6 +88,7 @@
 	<script src="js/Sidebar.Scene.Geometry.SphereGeometry.js"></script>
 	<script src="js/Sidebar.Scene.Material.js"></script>
 
+	<script src="js/BrushCanvas.js"></script>
 	<script src="js/Sidebar2.js"></script>
 
 	<script src="js/Viewport.js"></script>
@@ -166,6 +167,9 @@
 	document.body.appendChild( viewport.dom );
 
 	var myP5Layer = new p5( P5Layer );
+
+	var brushCanvas = new BrushCanvas( editor );
+	document.body.appendChild( brushCanvas.dom );
 
 	var sidebar = new Sidebar( editor );
 	document.body.appendChild( sidebar.dom );

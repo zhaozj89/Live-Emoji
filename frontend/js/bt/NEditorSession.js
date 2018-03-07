@@ -1,6 +1,8 @@
 class NodeSession {
-	constructor () {
+	constructor ( editor ) {
 		this.triggerNode = null;
+
+		this.editor = editor;
 	}
 
 	toJSON () {
@@ -107,7 +109,7 @@ class NodeSession {
 			}
 
 			case 'particle': {
-				node = new ParticleNode( type );
+				node = new ParticleNode( type, this.editor );
 				node.moveTo( { x: 300, y: 80 } );
 				node.initUI();
 				break;

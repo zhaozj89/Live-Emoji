@@ -17,7 +17,7 @@ class EmotionCMDManager {
 	newCMD () {
 		this.cleanSVG();
 
-		let nodeSession = new NodeSession();
+		let nodeSession = new NodeSession( this.editor );
 		this.currentNodeSession = nodeSession;
 	}
 
@@ -43,7 +43,7 @@ class EmotionCMDManager {
 	}
 
 	save () {
-		if ( this.currentNodeSession === null ) {
+		if ( this.currentNodeSession === null || this.currentNodeSession.triggerNode===null ) {
 			return;
 		}
 		else {

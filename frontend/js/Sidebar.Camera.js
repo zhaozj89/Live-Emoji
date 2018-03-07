@@ -127,7 +127,7 @@ Sidebar.Camera = function ( editor ) {
 
 	var debugInf = new UI.Text( 'For debug usage' );
 	debugInf.setId( 'debugInf' );
-	container.add( debugInf );
+	// container.add( debugInf );
 
 	var startButton = new UI.Button( 'Start' );
 	startButton.setValue( 'wait, loading video' );
@@ -290,8 +290,6 @@ Sidebar.Camera = function ( editor ) {
 		pred = FaceTracker.predict();
 
 		// measure
-		//GetFaceEmotion();
-
 		measurement = GetFaceEmotionAndLandmark();
 
 		// correct

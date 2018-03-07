@@ -57,12 +57,24 @@ Sidebar.EmotionCMD = function ( editor ) {
 	let newCMD = new UI.Button( 'New' );
 	let saveCMD = new UI.Button( 'Save' );
 	let cleanCMD = new UI.Button( 'Clean' );
-
+	let stopCMD = new UI.Button( 'Stop' );
 
 	var allUIThreeDOMInfo = {};
 
 	newCMD.onClick( function () {
 		emotionCMDManager.newCMD();
+
+		let msg = {
+			sourceStrokes: null,
+			travelStrokes: null,
+			textureName: null
+		};
+
+		signals.msgTextureInfo.dispatch( msg );
+		signals.displayP5Canvas.dispatch( false );
+
+		let ctx = editor.brushCanvas.getContext( '2d' );
+		ctx.clearRect( 0, 0, editor.brushCanvas.width, editor.brushCanvas.height );
 	} );
 
 	saveCMD.onClick( function () {
@@ -72,11 +84,25 @@ Sidebar.EmotionCMD = function ( editor ) {
 	cleanCMD.onClick( function () {
 		emotionCMDManager.cleanSVG();
 		emotionCMDManager.newCMD();
+
+		let ctx = editor.brushCanvas.getContext( '2d' );
+		ctx.clearRect( 0, 0, editor.brushCanvas.width, editor.brushCanvas.height );
 	} );
+
+	stopCMD.onClick(function (  ) {
+		let msg = {
+			sourceStrokes: null,
+			travelStrokes: null,
+			textureName: null
+		};
+
+		signals.msgTextureInfo.dispatch( msg );
+		signals.displayP5Canvas.dispatch( false );
+	});
 
 	let cmdHelper = new UI.Div();
 	cmdHelper.setClass( 'EmotionCMD' );
-	cmdHelper.add( newCMD, saveCMD, cleanCMD );
+	cmdHelper.add( newCMD, saveCMD, cleanCMD, stopCMD );
 
 	container.add( cmdHelper );
 
