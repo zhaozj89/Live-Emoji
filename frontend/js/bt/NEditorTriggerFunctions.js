@@ -5,5 +5,5 @@ var KeyboardTriggerFunction = function ( event ) {
 	};
 
 	KEYBOARD_TRIGGER.keycode = String.fromCharCode( event.keyCode ).toLowerCase();
-	editor.signals.trigger.dispatch( KEYBOARD_TRIGGER );
+	editor.signals.keyboardTriggering.dispatch( KEYBOARD_TRIGGER );
 };

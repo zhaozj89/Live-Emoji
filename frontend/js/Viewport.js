@@ -270,7 +270,7 @@ var Viewport = function ( editor ) {
 
 	}
 
-	editor.signals.animateRender.add( function () {
+	editor.signals.refreshThreeRender.add( function () {
 		render();
 	} );
 

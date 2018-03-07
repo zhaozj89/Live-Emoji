@@ -9,13 +9,13 @@ var P5Layer = function ( p ) {
 
 	let signals = editor.signals;
 
-	let runBackground = false;
+	let displayP5Canvas = false;
 
 	let sourceStrokes = null;
 	let travelStrokes = null;
 	let textureName = null;
 
-	signals.msgBackgroundTexturePattern.add( function ( msg ) {
+	signals.msgTextureInfo.add( function ( msg ) {
 		// console.log( msg.sourceStrokes );
 		// console.log( msg.travelStrokes );
 		// console.log( msg.textureName );
@@ -25,14 +25,14 @@ var P5Layer = function ( p ) {
 		textureName = msg.textureName;
 	} );
 
-	signals.runBackground.add( function ( boo ) {
+	signals.displayP5Canvas.add( function ( boo ) {
 		if( boo===true ) {
 			container.setDisplay('');
-			runBackground = true;
+			displayP5Canvas = true;
 		}
 		else {
 			container.setDisplay('none');
-			runBackground = false;
+			displayP5Canvas = false;
 		}
 	} );
 
@@ -74,7 +74,7 @@ var P5Layer = function ( p ) {
 		p.clear();
 		p.background('rgba(46,46,46, 0)');
 
-		if( runBackground===true ) {
+		if( displayP5Canvas===true ) {
 			if(sourceStrokes!==null) {
 				let texture = null;
 				switch (textureName) {

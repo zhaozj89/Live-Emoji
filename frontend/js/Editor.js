@@ -14,43 +14,31 @@ var Editor = function () {
 
 	this.signals = {
 
-		// animation
-		animateRender: new Signal(),
+		// refresh three render
+		refreshThreeRender: new Signal(),
 
 		// trigger
+		keyboardTriggering : new Signal(),
 
-		trigger : new Signal(),
-
+		// face following
 		followFace: new Signal(),
-
 		followEmotion: new Signal(),
-
 		followLeftEye: new Signal(),
 		followRightEye: new Signal(),
-
 		followMouth: new Signal(),
 
-		turnOnOffFaceTracking: new Signal(),
+		// background
+		displayP5Canvas: new Signal(),
 
-
-		// action signals
-
-		msgBackgroundTexturePattern: new Signal(),
-		runBackground: new Signal(),
-
-		// skinning
-
-		skinningChangeMode: new Signal(),
+		// texture signals
+		msgTextureInfo: new Signal(),
 
 		// node editor
-
 		editEmotionCMD: new Signal(),
-
 		saveEmotionCMD: new Signal(),
 
-		// actions
 
-		showModal: new Signal(),
+		// old existing signals
 
 		// notifications
 
@@ -108,7 +96,7 @@ var Editor = function () {
 	this.selected = null;
 	this.helpers = {};
 
-	this.emotionCMDManager = new EmotionCMDManager();
+	this.emotionCMDManager = new EmotionCMDManager( this );
 };
 
 Editor.prototype = {

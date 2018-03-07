@@ -165,7 +165,7 @@
 	var viewport = new Viewport( editor );
 	document.body.appendChild( viewport.dom );
 
-	var myp5 = new p5( P5Layer );
+	var myP5Layer = new p5( P5Layer );
 
 	var sidebar = new Sidebar( editor );
 	document.body.appendChild( sidebar.dom );
@@ -247,13 +247,6 @@
 		signals.sceneFogChanged.add( saveState );
 		signals.sceneGraphChanged.add( saveState );
 		signals.historyChanged.add( saveState );
-
-		signals.showModal.add( function ( content ) {
-
-			modal.show( content );
-
-		} );
-
 	} );
 
 	//
@@ -312,27 +305,6 @@
 		}
 
 	}
-
-	/*
-	window.addEventListener( 'message', function ( event ) {
-
-		editor.clear();
-		editor.fromJSON( event.data );
-
-	}, false );
-	*/
-
-	// for animation
-	function animate () {
-
-		requestAnimationFrame( animate );
-		// TWEEN.update();
-
-		editor.signals.animateRender.dispatch();
-
-	}
-
-	animate();
 </script>
 </body>
 </html>

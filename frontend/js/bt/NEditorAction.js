@@ -188,13 +188,6 @@ class ParticleNode extends Node {
 		this.travelStrokeCounter = 0;
 
 		let that = this;
-
-		editor.signals.runBackground.add( function ( boo ) {
-			if ( boo === true )
-				that.brushCanvas.dom.style.display = 'none';
-			else
-				that.brushCanvas.dom.style.display = '';
-		} );
 	}
 
 	run ( obj, info ) {
@@ -207,7 +200,8 @@ class ParticleNode extends Node {
 			textureName: info
 		};
 
-		editor.signals.msgBackgroundTexturePattern.dispatch( msg );
+		editor.signals.msgTextureInfo.dispatch( msg );
+		editor.signals.displayP5Canvas.dispatch( true );
 	}
 }
 

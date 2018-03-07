@@ -140,15 +140,6 @@ Sidebar.Camera = function ( editor ) {
 		TurnONOFFFaceTracking();
 	} );
 
-	signals.turnOnOffFaceTracking.add( function ( on_off ) {
-		if ( startButton.dom.textContent === 'Start' ) {
-			if ( on_off === true ) TurnONOFFFaceTracking();
-		}
-		else {
-			if ( on_off === false ) TurnONOFFFaceTracking();
-		}
-	} );
-
 	container.add( startButton );
 
 	// caller

@@ -6,12 +6,12 @@ var Global_NEditor_Container = null;
 var Global_All_DOM_In_SVG = [];
 
 class EmotionCMDManager {
-	constructor () {
+	constructor ( editor ) {
 		this.currentNodeSession = null;
-
-
 		this.allSerializedCMDs = {};
 		this.allCMDs = {};
+
+		this.editor = editor;
 	}
 
 	newCMD () {
@@ -55,7 +55,7 @@ class EmotionCMDManager {
 				'nodeString': nodeString
 			};
 
-			editor.signals.saveEmotionCMD.dispatch( msg );
+			this.editor.signals.saveEmotionCMD.dispatch( msg );
 
 			this.allSerializedCMDs[ info.key ] = nodeString;
 			this.allCMDs[ info.key ] = this.currentNodeSession;

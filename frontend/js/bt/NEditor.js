@@ -162,10 +162,6 @@ var NEditor = function ( editor ) {
 				Runner.children[ 0 ].textContent = ' Stop';
 
 			startBehaviorTree = !startBehaviorTree;
-
-			signals.runBackground.dispatch( startBehaviorTree );
-
-
 		} );
 	} );
 
@@ -179,7 +175,7 @@ var NEditor = function ( editor ) {
 
 	// Keyboard trigger
 
-	signals.trigger.add( function ( event ) {
+	signals.keyboardTriggering.add( function ( event ) {
 
 		if ( startBehaviorTree === false ) return;
 
