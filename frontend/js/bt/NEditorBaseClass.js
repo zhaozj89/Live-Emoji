@@ -126,25 +126,6 @@ class NodeInput {
 		this.domElement.appendChild( this.text.dom );
 	}
 
-	addEmotionInput () {
-		let that = this;
-		this.domElement.textContent = 'emotion: ';
-		this.selectMenu = new UI.Select();
-		this.selectMenu.setOptions( {
-			"happy": "happy",
-			"sad": "sad",
-			"disgusted": "disgusted",
-			"fearful": "fearful",
-			"neutral": "neutral",
-			"surprised": "surprised",
-			"angry": "angry"
-		} );
-		this.domElement.appendChild( this.selectMenu.dom );
-		$( that.selectMenu.dom ).change( function () {
-			that.arg = that.selectMenu.getValue();
-		} );
-	}
-
 	addCharacterInput () {
 		this.arg = '';
 
@@ -177,7 +158,14 @@ class NodeInput {
 		this.domElement.textContent = 'texture: ';
 
 		let allEmotions = {
-			'fire': 'fire'
+			'fire': 'fire',
+			'heart': 'heart',
+			'poop': 'poop',
+			'raindrop': 'raindrop',
+			'splatter1': 'splatter1',
+			'splatter2': 'splatter2',
+			'surprised': 'surprised',
+			'yellowbubble': 'yellowbubble'
 		};
 
 		let that = this;
@@ -187,7 +175,6 @@ class NodeInput {
 		this.domElement.appendChild( this.selectMenu.dom );
 		$( that.selectMenu.dom ).change( function () {
 			that.arg = allEmotions[ that.selectMenu.getValue() ];
-			console.log( that.arg );
 		} );
 	}
 

@@ -38,7 +38,14 @@ var P5Layer = function ( p ) {
 
 
 	p.preload = function () {
-		fire_texture = p.loadImage("./asset/background/images/fire_small.png");
+		fire_texture = p.loadImage("./asset/background/images/small/fire_small.png");
+		heart_texture = p.loadImage("./asset/background/images/small/heart_small.png");
+		poop_texture = p.loadImage("./asset/background/images/small/poop_small.png");
+		raindrop_texture = p.loadImage("./asset/background/images/small/raindrop_small.png");
+		splatter1_texture = p.loadImage("./asset/background/images/small/splatter1_small.png");
+		splatter2_texture = p.loadImage("./asset/background/images/small/splatter2_small.png");
+		surprised_texture = p.loadImage("./asset/background/images/small/surprised_small.png");
+		yellowbubble_texture = p.loadImage("./asset/background/images/small/yellowbubble_small.png");
 	}
 	p.setup = function () {
 
@@ -71,9 +78,38 @@ var P5Layer = function ( p ) {
 			if(sourceStrokes!==null) {
 				let texture = null;
 				switch (textureName) {
-					case 'fire':
+					case 'fire': {
 						texture = fire_texture;
 						break;
+					}
+					case 'heart': {
+						texture = heart_texture;
+						break;
+					}
+					case 'poop': {
+						texture = poop_texture;
+						break;
+					}
+					case 'raindrop': {
+						texture = raindrop_texture;
+						break;
+					}
+					case 'splatter1': {
+						texture = splatter1_texture;
+						break;
+					}
+					case 'splatter2': {
+						texture = splatter2_texture;
+						break;
+					}
+					case 'surprised': {
+						texture = surprised_texture;
+						break;
+					}
+					case 'yellowbubble': {
+						texture = yellowbubble_texture;
+						break;
+					}
 				}
 				ps.updateSystemInfo( sourceStrokes, texture );
 
