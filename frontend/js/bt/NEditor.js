@@ -204,6 +204,8 @@ var NEditor = function ( editor ) {
 	// Tracking
 
 	signals.followFace.add( function ( event ) {
+		let puppet = editor.selected;
+
 		if ( puppet !== null ) {
 			puppet.position.x = event.x;
 			puppet.position.y = event.y;
@@ -214,6 +216,8 @@ var NEditor = function ( editor ) {
 	} );
 
 	signals.followEmotion.add( function ( emotion ) {
+		let puppet = editor.selected;
+
 		if ( puppet !== null ) {
 			switch ( emotion ) {
 				case EMOTION_TYPE.HAPPY:
@@ -246,6 +250,8 @@ var NEditor = function ( editor ) {
 	} );
 
 	signals.followLeftEye.add( function ( state ) {
+		let puppet = editor.selected;
+
 		if ( puppet !== null ) {
 
 			puppet.updateLeftEye( state );
@@ -254,6 +260,8 @@ var NEditor = function ( editor ) {
 	} );
 
 	signals.followRightEye.add( function ( state ) {
+		let puppet = editor.selected;
+
 		if ( puppet !== null ) {
 
 			puppet.updateRightEye( state );
@@ -262,6 +270,8 @@ var NEditor = function ( editor ) {
 	} );
 
 	signals.followMouth.add( function ( state ) {
+		let puppet = editor.selected;
+
 		if ( puppet !== null ) {
 
 			puppet.updateMouth( state );
