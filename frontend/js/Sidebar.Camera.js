@@ -610,63 +610,9 @@ Sidebar.Camera = function ( editor ) {
 				'x': resX,
 				'y': resY
 			};
-			// for ( let i=0; i<normalizedPositions.length; ++i ) {
-			// 	normalizedPositions[i][0] -= resX;
-			// 	normalizedPositions[i][1] -= resY;
-			// }
-			//
-			// let res = numeric.svd( normalizedPositions );
-			//
-			// let x0 = res.V[0][0] * videoStreamWidth + videoStreamWidth/2;
-			// let y0 = -res.V[0][1] * videoStreamHeight + videoStreamHeight/2;
-			//
-			// let x1 = res.V[1][0] * videoStreamWidth + videoStreamWidth/2;
-			// let y1 = -res.V[1][1] * videoStreamHeight + videoStreamHeight/2;
-
-			// videoStreamOverlayContext.clearRect( 0, 0, videoStreamWidth, videoStreamHeight );
-
-			// videoStreamOverlayContext.height = videoStreamHeight;
-
-			// videoStreamOverlayContext.strokeStyle = "#FF0000";
-			// videoStreamOverlayContext.moveTo( videoStreamWidth/2, videoStreamHeight/2 );
-			// videoStreamOverlayContext.lineTo( x0, y0 );
-			// videoStreamOverlayContext.stroke();
-
-			// console.log( x0, y0 );
-			//
-			// videoStreamOverlayContext.fillStyle = "#0034ff";
-			// videoStreamOverlayContext.moveTo( videoStreamWidth/2, videoStreamHeight/2 );
-			// videoStreamOverlayContext.lineTo( x1, y1 );
-			// videoStreamOverlayContext.stroke();
-			//
-			// console.log( x1, y1 );
-
-			// res.V[0]
-
-			// res.V[0]
-			// console.log( res.V );
-			// console.log( 'S: ' + res.S );
 		}
 		else
 			return null;
-
-		// if ( positions ) {
-		// 	let res = { x: 0, y: 0 };
-		//
-		// 	for ( let i = 0; i < positions.length; ++i ) {
-		// 		res.x += positions[ i ][ 0 ];
-		// 		res.y += positions[ i ][ 1 ];
-		// 	}
-		//
-		// 	res.x /= positions.length;
-		// 	res.y /= positions.length;
-		//
-		// 	res.x = res.x / videoStreamWidth - 0.5;
-		// 	res.y = res.y / videoStreamWidth - 0.5;
-		//
-		// 	res.x *= 10;
-		// 	res.y *= 10;
-		// }
 	}
 
 	function DrawLandmark () {
