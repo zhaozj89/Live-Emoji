@@ -117,7 +117,9 @@ var P5Layer = function ( p ) {
 
 			ps.applyForce( wind );
 			ps.run();
-			ps.addParticle();
+
+			if( ps.particles.length < 100 )
+				ps.addParticle();
 		}
 	}
 

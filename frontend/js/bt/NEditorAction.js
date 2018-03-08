@@ -58,19 +58,19 @@ class ParticleNode extends Node {
 	}
 
 	getSourceStrokeColor () {
-		return this.sourceStrokeColor.inp.getValue();
+		return this.sourceStrokeColor.getValue();
 	}
 
 	setSourceStrokeColor ( color ) {
-		this.sourceStrokeColor.inp.setValue( color );
+		this.sourceStrokeColor.setValue( color );
 	}
 
 	getTravelStrokeColor () {
-		return this.travelStrokeColor.inp.getValue();
+		return this.travelStrokeColor.getValue();
 	}
 
 	setTravelStrokeColor ( color ) {
-		this.travelStrokeColor.inp.setValue( color );
+		this.travelStrokeColor.setValue( color );
 	}
 
 	getSourceStrokes () {
