@@ -102,7 +102,7 @@ class NodeSession {
 			}
 
 			case 'swap': {
-				node = new SwapNode( type );
+				node = new SwapNode( type, this.editor );
 				node.moveTo( { x: 300, y: 80 } );
 				node.initUI();
 				break;
