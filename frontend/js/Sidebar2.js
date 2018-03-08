@@ -29,7 +29,7 @@ var Sidebar2 = function ( editor ) {
 	valenceView.dom.style.padding = '5px';
 
 	var valenceImg = document.createElement("img");
-	valenceImg.src = './asset/valence/SAM0.png';
+	valenceImg.src = './asset/valence_new/1.png';
 	valenceImg.style.verticalAlign = 'middle';
 	valenceView.dom.appendChild(valenceImg);
 
@@ -70,7 +70,8 @@ var Sidebar2 = function ( editor ) {
 			max: 8,
 			slide: function ( event, ui ) {
 				$( valenceText.dom ).text( ui.value );
-				valenceImg.src = './asset/valence/SAM' + ui.value + '.png';
+				let res = ui.value + 1;
+				valenceImg.src = './asset/valence_new/' + res + '.png';
 			}
 		} );
 	} );

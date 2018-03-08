@@ -612,48 +612,48 @@ var LoadFileName = function ( characterStructure, name, emotion, filename ) {
 }
 
 
-var LoadCharacterJSON = function ( file ) {
-
-	let filename = file.name;
-	let extension = filename.split( '.' ).pop().toLowerCase();
-
-	let reader = new FileReader();
-
-	switch ( extension ) {
-
-		case 'json':
-
-			reader.addEventListener( 'load', function ( event ) {
-				let loader = JSON.parse( event.target.result );
-
-				let characterStructure = new CharacterStructure( file.name.slice( 0, -5 ) );
-				characterStructure.add2Scene.add( function ( obj ) {
-					editor.execute( new AddObjectCommand( obj ) );
-				} );
-
-				for ( let prop in loader ) {
-
-					if ( typeof( loader[ prop ] ) === 'string' ) {
-						LoadFileName( characterStructure, prop, '', loader[ prop ] );
-						continue;
-					}
-
-					if ( typeof( loader[ prop ] ) === 'object' ) {
-						for ( let prop2 in loader[ prop ] ) LoadFileName( characterStructure, prop, prop2, loader[ prop ][ prop2 ] );
-						continue;
-					}
-				}
-			} );
-			reader.readAsText( file );
-			break;
-
-		default:
-
-			alert( 'Unsupported file format (' + extension + ').' );
-
-			break;
-	}
-};
+// var LoadCharacterJSON = function ( file ) {
+//
+// 	let filename = file.name;
+// 	let extension = filename.split( '.' ).pop().toLowerCase();
+//
+// 	let reader = new FileReader();
+//
+// 	switch ( extension ) {
+//
+// 		case 'json':
+//
+// 			reader.addEventListener( 'load', function ( event ) {
+// 				let loader = JSON.parse( event.target.result );
+//
+// 				let characterStructure = new CharacterStructure( file.name.slice( 0, -5 ) );
+// 				characterStructure.add2Scene.add( function ( obj ) {
+// 					editor.execute( new AddObjectCommand( obj ) );
+// 				} );
+//
+// 				for ( let prop in loader ) {
+//
+// 					if ( typeof( loader[ prop ] ) === 'string' ) {
+// 						LoadFileName( characterStructure, prop, '', loader[ prop ] );
+// 						continue;
+// 					}
+//
+// 					if ( typeof( loader[ prop ] ) === 'object' ) {
+// 						for ( let prop2 in loader[ prop ] ) LoadFileName( characterStructure, prop, prop2, loader[ prop ][ prop2 ] );
+// 						continue;
+// 					}
+// 				}
+// 			} );
+// 			reader.readAsText( file );
+// 			break;
+//
+// 		default:
+//
+// 			alert( 'Unsupported file format (' + extension + ').' );
+//
+// 			break;
+// 	}
+// };
 
 var characterStructure = null;
 

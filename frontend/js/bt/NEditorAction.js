@@ -42,7 +42,8 @@ var CreateRemoveButton2 = function ( that ) {
 		}
 
 		that.domElement.remove();
-		that.brushCanvas.dom.remove();
+
+		// that.aPixi4ParticleExample.destroy();
 	} );
 	return dom;
 };
@@ -106,38 +107,6 @@ class ParticleNode extends Node {
 		this.setTravelStrokeColor( state.travelStrokeColor );
 		this.setSourceStrokes( state.sourceStrokes );
 		this.setTravelStrokes( state.travelStrokes );
-
-		this.updateCanvas(state.sourceStrokeColor, state.travelStrokeColor, state.sourceStrokes, state.travelStrokes);
-	}
-
-	updateCanvas ( sourceStrokeColor, travelStrokeColor, sourceStrokes, travelStrokes ) {
-
-		let ctx = editor.brushCanvas.getContext( '2d' );
-		for ( prop in sourceStrokes ) {
-			let stroke = sourceStrokes[ prop ];
-			ctx.beginPath();
-			ctx.strokeStyle = sourceStrokeColor;
-			for ( let k = 0; k < stroke.length; ++k ) {
-				let point = stroke[ i ];
-				ctx.moveTo( point.x, point.y );
-				ctx.lineTo( point.x, point.y );
-				ctx.stroke();
-			}
-			ctx.closePath();
-		}
-
-		for ( prop in travelStrokes ) {
-			let stroke = travelStrokes[ prop ];
-			ctx.beginPath();
-			ctx.strokeStyle = travelStrokeColor;
-			for ( let k = 0; k < stroke.length; ++k ) {
-				let point = stroke[ i ];
-				ctx.moveTo( point.x, point.y );
-				ctx.lineTo( point.x, point.y );
-				ctx.stroke();
-			}
-			ctx.closePath();
-		}
 	}
 
 	constructor ( type, editor ) {
@@ -160,45 +129,79 @@ class ParticleNode extends Node {
 		let removeButton = CreateRemoveButton2( this );
 		this.domElement.appendChild( removeButton );
 
-
 		// add select menu
-		this.strokeInput = new LeafInput( 'Select stroke: ' );
-		this.strokeInput.addSelectionInput( {
+		this.motionEffects = new LeafInput( 'Motion Effects: ' );
+		this.motionEffects.addSelectionInput( {
 			'SourceStroke': 'source_stroke',
 			'TravelStroke': 'travel_stroke'
 		} );
-		this.addInput( this.strokeInput );
-
-		let sourceColor = new LeafInput( 'Source stroke: ' );
-		this.sourceStrokeColor = sourceColor.addColorInput();
-		this.addInput( sourceColor );
-
-		let travelColor = new LeafInput( 'Travel stroke: ' );
-		this.travelStrokeColor = travelColor.addColorInput();
-		this.addInput( travelColor );
+		this.addInput( this.motionEffects );
 
 		this.addOutput();
 
-		this.sourceStrokes = {};
-		this.travelStrokes = {};
-
-		this.sourceStrokeCounter = 0;
-		this.travelStrokeCounter = 0;
-
-		this.editor.currentParticleNode = this;
+		this.aPixi4ParticleExample = new Pixi4ParticleExample();
 	}
 
 	run ( obj, info ) {
-		let sourceStrokes = this.sourceStrokes;
-		let travelStrokes = this.travelStrokes;
 
-		let msg = {
-			sourceStrokes: sourceStrokes,
-			travelStrokes: travelStrokes,
-			textureName: info
+		let imagePath = "./asset/background/small/" + info + "_small.png";
+
+		let config = {
+			"alpha": {
+				"start": 0.5,
+				"end": 0.5
+			},
+			"scale": {
+				"start": 1,
+				"end": 1
+			},
+			"color": {
+				"start": "ffffff",
+				"end": "ffffff"
+			},
+			"speed": {
+				"start": 3000,
+				"end": 3000
+			},
+			"startRotation": {
+				"min": 65,
+				"max": 65
+			},
+			"rotationSpeed": {
+				"min": 0,
+				"max": 0
+			},
+			"lifetime": {
+				"min": 0.81,
+				"max": 0.81
+			},
+			"blendMode": "normal",
+			"frequency": 0.004,
+			"emitterLifetime": 0,
+			"maxParticles": 1000,
+			"pos": {
+				"x": 0,
+				"y": 0
+			},
+			"addAtBack": false,
+			"spawnType": "rect",
+			"spawnRect": {
+				"x": -600,
+				"y": -460,
+				"w": 900,
+				"h": 20
+			}
 		};
 
-		editor.signals.msgTextureInfo.dispatch( msg );
-		editor.signals.displayP5Canvas.dispatch( true );
+		this.aPixi4ParticleExample.loadAsset( imagePath, config );
+		this.aPixi4ParticleExample.display();
+
+		let that = this;
+		setTimeout( function () {
+			that.aPixi4ParticleExample.destroy();
+
+			// that.editor..updateEmotion( emotion );
+			// editor.signals.sceneGraphChanged.dispatch();
+		}, 3000 );
 	}
 }

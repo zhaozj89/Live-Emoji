@@ -27,16 +27,9 @@ var Editor = function () {
 		followRightEye: new Signal(),
 		followMouth: new Signal(),
 
-		// background
-		displayP5Canvas: new Signal(),
-
-		// texture signals
-		msgTextureInfo: new Signal(),
-
 		// node editor
 		editEmotionCMD: new Signal(),
 		saveEmotionCMD: new Signal(),
-
 
 		// old existing signals
 
@@ -75,6 +68,9 @@ var Editor = function () {
 
 	};
 
+	// my objects
+	this.emotionCMDManager = new EmotionCMDManager( this );
+
 	this.config = new Config( 'threejs-editor' );
 	this.history = new History( this );
 	this.storage = new Storage();
@@ -95,8 +91,6 @@ var Editor = function () {
 
 	this.selected = null;
 	this.helpers = {};
-
-	this.emotionCMDManager = new EmotionCMDManager( this );
 };
 
 Editor.prototype = {
