@@ -84,6 +84,8 @@ var Editor = function () {
 		assets: {}
 	};
 
+	this.emotionMutex = false;
+
 	this.config = new Config( 'threejs-editor' );
 	this.history = new History( this );
 	this.storage = new Storage();

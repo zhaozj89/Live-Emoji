@@ -295,14 +295,19 @@ class SwapNode extends Node {
 	}
 
 	run ( obj, info ) {
+		this.editor.emotionMutex = true;
 		obj.updateEmotion( info );
 		editor.signals.sceneGraphChanged.dispatch();
 
 		let that = this;
 		setTimeout( function () {
-			that.editor.updateEmotion( 6 ); // neutral
-			that.editor.signals.sceneGraphChanged.dispatch();
-		}, 1000 );
+			// obj.updateEmotion( 6 ); // neutral
+			// that.editor.signals.sceneGraphChanged.dispatch();
+
+			// obj.setIsTrigger( false );
+
+			that.editor.emotionMutex = false;
+		}, 500 );
 	}
 
 	toJSON () {

@@ -202,6 +202,9 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 };
 
 CharacterStructure.prototype.updateEmotion = function ( emotion ) {
+
+	this.emotion = emotion;
+
 	for ( let i = 0; i < Object.keys( EMOTION_TYPE ).length; ++i ) {
 
 		this.left_eyebrow[ i ].mesh.visible = false;

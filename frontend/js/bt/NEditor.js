@@ -240,8 +240,10 @@ var NEditor = function ( editor ) {
 					break;
 			}
 
-			puppet.updateEmotion( emotion );
-			editor.signals.sceneGraphChanged.dispatch();
+			if( editor.emotionMutex === false ) {
+				puppet.updateEmotion( emotion );
+				editor.signals.sceneGraphChanged.dispatch();
+			}
 		}
 
 	} );

@@ -143,7 +143,7 @@ class NodeSession {
 
 				let obj = null;
 				if ( object_node[ 'type' ] === 'Character: character' )
-					obj = this.editor.characterStructure;
+					obj = characterStructure;
 				else if ( object_node[ 'type' ] === 'Texture: texture' ) {
 					// obj = backgroundStructure;
 					// DO something better
