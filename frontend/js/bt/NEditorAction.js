@@ -321,34 +321,6 @@ class SwapNode extends Node {
 	}
 }
 
-var CreateRemoveButton2 = function ( that ) {
-	let dom = document.createElement( 'button' );
-	dom.classList.add( 'delete' );
-	dom.textContent = 'X';
-
-	$( dom ).on( 'click', function () {
-
-		for ( let i = 0; i < that.inputs.length; ++i ) {
-			if ( that.inputs[ i ].node !== null )
-				that.inputs[ i ].node.detachInput( that.inputs[ i ] );
-		}
-
-		if ( that.parentInput !== null ) {
-			that.parentInput.domElement.classList.remove( 'filled' );
-			that.parentInput.domElement.classList.add( 'empty' );
-			that.parentInput.currentNode.inputs = [];
-
-			that.detachInput( that.parentInput );
-
-		}
-
-		that.domElement.remove();
-
-		// that.aPixi4ParticleExample.destroy();
-	} );
-	return dom;
-};
-
 class ParticleNode extends Node {
 
 	getMotionEffect () {
@@ -362,35 +334,31 @@ class ParticleNode extends Node {
 	toJSON () {
 		return {
 			type: 'particle',
-			motionEffect: this.getMotionEffect()
+			motionEffect: this.getMotionEffect(),
+			emitterX: this.emitterX.text.getValue(),
+			emitterY: this.emitterY.text.getValue()
 		};
 	}
 
 	fromJSON ( state ) {
 		this.setMotionEffect( state.motionEffect );
+		this.emitterX.text.setValue( state.emitterX );
+		this.emitterY.text.setValue( state.emitterY );
 	}
 
 	constructor ( type, editor ) {
-		super( null );
+		super( 'Action: ' + type );
 
 		this.editor = editor;
 
-		this.type = 'Action: ' + type;
+		this.emitterX = new LeafInput( 'Emitter X: ' );
+		this.emitterX.addTextInfoInput(editor.pixi4Obj.width/2);
+		this.addInput( this.emitterX );
 
-		this.output = null;
-		this.inputs = [];
+		this.emitterY = new LeafInput( 'Emitter Y: ' );
+		this.emitterY.addTextInfoInput(editor.pixi4Obj.height/2);
+		this.addInput( this.emitterY );
 
-		this.parentInput = null;
-
-		this.attachedPaths = [];
-		this.connected = false;
-
-		this.domElement = CreateTitle( this.type );
-
-		let removeButton = CreateRemoveButton2( this );
-		this.domElement.appendChild( removeButton );
-
-		// add select menu
 		this.motionEffects = new LeafInput( 'Motion Effects: ' );
 
 		let configs = {};
@@ -415,7 +383,7 @@ class ParticleNode extends Node {
 		let config = ALL_BACKGROUND_ANIMATION_CONFIGS[this.getMotionEffect()];
 
 		this.aPixi4ParticleExample.stop();
-		this.aPixi4ParticleExample.updateConfig( asset_name, config );
+		this.aPixi4ParticleExample.updateConfig( asset_name, config, this.emitterX, this.emitterY );
 		this.aPixi4ParticleExample.display();
 	}
 }

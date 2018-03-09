@@ -32,7 +32,7 @@ class CharacterNode extends Node {
 class TextureNode extends Node {
 
 	getTextureName () {
-		return this.input.arg;
+		return this.input.selectMenu.getValue();
 	}
 
 	setTextureName ( textureName ) {

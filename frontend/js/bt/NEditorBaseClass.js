@@ -28,6 +28,12 @@ class LeafInput {
 		return this.box.dom;
 	}
 
+	addTextInfoInput ( val ) {
+		this.text = new UI.Text();
+		this.text.setValue(val);
+		this.domElement.appendChild( this.text.dom );
+	}
+
 	addTextInput () {
 		this.text = new UI.Input();
 		this.text.setValue( '' );
@@ -339,6 +345,8 @@ class Node {
 		return res;
 	}
 
+
+	// THESE TWO FUNCTSIONS DO NOT WORK!!!
 	getArgs () {
 		let res = [];
 		for ( let i = 0; i < this.inputs.length; ++i ) {

@@ -13,19 +13,24 @@ class Pixi4ParticleExample {
 		this.update();
 	}
 
-	updateConfig( asset_name, config ) {
+	updateConfig( asset_name, config, emitterX, emitterY ) {
 		let that = this;
 		that.emitterContainer = new PIXI.Container();
 		that.stage.addChild( that.emitterContainer );
 
 		that.editor.pixi4Obj.emitter = new PIXI.particles.Emitter( that.emitterContainer, that.assets[asset_name], config );
-		that.editor.pixi4Obj.emitter.updateOwnerPos( that.width / 2, that.height / 2 );
+		that.editor.pixi4Obj.emitter.updateOwnerPos( Number(emitterX.text.getValue()), Number(emitterY.text.getValue()) );
 
 		that.canvas.addEventListener( 'mouseup', function ( e ) {
+			let X = e.offsetX || e.layerX;
+			let Y = e.offsetY || e.layerY;
 			if ( !that.editor.pixi4Obj.emitter ) return;
 			that.editor.pixi4Obj.emitter.emit = true;
 			that.editor.pixi4Obj.emitter.resetPositionTracking();
-			that.editor.pixi4Obj.emitter.updateOwnerPos( e.offsetX || e.layerX, e.offsetY || e.layerY );
+			that.editor.pixi4Obj.emitter.updateOwnerPos( X, Y );
+
+			emitterX.text.setValue( X );
+			emitterY.text.setValue( Y );
 		} );
 	}
 
