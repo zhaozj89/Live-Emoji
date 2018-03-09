@@ -54,21 +54,16 @@ Sidebar.EmotionCMD = function ( editor ) {
 	container.setBorderTop( '0' );
 	container.setPaddingTop( '10px' );
 
-	let newCMD = new UI.Button( 'New' );
-	let saveCMD = new UI.Button( 'Save' );
-	let cleanCMD = new UI.Button( 'Clean' );
-	let stopCMD = new UI.Button( 'Stop' );
+	let newCMD = new UI.Button( 'New CMD' );
+	let saveCMD = new UI.Button( 'Save CMD' );
+	let cleanCMD = new UI.Button( 'Clean CMD' );
+	let importCMD = new UI.Button( 'Import CMDs' );
+	let exportCMD = new UI.Button( 'Export CMDs' );
 
 	let allUIThreeDOMInfo = {};
 
 	newCMD.onClick( function () {
 		emotionCMDManager.newCMD();
-
-		let msg = {
-			sourceStrokes: null,
-			travelStrokes: null,
-			textureName: null
-		};
 	} );
 
 	saveCMD.onClick( function () {
@@ -80,17 +75,9 @@ Sidebar.EmotionCMD = function ( editor ) {
 		emotionCMDManager.newCMD();
 	} );
 
-	stopCMD.onClick(function (  ) {
-		let msg = {
-			sourceStrokes: null,
-			travelStrokes: null,
-			textureName: null
-		};
-	});
-
 	let cmdHelper = new UI.Div();
 	cmdHelper.setClass( 'EmotionCMD' );
-	cmdHelper.add( newCMD, saveCMD, cleanCMD, stopCMD );
+	cmdHelper.add( newCMD, saveCMD, cleanCMD, importCMD, exportCMD );
 
 	container.add( cmdHelper );
 
