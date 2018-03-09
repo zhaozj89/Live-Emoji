@@ -75,6 +75,48 @@ Sidebar.EmotionCMD = function ( editor ) {
 		emotionCMDManager.newCMD();
 	} );
 
+	exportCMD.onClick (function (  ) {
+		let text_file = JSON.stringify( emotionCMDManager );
+
+		function download(text, name, type) {
+			let a = document.createElement("a");
+			let file = new Blob([text], {type: type});
+			a.href = URL.createObjectURL(file);
+			a.download = name;
+			a.click();
+		}
+		download(text_file, 'test.json', 'text/plain');
+	});
+
+	importCMD.onClick(function (  ) {
+		let LoadJSONFile = function ( filename ) {
+
+			let xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					let jsonFile = JSON.parse(this.responseText);
+
+					emotionCMDManager.fromJSON( jsonFile );
+
+					for( let prop in emotionCMDManager.allSerializedCMDs ) {
+
+						let msg = {
+							'info': prop,
+							'nodeString': emotionCMDManager.allSerializedCMDs[prop]
+						};
+
+						signals.saveEmotionCMD.dispatch( msg );
+					}
+				}
+			};
+
+			xhr.open( 'GET', './asset/' + filename, true );
+			xhr.send();
+		}
+
+		LoadJSONFile( 'test.json' );
+	});
+
 	let cmdHelper = new UI.Div();
 	cmdHelper.setClass( 'EmotionCMD' );
 	cmdHelper.add( newCMD, saveCMD, cleanCMD, importCMD, exportCMD );
@@ -100,6 +142,9 @@ Sidebar.EmotionCMD = function ( editor ) {
 			let threeDOM = new EmotionCMDThreeDOM( msg.info, msg.nodeString );
 			outliner.add( threeDOM.createEmotionCMDThreeDOM( editor ) );
 			allUIThreeDOMInfo[ msg.info.key ] = threeDOM;
+
+			allUIThreeDOMInfo[ msg.info.key ].updateInfo( msg.info );
+			allUIThreeDOMInfo[ msg.info.key ].updateNodeString( msg.nodeString );
 		}
 		else {
 			allUIThreeDOMInfo[ msg.info.key ].updateInfo( msg.info );

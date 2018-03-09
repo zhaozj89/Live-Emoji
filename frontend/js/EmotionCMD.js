@@ -69,7 +69,7 @@ class EmotionCMDManager {
 	fromJSON ( state ) {
 		this.allSerializedCMDs = state;
 		for ( let prop in this.allSerializedCMDs ) {
-			let currentState = this.allSerializedCMDs[ prop ];
+			let currentState = JSON.parse( this.allSerializedCMDs[ prop ] );
 			let nodeSession = new NodeSession( this.editor );
 			this.allCMDs[ currentState.key ] = nodeSession.fromJSON( currentState );
 		}
