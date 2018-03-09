@@ -22,6 +22,9 @@ class LeafInput {
 				this.selectMenu.setValue( val );
 				break;
 			}
+			case 'color': {
+				this.color.setValue( val );
+			}
 		}
 	}
 
@@ -32,6 +35,9 @@ class LeafInput {
 			}
 			case 'select': {
 				return this.selectMenu.getValue();
+			}
+			case 'color': {
+				this.color.getValue();
 			}
 		}
 	}
@@ -56,6 +62,15 @@ class LeafInput {
 		this.text = new UI.Text();
 		this.text.setValue(val);
 		this.domElement.appendChild( this.text.dom );
+	}
+
+	addColorInput () {
+		this.inputType = 'color';
+
+		this.color = new UI.Input( '' );
+		this.color.dom.type = 'color';
+		this.color.setValue( '#ff0000' );
+		this.domElement.appendChild( this.color.dom );
 	}
 
 	addTextInput () {

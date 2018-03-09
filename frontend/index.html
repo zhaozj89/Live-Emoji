@@ -12,6 +12,8 @@
 	<link rel="stylesheet" href="css/heart.css">
 	<link rel="stylesheet" href="css/EmotionPanel.css">
 
+	<script src="js/libs/raphael.min.js"></script>
+
 	<!--numeric-->
 	<script src="js/libs/gaussian.js"></script>
 
@@ -79,6 +81,7 @@
 	<script src="js/Sidebar.Scene.Material.js"></script>
 
 	<script src="js/BackgroundAnimation.js"></script>
+	<script src="js/TextAnimation.js"></script>
 	<script src="js/Sidebar2.js"></script>
 
 	<script src="js/libs/pixi.js"></script>
@@ -157,6 +160,9 @@
 
 	var backgroundAnimationCanvas = new BackgroundAnimationCanvas( editor );
 	document.body.appendChild( backgroundAnimationCanvas.dom );
+
+	var textAnimationCanvas = new TextAnimationCanvas( editor );
+	document.body.appendChild( textAnimationCanvas.dom );
 
 	var sidebar = new Sidebar( editor );
 	document.body.appendChild( sidebar.dom );

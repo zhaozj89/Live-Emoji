@@ -301,11 +301,6 @@ class SwapNode extends Node {
 
 		let that = this;
 		setTimeout( function () {
-			// obj.updateEmotion( 6 ); // neutral
-			// that.editor.signals.sceneGraphChanged.dispatch();
-
-			// obj.setIsTrigger( false );
-
 			that.editor.emotionMutex = false;
 		}, 500 );
 	}
@@ -385,5 +380,35 @@ class ParticleNode extends Node {
 		this.aPixi4ParticleExample.stop();
 		this.aPixi4ParticleExample.updateConfig( asset_name, config, this.emitterX, this.emitterY );
 		this.aPixi4ParticleExample.display();
+	}
+}
+
+class TextMotionNode extends Node {
+
+	toJSON() {
+		return {
+			type: 'text_motion',
+			color: this.textColor.getArg()
+		};
+	}
+
+	fromJSON( state ) {
+		this.textColor.getArg( state.color );
+	}
+
+	constructor ( type, editor ) {
+		super(  'Action: ' + type  );
+
+		this.editor = editor;
+
+		this.textColor = new LeafInput( 'Color: ' );
+		this.textColor.addColorInput();
+		this.addInput( this.textColor );
+
+		this.addOutput();
+	}
+
+	run (obj, info) {
+
 	}
 }

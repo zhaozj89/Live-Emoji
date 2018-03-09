@@ -16,6 +16,7 @@ class Pixi4ParticleExample {
 	updateConfig( asset_name, config, emitterX, emitterY ) {
 		let that = this;
 		that.emitterContainer = new PIXI.Container();
+
 		that.stage.addChild( that.emitterContainer );
 
 		that.editor.pixi4Obj.emitter = new PIXI.particles.Emitter( that.emitterContainer, that.assets[asset_name], config );

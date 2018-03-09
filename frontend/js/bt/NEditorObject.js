@@ -61,14 +61,33 @@ class TextureNode extends Node {
 	}
 }
 
-// class TextNode extends Node {
-// 	constructor ( type ) {
-// 		super ( 'Text: ' + type );
-//
-// 		this.addOutput();
-//
-// 		let input = new NodeInput( this );
-// 		input.addTextInput();
-// 		this.addInput( input );
-// 	}
-// }
+class TextNode extends Node {
+	setTextVal(val) {
+		this.input.text.setValue( val );
+	}
+
+	getTextVal () {
+		return this.input.text.getValue();
+	}
+
+	toJSON() {
+		return {
+			type: 'text',
+			text: this.getTextVal()
+		}
+	}
+
+	fromJSON( state ) {
+		this.setTextVal( state.text );
+	}
+
+	constructor ( type ) {
+		super ( 'Text: ' + type );
+
+		this.addOutput();
+
+		this.input = new NodeInput( this );
+		this.input.addTextInput();
+		this.addInput( this.input );
+	}
+}

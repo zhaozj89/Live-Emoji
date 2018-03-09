@@ -86,13 +86,13 @@ class NodeSession {
 				break;
 			}
 
-			// case 'text': {
-			// 	let node = new TextNode ( type );
-			// 	node.moveTo ( { x: 300, y: 80 } );
-			// 	node.initUI ();
-			// 	this.objectNode = node;
-			// 	break;
-			// }
+			case 'text': {
+				let node = new TextNode ( type );
+				node.moveTo ( { x: 300, y: 80 } );
+				node.initUI ();
+				this.objectNode = node;
+				break;
+			}
 
 			case 'sequence': {
 				node = new CompositeNode( type );
@@ -110,6 +110,13 @@ class NodeSession {
 
 			case 'particle': {
 				node = new ParticleNode( type, this.editor );
+				node.moveTo( { x: 300, y: 80 } );
+				node.initUI();
+				break;
+			}
+
+			case 'text_motion': {
+				node = new TextMotionNode( type, this.editor );
 				node.moveTo( { x: 300, y: 80 } );
 				node.initUI();
 				break;

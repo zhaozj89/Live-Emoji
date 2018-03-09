@@ -96,8 +96,9 @@ var NEditor = function ( editor ) {
 	Objects.appendChild( menuObjects.dom );
 
 	let menuActions = new UI.UList();
-	let buttonSwap = menuActions.addLi( 'Swap' );
+	let buttonSwap = menuActions.addLi( 'Face Swapping' );
 	let buttonParticle = menuActions.addLi( 'Texture Motion' );
+	let buttonTextMotion = menuActions.addLi( 'Text Motion' );
 	Actions.appendChild( menuActions.dom );
 
 	menu.dom.style.position = 'absolute';
@@ -154,6 +155,10 @@ var NEditor = function ( editor ) {
 		$( buttonParticle ).click( function () {
 			emotionCMDManager.addNode( 'particle' );
 		} );
+
+		$( buttonTextMotion ).click(function (  ) {
+			emotionCMDManager.addNode( 'text_motion' );
+		});
 
 		$( Runner ).click( function () {
 			if ( startBehaviorTree )
