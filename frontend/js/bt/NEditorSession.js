@@ -154,7 +154,7 @@ class NodeSession {
 					return;
 				}
 
-				let info = object_node.getTextureName();
+				let info = object_node.getArg();
 				let object_node_children = object_node.getChildren();
 				for ( let j = 0; j < object_node_children.length; ++j ) {
 

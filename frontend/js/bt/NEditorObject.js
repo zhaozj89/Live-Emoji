@@ -1,6 +1,6 @@
 class CharacterNode extends Node {
 	getEmotion () {
-		return this.input.arg;
+		return this.input.selectMenu.getValue();
 	}
 
 	setEmotion ( emotion ) {
