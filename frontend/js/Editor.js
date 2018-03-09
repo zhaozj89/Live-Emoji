@@ -71,6 +71,19 @@ var Editor = function () {
 	// my objects
 	this.emotionCMDManager = new EmotionCMDManager( this );
 
+	this.pixi4Obj = {
+		width: 840,
+		height: 681,
+		canvas: null,
+		stage: new PIXI.Container(),
+		loader: PIXI.loader,
+		render: null,
+		updateId: null,
+		update: null,
+		emitter: null,
+		assets: {}
+	};
+
 	this.config = new Config( 'threejs-editor' );
 	this.history = new History( this );
 	this.storage = new Storage();

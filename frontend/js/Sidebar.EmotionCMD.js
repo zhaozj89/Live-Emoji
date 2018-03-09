@@ -19,7 +19,7 @@ class EmotionCMDThreeDOM {
 		this.nodeString = nodeString;
 	}
 
-	createEmotionCMDThreeDOM () {
+	createEmotionCMDThreeDOM ( editor ) {
 
 		this.editButton.setClass( 'EmotionTableEditor' );
 
@@ -30,7 +30,7 @@ class EmotionCMDThreeDOM {
 			}
 			$( Global_Graph_SVG ).empty();
 
-			let nodeSession = new NodeSession();
+			let nodeSession = new NodeSession( editor );
 			nodeSession.fromJSON( JSON.parse( that.nodeString ) );
 			editor.emotionCMDManager.currentNodeSession = nodeSession;
 		} );
@@ -111,7 +111,7 @@ Sidebar.EmotionCMD = function ( editor ) {
 	signals.saveEmotionCMD.add( function ( msg ) {
 		if ( allUIThreeDOMInfo[ msg.info.key ] === undefined ) {
 			let threeDOM = new EmotionCMDThreeDOM( msg.info, msg.nodeString );
-			outliner.add( threeDOM.createEmotionCMDThreeDOM() );
+			outliner.add( threeDOM.createEmotionCMDThreeDOM( editor ) );
 			allUIThreeDOMInfo[ msg.info.key ] = threeDOM;
 		}
 		else {

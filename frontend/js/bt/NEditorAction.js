@@ -74,7 +74,7 @@ var ALL_BACKGROUND_ANIMATION_CONFIGS = {
 		},
 		"blendMode": "normal",
 		"frequency": 0.001,
-		"emitterLifetime": 0,
+		"emitterLifetime": 0.31,
 		"maxParticles": 1000,
 		"pos": {
 			"x": 0,
@@ -119,7 +119,7 @@ var ALL_BACKGROUND_ANIMATION_CONFIGS = {
 		},
 		"blendMode": "normal",
 		"frequency": 0.004,
-		"emitterLifetime": 0,
+		"emitterLifetime": 0.31,
 		"maxParticles": 1000,
 		"pos": {
 			"x": 0,
@@ -166,7 +166,7 @@ var ALL_BACKGROUND_ANIMATION_CONFIGS = {
 		},
 		"blendMode": "normal",
 		"frequency": 0.016,
-		"emitterLifetime": 0,
+		"emitterLifetime": 0.31,
 		"maxParticles": 500,
 		"pos": {
 			"x": 0,
@@ -224,7 +224,7 @@ var ALL_BACKGROUND_ANIMATION_CONFIGS = {
 			}
 		],
 		"frequency": 0.004,
-		"emitterLifetime": 0,
+		"emitterLifetime": 0.31,
 		"maxParticles": 1000,
 		"pos": {
 			"x": 0,
@@ -270,7 +270,7 @@ var ALL_BACKGROUND_ANIMATION_CONFIGS = {
 		},
 		"blendMode": "normal",
 		"frequency": 0.001,
-		"emitterLifetime": 0,
+		"emitterLifetime": 0.31,
 		"maxParticles": 1000,
 		"pos": {
 			"x": 0,
@@ -362,7 +362,7 @@ class ParticleNode extends Node {
 	}
 
 	fromJSON ( state ) {
-		this.setMotionEffect( state.travelStrokes );
+		this.setMotionEffect( state.motionEffect );
 	}
 
 	constructor ( type, editor ) {
@@ -400,21 +400,17 @@ class ParticleNode extends Node {
 
 		this.addOutput();
 
-		this.aPixi4ParticleExample = new Pixi4ParticleExample();
+		this.aPixi4ParticleExample = new Pixi4ParticleExample( editor );
 	}
 
 	run ( obj, info ) {
 
-		let imagePath = "./asset/background/small/" + info + "_small.png";
+		let asset_name = info ;
 
 		let config = ALL_BACKGROUND_ANIMATION_CONFIGS[this.getMotionEffect()];
 
-		this.aPixi4ParticleExample.loadAsset( imagePath, config );
+		this.aPixi4ParticleExample.stop();
+		this.aPixi4ParticleExample.updateConfig( asset_name, config );
 		this.aPixi4ParticleExample.display();
-
-		let that = this;
-		setTimeout( function () {
-			that.aPixi4ParticleExample.destroy();
-		}, 5000 );
 	}
 }

@@ -106,7 +106,10 @@ Menubar.File = function ( editor ) {
 	// } );
 	// options.add( option2 );
 
-	PreLoadCharacterJSON();
+
+	// DO NOT load it for testing
+	// PreLoadCharacterJSON();
+
 	// PreLoadBackgroundJSON();
 
 	return container;
