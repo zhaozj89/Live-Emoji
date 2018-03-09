@@ -36,11 +36,12 @@
     magin: auto;
     padding: 5px;
     vertical-align:middle;
-    font-size: large
+    /*font-size: large*/
 }
 
-button.EmotionTableEditor {
-    position: absolute;
-    right: 20px;
-    margin: 4px
-}
+/*button.EmotionTableEditor {*/
+    /*position: absolute;*/
+    /*!*right: 20px;*!*/
+    /*margin: 4px;*/
+    /*float: right*/
+/*}*/

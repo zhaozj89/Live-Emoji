@@ -1,3 +1,5 @@
+var allUIThreeDOMInfo = {};
+
 class EmotionCMDThreeDOM {
 	constructor ( info, nodeString ) {
 		this.keyDiv = new UI.Text( info.key );
@@ -5,6 +7,7 @@ class EmotionCMDThreeDOM {
 		this.valenceDiv = new UI.Text( info.valence );
 		this.arousalDiv = new UI.Text( info.arousal );
 		this.editButton = new UI.Button( 'Edit' );
+		this.deleteButton = new UI.Button( 'D' );
 		this.nodeString = nodeString;
 	}
 
@@ -35,11 +38,21 @@ class EmotionCMDThreeDOM {
 			editor.emotionCMDManager.currentNodeSession = nodeSession;
 		} );
 
-		let rowDiv = new UI.Div();
-		rowDiv.setClass( 'EmotionTable' );
-		rowDiv.add( this.keyDiv, this.semanticDiv, this.valenceDiv, this.arousalDiv, this.editButton );
+		this.deleteButton.onClick( function () {
+			let key = that.keyDiv.getValue();
+			delete editor.emotionCMDManager.allSerializedCMDs[ key ];
+			delete editor.emotionCMDManager.allCMDs[ key ];
 
-		return rowDiv;
+			that.rowDiv.dom.remove();
+
+			delete allUIThreeDOMInfo[ key ];
+		} );
+
+		this.rowDiv = new UI.Div();
+		this.rowDiv.setClass( 'EmotionTable' );
+		this.rowDiv.add( this.keyDiv, this.semanticDiv, this.valenceDiv, this.arousalDiv, this.editButton, this.deleteButton );
+
+		return this.rowDiv;
 	}
 }
 
@@ -56,11 +69,9 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 	let newCMD = new UI.Button( 'New CMD' );
 	let saveCMD = new UI.Button( 'Save CMD' );
-	let cleanCMD = new UI.Button( 'Clean CMD' );
+	let cleanSVG = new UI.Button( 'Clean SVG' );
 	let importCMD = new UI.Button( 'Import CMDs' );
 	let exportCMD = new UI.Button( 'Export CMDs' );
-
-	let allUIThreeDOMInfo = {};
 
 	newCMD.onClick( function () {
 		emotionCMDManager.newCMD();
@@ -70,7 +81,7 @@ Sidebar.EmotionCMD = function ( editor ) {
 		emotionCMDManager.save();
 	} );
 
-	cleanCMD.onClick( function () {
+	cleanSVG.onClick( function () {
 		emotionCMDManager.cleanSVG();
 		emotionCMDManager.newCMD();
 	} );
@@ -98,10 +109,14 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 					emotionCMDManager.fromJSON( jsonFile );
 
+					emotionCMDManager.cleanSVG();
+
 					for( let prop in emotionCMDManager.allSerializedCMDs ) {
 
+						let info = emotionCMDManager.allCMDs[prop].getInfo();
+
 						let msg = {
-							'info': prop,
+							'info': info,
 							'nodeString': emotionCMDManager.allSerializedCMDs[prop]
 						};
 
@@ -119,7 +134,7 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 	let cmdHelper = new UI.Div();
 	cmdHelper.setClass( 'EmotionCMD' );
-	cmdHelper.add( newCMD, saveCMD, cleanCMD, importCMD, exportCMD );
+	cmdHelper.add( newCMD, saveCMD, cleanSVG, importCMD, exportCMD );
 
 	container.add( cmdHelper );
 

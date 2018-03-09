@@ -122,12 +122,13 @@ class NodeSession {
 	}
 
 	getInfo () {
-		let args = this.triggerNode.getArgs();
+		// let args = this.triggerNode.getArgs();
+		let that = this;
 		return {
-			semantic: args[ 0 ],
-			valence: args[ 1 ],
-			arousal: args[ 2 ],
-			key: args[ 3 ]
+			semantic: that.triggerNode.getSemanticName(),
+			valence: that.triggerNode.getValence(),
+			arousal: that.triggerNode.getArousal(),
+			key: that.triggerNode.getKey()
 		}
 	}
 

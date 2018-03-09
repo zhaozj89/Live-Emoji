@@ -37,7 +37,7 @@ class TriggerNode extends Node {
 	}
 
 	getKey () {
-		return this.key.arg;
+		return this.key.text.getValue();
 	}
 
 	constructor ( type ) {
