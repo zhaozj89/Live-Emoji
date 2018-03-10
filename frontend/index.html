@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="css/NEditor.css">
 	<link rel="stylesheet" href="css/heart.css">
 	<link rel="stylesheet" href="css/EmotionPanel.css">
+	<link rel="stylesheet" href="css/RecommendationPanel.css">
 
 	<script src="js/libs/raphael.min.js"></script>
 
@@ -34,6 +35,8 @@
 	<!--threejs-->
 	<script src="js/libs/three.js"></script>
 	<script src="js/libs/ui.three.js"></script>
+
+	<script src="js/RecommendationPanel.js"></script>
 
 	<!--other threejs modules-->
 	<script src="js/libs/examples/js/libs/system.min.js"></script>
@@ -178,6 +181,9 @@
 
 	var nEditor = new NEditor( editor ); // need face info in sidebar
 	document.body.appendChild( nEditor.dom );
+
+	var recommendationPanel = new RecommendationPanel( editor );
+	document.body.appendChild( recommendationPanel.dom );
 
 	//
 
