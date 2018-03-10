@@ -1,93 +1,68 @@
 class CharacterNode extends Node {
-	getEmotion () {
-		return this.input.selectMenu.getValue();
-	}
-
-	setEmotion ( emotion ) {
-		this.input.selectMenu.setValue( emotion );
-	}
-
 	constructor ( type ) {
 		super( 'Character: ' + type );
 
 		this.addOutput();
 
-		this.input = new NodeInput( this );
-		this.input.addCharacterInput();
-		this.addInput( this.input );
+		this.emotionInput = new NodeInput( this );
+		this.emotionInput.addCharacterInput();
+		this.addInput( this.emotionInput );
 	}
 
 	toJSON () {
 		return {
 			type: 'character',
-			emotion: this.getEmotion()
+			emotion: this.emotionInput.getArg()
 		};
 	}
 
 	fromJSON ( state ) {
-		this.setEmotion( state.emotion );
+		this.emotionInput.setArg( state.emotion );
 	}
 }
 
 class TextureNode extends Node {
-
-	getTextureName () {
-		return this.input.selectMenu.getValue();
-	}
-
-	setTextureName ( textureName ) {
-		this.input.selectMenu.setValue( textureName );
-	}
-
 	constructor ( type ) {
 		super( 'Texture: ' + type );
 
 		this.addOutput();
 
-		this.input = new NodeInput( this );
-		this.input.addTextureInput();
-		this.addInput( this.input );
+		this.textureInput = new NodeInput( this );
+		this.textureInput.addTextureInput();
+		this.addInput( this.textureInput );
 	}
 
 	toJSON () {
 		return {
 			type: 'texture',
-			textureName: this.getTextureName()
+			textureName: this.textureInput.getArg()
 		};
 	}
 
 	fromJSON ( state ) {
-		this.setTextureName( state.textureName );
+		this.textureInput.setArg( state.textureName );
 	}
 }
 
 class TextNode extends Node {
-	setTextVal(val) {
-		this.input.text.setValue( val );
-	}
-
-	getTextVal () {
-		return this.input.text.getValue();
-	}
-
-	toJSON() {
-		return {
-			type: 'text',
-			text: this.getTextVal()
-		}
-	}
-
-	fromJSON( state ) {
-		this.setTextVal( state.text );
-	}
-
 	constructor ( type ) {
 		super ( 'Text: ' + type );
 
 		this.addOutput();
 
-		this.input = new NodeInput( this );
-		this.input.addTextInput();
-		this.addInput( this.input );
+		this.textInput = new NodeInput( this );
+		this.textInput.addTextInput();
+		this.addInput( this.textInput );
+	}
+
+	toJSON() {
+		return {
+			type: 'text',
+			text: this.textInput.getArg()
+		};
+	}
+
+	fromJSON( state ) {
+		this.textInput.setArg( state.text );
 	}
 }

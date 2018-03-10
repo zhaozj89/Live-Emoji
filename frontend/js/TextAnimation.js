@@ -1,3 +1,24 @@
+class TextControl {
+	constructor (editor) {
+		this.editor = editor;
+		this.paper = editor.raphaelObj.paper;
+		this.text = null;
+	}
+
+	displayText (textVal, textConfig) {
+		this.text = this.paper.text( textConfig.x, textConfig.y, textVal );
+		this.text.attr( 'font-size', textConfig.fontSize );
+		this.text.attr( 'fill', textConfig.fontColor );
+
+		this.text.animate( {x: textConfig.ex, y: textConfig.ey}, textConfig.elapse, 'bounce', deleteText);
+
+		let that = this;
+		function deleteText () {
+			that.paper.clear();
+		}
+	}
+}
+
 var TextAnimationCanvas = function ( editor ) {
 
 	let container = new UI.Panel();
@@ -18,17 +39,7 @@ var TextAnimationCanvas = function ( editor ) {
 
 	container.add( canvas );
 
-
-	// Creates canvas 320 × 200 at 10, 50
-	let paper = Raphael(0, 32, 840, 681);
-
-	var t = paper.text(100, 100, "愤怒!");
-
-	t.attr( 'font-size', 80 );
-	t.attr("fill", "#f00");
-
-	t.animate({x:200, y:200}, 2000);
+	editor.raphaelObj.paper = Raphael(editor.raphaelObj.left, editor.raphaelObj.top, editor.raphaelObj.width, editor.raphaelObj.height);
 
 	return container;
-
 };

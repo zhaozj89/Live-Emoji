@@ -84,6 +84,14 @@ var Editor = function () {
 		assets: {}
 	};
 
+	this.raphaelObj = {
+		paper: null,
+		width: 840,
+		height: 681,
+		left: 0,
+		top: 32
+	};
+
 	this.emotionMutex = false;
 
 	this.config = new Config( 'threejs-editor' );

@@ -388,12 +388,16 @@ class TextMotionNode extends Node {
 	toJSON() {
 		return {
 			type: 'text_motion',
-			color: this.textColor.getArg()
+			color: this.textColor.getArg(),
+			// size: this.textSize.getArg(),
+			elapse: this.textElapse.getArg()
 		};
 	}
 
 	fromJSON( state ) {
-		this.textColor.getArg( state.color );
+		this.textColor.setArg( state.color );
+		// this.textSize.setArg( state.size );
+		this.textElapse.setArg( state.elapse );
 	}
 
 	constructor ( type, editor ) {
@@ -401,14 +405,44 @@ class TextMotionNode extends Node {
 
 		this.editor = editor;
 
-		this.textColor = new LeafInput( 'Color: ' );
+		this.textColor = new LeafInput( 'Text Color: ' );
 		this.textColor.addColorInput();
 		this.addInput( this.textColor );
 
+		// this.textSize = new LeafInput( 'Text Size: ' );
+		// this.textSize.addSelectionInput({
+		// 	'small': 'small',
+		// 	'middle': 'middle',
+		// 	'big': 'big'
+		// });
+		// this.addInput( this.textSize );
+
+		this.textElapse = new LeafInput( 'Moving Time: ' );
+		this.textElapse.addSelectionInput({
+			'100': '100',
+			'500': '500',
+			'1000': '1000',
+			'5000': '5000'
+		});
+		this.addInput( this.textElapse );
+
 		this.addOutput();
+
+		this.textControl = new TextControl( editor );
 	}
 
 	run (obj, info) {
+		let textVal = info;
+		let textConfig = {
+			x:0,
+			y:0,
+			fontSize: 100,
+			fontColor: this.textColor.getArg(),
+			ex:500,
+			ey:500,
+			elapse: Number(this.textElapse.getArg())
+		};
 
+		this.textControl.displayText( textVal, textConfig );
 	}
 }

@@ -87,10 +87,9 @@ class NodeSession {
 			}
 
 			case 'text': {
-				let node = new TextNode ( type );
+				node = new TextNode ( type );
 				node.moveTo ( { x: 300, y: 80 } );
 				node.initUI ();
-				this.objectNode = node;
 				break;
 			}
 
@@ -156,6 +155,9 @@ class NodeSession {
 					// obj = backgroundStructure;
 					// DO something better
 				}
+				else if ( object_node[ 'type' ] === 'Text: text' ) {
+
+				}
 				else {
 					alert( 'Error in Behavior Tree!' );
 					return;
@@ -175,6 +177,6 @@ class NodeSession {
 				}
 			}
 		}
-		return false;
+		return;
 	}
 }

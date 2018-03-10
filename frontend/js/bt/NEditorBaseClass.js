@@ -37,7 +37,7 @@ class LeafInput {
 				return this.selectMenu.getValue();
 			}
 			case 'color': {
-				this.color.getValue();
+				return this.color.getValue();
 			}
 		}
 	}
