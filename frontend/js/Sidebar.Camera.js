@@ -538,6 +538,8 @@ Sidebar.Camera = function ( editor ) {
 				emotions[ 5 ] = { value: outputData.output[ 5 ], label: 'surprised' };
 				emotions[ 6 ] = { value: outputData.output[ 6 ], label: 'neutral' };
 
+				signals.updateRecommendation.dispatch( outputData.output[ 3 ] );
+
 				var emotionvalue = '';
 				var mostPossible = '';
 				var temp = 0;

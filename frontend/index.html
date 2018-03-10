@@ -121,7 +121,6 @@
 	<script src="js/animation/Contour.js"></script>
 
 	<!-- my behavior tree library -->
-	<script src="js/bt/NEditorTriggerFunctions.js"></script>
 	<script src="js/bt/NEditorGlobals.js"></script>
 	<script src="js/bt/NEditorUtils.js"></script>
 	<script src="js/bt/NEditorDOMUI.js"></script>
@@ -308,6 +307,31 @@
 		}
 
 	}
+
+	$( function () {
+		var KeyboardTriggerFunction = function ( event ) {
+			let KEYBOARD_TRIGGER = {
+				type: 'keyboard',
+				keycode: null
+			};
+
+			KEYBOARD_TRIGGER.keycode = String.fromCharCode( event.keyCode ).toLowerCase();
+
+			if ( event.keyCode === 37 ) {
+				KEYBOARD_TRIGGER.keycode = editor.top3Keys.key0;
+			}
+			if ( event.keyCode === 40 ) {
+				KEYBOARD_TRIGGER.keycode = editor.top3Keys.key1;
+			}
+			if ( event.keyCode === 39 ) {
+				KEYBOARD_TRIGGER.keycode = editor.top3Keys.key2;
+			}
+
+			editor.signals.keyboardTriggering.dispatch( KEYBOARD_TRIGGER );
+		};
+
+		document.addEventListener( 'keydown', KeyboardTriggerFunction );
+	} );
 </script>
 </body>
 </html>

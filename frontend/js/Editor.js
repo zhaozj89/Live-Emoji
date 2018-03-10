@@ -14,8 +14,7 @@ var Editor = function () {
 
 	this.signals = {
 
-		// refresh three render
-		refreshThreeRender: new Signal(),
+		updateRecommendation: new Signal(),
 
 		// trigger
 		keyboardTriggering : new Signal(),
@@ -70,6 +69,14 @@ var Editor = function () {
 
 	// my objects
 	this.emotionCMDManager = new EmotionCMDManager( this );
+
+	this.msgInputArousal = null;
+
+	this.top3Keys = {
+		key0: null,
+		key1: null,
+		key2: null
+	};
 
 	this.pixi4Obj = {
 		width: 840,

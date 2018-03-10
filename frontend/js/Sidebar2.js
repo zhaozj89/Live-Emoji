@@ -49,6 +49,8 @@ var Sidebar2 = function ( editor ) {
 	container.add( valenceText );
 	container.add( valenceSlider );
 
+	editor.msgInputArousal = 1;
+
 	$( function (  ) {
 
 		let heart = document.getElementsByClassName('heart')[0];
@@ -58,6 +60,8 @@ var Sidebar2 = function ( editor ) {
 			min: 1,
 			max: 100,
 			slide: function ( event, ui ) {
+				editor.msgInputArousal = Number( ui.value );
+
 				$( heartValueText.dom ).text( ui.value );
 				let val = -19*ui.value + 1981;
 				heart.style.animation = val + 'ms pulsate infinite alternate ease-in-out';

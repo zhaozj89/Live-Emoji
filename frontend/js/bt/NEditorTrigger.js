@@ -102,15 +102,6 @@ class TriggerNode extends Node {
 			--that.counter;
 			that.removeInput();
 		} );
-
-
-		// Dynamic
-
-		document.addEventListener( 'keydown', KeyboardTriggerFunction );
-
-		$( this.domElement ).find( "button.delete" ).on( 'click', function () {
-			document.removeEventListener( 'keydown', KeyboardTriggerFunction );
-		} );
 	}
 
 	toJSON () {

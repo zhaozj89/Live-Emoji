@@ -270,10 +270,6 @@ var Viewport = function ( editor ) {
 
 	}
 
-	editor.signals.refreshThreeRender.add( function () {
-		render();
-	} );
-
 	return container;
 
 };
