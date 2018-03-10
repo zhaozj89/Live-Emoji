@@ -60,7 +60,7 @@ var BackgroundAnimationCanvas = function ( editor ) {
 	container.setBottom( '32px' );
 	container.setLeft( '0px' );
 	container.setOpacity( 0.9 );
-	container.dom.style.zIndex = "1";
+	container.dom.style.zIndex = "2";
 
 	let canvas = new UI.Canvas();
 	canvas.setId( 'BackgroundAnimationCanvas' );
