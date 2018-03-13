@@ -14,6 +14,8 @@ var Editor = function () {
 
 	this.signals = {
 
+		// adjustTriggerNodeValenceArousalInfo: new Signal(),
+
 		updateRecommendation: new Signal(),
 
 		// trigger
@@ -77,6 +79,8 @@ var Editor = function () {
 		key1: null,
 		key2: null
 	};
+
+	this.isLiveAnimationMode = false;
 
 	this.pixi4Obj = {
 		width: 840,
