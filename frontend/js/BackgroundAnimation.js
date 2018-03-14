@@ -1,26 +1,26 @@
 class Pixi4ParticleExample {
 	stop () {
-		if( this.emitterContainer!==null  )
+		if ( this.emitterContainer !== null )
 			this.stage.removeChild( this.emitterContainer );
 
-		if( this.updateId!==null ) {
+		if ( this.updateId !== null ) {
 			cancelAnimationFrame( this.updateId );
 			this.updateId = null;
 		}
 	}
 
-	display() {
+	display () {
 		this.update();
 	}
 
-	updateConfig( asset_name, config, emitterX, emitterY ) {
+	updateConfig ( asset_name, config, emitterX, emitterY ) {
 		let that = this;
 		that.emitterContainer = new PIXI.Container();
 
 		that.stage.addChild( that.emitterContainer );
 
-		that.editor.pixi4Obj.emitter = new PIXI.particles.Emitter( that.emitterContainer, that.assets[asset_name], config );
-		that.editor.pixi4Obj.emitter.updateOwnerPos( Number(emitterX.text.getValue()), Number(emitterY.text.getValue()) );
+		that.editor.pixi4Obj.emitter = new PIXI.particles.Emitter( that.emitterContainer, that.assets[ asset_name ], config );
+		that.editor.pixi4Obj.emitter.updateOwnerPos( Number( emitterX.text.getValue() ), Number( emitterY.text.getValue() ) );
 
 		that.canvas.addEventListener( 'mouseup', function ( e ) {
 			let X = e.offsetX || e.layerX;
@@ -76,7 +76,7 @@ var BackgroundAnimationCanvas = function ( editor ) {
 	editor.pixi4Obj.canvas = canvas.dom;
 	let loader = editor.pixi4Obj.loader;
 
-	editor.pixi4Obj.renderer = PIXI.autoDetectRenderer( width, height, { view: canvas.dom, transparent: true });
+	editor.pixi4Obj.renderer = PIXI.autoDetectRenderer( width, height, { view: canvas.dom, transparent: true } );
 
 	let elapsed = Date.now();
 
@@ -93,13 +93,13 @@ var BackgroundAnimationCanvas = function ( editor ) {
 
 	editor.pixi4Obj.renderer.resize( width, height );
 
-	let asset_name = ['fire', 'heart', 'poop', 'raindrop', 'splatter1', 'splatter2', 'surprised', 'yellowbubble'];
+	let asset_name = [ 'fire', 'heart', 'poop', 'raindrop', 'splatter1', 'splatter2', 'surprised', 'yellowbubble' ];
 	loader.load( function () {
-		for(let k=0; k<asset_name.length; ++k) {
+		for ( let k = 0; k < asset_name.length; ++k ) {
 			let art = [];
-			let name = './asset/background/small/' + asset_name[k] + '.png';
+			let name = './asset/background/small/' + asset_name[ k ] + '.png';
 			art.push( PIXI.Texture.fromImage( name ) );
-			editor.pixi4Obj.assets[asset_name[k]] = art;
+			editor.pixi4Obj.assets[ asset_name[ k ] ] = art;
 		}
 	} );
 

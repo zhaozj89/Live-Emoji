@@ -21,7 +21,7 @@ var Editor = function () {
 		updateRecommendation: new Signal(),
 
 		// trigger
-		keyboardTriggering : new Signal(),
+		keyboardTriggering: new Signal(),
 
 		// face following
 		followFace: new Signal(),

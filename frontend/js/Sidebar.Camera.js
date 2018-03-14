@@ -10,57 +10,57 @@ function addToConversation ( who, msgType, info ) {
 	// alert( 'Received message from ' + who + ', as: ' + content );
 
 	// console.log(content);
-	switch (info.type) {
+	switch ( info.type ) {
 		case 'followFace': {
-            let puppet = editor.selected;
+			let puppet = editor.selected;
 
-            if ( puppet !== null ) {
-                puppet.position.x = info.x;
-                puppet.position.y = info.y;
+			if ( puppet !== null ) {
+				puppet.position.x = info.x;
+				puppet.position.y = info.y;
 
-                editor.signals.sceneGraphChanged.dispatch();
-            }
-            break;
+				editor.signals.sceneGraphChanged.dispatch();
+			}
+			break;
 		}
 
 		case 'followEmotion': {
-            let puppet = editor.selected;
+			let puppet = editor.selected;
 
-            if ( puppet !== null ) {
-                puppet.updateEmotion(info.emotion);
-                editor.signals.sceneGraphChanged.dispatch();
-            }
-            break;
+			if ( puppet !== null ) {
+				puppet.updateEmotion( info.emotion );
+				editor.signals.sceneGraphChanged.dispatch();
+			}
+			break;
 		}
 
 		case 'followLeftEye': {
-            let puppet = editor.selected;
+			let puppet = editor.selected;
 
-            if ( puppet !== null ) {
-                puppet.updateLeftEye(info.state);
-                editor.signals.sceneGraphChanged.dispatch();
-            }
-            break;
+			if ( puppet !== null ) {
+				puppet.updateLeftEye( info.state );
+				editor.signals.sceneGraphChanged.dispatch();
+			}
+			break;
 		}
 
 		case 'followRightEye': {
-            let puppet = editor.selected;
+			let puppet = editor.selected;
 
-            if ( puppet !== null ) {
-                puppet.updateRightEye(info.state);
-                editor.signals.sceneGraphChanged.dispatch();
-            }
-            break;
+			if ( puppet !== null ) {
+				puppet.updateRightEye( info.state );
+				editor.signals.sceneGraphChanged.dispatch();
+			}
+			break;
 		}
 
 		case 'followMouth': {
-            let puppet = editor.selected;
+			let puppet = editor.selected;
 
-            if ( puppet !== null ) {
-                puppet.updateMouth(info.state);
-                editor.signals.sceneGraphChanged.dispatch();
-            }
-            break;
+			if ( puppet !== null ) {
+				puppet.updateMouth( info.state );
+				editor.signals.sceneGraphChanged.dispatch();
+			}
+			break;
 		}
 	}
 }
@@ -83,44 +83,44 @@ function convertListToButtons ( roomName, data, isPrimary ) {
 	clearConnectList();
 	var otherClientDiv = document.getElementById( 'otherClients' );
 
-	var rtcid = Object.keys(data)[0]; // Only allowing ONE client
+	var rtcid = Object.keys( data )[ 0 ]; // Only allowing ONE client
 
-    var button = document.createElement( 'button' );
-    button.onclick = function ( easyrtcid ) {
-        return function () {
-            performCall( easyrtcid );
+	var button = document.createElement( 'button' );
+	button.onclick = function ( easyrtcid ) {
+		return function () {
+			performCall( easyrtcid );
 
-            // sendStuffWS( easyrtcid );
-        };
-    }( rtcid );
+			// sendStuffWS( easyrtcid );
+		};
+	}( rtcid );
 
-    var label = document.createTextNode( 'Connect' );
-    button.appendChild( label );
-    otherClientDiv.appendChild( button );
+	var label = document.createTextNode( 'Connect' );
+	button.appendChild( label );
+	otherClientDiv.appendChild( button );
 
-    editor.signals.teacherSendInfo2Students.add(function ( info ) {
-    	// console.log( info );
-        sendStuffWS( rtcid, info );
-    });
+	editor.signals.teacherSendInfo2Students.add( function ( info ) {
+		// console.log( info );
+		sendStuffWS( rtcid, info );
+	} );
 
 	// for ( var easyrtcid in data ) {
 	// 	var button = document.createElement( 'button' );
 	// 	button.onclick = function ( easyrtcid ) {
 	// 		return function () {
 	// 			performCall( easyrtcid );
-    //
+	//
 	// 			sendStuffWS( easyrtcid );
 	// 		};
 	// 	}( easyrtcid );
-    //
+	//
 	// 	// var label = document.createTextNode( 'Connect/Send to: ' + easyrtc.idToName( easyrtcid ) );
 	// 	var label = document.createTextNode( 'Connect' );
 	// 	button.appendChild( label );
 	// 	otherClientDiv.appendChild( button );
-    //
+	//
 	// 	editor.signals.teacherSendInfo2Students.add(function () {
-    //
-     //    });
+	//
+	//    });
 	// }
 }
 
@@ -146,7 +146,7 @@ function performCall ( otherEasyrtcid ) {
 
 function loginSuccess ( easyrtcid ) {
 	selfEasyrtcid = easyrtcid;
-	document.getElementById("otherClients").innerHTML = "I am " + easyrtc.cleanId(easyrtcid);
+	document.getElementById( "otherClients" ).innerHTML = "I am " + easyrtc.cleanId( easyrtcid );
 }
 
 function loginFailure ( errorCode, message ) {
@@ -479,9 +479,9 @@ Sidebar.Camera = function ( editor ) {
 		if ( positions ) {
 
 			// open mouth detection
-			let mousedist = positions[57][1] - positions[60][1];
-			let mouthwidth = positions[50][0] - positions[44][0];
-			if(mousedist>mouthwidth*0.18){
+			let mousedist = positions[ 57 ][ 1 ] - positions[ 60 ][ 1 ];
+			let mouthwidth = positions[ 50 ][ 0 ] - positions[ 44 ][ 0 ];
+			if ( mousedist > mouthwidth * 0.18 ) {
 				signals.followMouth.dispatch( 'open' );
 			}
 			else {
@@ -647,7 +647,7 @@ Sidebar.Camera = function ( editor ) {
 						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
 						break;
 				}
-				if( FACE_INFORMATION[ 'emotion' ]===EMOTION_TYPE.NEUTRAL ||  FACE_INFORMATION[ 'emotion' ]===EMOTION_TYPE.HAPPY )
+				if ( FACE_INFORMATION[ 'emotion' ] === EMOTION_TYPE.NEUTRAL || FACE_INFORMATION[ 'emotion' ] === EMOTION_TYPE.HAPPY )
 					signals.followEmotion.dispatch( FACE_INFORMATION[ 'emotion' ] );
 
 				//show debug information about eyes and emotion, should delete it after completion
