@@ -6,13 +6,13 @@
 
 var selfEasyrtcid = "";
 
-// function addToConversation ( who, msgType, content ) {
-// 	alert( 'Received message from ' + who + ', as: ' + content );
-// }
+function addToConversation ( who, msgType, content ) {
+	alert( 'Received message from ' + who + ', as: ' + content );
+}
 
 function connect () {
 	// easyrtc.setVideoDims(640,480);
-	// easyrtc.setPeerListener( addToConversation );
+	easyrtc.setPeerListener( addToConversation );
 	easyrtc.setRoomOccupantListener( convertListToButtons );
 	easyrtc.easyApp( "easyrtc.audioVideoSimple", "selfVideo", [ "callerVideo" ], loginSuccess, loginFailure );
 }
@@ -35,24 +35,24 @@ function convertListToButtons ( roomName, data, isPrimary ) {
 			return function () {
 				performCall( easyrtcid );
 
-				// sendStuffWS( easyrtcid );
+				sendStuffWS( easyrtcid );
 			};
 		}( easyrtcid );
 
 		var label = document.createTextNode( 'Connect/Send to: ' + easyrtc.idToName( easyrtcid ) );
-		// var label = document.createTextNode( 'Connect' );
+		var label = document.createTextNode( 'Connect' );
 		button.appendChild( label );
 		otherClientDiv.appendChild( button );
 	}
 }
 
-// function sendStuffWS ( otherEasyrtcid ) {
-// 	var text = 'Hello World!';
-//
-// 	easyrtc.sendDataWS( otherEasyrtcid, "message", text );
-//
-// 	alert( 'Send to ' + easyrtc.idToName( otherEasyrtcid ) + ': ' + text );
-// }
+function sendStuffWS ( otherEasyrtcid ) {
+	var text = 'Hello World!';
+
+	easyrtc.sendDataWS( otherEasyrtcid, "message", text );
+
+	alert( 'Send to ' + easyrtc.idToName( otherEasyrtcid ) + ': ' + text );
+}
 
 function performCall ( otherEasyrtcid ) {
 	easyrtc.hangupAll();
@@ -69,7 +69,7 @@ function performCall ( otherEasyrtcid ) {
 
 function loginSuccess ( easyrtcid ) {
 	selfEasyrtcid = easyrtcid;
-	// document.getElementById("iam").innerHTML = "I am " + easyrtc.cleanId(easyrtcid);
+	document.getElementById("otherClients").innerHTML = "I am " + easyrtc.cleanId(easyrtcid);
 }
 
 

@@ -2,7 +2,7 @@ Forked from https://github.com/mrdoob/three.js/tree/master/editor
 
 #### App
 
-Pre-authoring for 2D live animation
+Emotion Command
 
 #### Implemented
 
@@ -11,11 +11,12 @@ Pre-authoring for 2D live animation
 * Image Triangulation
 * Face tracking
 * Asset
+* Animation
+* Node Graph Logic
 
 #### TODO
 
-* Animation
-* Node Graph Logic
+* Fine tune
 
 #### How to use
 
@@ -25,7 +26,7 @@ Pre-authoring for 2D live animation
 * `npm install`
 * `cd ..`
 * `node server.js`
-* `https://localhost:8080/`, `https://localhost:8080/robot.html`
+* `https://localhost:8080/` or 
 
 #### Dependencies
 
