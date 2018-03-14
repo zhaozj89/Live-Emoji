@@ -6,8 +6,63 @@
 
 var selfEasyrtcid = "";
 
-function addToConversation ( who, msgType, content ) {
-	alert( 'Received message from ' + who + ', as: ' + content );
+function addToConversation ( who, msgType, info ) {
+	// alert( 'Received message from ' + who + ', as: ' + content );
+
+	// console.log(content);
+	switch (info.type) {
+		case 'followFace': {
+            let puppet = editor.selected;
+
+            if ( puppet !== null ) {
+                puppet.position.x = info.x;
+                puppet.position.y = info.y;
+
+                editor.signals.sceneGraphChanged.dispatch();
+            }
+            break;
+		}
+
+		case 'followEmotion': {
+            let puppet = editor.selected;
+
+            if ( puppet !== null ) {
+                puppet.updateEmotion(info.emotion);
+                editor.signals.sceneGraphChanged.dispatch();
+            }
+            break;
+		}
+
+		case 'followLeftEye': {
+            let puppet = editor.selected;
+
+            if ( puppet !== null ) {
+                puppet.updateLeftEye(info.state);
+                editor.signals.sceneGraphChanged.dispatch();
+            }
+            break;
+		}
+
+		case 'followRightEye': {
+            let puppet = editor.selected;
+
+            if ( puppet !== null ) {
+                puppet.updateRightEye(info.state);
+                editor.signals.sceneGraphChanged.dispatch();
+            }
+            break;
+		}
+
+		case 'followMouth': {
+            let puppet = editor.selected;
+
+            if ( puppet !== null ) {
+                puppet.updateMouth(info.state);
+                editor.signals.sceneGraphChanged.dispatch();
+            }
+            break;
+		}
+	}
 }
 
 function connect () {
@@ -16,7 +71,6 @@ function connect () {
 	easyrtc.easyApp( "easyrtc.audioVideoSimple", "selfVideo", [ "callerVideo" ], loginSuccess, loginFailure );
 }
 
-
 function clearConnectList () {
 	var otherClientDiv = document.getElementById( 'otherClients' );
 	while ( otherClientDiv.hasChildNodes() ) {
@@ -24,33 +78,58 @@ function clearConnectList () {
 	}
 }
 
-
 function convertListToButtons ( roomName, data, isPrimary ) {
+	// console.log(data);
 	clearConnectList();
 	var otherClientDiv = document.getElementById( 'otherClients' );
-	for ( var easyrtcid in data ) {
-		var button = document.createElement( 'button' );
-		button.onclick = function ( easyrtcid ) {
-			return function () {
-				performCall( easyrtcid );
 
-				sendStuffWS( easyrtcid );
-			};
-		}( easyrtcid );
+	var rtcid = Object.keys(data)[0]; // Only allowing ONE client
 
-		var label = document.createTextNode( 'Connect/Send to: ' + easyrtc.idToName( easyrtcid ) );
-		var label = document.createTextNode( 'Connect' );
-		button.appendChild( label );
-		otherClientDiv.appendChild( button );
-	}
+    var button = document.createElement( 'button' );
+    button.onclick = function ( easyrtcid ) {
+        return function () {
+            performCall( easyrtcid );
+
+            // sendStuffWS( easyrtcid );
+        };
+    }( rtcid );
+
+    var label = document.createTextNode( 'Connect' );
+    button.appendChild( label );
+    otherClientDiv.appendChild( button );
+
+    editor.signals.teacherSendInfo2Students.add(function ( info ) {
+    	// console.log( info );
+        sendStuffWS( rtcid, info );
+    });
+
+	// for ( var easyrtcid in data ) {
+	// 	var button = document.createElement( 'button' );
+	// 	button.onclick = function ( easyrtcid ) {
+	// 		return function () {
+	// 			performCall( easyrtcid );
+    //
+	// 			sendStuffWS( easyrtcid );
+	// 		};
+	// 	}( easyrtcid );
+    //
+	// 	// var label = document.createTextNode( 'Connect/Send to: ' + easyrtc.idToName( easyrtcid ) );
+	// 	var label = document.createTextNode( 'Connect' );
+	// 	button.appendChild( label );
+	// 	otherClientDiv.appendChild( button );
+    //
+	// 	editor.signals.teacherSendInfo2Students.add(function () {
+    //
+     //    });
+	// }
 }
 
-function sendStuffWS ( otherEasyrtcid ) {
-	var text = 'Hello World!';
+function sendStuffWS ( otherEasyrtcid, info ) {
+	// var text = 'Hello World!';
 
-	easyrtc.sendDataWS( otherEasyrtcid, "message", text );
+	easyrtc.sendDataWS( otherEasyrtcid, "message", info );
 
-	alert( 'Send to ' + easyrtc.idToName( otherEasyrtcid ) + ': ' + text );
+	// alert( 'Send to ' + easyrtc.idToName( otherEasyrtcid ) + ': ' + text );
 }
 
 function performCall ( otherEasyrtcid ) {
@@ -65,12 +144,10 @@ function performCall ( otherEasyrtcid ) {
 	//
 }
 
-
 function loginSuccess ( easyrtcid ) {
 	selfEasyrtcid = easyrtcid;
 	document.getElementById("otherClients").innerHTML = "I am " + easyrtc.cleanId(easyrtcid);
 }
-
 
 function loginFailure ( errorCode, message ) {
 	easyrtc.showError( errorCode, message );

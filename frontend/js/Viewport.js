@@ -14,10 +14,10 @@ var Viewport = function ( editor ) {
 
 	//
 
-	$( function () {
-		console.log( 'view port width: ' + container.dom.clientWidth );
-		console.log( 'view port height: ' + container.dom.clientHeight );
-	} );
+	// $( function () {
+	// 	console.log( 'view port width: ' + container.dom.clientWidth );
+	// 	console.log( 'view port height: ' + container.dom.clientHeight );
+	// } );
 
 	var renderer = null;
 
@@ -236,10 +236,10 @@ var Viewport = function ( editor ) {
 		editor.DEFAULT_CAMERA.bottom = bottom;
 		editor.DEFAULT_CAMERA.updateProjectionMatrix();
 
-		console.log( 'camera left: ' + left );
-		console.log( 'camera right: ' + right );
-		console.log( 'camera top: ' + top );
-		console.log( 'camera bottom: ' + bottom );
+		// console.log( 'camera left: ' + left );
+		// console.log( 'camera right: ' + right );
+		// console.log( 'camera top: ' + top );
+		// console.log( 'camera bottom: ' + bottom );
 
 		camera.left = left;
 		camera.right = right;

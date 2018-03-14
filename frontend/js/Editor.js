@@ -14,6 +14,8 @@ var Editor = function () {
 
 	this.signals = {
 
+		teacherSendInfo2Students: new Signal(),
+
 		// adjustTriggerNodeValenceArousalInfo: new Signal(),
 
 		updateRecommendation: new Signal(),
@@ -81,6 +83,8 @@ var Editor = function () {
 	};
 
 	this.isLiveAnimationMode = false;
+
+	this.isTeacherSide = false;
 
 	this.pixi4Obj = {
 		width: 840,

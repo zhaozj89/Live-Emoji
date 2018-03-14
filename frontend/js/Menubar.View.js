@@ -46,9 +46,23 @@ Menubar.View = function ( editor ) {
 			editor.isLiveAnimationMode = true;
 		else
 			editor.isLiveAnimationMode = false;
-
-		console.log( editor.isLiveAnimationMode );
 	});
+
+    options.add( new UI.HorizontalRule() );
+
+    var isTeacher = new UI.Checkbox( false );
+    options.add( isTeacher );
+
+    var isTeacherInfo = new UI.Text( 'Teacher Side' );
+    isTeacherInfo.setClass( 'option' );
+    options.add( isTeacherInfo );
+
+    isTeacher.onChange(function (  ) {
+        if( isTeacher.getValue()===true )
+            editor.isTeacherSide = true;
+        else
+            editor.isTeacherSide = false;
+    });
 
 	// Plane
 

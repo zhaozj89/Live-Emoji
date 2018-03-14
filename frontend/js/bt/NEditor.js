@@ -213,8 +213,15 @@ var NEditor = function ( editor ) {
 			puppet.position.y = event.y;
 
 			editor.signals.sceneGraphChanged.dispatch();
-		}
 
+            let info = {
+            	type: 'followFace',
+                x: event.x,
+                y: event.y
+            };
+
+            editor.signals.teacherSendInfo2Students.dispatch( info );
+		}
 	} );
 
 	signals.followEmotion.add( function ( emotion ) {
@@ -248,6 +255,13 @@ var NEditor = function ( editor ) {
 			if( editor.emotionMutex === false ) {
 				puppet.updateEmotion( emotion );
 				editor.signals.sceneGraphChanged.dispatch();
+
+                let info = {
+                    type: 'followEmotion',
+                    emotion: emotion
+                };
+
+                editor.signals.teacherSendInfo2Students.dispatch( info );
 			}
 		}
 
@@ -260,6 +274,13 @@ var NEditor = function ( editor ) {
 
 			puppet.updateLeftEye( state );
 			editor.signals.sceneGraphChanged.dispatch();
+
+            let info = {
+                type: 'followLeftEye',
+                state: state
+            };
+
+            editor.signals.teacherSendInfo2Students.dispatch( info );
 		}
 	} );
 
@@ -270,6 +291,13 @@ var NEditor = function ( editor ) {
 
 			puppet.updateRightEye( state );
 			editor.signals.sceneGraphChanged.dispatch();
+
+            let info = {
+                type: 'followRightEye',
+                state: state
+            };
+
+            editor.signals.teacherSendInfo2Students.dispatch( info );
 		}
 	} );
 
@@ -280,6 +308,13 @@ var NEditor = function ( editor ) {
 
 			puppet.updateMouth( state );
 			editor.signals.sceneGraphChanged.dispatch();
+
+            let info = {
+                type: 'followMouth',
+                state: state
+            };
+
+            editor.signals.teacherSendInfo2Students.dispatch( info );
 		}
 	} );
 
