@@ -11,7 +11,6 @@ function addToConversation ( who, msgType, content ) {
 }
 
 function connect () {
-	// easyrtc.setVideoDims(640,480);
 	easyrtc.setPeerListener( addToConversation );
 	easyrtc.setRoomOccupantListener( convertListToButtons );
 	easyrtc.easyApp( "easyrtc.audioVideoSimple", "selfVideo", [ "callerVideo" ], loginSuccess, loginFailure );
