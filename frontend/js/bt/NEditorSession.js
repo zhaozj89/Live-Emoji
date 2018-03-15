@@ -128,7 +128,6 @@ class NodeSession {
 	}
 
 	getInfo () {
-		// let args = this.triggerNode.getArgs();
 		let that = this;
 		return {
 			semantic: that.triggerNode.getSemanticName(),

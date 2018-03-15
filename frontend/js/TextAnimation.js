@@ -1,7 +1,7 @@
 class TextControl {
 	constructor (editor) {
 		this.editor = editor;
-		this.paper = editor.raphaelObj.paper;
+		this.paper = editor.raphaelRenderer.paper;
 		this.text = null;
 	}
 
@@ -39,7 +39,7 @@ var TextAnimationCanvas = function ( editor ) {
 
 	container.add( canvas );
 
-	editor.raphaelObj.paper = Raphael(editor.raphaelObj.left, editor.raphaelObj.top, editor.raphaelObj.width, editor.raphaelObj.height);
+	editor.raphaelRenderer.paper = Raphael(editor.raphaelRenderer.left, editor.raphaelRenderer.top, editor.raphaelRenderer.width, editor.raphaelRenderer.height);
 
 	return container;
 };

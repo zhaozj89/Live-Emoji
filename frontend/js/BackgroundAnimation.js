@@ -1,59 +1,110 @@
-class Pixi4ParticleExample {
-	stop () {
-		if ( this.emitterContainer !== null )
-			this.stage.removeChild( this.emitterContainer );
+// class Pixi4ParticleExample {
+// 	stop () {
+// 		if ( this.emitterContainer !== null )
+// 			this.stage.removeChild( this.emitterContainer );
+//
+// 		if ( this.updateId !== null ) {
+// 			cancelAnimationFrame( this.updateId );
+// 			this.updateId = null;
+// 		}
+// 	}
+//
+// 	display () {
+// 		this.update();
+// 	}
+//
+// 	updateConfig ( asset_name, config, emitterX, emitterY ) {
+// 		let that = this;
+// 		that.emitterContainer = new PIXI.Container();
+//
+// 		that.stage.addChild( that.emitterContainer );
+//
+// 		that.editor.protonPixi4Renderer.emitter = new PIXI.particles.Emitter( that.emitterContainer, that.assets[ asset_name ], config );
+// 		that.editor.protonPixi4Renderer.emitter.updateOwnerPos( Number( emitterX.text.getValue() ), Number( emitterY.text.getValue() ) );
+//
+// 		that.canvas.addEventListener( 'mouseup', function ( e ) {
+// 			let X = e.offsetX || e.layerX;
+// 			let Y = e.offsetY || e.layerY;
+// 			if ( !that.editor.protonPixi4Renderer.emitter ) return;
+// 			that.editor.protonPixi4Renderer.emitter.emit = true;
+// 			that.editor.protonPixi4Renderer.emitter.resetPositionTracking();
+// 			that.editor.protonPixi4Renderer.emitter.updateOwnerPos( X, Y );
+//
+// 			emitterX.text.setValue( X );
+// 			emitterY.text.setValue( Y );
+// 		} );
+// 	}
+//
+// 	constructor ( editor ) {
+// 		this.editor = editor;
+//
+// 		this.width = editor.protonPixi4Renderer.width;
+// 		this.height = editor.protonPixi4Renderer.height;
+//
+// 		this.canvas = editor.protonPixi4Renderer.canvas;
+// 		this.stage = editor.protonPixi4Renderer.stage;
+// 		this.assets = editor.protonPixi4Renderer.assets;
+// 		this.renderer = editor.protonPixi4Renderer.renderer;
+// 		this.updateId = editor.protonPixi4Renderer.updateId;
+// 		this.update = editor.protonPixi4Renderer.update;
+// 	}
+// }
 
-		if ( this.updateId !== null ) {
-			cancelAnimationFrame( this.updateId );
-			this.updateId = null;
-		}
+class BackgroundAnimationController {
+	constructor ( editor, outX, outY ) {
+		this.editor = editor;
+		this.emitter = new Proton.BehaviourEmitter();
+		this.emitter.rate = new Proton.Rate( new Proton.Span( 25, 40 ), new Proton.Span( .2, .5 ) );
+		this.editor.protonPixi4Renderer.proton.addEmitter( this.emitter );
+
+		this.emitter.p.x = outX.getArg();
+		this.emitter.p.y = outY.getArg();
+
+		let canvas = document.getElementById('BackgroundAnimationCanvas').firstChild;
+
+		let that = this;
+		canvas.addEventListener( 'mouseup', function ( e ) {
+			let X = e.offsetX || e.layerX;
+			let Y = e.offsetY || e.layerY;
+			that.emitter.p.x = X;
+			that.emitter.p.y = Y;
+			outX.setArg(X);
+			outY.setArg(Y);
+			that.emitter.emit( 'once' );
+		});
+	}
+
+	updateEmitter ( name, _mass ) {
+
+		this.emitter.removeAllInitializers();
+		this.emitter.removeAllBehaviours();
+
+		let mass = 1 / Number(_mass);
+		this.emitter.addInitialize( new Proton.Mass( mass ) );
+
+		let filename = "./asset/background/small/" + name + ".png";
+		this.emitter.addInitialize( new Proton.Body( filename ) );
+		this.emitter.addInitialize( new Proton.Velocity( new Proton.Span( 3, 9 ), new Proton.Span( 0, 30, true ), 'polar' ) );
+
+		this.emitter.addBehaviour( new Proton.Gravity( 8 ) );
+		this.emitter.addBehaviour( new Proton.Scale( new Proton.Span( 1, 3 ), 0.3 ) );
+		this.emitter.addBehaviour( new Proton.Alpha( 1, 0.5 ) );
+		this.emitter.addBehaviour( new Proton.Rotate( 0, Proton.getSpan( -8, 9 ), 'add' ) );
+
+		// this.emitter.addSelfBehaviour( new Proton.Gravity( 5 ) );
+		// this.emitter.addSelfBehaviour( new Proton.RandomDrift( 30, 30, .1 ) );
+		// this.emitter.addSelfBehaviour( new Proton.CrossZone( new Proton.RectZone( 50, 0, 953, 610 ), 'bound' ) );
 	}
 
 	display () {
-		this.update();
-	}
-
-	updateConfig ( asset_name, config, emitterX, emitterY ) {
-		let that = this;
-		that.emitterContainer = new PIXI.Container();
-
-		that.stage.addChild( that.emitterContainer );
-
-		that.editor.pixi4Obj.emitter = new PIXI.particles.Emitter( that.emitterContainer, that.assets[ asset_name ], config );
-		that.editor.pixi4Obj.emitter.updateOwnerPos( Number( emitterX.text.getValue() ), Number( emitterY.text.getValue() ) );
-
-		that.canvas.addEventListener( 'mouseup', function ( e ) {
-			let X = e.offsetX || e.layerX;
-			let Y = e.offsetY || e.layerY;
-			if ( !that.editor.pixi4Obj.emitter ) return;
-			that.editor.pixi4Obj.emitter.emit = true;
-			that.editor.pixi4Obj.emitter.resetPositionTracking();
-			that.editor.pixi4Obj.emitter.updateOwnerPos( X, Y );
-
-			emitterX.text.setValue( X );
-			emitterY.text.setValue( Y );
-		} );
-	}
-
-	constructor ( editor ) {
-		this.editor = editor;
-
-		this.width = editor.pixi4Obj.width;
-		this.height = editor.pixi4Obj.height;
-
-		this.canvas = editor.pixi4Obj.canvas;
-		this.stage = editor.pixi4Obj.stage;
-		this.assets = editor.pixi4Obj.assets;
-		this.renderer = editor.pixi4Obj.renderer;
-		this.updateId = editor.pixi4Obj.updateId;
-		this.update = editor.pixi4Obj.update;
+		this.emitter.emit( 'once' );
 	}
 }
 
 var BackgroundAnimationCanvas = function ( editor ) {
 
 	let container = new UI.Panel();
-	container.setId( 'BackgroundAnimation' );
+	container.setId( 'BackgroundAnimationCanvas' );
 	container.setPosition( 'absolute' );
 	container.setTop( '32px' );
 	container.setRight( '600px' );
@@ -62,46 +113,24 @@ var BackgroundAnimationCanvas = function ( editor ) {
 	container.setOpacity( 0.9 );
 	container.dom.style.zIndex = "2";
 
-	let canvas = new UI.Canvas();
-	canvas.setId( 'BackgroundAnimationCanvas' );
-	canvas.setPosition( 'absolute' );
-	canvas.dom.style.width = '100%';
-	canvas.dom.style.height = '100%';
+	let width = editor.protonPixi4Renderer.width;
+	let height = editor.protonPixi4Renderer.height;
 
-	container.add( canvas );
+	// initialize proton in editor
+	editor.protonPixi4Renderer.app = new PIXI.Application( width, height, { transparent: true } );
+	container.dom.appendChild( editor.protonPixi4Renderer.app.view );
 
-	let width = editor.pixi4Obj.width;
-	let height = editor.pixi4Obj.height;
+	editor.protonPixi4Renderer.proton = new Proton();
+	editor.protonPixi4Renderer.proton.addRenderer( new Proton.PixiRenderer( editor.protonPixi4Renderer.app.stage ) );
 
-	editor.pixi4Obj.canvas = canvas.dom;
-	let loader = editor.pixi4Obj.loader;
 
-	editor.pixi4Obj.renderer = PIXI.autoDetectRenderer( width, height, { view: canvas.dom, transparent: true } );
+	function backgroundUpdate() {
+		requestAnimationFrame( backgroundUpdate );
 
-	let elapsed = Date.now();
+		editor.protonPixi4Renderer.proton.update();
+	}
 
-	editor.pixi4Obj.update = function () {
-		editor.pixi4Obj.updateId = requestAnimationFrame( editor.pixi4Obj.update );
-
-		let now = Date.now();
-		if ( editor.pixi4Obj.emitter )
-			editor.pixi4Obj.emitter.update( ( now - elapsed ) * 0.001 );
-
-		elapsed = now;
-		editor.pixi4Obj.renderer.render( editor.pixi4Obj.stage );
-	};
-
-	editor.pixi4Obj.renderer.resize( width, height );
-
-	let asset_name = [ 'fire', 'heart', 'poop', 'raindrop', 'splatter1', 'splatter2', 'surprised', 'yellowbubble' ];
-	loader.load( function () {
-		for ( let k = 0; k < asset_name.length; ++k ) {
-			let art = [];
-			let name = './asset/background/small/' + asset_name[ k ] + '.png';
-			art.push( PIXI.Texture.fromImage( name ) );
-			editor.pixi4Obj.assets[ asset_name[ k ] ] = art;
-		}
-	} );
+	backgroundUpdate();
 
 	return container;
 

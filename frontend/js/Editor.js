@@ -86,20 +86,14 @@ var Editor = function () {
 
 	this.isTeacherSide = false;
 
-	this.pixi4Obj = {
+	this.protonPixi4Renderer = {
 		width: 840,
 		height: 681,
-		canvas: null,
-		stage: new PIXI.Container(),
-		loader: PIXI.loader,
-		render: null,
-		updateId: null,
-		update: null,
-		emitter: null,
-		assets: {}
+		app: null,
+		proton: null
 	};
 
-	this.raphaelObj = {
+	this.raphaelRenderer = {
 		paper: null,
 		width: 840,
 		height: 681,
