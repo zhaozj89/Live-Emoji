@@ -84,21 +84,18 @@ var NEditor = function ( editor ) {
 	menu.addLi( 'Modules', 'ui-state-disabled' );
 
 	let Trigger = menu.addLi( 'Trigger' );
-	let Objects = menu.addLi( 'Object' );
 	let Composite = menu.addLi( 'Composite' );
 	let Actions = menu.addLi( 'Action' );
 	let Runner = menu.addLi( 'Start' );
 
-	let menuObjects = new UI.UList();
-	let characterObject = menuObjects.addLi( 'Character' );
-	let textureObject = menuObjects.addLi( 'Texture' );
-	let textObject = menuObjects.addLi( 'Text' );
-	Objects.appendChild( menuObjects.dom );
-
 	let menuActions = new UI.UList();
-	let buttonSwap = menuActions.addLi( 'Face Swapping' );
-	let buttonParticle = menuActions.addLi( 'Texture Motion' );
-	let buttonTextMotion = menuActions.addLi( 'Text Motion' );
+	let buttonTranslation = menuActions.addLi( 'Translation' );
+	let buttonRotation = menuActions.addLi( 'Rotation' );
+	let buttonScale = menuActions.addLi( 'Scale' );
+	let buttonVibration = menuActions.addLi( 'Vibration' );
+	let buttonColor = menuActions.addLi( 'Color' );
+	let buttonSwap = menuActions.addLi( 'Swap [PUPPET]' );
+	let buttonExplode = menuActions.addLi( 'Explode [BG]' );
 	Actions.appendChild( menuActions.dom );
 
 	menu.dom.style.position = 'absolute';
@@ -130,19 +127,6 @@ var NEditor = function ( editor ) {
 			emotionCMDManager.addNode( 'trigger' );
 		} );
 
-		$( characterObject ).click( function () {
-			emotionCMDManager.addNode( 'character' );
-		} );
-
-		$( textureObject ).click( function () {
-			emotionCMDManager.addNode( 'texture' );
-		} );
-
-		$( textObject ).click( function () {
-			emotionCMDManager.addNode( 'text' );
-		} );
-
-
 		$( Composite ).click( function () {
 			emotionCMDManager.addNode( 'sequence' );
 		} );
@@ -152,13 +136,9 @@ var NEditor = function ( editor ) {
 			emotionCMDManager.addNode( 'swap' );
 		} );
 
-		$( buttonParticle ).click( function () {
-			emotionCMDManager.addNode( 'particle' );
+		$( buttonExplode ).click( function () {
+			emotionCMDManager.addNode( 'explode' );
 		} );
-
-		$( buttonTextMotion ).click(function (  ) {
-			emotionCMDManager.addNode( 'text_motion' );
-		});
 
 		$( Runner ).click( function () {
 			if ( startBehaviorTree )

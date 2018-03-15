@@ -12,8 +12,8 @@ class LeafInput {
 		this.domElement = this.createInput( this );
 	}
 
-	setArg( val ) {
-		switch (this.inputType) {
+	setArg ( val ) {
+		switch ( this.inputType ) {
 			case 'text': {
 				this.text.setValue( val );
 				break;
@@ -28,8 +28,8 @@ class LeafInput {
 		}
 	}
 
-	getArg() {
-		switch (this.inputType) {
+	getArg () {
+		switch ( this.inputType ) {
 			case 'text': {
 				return this.text.getValue();
 			}
@@ -58,9 +58,9 @@ class LeafInput {
 		return this.box.dom;
 	}
 
-	addTextInfoInput ( val ) {
+	addTextLabel ( val ) {
 		this.text = new UI.Text();
-		this.text.setValue(val);
+		this.text.setValue( val );
 		this.domElement.appendChild( this.text.dom );
 	}
 
@@ -104,8 +104,8 @@ class NodeInput {
 		this.inputType = null;
 	}
 
-	setArg( val ) {
-		switch (this.inputType) {
+	setArg ( val ) {
+		switch ( this.inputType ) {
 			case 'text': {
 				this.text.setValue( val );
 				break;
@@ -117,8 +117,8 @@ class NodeInput {
 		}
 	}
 
-	getArg() {
-		switch (this.inputType) {
+	getArg () {
+		switch ( this.inputType ) {
 			case 'text': {
 				return this.text.getValue();
 			}
@@ -126,6 +126,12 @@ class NodeInput {
 				return this.selectMenu.getValue();
 			}
 		}
+	}
+
+	addTextLabel ( val ) {
+		this.text = new UI.Text();
+		this.text.setValue( val );
+		this.domElement.appendChild( this.text.dom );
 	}
 
 	addTextInput () {
@@ -136,42 +142,11 @@ class NodeInput {
 		this.domElement.appendChild( this.text.dom );
 	}
 
-	addCharacterInput () {
+	addSelectionInput ( options ) {
 		this.inputType = 'select';
 
-		this.domElement.textContent = 'character: ';
-
 		this.selectMenu = new UI.Select();
-		this.selectMenu.setOptions({
-			'happy': 'happy',
-			'sad': 'sad',
-			'surprised': 'surprised',
-			'disgusted': 'disgusted',
-			'angry': 'angry',
-			'fearful': 'fearful',
-			'neutral': 'neutral'
-		});
-
-		this.domElement.appendChild( this.selectMenu.dom );
-	}
-
-	addTextureInput () {
-		this.inputType = 'select';
-
-		this.domElement.textContent = 'texture: ';
-
-		this.selectMenu = new UI.Select();
-		this.selectMenu.setOptions( {
-			'fire': 'fire',
-			'heart': 'heart',
-			'poop': 'poop',
-			'raindrop': 'raindrop',
-			'splatter1': 'splatter1',
-			'splatter2': 'splatter2',
-			'surprised': 'surprised',
-			'yellowbubble': 'yellowbubble'
-		} );
-
+		this.selectMenu.setOptions( options );
 		this.domElement.appendChild( this.selectMenu.dom );
 	}
 
@@ -184,11 +159,10 @@ class NodeInput {
 	}
 }
 
-
 class Node {
-	constructor ( type ) {
-		if ( type === null ) return;
-		this.type = type;
+	constructor ( title ) {
+		if ( title === null ) return;
+		this.title = title;
 
 		this.output = null;
 		this.inputs = [];
@@ -198,10 +172,14 @@ class Node {
 		this.attachedPaths = [];
 		this.connected = false;
 
-		this.domElement = CreateTitle( this.type );
+		this.domElement = CreateTitle( this.title );
 
 		let removeButton = CreateRemoveButton( this );
 		this.domElement.appendChild( removeButton );
+	}
+
+	addDOM ( dom ) {
+		this.domElement.appendChild( dom );
 	}
 
 	addOutput () {
@@ -210,7 +188,7 @@ class Node {
 		this.output = outputDom;
 	}
 
-	getInputForSerializationOnly () {
+	getInputsForSerializationOnly () {
 		for ( let i = 0; i < this.inputs.length; ++i ) {
 			if ( this.inputs[ i ].domElement.classList.contains( 'filled' ) === true || this.inputs[ i ].type === 'LeafInput' ) continue;
 			else return this.inputs[ i ];
@@ -219,8 +197,6 @@ class Node {
 
 	addInput ( input ) {
 		this.inputs.push( input );
-		// let br = new UI.Break();
-		// this.domElement.appendChild( br.dom );
 		this.domElement.appendChild( input.domElement );
 	}
 
@@ -325,9 +301,6 @@ class Node {
 		this.updatePosition();
 	}
 
-
-	// currently, one input can ONLY connect to one output (but one output can have multiple inputs)
-	// AND, no method is provied for getting parent
 	getChildren () {
 		let res = [];
 		for ( let k = 0; k < this.inputs.length; ++k ) {
@@ -349,5 +322,17 @@ class Node {
 
 	getArg () {
 		return this.inputs[ 0 ].getArg();
+	}
+
+	getOffset () {
+		return {
+			top: this.domElement.style.top,
+			left: this.domElement.style.left
+		}
+	}
+
+	setOffset ( val ) {
+		this.domElement.style.top = val.top;
+		this.domElement.style.left = val.left;
 	}
 }

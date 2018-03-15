@@ -57,7 +57,7 @@ class NodeSession {
 		}
 
 		for ( let i = 0; i < state.A.length; ++i ) {
-			nodes[ state.A[ i ][ 1 ] ].connectFrom( nodes[ state.A[ i ][ 0 ] ].getInputForSerializationOnly() );
+			nodes[ state.A[ i ][ 1 ] ].connectFrom( nodes[ state.A[ i ][ 0 ] ].getInputsForSerializationOnly() );
 		}
 	}
 
@@ -66,57 +66,25 @@ class NodeSession {
 		switch ( type ) {
 			case 'trigger': {
 				node = new TriggerNode( type );
-				node.moveTo( { x: 300, y: 80 } );
 				node.initUI();
 				this.triggerNode = node;
 				break;
 			}
 
-			case 'character': {
-				node = new CharacterNode( type );
-				node.moveTo( { x: 300, y: 80 } );
-				node.initUI();
-				break;
-			}
-
-			case 'texture': {
-				node = new TextureNode( type );
-				node.moveTo( { x: 300, y: 80 } );
-				node.initUI();
-				break;
-			}
-
-			case 'text': {
-				node = new TextNode ( type );
-				node.moveTo ( { x: 300, y: 80 } );
-				node.initUI ();
-				break;
-			}
-
 			case 'sequence': {
 				node = new CompositeNode( type );
-				node.moveTo( { x: 300, y: 80 } );
 				node.initUI();
 				break;
 			}
 
 			case 'swap': {
 				node = new SwapNode( type, this.editor );
-				node.moveTo( { x: 300, y: 80 } );
 				node.initUI();
 				break;
 			}
 
-			case 'particle': {
-				node = new ParticleNode( type, this.editor );
-				node.moveTo( { x: 300, y: 80 } );
-				node.initUI();
-				break;
-			}
-
-			case 'text_motion': {
-				node = new TextMotionNode( type, this.editor );
-				node.moveTo( { x: 300, y: 80 } );
+			case 'explode': {
+				node = new ExplodeNode( type, this.editor );
 				node.initUI();
 				break;
 			}
@@ -130,10 +98,10 @@ class NodeSession {
 	getInfo () {
 		let that = this;
 		return {
-			semantic: that.triggerNode.getSemanticName(),
-			valence: that.triggerNode.getValence(),
-			arousal: that.triggerNode.getArousal(),
-			key: that.triggerNode.getKey()
+			semantic: that.triggerNode.semanticName.getArg(),
+			valence: that.triggerNode.valence.getArg(),
+			arousal: that.triggerNode.arousal.getArg(),
+			key: that.triggerNode.key.getArg()
 		}
 	}
 
@@ -145,34 +113,15 @@ class NodeSession {
 			let trigger_node_children = this.triggerNode.getChildren();
 			for ( let i = 0; i < trigger_node_children.length; ++i ) {
 
-				let object_node = trigger_node_children[ i ];
+				let composite_node = trigger_node_children[ i ];
 
-				let obj = null;
-				if ( object_node[ 'type' ] === 'Character: character' )
-					obj = characterStructure;
-				else if ( object_node[ 'type' ] === 'Texture: texture' ) {
-					// obj = backgroundStructure;
-					// DO something better
-				}
-				else if ( object_node[ 'type' ] === 'Text: text' ) {
+				let component = composite_node.component.getArg();
+				let composite_node_children = composite_node.getChildren();
+				for ( let j = 0; j < composite_node_children.length; ++j ) {
 
-				}
-				else {
-					alert( 'Error in Behavior Tree!' );
-					return;
-				}
+					let action_node = composite_node_children[ j ];
 
-				let info = object_node.getArg();
-				let object_node_children = object_node.getChildren();
-				for ( let j = 0; j < object_node_children.length; ++j ) {
-
-					let sequence_node = object_node_children[ j ];
-					let sequence_node_children = sequence_node.getChildren();
-
-					for ( let k = 0; k < sequence_node_children.length; ++k ) {
-						let action_node = sequence_node_children[ k ];
-						action_node.run( obj, info );
-					}
+					action_node.run( component );
 				}
 			}
 		}
