@@ -59,6 +59,8 @@ class LeafInput {
 	}
 
 	addTextLabel ( val ) {
+		this.inputType = 'text';
+
 		this.text = new UI.Text();
 		this.text.setValue( val );
 		this.domElement.appendChild( this.text.dom );
@@ -129,6 +131,8 @@ class NodeInput {
 	}
 
 	addTextLabel ( val ) {
+		this.inputType = 'text';
+
 		this.text = new UI.Text();
 		this.text.setValue( val );
 		this.domElement.appendChild( this.text.dom );

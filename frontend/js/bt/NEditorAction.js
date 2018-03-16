@@ -109,7 +109,11 @@ class ExplodeNode extends Node {
 			return;
 		}
 
-		this.particleController.updateEmitter( this.image.getArg(), this.mass.getArg() );
+		this.particleController.updateEmitter(
+			this.image.getArg(),
+			this.mass.getArg(),
+			this.emitterX.getArg(),
+			this.emitterY.getArg() );
 		this.particleController.display();
 	}
 

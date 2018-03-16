@@ -74,16 +74,20 @@ class BackgroundAnimationController {
 		});
 	}
 
-	updateEmitter ( name, _mass ) {
+	updateEmitter ( _name, _mass, _X, _Y ) {
 
 		this.emitter.removeAllInitializers();
 		this.emitter.removeAllBehaviours();
 
+		let filename = "./asset/background/small/" + _name + ".png";
+		this.emitter.addInitialize( new Proton.Body( filename ) );
+
 		let mass = 1 / Number(_mass);
 		this.emitter.addInitialize( new Proton.Mass( mass ) );
 
-		let filename = "./asset/background/small/" + name + ".png";
-		this.emitter.addInitialize( new Proton.Body( filename ) );
+		this.emitter.p.x = Number(_X);
+		this.emitter.p.y = Number(_Y);
+
 		this.emitter.addInitialize( new Proton.Velocity( new Proton.Span( 3, 9 ), new Proton.Span( 0, 30, true ), 'polar' ) );
 
 		this.emitter.addBehaviour( new Proton.Gravity( 8 ) );
