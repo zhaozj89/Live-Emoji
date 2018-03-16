@@ -672,6 +672,7 @@ var PreLoadCharacterJSON = function () {
 
 	characterStructure = new CharacterStructure( 'qin_emotion' );
 	characterStructure.add2Scene.add( function ( obj ) {
+		editor.selected = obj;
 		editor.execute( new AddObjectCommand( obj ) );
 	} );
 

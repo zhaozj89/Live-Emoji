@@ -6,7 +6,7 @@ Menubar.File = function ( editor ) {
 
 	var NUMBER_PRECISION = 6;
 
-	function parseNumber( key, value ) {
+	function parseNumber ( key, value ) {
 
 		return typeof value === 'number' ? parseFloat( value.toFixed( NUMBER_PRECISION ) ) : value;
 

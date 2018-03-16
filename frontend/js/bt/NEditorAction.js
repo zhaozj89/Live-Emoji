@@ -190,12 +190,16 @@ class DanmakuNode extends Node {
 		this.moveTo( { x: 300, y: 80 } );
 	}
 
-	getManner( val ) {
-		switch( val ) {
-			case 'l2r_top': return {sx: 0, sy: 100, ex: 800, ey: 100};
-			case 'r2l_top': return {sx: 800, sy: 100, ex: 0, ey: 100};
-			case 'l2r_bottom': return {sx: 0, sy: 900, ex: 800, ey: 900};
-			case 'r2l_bottom': return {sx: 800, sy: 900, ex: 0, ey: 900};
+	getManner ( val ) {
+		switch ( val ) {
+			case 'l2r_top':
+				return { sx: 0, sy: 100, ex: 800, ey: 100 };
+			case 'r2l_top':
+				return { sx: 800, sy: 100, ex: 0, ey: 100 };
+			case 'l2r_bottom':
+				return { sx: 0, sy: 900, ex: 800, ey: 900 };
+			case 'r2l_bottom':
+				return { sx: 800, sy: 900, ex: 0, ey: 900 };
 		}
 	}
 
@@ -239,7 +243,7 @@ class DanmakuNode extends Node {
 }
 
 class ViberationNode extends Node {
-	constructor (type, editor) {
+	constructor ( type, editor ) {
 		super( 'Action: ' + type );
 
 		this.type = type;
@@ -295,12 +299,12 @@ class ViberationNode extends Node {
 	}
 
 	run ( component ) {
-		if( component==='puppet' ) {
+		if ( component === 'puppet' || component === 'background' ) {
 			let puppet = this.editor.selected;
 
 			let timestep = null;
 			let diststep = null;
-			switch (this.frequency.getArg()) {
+			switch ( this.frequency.getArg() ) {
 				case 'low': {
 					timestep = 200;
 					break;
@@ -315,7 +319,7 @@ class ViberationNode extends Node {
 				}
 			}
 
-			switch (this.amplitude.getArg()) {
+			switch ( this.amplitude.getArg() ) {
 				case 'low': {
 					diststep = 0.05;
 					break;
@@ -330,9 +334,15 @@ class ViberationNode extends Node {
 				}
 			}
 
+			let target = null;
+			if ( component === 'puppet' )
+				target = this.editor.selected;
+			else
+				target = this.editor.backgroundSprite;
+
 			let state0 = {
-				x: puppet.position.x,
-				y: puppet.position.y
+				x: target.position.x,
+				y: target.position.y
 			}
 
 			let state1 = {
@@ -341,21 +351,32 @@ class ViberationNode extends Node {
 			}
 
 			let state2 = {
-				x: state1.x + diststep / 2,
-				y: state1.y + diststep
+				x: state1.x - diststep,
+				y: state1.y - diststep / 2
 			}
 
+			let stage3 = {
+				x: target.position.x,
+				y: target.position.y
+			};
+
 			let tween0 = new TWEEN.Tween( state0 ).to( state1, timestep ).onUpdate( function ( obj ) {
-				puppet.position.x = obj.x;
-				puppet.position.y = obj.y
+				target.position.x = obj.x;
+				target.position.y = obj.y
 			} );
 
 			let tween1 = new TWEEN.Tween( state1 ).to( state2, timestep ).onUpdate( function ( obj ) {
-				puppet.position.x = obj.x;
-				puppet.position.y = obj.y
+				target.position.x = obj.x;
+				target.position.y = obj.y
+			} );
+
+			let tween2 = new TWEEN.Tween( state2 ).to( stage3, timestep ).onUpdate( function ( obj ) {
+				target.position.x = obj.x;
+				target.position.y = obj.y
 			} );
 
 			tween0.chain( tween1 );
+			tween0.chain( tween2 );
 			tween0.repeat( 10 );
 			tween0.start();
 
