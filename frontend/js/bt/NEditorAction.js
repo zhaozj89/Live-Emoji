@@ -181,7 +181,7 @@ class DanmakuNode extends Node {
 			'r2l_bottom': 'Right to left [BOTTOM]'
 		} );
 		this.addInput( this.manner );
-		this.manner.setArg( 'r2l' );
+		this.manner.setArg( 'r2l_top' );
 
 		this.addOutput();
 
@@ -197,9 +197,9 @@ class DanmakuNode extends Node {
 			case 'r2l_top':
 				return { sx: 800, sy: 100, ex: 0, ey: 100 };
 			case 'l2r_bottom':
-				return { sx: 0, sy: 900, ex: 800, ey: 900 };
+				return { sx: 0, sy: 500, ex: 800, ey: 500 };
 			case 'r2l_bottom':
-				return { sx: 800, sy: 900, ex: 0, ey: 900 };
+				return { sx: 800, sy: 500, ex: 0, ey: 500 };
 		}
 	}
 

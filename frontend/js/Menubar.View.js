@@ -30,6 +30,18 @@ Menubar.View = function ( editor ) {
 	} );
 	options.add( option );
 
+	var option = new UI.Row();
+	option.setClass( 'option' );
+	option.setTextContent( 'Reset' );
+	option.onClick( function () {
+		editor.selected.position.x = 0;
+		editor.selected.position.y = 0;
+
+		editor.backgroundSprite.position.x = 0;
+		editor.backgroundSprite.position.y = 0;
+	} );
+	options.add( option );
+
 	//
 
 	options.add( new UI.HorizontalRule() );
