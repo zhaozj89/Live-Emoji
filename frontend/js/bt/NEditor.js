@@ -141,6 +141,10 @@ var NEditor = function ( editor ) {
 			emotionCMDManager.addNode( 'danmaku' );
 		} );
 
+		$( buttonVibration ).click( function (  ) {
+			emotionCMDManager.addNode( 'viberation' );
+		} );
+
 		$( Runner ).click( function () {
 			if ( startBehaviorTree )
 				Runner.children[ 0 ].textContent = 'Start';

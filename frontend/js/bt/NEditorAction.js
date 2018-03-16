@@ -233,3 +233,12 @@ class DanmakuNode extends Node {
 		this.manner.setArg( state.manner );
 	}
 }
+
+class ViberationNode extends Node {
+	constructor (type, editor) {
+		super( 'Action: ' + type );
+
+		this.type = type;
+		this.editor = editor;
+	}
+}

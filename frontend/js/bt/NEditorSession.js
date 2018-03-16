@@ -96,6 +96,12 @@ class NodeSession {
 				node.initUI();
 				break;
 			}
+
+			case 'viberation': {
+				node = new ViberationNode( type, this.editor );
+				node.initUI();
+				break;
+			}
 		}
 
 		Global_All_DOM_In_SVG.push( node.domElement );
