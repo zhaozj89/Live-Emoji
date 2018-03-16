@@ -85,8 +85,8 @@ class NodeSession {
 				break;
 			}
 
-			case 'explode': {
-				node = new ExplodeNode( type, this.editor );
+			case 'particle': {
+				node = new ParticleNode( type, this.editor );
 				node.initUI();
 				break;
 			}

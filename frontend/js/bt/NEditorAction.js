@@ -1,6 +1,6 @@
 class SwapNode extends Node {
 	constructor ( type, editor ) {
-		super( 'Action' + type );
+		super( 'Action: ' + type );
 		this.type = type;
 
 		this.editor = editor;
@@ -55,7 +55,7 @@ class SwapNode extends Node {
 	}
 }
 
-class ExplodeNode extends Node {
+class ParticleNode extends Node {
 	constructor ( type, editor ) {
 		super( 'Action: ' + type );
 

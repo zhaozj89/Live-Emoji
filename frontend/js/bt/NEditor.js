@@ -95,7 +95,7 @@ var NEditor = function ( editor ) {
 	let buttonVibration = menuActions.addLi( 'Vibration' );
 	let buttonColor = menuActions.addLi( 'Color' );
 	let buttonSwap = menuActions.addLi( 'Swap [PUPPET]' );
-	let buttonExplode = menuActions.addLi( 'Explode [BG]' );
+	let buttonExplode = menuActions.addLi( 'Particle [BG]' );
 	Actions.appendChild( menuActions.dom );
 
 	menu.dom.style.position = 'absolute';
@@ -137,7 +137,7 @@ var NEditor = function ( editor ) {
 		} );
 
 		$( buttonExplode ).click( function () {
-			emotionCMDManager.addNode( 'explode' );
+			emotionCMDManager.addNode( 'particle' );
 		} );
 
 		$( Runner ).click( function () {
