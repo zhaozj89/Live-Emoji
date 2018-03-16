@@ -8,7 +8,7 @@ class SwapNode extends Node {
 		this.addOutput();
 
 		this.emotion = new LeafInput( '' );
-		this.emotion.addSelectionInput({
+		this.emotion.addSelectionInput( {
 			'happy': 'happy',
 			'sad': 'sad',
 			'surprised': 'surprised',
@@ -16,7 +16,7 @@ class SwapNode extends Node {
 			'angry': 'angry',
 			'fearful': 'fearful',
 			'neutral': 'neutral'
-		});
+		} );
 		this.addInput( this.emotion );
 		this.emotion.setArg( 'neutral' );
 
@@ -24,7 +24,7 @@ class SwapNode extends Node {
 	}
 
 	run ( component ) {
-		if( component!=='puppet' ) {
+		if ( component !== 'puppet' ) {
 			alert( 'Explode action ONLY allows puppet component input!' );
 			return;
 		}
@@ -63,7 +63,7 @@ class ParticleNode extends Node {
 		this.editor = editor;
 
 		this.image = new LeafInput( 'Image: ' );
-		this.image.addSelectionInput({
+		this.image.addSelectionInput( {
 			'fire': 'fire',
 			'heart': 'heart',
 			'poop': 'poop',
@@ -72,27 +72,27 @@ class ParticleNode extends Node {
 			'splatter2': 'splatter2',
 			'surprised': 'surprised',
 			'yellowbubble': 'yellowbubble'
-		});
+		} );
 		this.addInput( this.image );
 		this.image.setArg( 'yellowbubble' );
 
 		// initialization configuration
 		this.mass = new LeafInput( 'Mass: ' );
-		this.mass.addSelectionInput({
+		this.mass.addSelectionInput( {
 			1: 1,
 			2: 2,
 			5: 5,
 			10: 10
-		});
+		} );
 		this.addInput( this.mass );
 		this.mass.setArg( '1' );
 
 		this.emitterX = new LeafInput( 'Emitter X: ' );
-		this.emitterX.addTextLabel(editor.protonPixi4Renderer.width/2);
+		this.emitterX.addTextLabel( editor.protonPixi4Renderer.width / 2 );
 		this.addInput( this.emitterX );
 
 		this.emitterY = new LeafInput( 'Emitter Y: ' );
-		this.emitterY.addTextLabel(editor.protonPixi4Renderer.height/2);
+		this.emitterY.addTextLabel( editor.protonPixi4Renderer.height / 2 );
 		this.addInput( this.emitterY );
 
 		this.addOutput();
@@ -104,7 +104,7 @@ class ParticleNode extends Node {
 
 	run ( component ) {
 
-		if( component!=='background' ) {
+		if ( component !== 'background' ) {
 			alert( 'Explode action ONLY allows background component input!' );
 			return;
 		}
@@ -138,66 +138,98 @@ class ParticleNode extends Node {
 	}
 }
 
-// class TextMotionNode extends Node {
-//
-// 	toJSON() {
-// 		return {
-// 			type: 'text_motion',
-// 			color: this.textColor.getArg(),
-// 			// size: this.textSize.getArg(),
-// 			elapse: this.textElapse.getArg()
-// 		};
-// 	}
-//
-// 	fromJSON( state ) {
-// 		this.textColor.setArg( state.color );
-// 		// this.textSize.setArg( state.size );
-// 		this.textElapse.setArg( state.elapse );
-// 	}
-//
-// 	constructor ( type, editor ) {
-// 		super(  'Action: ' + type  );
-//
-// 		this.editor = editor;
-//
-// 		this.textColor = new LeafInput( 'Text Color: ' );
-// 		this.textColor.addColorInput();
-// 		this.addInput( this.textColor );
-//
-// 		// this.textSize = new LeafInput( 'Text Size: ' );
-// 		// this.textSize.addSelectionInput({
-// 		// 	'small': 'small',
-// 		// 	'middle': 'middle',
-// 		// 	'big': 'big'
-// 		// });
-// 		// this.addInput( this.textSize );
-//
-// 		this.textElapse = new LeafInput( 'Moving Time: ' );
-// 		this.textElapse.addSelectionInput({
-// 			'100': '100',
-// 			'500': '500',
-// 			'1000': '1000',
-// 			'5000': '5000'
-// 		});
-// 		this.addInput( this.textElapse );
-//
-// 		this.addOutput();
-//
-// 		this.textControl = new TextControl( editor );
-// 	}
-//
-// 	run (obj, info) {
-// 		let textVal = info;
-// 		let textConfig = {
-// 			x:0,
-// 			y:0,
-// 			fontSize: 100,
-// 			fontColor: this.textColor.getArg(),
-// 			ex:500,
-// 			ey:500,
-// 			elapse: Number(this.textElapse.getArg())
-// 		};
-//
-// 		this.textControl.displayText( textVal, textConfig );
-// 	}
-// }
+
+class DanmakuNode extends Node {
+	constructor ( type, editor ) {
+		super( 'Action: ' + type );
+
+		this.type = type;
+		this.editor = editor;
+
+		this.text = new LeafInput( 'Text: ' );
+		this.text.addTextInput();
+		this.addInput( this.text );
+
+		this.color = new LeafInput( 'Color: ' );
+		this.color.addColorInput();
+		this.addInput( this.color );
+
+		this.size = new LeafInput( 'Size: ' );
+		this.size.addSelectionInput( {
+			'50': 'small',
+			'100': 'middle',
+			'200': 'big'
+		} );
+		this.addInput( this.size );
+		this.size.setArg( '100' );
+
+		this.elasp = new LeafInput( 'Moving Time: ' );
+		this.elasp.addSelectionInput( {
+			'100': '100',
+			'500': '500',
+			'1000': '1000',
+			'5000': '5000'
+		} );
+		this.addInput( this.elasp );
+		this.elasp.setArg( '1000' );
+
+		this.manner = new LeafInput( 'Manner' );
+		this.manner.addSelectionInput( {
+			'l2r': 'Left to right',
+			'r2l': 'Right to left'
+		} );
+		this.addInput( this.manner );
+		this.manner.setArg( 'r2l' );
+
+		this.addOutput();
+
+		this.danmakuController = new DanmakuController( editor );
+
+		this.moveTo( { x: 300, y: 80 } );
+	}
+
+	getManner( val ) {
+		switch( val ) {
+			case 'l2r': return {sx: 0, sy: 100, ex: 800, ey: 100};
+			case 'r2l': return {sx: 800, sy: 100, ex: 0, ey: 100};
+		}
+	}
+
+	run ( component ) {
+
+		if ( component !== 'text' ) {
+			alert( 'Danmaku action ONLY allows text component input!' );
+			return;
+		}
+
+		let text = this.text.getArg();
+		let color = this.color.getArg();
+		let size = Number( this.size.getArg() );
+		let elapse = Number( this.elasp.getArg() );
+		let manner = this.getManner( this.manner.getArg() );
+
+		this.danmakuController.display( text, color, size, elapse, manner );
+	}
+
+	toJSON () {
+		return {
+			type: this.type,
+			offset: this.getOffset(),
+			text: this.text.getArg(),
+			color: this.color.getArg(),
+			size: this.size.getArg(),
+			elapse: this.elasp.getArg(),
+			manner: this.manner.getArg()
+		};
+	}
+
+	fromJSON ( state ) {
+		this.type = state.type;
+		this.setOffset( state.offset );
+		this.text.setArg( state.text );
+		this.color.setArg( state.color );
+		this.size.setArg( state.size );
+		this.elasp.setArg( state.elapse );
+		this.manner.setArg( state.manner );
+	}
+}

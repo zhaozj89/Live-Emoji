@@ -89,11 +89,8 @@ var NEditor = function ( editor ) {
 	let Runner = menu.addLi( 'Start' );
 
 	let menuActions = new UI.UList();
-	let buttonTranslation = menuActions.addLi( 'Translation' );
-	let buttonRotation = menuActions.addLi( 'Rotation' );
-	let buttonScale = menuActions.addLi( 'Scale' );
 	let buttonVibration = menuActions.addLi( 'Vibration' );
-	let buttonColor = menuActions.addLi( 'Color' );
+	let buttonDanmaku = menuActions.addLi( 'Danmaku [TXT]' );
 	let buttonSwap = menuActions.addLi( 'Swap [PUPPET]' );
 	let buttonExplode = menuActions.addLi( 'Particle [BG]' );
 	Actions.appendChild( menuActions.dom );
@@ -138,6 +135,10 @@ var NEditor = function ( editor ) {
 
 		$( buttonExplode ).click( function () {
 			emotionCMDManager.addNode( 'particle' );
+		} );
+
+		$( buttonDanmaku ).click( function (  ) {
+			emotionCMDManager.addNode( 'danmaku' );
 		} );
 
 		$( Runner ).click( function () {

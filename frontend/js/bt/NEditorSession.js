@@ -90,6 +90,12 @@ class NodeSession {
 				node.initUI();
 				break;
 			}
+
+			case 'danmaku': {
+				node = new DanmakuNode( type, this.editor );
+				node.initUI();
+				break;
+			}
 		}
 
 		Global_All_DOM_In_SVG.push( node.domElement );
