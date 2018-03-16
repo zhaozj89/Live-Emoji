@@ -33,6 +33,7 @@
 	<!--threejs-->
 	<script src="js/libs/three.js"></script>
 	<script src="js/libs/ui.three.js"></script>
+	<script src="js/libs/Tween.js"></script>
 
 	<script src="js/libs/pixi.js"></script>
 	<script src="js/libs/proton.js"></script>
@@ -326,6 +327,18 @@
 
 		document.addEventListener( 'keydown', KeyboardTriggerFunction );
 	} );
+
+	function animate () {
+
+		requestAnimationFrame( animate );
+
+		TWEEN.update();
+
+		editor.signals.sceneGraphChanged.dispatch();
+
+	}
+
+	animate();
 </script>
 </body>
 </html>

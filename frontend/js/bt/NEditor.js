@@ -194,18 +194,20 @@ var NEditor = function ( editor ) {
 		let puppet = editor.selected;
 
 		if ( puppet !== null ) {
-			puppet.position.x = event.x;
-			puppet.position.y = event.y;
+			if( editor.facePositionMutex===false ) {
+				puppet.position.x = event.x;
+				puppet.position.y = event.y;
 
-			editor.signals.sceneGraphChanged.dispatch();
+				editor.signals.sceneGraphChanged.dispatch();
 
-            let info = {
-            	type: 'followFace',
-                x: event.x,
-                y: event.y
-            };
+				let info = {
+					type: 'followFace',
+					x: event.x,
+					y: event.y
+				};
 
-            editor.signals.teacherSendInfo2Students.dispatch( info );
+				editor.signals.teacherSendInfo2Students.dispatch( info );
+			}
 		}
 	} );
 

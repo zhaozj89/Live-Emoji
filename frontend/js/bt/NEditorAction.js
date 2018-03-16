@@ -173,7 +173,7 @@ class DanmakuNode extends Node {
 		this.addInput( this.elasp );
 		this.elasp.setArg( '1000' );
 
-		this.manner = new LeafInput( 'Manner' );
+		this.manner = new LeafInput( 'Manner: ' );
 		this.manner.addSelectionInput( {
 			'l2r': 'Left to right',
 			'r2l': 'Right to left'
@@ -240,5 +240,126 @@ class ViberationNode extends Node {
 
 		this.type = type;
 		this.editor = editor;
+
+		this.frequency = new LeafInput( 'Frequency: ' );
+		this.frequency.addSelectionInput( {
+			'low': 'low',
+			'middle': 'middle',
+			'high': 'high'
+		} );
+		this.addInput( this.frequency );
+		this.frequency.setArg( 'middle' );
+
+		this.amplitude = new LeafInput( 'Amplitude: ' );
+		this.amplitude.addSelectionInput( {
+			'low': 'low',
+			'middle': 'middle',
+			'high': 'high'
+		} );
+		this.addInput( this.amplitude );
+		this.amplitude.setArg( 'middle' );
+
+		this.manner = new LeafInput( 'Manner: ' );
+		this.manner.addSelectionInput( {
+			'normal': 'normal'
+		} );
+		this.addInput( this.manner );
+		this.manner.setArg( 'normal' );
+
+		this.addOutput();
+
+		this.moveTo( { x: 300, y: 80 } );
+
+	}
+
+	toJSON () {
+		return {
+			type: this.type,
+			offset: this.getOffset(),
+			frequency: this.frequency.getArg(),
+			amplitude: this.amplitude.getArg(),
+			manner: this.manner.getArg()
+		};
+	}
+
+	fromJSON ( state ) {
+		this.type = state.type;
+		this.setOffset( state.offset );
+		this.frequency.setArg( state.frequency );
+		this.amplitude.setArg( state.amplitude );
+		this.manner.setArg( state.manner );
+	}
+
+	run ( component ) {
+		if( component==='puppet' ) {
+			let puppet = this.editor.selected;
+
+			let timestep = null;
+			let diststep = null;
+			switch (this.frequency.getArg()) {
+				case 'low': {
+					timestep = 200;
+					break;
+				}
+				case 'middle': {
+					timestep = 100;
+					break;
+				}
+				case 'high': {
+					timestep = 50;
+					break;
+				}
+			}
+
+			switch (this.amplitude.getArg()) {
+				case 'low': {
+					diststep = 0.05;
+					break;
+				}
+				case 'middle': {
+					diststep = 0.1;
+					break;
+				}
+				case 'high': {
+					diststep = 0.2;
+					break;
+				}
+			}
+
+			let state0 = {
+				x: puppet.position.x,
+				y: puppet.position.y
+			}
+
+			let state1 = {
+				x: state0.x + diststep,
+				y: state0.y + diststep / 2
+			}
+
+			let state2 = {
+				x: state1.x + diststep / 2,
+				y: state1.y + diststep
+			}
+
+			let tween0 = new TWEEN.Tween( state0 ).to( state1, timestep ).onUpdate( function ( obj ) {
+				puppet.position.x = obj.x;
+				puppet.position.y = obj.y
+			} );
+
+			let tween1 = new TWEEN.Tween( state1 ).to( state2, timestep ).onUpdate( function ( obj ) {
+				puppet.position.x = obj.x;
+				puppet.position.y = obj.y
+			} );
+
+			tween0.chain( tween1 );
+			tween0.repeat( 10 );
+			tween0.start();
+
+			let that = this;
+			that.editor.facePositionMutex = true;
+			setTimeout( function () {
+				that.editor.emotionMutex = false;
+			}, 2000 );
+		}
 	}
 }

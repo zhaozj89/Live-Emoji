@@ -102,6 +102,7 @@ var Editor = function () {
 	};
 
 	this.emotionMutex = false;
+	this.facePositionMutex = false;
 
 	this.config = new Config( 'threejs-editor' );
 	this.history = new History( this );
