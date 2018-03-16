@@ -57,7 +57,9 @@ class NodeSession {
 		}
 
 		for ( let i = 0; i < state.A.length; ++i ) {
-			nodes[ state.A[ i ][ 1 ] ].connectFrom( nodes[ state.A[ i ][ 0 ] ].getInputsForSerializationOnly() );
+			let parentInput = nodes[ state.A[ i ][ 0 ] ].getAnInputForSerializationOnly();
+			nodes[ state.A[ i ][ 1 ] ].connectFrom( parentInput );
+			nodes[ state.A[ i ][ 1 ] ].parentInput = parentInput;
 		}
 	}
 

@@ -192,7 +192,7 @@ class Node {
 		this.output = outputDom;
 	}
 
-	getInputsForSerializationOnly () {
+	getAnInputForSerializationOnly () {
 		for ( let i = 0; i < this.inputs.length; ++i ) {
 			if ( this.inputs[ i ].domElement.classList.contains( 'filled' ) === true || this.inputs[ i ].type === 'LeafInput' ) continue;
 			else return this.inputs[ i ];
