@@ -175,8 +175,10 @@ class DanmakuNode extends Node {
 
 		this.manner = new LeafInput( 'Manner: ' );
 		this.manner.addSelectionInput( {
-			'l2r': 'Left to right',
-			'r2l': 'Right to left'
+			'l2r_top': 'Left to right [TOP]',
+			'r2l_top': 'Right to left [TOP]',
+			'l2r_bottom': 'Left to right [BOTTOM]',
+			'r2l_bottom': 'Right to left [BOTTOM]'
 		} );
 		this.addInput( this.manner );
 		this.manner.setArg( 'r2l' );
@@ -190,8 +192,10 @@ class DanmakuNode extends Node {
 
 	getManner( val ) {
 		switch( val ) {
-			case 'l2r': return {sx: 0, sy: 100, ex: 800, ey: 100};
-			case 'r2l': return {sx: 800, sy: 100, ex: 0, ey: 100};
+			case 'l2r_top': return {sx: 0, sy: 100, ex: 800, ey: 100};
+			case 'r2l_top': return {sx: 800, sy: 100, ex: 0, ey: 100};
+			case 'l2r_bottom': return {sx: 0, sy: 900, ex: 800, ey: 900};
+			case 'r2l_bottom': return {sx: 800, sy: 900, ex: 0, ey: 900};
 		}
 	}
 
