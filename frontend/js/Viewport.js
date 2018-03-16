@@ -32,24 +32,23 @@ var Viewport = function ( editor ) {
 
 	// add background
 
-	var spriteMap = new THREE.TextureLoader().load( "./asset/background.jpg" );
+	var spriteMap = new THREE.TextureLoader().load( "./asset/stage/background.jpg" );
 	var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
-	var sprite = new THREE.Sprite( spriteMaterial );
+	editor.backgroundSprite = new THREE.Sprite( spriteMaterial );
 
-	$(function (  ) {
+	$( function () {
 		let left = editor.DEFAULT_CAMERA.left;
 		let right = editor.DEFAULT_CAMERA.right;
 		let top = editor.DEFAULT_CAMERA.top;
 		let bottom = editor.DEFAULT_CAMERA.bottom;
 
-		let ratio = (right-left) / (bottom-top);
-		sprite.scale.set( 10*ratio, 10, 1 );
+		let ratio = ( right - left ) / ( bottom - top );
+		editor.backgroundSprite.scale.set( 12 * ratio, 12, 1 );
 
-		sprite.position.z = 10;
+		editor.backgroundSprite.position.z = 10;
+	} );
 
-	});
-
-	scene.add( sprite );
+	scene.add( editor.backgroundSprite );
 
 	// signals
 

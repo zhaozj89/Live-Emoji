@@ -66,7 +66,7 @@ Menubar.File = function ( editor ) {
 
 	var option = new UI.Row();
 	option.setClass( 'option' );
-	option.setTextContent( 'Import' );
+	option.setTextContent( 'Load Image' );
 	option.onClick( function () {
 
 		fileInput.click();

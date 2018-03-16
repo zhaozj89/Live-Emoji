@@ -76,6 +76,8 @@ var Editor = function () {
 
 	this.msgInputArousal = null;
 
+	this.backgroundSprite = null;
+
 	this.top3Keys = {
 		key0: null,
 		key1: null,

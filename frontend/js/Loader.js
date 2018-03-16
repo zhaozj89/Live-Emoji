@@ -25,6 +25,16 @@ var Loader = function ( editor ) {
 
 		switch ( extension ) {
 
+			case 'png':
+			case 'jpg':
+
+				let texture = new THREE.TextureLoader().load( './asset/stage/' + filename );
+
+				editor.backgroundSprite.material.map = texture;
+				editor.backgroundSprite.material.needsUpdate = true;
+
+				break;
+
 			case '3ds':
 
 				reader.addEventListener( 'load', function ( event ) {
