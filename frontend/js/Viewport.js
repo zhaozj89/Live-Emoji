@@ -9,15 +9,11 @@ var Viewport = function ( editor ) {
 	var container = new UI.Panel();
 	container.setId( 'viewport' );
 	container.setPosition( 'absolute' );
+	container.dom.style.zIndex = '0';
 
 	// container.add( new Viewport.Info( editor ) );
 
 	//
-
-	// $( function () {
-	// 	console.log( 'view port width: ' + container.dom.clientWidth );
-	// 	console.log( 'view port height: ' + container.dom.clientHeight );
-	// } );
 
 	var renderer = null;
 
@@ -27,12 +23,33 @@ var Viewport = function ( editor ) {
 
 	var objects = [];
 
-	var selectionBox = new THREE.BoxHelper();
-	selectionBox.material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-	selectionBox.material.depthTest = false;
-	selectionBox.material.transparent = true;
-	selectionBox.visible = false;
-	sceneHelpers.add( selectionBox );
+	// var selectionBox = new THREE.BoxHelper();
+	// selectionBox.material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
+	// selectionBox.material.depthTest = false;
+	// selectionBox.material.transparent = true;
+	// selectionBox.visible = false;
+	// sceneHelpers.add( selectionBox );
+
+	// add background
+
+	var spriteMap = new THREE.TextureLoader().load( "./asset/background.jpg" );
+	var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+	var sprite = new THREE.Sprite( spriteMaterial );
+
+	$(function (  ) {
+		let left = editor.DEFAULT_CAMERA.left;
+		let right = editor.DEFAULT_CAMERA.right;
+		let top = editor.DEFAULT_CAMERA.top;
+		let bottom = editor.DEFAULT_CAMERA.bottom;
+
+		let ratio = (right-left) / (bottom-top);
+		sprite.scale.set( 10*ratio, 10, 1 );
+
+		sprite.position.z = 10;
+
+	});
+
+	scene.add( sprite );
 
 	// signals
 
@@ -77,14 +94,14 @@ var Viewport = function ( editor ) {
 
 	signals.objectSelected.add( function ( object ) {
 
-		selectionBox.visible = false;
-
-		if ( object !== null && object !== scene && object !== camera ) {
-
-			selectionBox.setFromObject( object );
-			selectionBox.visible = true;
-
-		}
+		// selectionBox.visible = false;
+		//
+		// if ( object !== null && object !== scene && object !== camera ) {
+		//
+		// 	selectionBox.setFromObject( object );
+		// 	selectionBox.visible = true;
+		//
+		// }
 
 		render();
 
@@ -93,11 +110,11 @@ var Viewport = function ( editor ) {
 
 	signals.geometryChanged.add( function ( object ) {
 
-		if ( object !== undefined ) {
-
-			selectionBox.setFromObject( object );
-
-		}
+		// if ( object !== undefined ) {
+		//
+		// 	selectionBox.setFromObject( object );
+		//
+		// }
 
 		render();
 
@@ -115,11 +132,11 @@ var Viewport = function ( editor ) {
 
 	signals.objectChanged.add( function ( object ) {
 
-		if ( editor.selected === object ) {
-
-			selectionBox.setFromObject( object );
-
-		}
+		// if ( editor.selected === object ) {
+		//
+		// 	selectionBox.setFromObject( object );
+		//
+		// }
 
 		if ( object instanceof THREE.PerspectiveCamera ) {
 

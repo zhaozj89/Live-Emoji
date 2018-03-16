@@ -267,9 +267,12 @@ Sidebar.Scene = function ( editor ) {
 
 		rendererPropertiesRow.setDisplay( type === 'WebGLRenderer' ? '' : 'none' );
 
-		var renderer = new rendererTypes[ type ]( { antialias: antialias} );
+		var renderer = new rendererTypes[ type ]( { antialias: antialias, alpha: true} );
 		renderer.gammaInput = gammaIn;
 		renderer.gammaOutput = gammaOut;
+
+		renderer.setClearColor( 0x000000, 0 ); // the default
+
 		if ( shadows && renderer.shadowMap ) {
 
 			renderer.shadowMap.enabled = true;
