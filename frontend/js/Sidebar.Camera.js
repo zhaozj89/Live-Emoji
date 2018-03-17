@@ -350,7 +350,7 @@ Sidebar.Camera = function ( editor ) {
 		}
 	}
 
-	let requestId;
+	let requestId = undefined;
 
 	let FaceTracker = new ParticleFilter();
 	FaceTracker.init( videoStreamWidth, videoStreamHeight, 500, 1 );
@@ -359,43 +359,52 @@ Sidebar.Camera = function ( editor ) {
 	let measurement = null;
 	let corr = null;
 
+	let fpsInterval, now, then, elapsed;
+
 	function MainLoop () {
 		requestId = undefined;
 
-		// predict
-		pred = FaceTracker.predict();
+		now = Date.now();
+		elapsed = now - then;
 
-		// measure
-		measurement = GetFaceEmotionAndLandmark();
+		if (elapsed > fpsInterval) {
+			then = now - (elapsed % fpsInterval);
 
-		// correct
-		if ( measurement === null ) {
-			corr = pred;
-		}
-		else {
-			corr = FaceTracker.correct( measurement.x, measurement.y );
-		}
+			// predict
+			pred = FaceTracker.predict();
 
-		// send signal
-		if ( corr !== null ) {
+			// measure
+			measurement = GetFaceEmotionAndLandmark();
 
-			let lpfCorr = lpf( corr, 0.6 );
-			if ( lpfCorr !== null ) {
-				let res = { x: 0, y: 0 };
-
-				res.x = lpfCorr.x / videoStreamWidth - 0.5;
-				res.y = lpfCorr.y / videoStreamHeight - 0.5;
-
-				res.x *= 10;
-				res.y *= 10;
-
-				signals.followFace.dispatch( res );
+			// correct
+			if ( measurement === null ) {
+				corr = pred;
 			}
+			else {
+				corr = FaceTracker.correct( measurement.x, measurement.y );
+			}
+
+			// send signal
+			if ( corr !== null ) {
+
+				let lpfCorr = lpf( corr, 0.6 );
+				if ( lpfCorr !== null ) {
+					let res = { x: 0, y: 0 };
+
+					res.x = lpfCorr.x / videoStreamWidth - 0.5;
+					res.y = lpfCorr.y / videoStreamHeight - 0.5;
+
+					res.x *= 10;
+					res.y *= 10;
+
+					signals.followFace.dispatch( res );
+				}
+			}
+
+			DrawLandmark();
+
+			StartMainLoop();
 		}
-
-		DrawLandmark();
-
-		StartMainLoop();
 	}
 
 	function StartMainLoop () {
@@ -419,6 +428,10 @@ Sidebar.Camera = function ( editor ) {
 			videoStream.dom.play();
 			ctrack.start( videoStream.dom );
 			faceTrackingStarted = true;
+
+			let fps = 45;
+			fpsInterval = 1000 / fps;
+			then = Date.now();
 
 			StartMainLoop();
 		}
