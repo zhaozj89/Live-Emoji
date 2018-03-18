@@ -142,11 +142,12 @@ var Sidebar2 = function ( editor ) {
 	headerRow.appendChild(headerCell0);
 	headerRow.appendChild(headerCell1);
 
+	headerCell1.style.textAlign = 'center';
+
 	recommendationPanel.dom.appendChild( table );
 
 	let autoCheck = new UI.Checkbox( false );
 	let autoCheckInfo = new UI.Text( 'Auto Triggering' );
-	autoCheckInfo.setTextAlign( 'center' );
 
 	headerCell0.appendChild( autoCheck.dom );
 	headerCell1.appendChild(autoCheckInfo.dom);
@@ -157,9 +158,13 @@ var Sidebar2 = function ( editor ) {
 	let bodyRow1 = body.insertRow(1);
 	let bodyRow2 = body.insertRow(2);
 
-	let top0 = new UI.Text( '(<-)' );
-	let top1 = new UI.Text( '(v)' );
-	let top2 = new UI.Text( '(->)' );
+	let top0 = new UI.Text( '' );
+	let top1 = new UI.Text( '' );
+	let top2 = new UI.Text( '' );
+
+	let icon0 = new UI.Text( '<-' );
+	let icon1 = new UI.Text('V');
+	let icon2 = new UI.Text('->');
 
 	//
 
@@ -171,8 +176,13 @@ var Sidebar2 = function ( editor ) {
 	bodyRow0Cell1.appendChild( top0.dom );
 	bodyRow0Cell1.style.textAlign = 'center';
 
+	let bodyRow0Cell2 = document.createElement('td');
+	bodyRow0Cell2.appendChild( icon0.dom );
+	bodyRow0Cell2.style.textAlign = 'center';
+
 	bodyRow0.appendChild( bodyRow0Cell0 );
 	bodyRow0.appendChild( bodyRow0Cell1 );
+	bodyRow0.appendChild( bodyRow0Cell2 );
 
 	//
 
@@ -184,8 +194,13 @@ var Sidebar2 = function ( editor ) {
 	bodyRow1Cell1.appendChild( top1.dom );
 	bodyRow1Cell1.style.textAlign = 'center';
 
+	let bodyRow1Cell2 = document.createElement('td');
+	bodyRow1Cell2.appendChild( icon1.dom );
+	bodyRow1Cell2.style.textAlign = 'center';
+
 	bodyRow1.appendChild( bodyRow1Cell0 );
 	bodyRow1.appendChild( bodyRow1Cell1 );
+	bodyRow1.appendChild( bodyRow1Cell2 );
 
 	//
 
@@ -197,8 +212,13 @@ var Sidebar2 = function ( editor ) {
 	bodyRow2Cell1.appendChild( top2.dom );
 	bodyRow2Cell1.style.textAlign = 'center';
 
+	let bodyRow2Cell2 = document.createElement('td');
+	bodyRow2Cell2.appendChild( icon2.dom );
+	bodyRow2Cell2.style.textAlign = 'center';
+
 	bodyRow2.appendChild( bodyRow2Cell0 );
 	bodyRow2.appendChild( bodyRow2Cell1 );
+	bodyRow2.appendChild( bodyRow2Cell2 );
 
 	container.add( recommendationPanel );
 

@@ -53,8 +53,6 @@ class EmotionCMDThreeDOM {
 
 	createEmotionCMDThreeDOM ( editor ) {
 
-		// this.editButton.setClass( 'EmotionTableEditor' );
-
 		let that = this;
 		this.editButton.onClick( function () {
 			for ( let i = 0; i < Global_All_DOM_In_SVG.length; ++i ) {
@@ -72,14 +70,10 @@ class EmotionCMDThreeDOM {
 			delete editor.emotionCMDManager.allSerializedCMDs[ key ];
 			delete editor.emotionCMDManager.allCMDs[ key ];
 
-			that.rowDiv.dom.remove();
+			that.row.remove();
 
 			delete allUIThreeDOMInfo[ key ];
 		} );
-
-		// this.rowDiv = new UI.Div();
-		// this.rowDiv.setClass( 'EmotionTable' );
-		// this.rowDiv.add( this.keyDiv, this.semanticDiv, this.valenceDiv, this.arousalDiv, this.editButton, this.deleteButton );
 
 		this.row = document.createElement('tr');
 		this.row.appendChild( this.cell0 );
@@ -175,10 +169,10 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 	container.add( cmdHelper );
 
-	let outliner = new UI.Outliner( editor );
+	// let outliner = new UI.Outliner( editor );
 
 	let table = document.createElement("TABLE");
-	table.style.class = 'table';
+	table.style.class = 'table table-hover table-dark';
 	table.style.width = '100%';
 	let header = table.createTHead();
 	let headerRow = header.insertRow(0);
@@ -213,8 +207,8 @@ Sidebar.EmotionCMD = function ( editor ) {
 	headerCell2.appendChild( valenceDiv.dom );
 	headerCell3.appendChild( arousalDiv.dom );
 
-	outliner.dom.appendChild( table );
-	container.add( outliner );
+	container.dom.appendChild( table );
+	// container.add( outliner );
 
 	let body = table.createTBody();
 

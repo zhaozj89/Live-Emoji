@@ -86,7 +86,7 @@ var Editor = function () {
 
 	this.isLiveAnimationMode = false;
 
-	this.isTeacherSide = false;
+	this.isStudentsSide = false;
 
 	this.protonPixi4Renderer = {
 		width: 840,

@@ -2,18 +2,7 @@
  * @author mrdoob / http://mrdoob.com/
  */
 
-Menubar.File = function ( editor ) {
-
-	var NUMBER_PRECISION = 6;
-
-	function parseNumber ( key, value ) {
-
-		return typeof value === 'number' ? parseFloat( value.toFixed( NUMBER_PRECISION ) ) : value;
-
-	}
-
-	//
-
+Menubar.Tool = function ( editor ) {
 	var config = editor.config;
 
 	var container = new UI.Panel();
@@ -21,32 +10,44 @@ Menubar.File = function ( editor ) {
 
 	var title = new UI.Panel();
 	title.setClass( 'title' );
-	title.setTextContent( 'File' );
+	title.setTextContent( 'Tool' );
 	container.add( title );
 
 	var options = new UI.Panel();
 	options.setClass( 'options' );
 	container.add( options );
 
-	// New
-
 	var option = new UI.Row();
 	option.setClass( 'option' );
-	option.setTextContent( 'New' );
+	option.setTextContent( 'Reset' );
 	option.onClick( function () {
+		editor.selected.position.x = 0;
+		editor.selected.position.y = 0;
 
-		if ( confirm( 'Any unsaved data will be lost. Are you sure?' ) ) {
-
-			editor.clear();
-
-		}
-
+		editor.backgroundSprite.position.x = 0;
+		editor.backgroundSprite.position.y = 0;
 	} );
 	options.add( option );
 
+	// // New
+	//
+	// var option = new UI.Row();
+	// option.setClass( 'option' );
+	// option.setTextContent( 'New' );
+	// option.onClick( function () {
+	//
+	// 	if ( confirm( 'Any unsaved data will be lost. Are you sure?' ) ) {
+	//
+	// 		editor.clear();
+	//
+	// 	}
+	//
+	// } );
+	// options.add( option );
+
 	//
 
-	options.add( new UI.HorizontalRule() );
+	// options.add( new UI.HorizontalRule() );
 
 	// Import
 
@@ -66,7 +67,7 @@ Menubar.File = function ( editor ) {
 
 	var option = new UI.Row();
 	option.setClass( 'option' );
-	option.setTextContent( 'Load Image' );
+	option.setTextContent( 'Background Image' );
 	option.onClick( function () {
 
 		fileInput.click();
