@@ -41,31 +41,6 @@ textarea, input { outline: none; } /* osx */
 	user-select: none;
 }
 
-/* CodeMirror */
-
-.CodeMirror {
-
-	position: absolute !important;
-	top: 37px;
-	width: 100% !important;
-	height: calc(100% - 37px) !important;
-
-}
-
-	.CodeMirror .errorLine {
-
-		background: rgba(255,0,0,0.25);
-
-	}
-
-	.CodeMirror .esprima-error {
-
-		color: #f00;
-		text-align: right;
-		padding: 0 20px;
-
-	}
-
 /* outliner */
 
 #outliner .option {

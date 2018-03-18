@@ -5,7 +5,6 @@ var Sidebar2 = function ( editor ) {
 
 	let titleValence = new UI.Text( 'Valence Panel' );
 	titleValence.setColor( 'whitesmoke' );
-	titleValence.setMargin( '10px' );
 	titleValence.setWidth( '200px' );
 	titleValence.setBackgroundColor( 'blueviolet' );
 	container.add( titleValence );
@@ -40,7 +39,7 @@ var Sidebar2 = function ( editor ) {
 
 	let titleArousal = new UI.Text( 'Arousal Panel' );
 	titleArousal.setColor( 'whitesmoke' );
-	titleArousal.setMargin( '10px' );
+	titleArousal.setMarginTop( '15px' );
 	titleArousal.setWidth( '200px' );
 	titleArousal.setBackgroundColor( 'blueviolet' );
 	container.add( titleArousal );
@@ -119,7 +118,7 @@ var Sidebar2 = function ( editor ) {
 
 	let titleRecommendation = new UI.Text( 'Recommendation Panel' );
 	titleRecommendation.setColor( 'whitesmoke' );
-	titleRecommendation.setMargin( '10px' );
+	titleRecommendation.setMarginTop( '15px' );
 	titleRecommendation.setWidth( '200px' );
 	titleRecommendation.setBackgroundColor( 'blueviolet' );
 	container.add( titleRecommendation );
