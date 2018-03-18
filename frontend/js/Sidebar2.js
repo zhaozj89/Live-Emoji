@@ -3,6 +3,13 @@ var Sidebar2 = function ( editor ) {
 	var container = new UI.Panel();
 	container.setId( 'sidebar2' );
 
+	let titleValence = new UI.Text( 'Valence Panel' );
+	titleValence.setColor( 'whitesmoke' );
+	titleValence.setMargin( '10px' );
+	titleValence.setWidth( '200px' );
+	titleValence.setBackgroundColor( 'blueviolet' );
+	container.add( titleValence );
+
 	var valenceView = new UI.Div();
 	valenceView.setId( 'valenceView' );
 	valenceView.dom.style.textAlign = 'center';
@@ -18,9 +25,11 @@ var Sidebar2 = function ( editor ) {
 	valenceText.setWidth( '20px' );
 	valenceText.setHeight( '20px' );
 	valenceText.setTextContent( '0' );
-	valenceText.dom.style.backgroundColor = 'white';
-	valenceText.dom.style.marginBottom = '5px';
-	valenceText.dom.style.textAlign = 'center';
+	valenceText.setBackgroundColor('yellow');
+	valenceText.setMargin('5px');
+	valenceText.setMarginLeft('90px');
+	valenceText.setTextAlign('center');
+	valenceText.dom.style.borderRadius = '10px';
 
 	var valenceSlider = new UI.Div();
 	valenceSlider.setId( 'valenceSlider' );
@@ -29,18 +38,27 @@ var Sidebar2 = function ( editor ) {
 	container.add( valenceText );
 	container.add( valenceSlider );
 
+	let titleArousal = new UI.Text( 'Arousal Panel' );
+	titleArousal.setColor( 'whitesmoke' );
+	titleArousal.setMargin( '10px' );
+	titleArousal.setWidth( '200px' );
+	titleArousal.setBackgroundColor( 'blueviolet' );
+	container.add( titleArousal );
+
 	var heartView = new UI.Div();
 	heartView.setId( 'heartView' );
 	heartView.setClass( 'heart animated' );
 
 	var heartValueText = new UI.Div();
 	heartValueText.setId( 'heartValueText' );
-	heartValueText.setWidth( '50px' );
+	heartValueText.setWidth( '40px' );
 	heartValueText.setHeight( '20px' );
 	heartValueText.setTextContent( '1' );
-	heartValueText.dom.style.backgroundColor = 'white';
-	heartValueText.dom.style.marginBottom = '5px';
-	heartValueText.dom.style.textAlign = 'center';
+	heartValueText.setBackgroundColor('red');
+	heartValueText.setMargin('5px');
+	heartValueText.setMarginLeft('80px');
+	heartValueText.setTextAlign('center');
+	heartValueText.dom.style.borderRadius = '15px';
 
 	var heartSlider = new UI.Div();
 	heartSlider.setId( 'heartSlider' );
@@ -66,7 +84,7 @@ var Sidebar2 = function ( editor ) {
 				let val = -19 * ui.value + 1981;
 				heart.style.animation = val + 'ms pulsate infinite alternate ease-in-out';
 
-				if( editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
+				if( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
 					editor.emotionCMDManager.currentNodeSession.triggerNode.arousal.setArg( ui.value );
 				}
 			}
@@ -81,7 +99,7 @@ var Sidebar2 = function ( editor ) {
 				let res = ui.value + 1;
 				valenceImg.src = './asset/valence_new/' + res + '.png';
 
-				if( editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
+				if( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
 					editor.emotionCMDManager.currentNodeSession.triggerNode.valence.setArg( ui.value );
 				}
 			}
@@ -99,27 +117,89 @@ var Sidebar2 = function ( editor ) {
 		}
 	} );
 
+	let titleRecommendation = new UI.Text( 'Recommendation Panel' );
+	titleRecommendation.setColor( 'whitesmoke' );
+	titleRecommendation.setMargin( '10px' );
+	titleRecommendation.setWidth( '200px' );
+	titleRecommendation.setBackgroundColor( 'blueviolet' );
+	container.add( titleRecommendation );
 
 	// recommendation panel
-	var recommendationPanel = new UI.Panel();
-	// recommendationPanel.setId( 'recommendationPanel' );
+	let recommendationPanel = new UI.Panel();
+
+	let table = document.createElement("TABLE");
+	table.style.class = 'table table-dark';
+
+	let header = table.createTHead();
+
+	let headerRow = header.insertRow(0);
+
+	let headerCell0 = document.createElement('th');
+	let headerCell1 = document.createElement('th');
+
+	headerCell0.setAttribute( 'scope', 'col');
+	headerCell1.setAttribute( 'scope', 'col');
+
+	headerRow.appendChild(headerCell0);
+	headerRow.appendChild(headerCell1);
+
+	recommendationPanel.dom.appendChild( table );
 
 	let autoCheck = new UI.Checkbox( false );
-	recommendationPanel.add( autoCheck );
+	let autoCheckInfo = new UI.Text( 'Auto Triggering' );
+	autoCheckInfo.setTextAlign( 'center' );
 
-	let autoCheckInfo = new UI.Text( 'Use Auto Triggering' );
-	recommendationPanel.add( autoCheckInfo );
+	headerCell0.appendChild( autoCheck.dom );
+	headerCell1.appendChild(autoCheckInfo.dom);
 
-	let recommendedInfo = new UI.Text( 'Top 3 Recommended Keys' );
-	recommendationPanel.add( recommendedInfo );
+	let body = table.createTBody();
 
-	let recommendedList = new UI.UList();
-	recommendedList.setLeft( '0px' );
-	let top0 = recommendedList.addLi( 'Top0: (key: <-)' );
-	let top1 = recommendedList.addLi( 'Top1: (key: v)' );
-	let top2 = recommendedList.addLi( 'Top2: (key: ->)' );
+	let bodyRow0 = body.insertRow(0);
+	let bodyRow1 = body.insertRow(1);
+	let bodyRow2 = body.insertRow(2);
 
-	recommendationPanel.add( recommendedList );
+	let top0 = new UI.Text( '(key: <-)' );
+	let top1 = new UI.Text( '(key: v)' );
+	let top2 = new UI.Text( '(key: ->)' );
+
+	//
+
+	let bodyRow0Cell0 = document.createElement('th');
+	bodyRow0Cell0.innerHTML = "0";
+	bodyRow0Cell0.setAttribute( 'scope', 'row');
+
+	let bodyRow0Cell1 = document.createElement('td');
+	bodyRow0Cell1.appendChild( top0.dom );
+	bodyRow0Cell1.style.textAlign = 'center';
+
+	bodyRow0.appendChild( bodyRow0Cell0 );
+	bodyRow0.appendChild( bodyRow0Cell1 );
+
+	//
+
+	let bodyRow1Cell0 = document.createElement('th');
+	bodyRow1Cell0.innerHTML = "1";
+	bodyRow1Cell0.setAttribute( 'scope', 'row');
+
+	let bodyRow1Cell1 = document.createElement('td');
+	bodyRow1Cell1.appendChild( top1.dom );
+	bodyRow1Cell1.style.textAlign = 'center';
+
+	bodyRow1.appendChild( bodyRow1Cell0 );
+	bodyRow1.appendChild( bodyRow1Cell1 );
+
+	//
+
+	let bodyRow2Cell0 = document.createElement('th');
+	bodyRow2Cell0.innerHTML = "2";
+	bodyRow2Cell0.setAttribute( 'scope', 'row');
+
+	let bodyRow2Cell1 = document.createElement('td');
+	bodyRow2Cell1.appendChild( top2.dom );
+	bodyRow2Cell1.style.textAlign = 'center';
+
+	bodyRow2.appendChild( bodyRow2Cell0 );
+	bodyRow2.appendChild( bodyRow2Cell1 );
 
 	container.add( recommendationPanel );
 
@@ -157,9 +237,9 @@ var Sidebar2 = function ( editor ) {
 				}
 			}
 
-			top0.firstChild.textContent = 'Top0: ' + all_distprop[ 0 ].other.key + '-' + all_distprop[ 0 ].other.semantic + ' (key: <-)';
-			top1.firstChild.textContent = 'Top1: ' + all_distprop[ 1 ].other.key + '-' + all_distprop[ 1 ].other.semantic + ' (key: v)';
-			top2.firstChild.textContent = 'Top2: ' + all_distprop[ 2 ].other.key + '-' + all_distprop[ 2 ].other.semantic + ' (key: ->)';
+			top0.textContent = 'Top0: ' + all_distprop[ 0 ].other.key + '-' + all_distprop[ 0 ].other.semantic + ' (key: <-)';
+			top1.textContent = 'Top1: ' + all_distprop[ 1 ].other.key + '-' + all_distprop[ 1 ].other.semantic + ' (key: v)';
+			top2.textContent = 'Top2: ' + all_distprop[ 2 ].other.key + '-' + all_distprop[ 2 ].other.semantic + ' (key: ->)';
 
 			if ( autoCheck.getValue() === true ) {
 				let key = all_distprop[ 0 ].other.key;

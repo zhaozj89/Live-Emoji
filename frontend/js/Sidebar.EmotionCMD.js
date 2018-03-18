@@ -67,11 +67,11 @@ Sidebar.EmotionCMD = function ( editor ) {
 	container.setBorderTop( '0' );
 	container.setPaddingTop( '10px' );
 
-	let newCMD = new UI.Button( 'New CMD' );
-	let saveCMD = new UI.Button( 'Save CMD' );
-	let cleanSVG = new UI.Button( 'Clean SVG' );
-	let importCMD = new UI.Button( 'Import CMDs' );
-	let exportCMD = new UI.Button( 'Export CMDs' );
+	let newCMD = new UI.Button( 'New' );
+	let saveCMD = new UI.Button( 'Save' );
+	let cleanSVG = new UI.Button( 'Clean' );
+	let importCMD = new UI.Button( 'Import' );
+	let exportCMD = new UI.Button( 'Export' );
 
 	newCMD.onClick( function () {
 		emotionCMDManager.newCMD();

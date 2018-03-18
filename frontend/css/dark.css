@@ -52,7 +52,7 @@ select {
 	position: absolute;
 	top: 32px;
 	left: 0;
-	right: 600px;
+	right: 500px;
 	bottom: 0px;
 }
 
@@ -180,7 +180,7 @@ select {
 	right: 300px;
 	top: 32px;
 	bottom: 0;
-	width: 300px;
+	width: 200px;
 	background-color: #111;
 	overflow: auto;
 }
@@ -209,13 +209,13 @@ select {
 	}
 
 	#sidebar2 .heartView {
-		width: 300px;
-		height: 300px;
+		width: 180px;
+		height: 180px;
 	}
 
 	#sidebar2 .valenceView {
-		width: 300px;
-		height: 300px;
+		width: 200px;
+		height: 200px;
 	}
 
 #tabs {
