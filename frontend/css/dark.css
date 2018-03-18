@@ -20,15 +20,15 @@ button {
 
 input, textarea {
 	background-color: #222;
-	border: 1px solid transparent;
+	border: 0px solid transparent;
 	color: #888;
 }
 
 input.Number {
 	color: #08f!important;
-	font-size: 12px;
+	font-size: 10px;
 	border: 0px;
-	padding: 2px;
+	padding: 0px;
 	cursor: col-resize;
 }
 
@@ -65,7 +65,7 @@ select {
 	position: absolute;
 	top: 32px;
 	left: 0;
-	right: 600px;
+	right: 500px;
 	bottom: 0px;
 	opacity: 0.9;
 }

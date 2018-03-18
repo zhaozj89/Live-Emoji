@@ -157,9 +157,9 @@ var Sidebar2 = function ( editor ) {
 	let bodyRow1 = body.insertRow(1);
 	let bodyRow2 = body.insertRow(2);
 
-	let top0 = new UI.Text( '(key: <-)' );
-	let top1 = new UI.Text( '(key: v)' );
-	let top2 = new UI.Text( '(key: ->)' );
+	let top0 = new UI.Text( '(<-)' );
+	let top1 = new UI.Text( '(v)' );
+	let top2 = new UI.Text( '(->)' );
 
 	//
 
@@ -236,9 +236,9 @@ var Sidebar2 = function ( editor ) {
 				}
 			}
 
-			top0.textContent = 'Top0: ' + all_distprop[ 0 ].other.key + '-' + all_distprop[ 0 ].other.semantic + ' (key: <-)';
-			top1.textContent = 'Top1: ' + all_distprop[ 1 ].other.key + '-' + all_distprop[ 1 ].other.semantic + ' (key: v)';
-			top2.textContent = 'Top2: ' + all_distprop[ 2 ].other.key + '-' + all_distprop[ 2 ].other.semantic + ' (key: ->)';
+			top0.textContent = 'Top0: ' + all_distprop[ 0 ].other.key + '-' + all_distprop[ 0 ].other.semantic + ' (<-)';
+			top1.textContent = 'Top1: ' + all_distprop[ 1 ].other.key + '-' + all_distprop[ 1 ].other.semantic + ' (v)';
+			top2.textContent = 'Top2: ' + all_distprop[ 2 ].other.key + '-' + all_distprop[ 2 ].other.semantic + ' (->)';
 
 			if ( autoCheck.getValue() === true ) {
 				let key = all_distprop[ 0 ].other.key;
