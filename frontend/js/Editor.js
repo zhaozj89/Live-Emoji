@@ -4,6 +4,10 @@
 
 var Editor = function () {
 
+	// components of editor
+	this.viewport = null;
+	this.node_editor = null;
+
 	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -20, 20, -20, 20, -100, 100 );
 	this.DEFAULT_CAMERA.name = 'Camera';
 	this.DEFAULT_CAMERA.position.set( 0, 0, -50 );

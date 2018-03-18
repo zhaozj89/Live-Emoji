@@ -9,9 +9,11 @@ var Viewport = function ( editor ) {
 	var container = new UI.Panel();
 	container.setId( 'viewport' );
 	container.setPosition( 'absolute' );
-	container.dom.style.zIndex = '0';
+	container.dom.style.zIndex = '6';
 
 	// container.add( new Viewport.Info( editor ) );
+
+	editor.viewport = container;
 
 	//
 

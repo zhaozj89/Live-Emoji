@@ -162,6 +162,9 @@
 	var viewport = new Viewport( editor );
 	document.body.appendChild( viewport.dom );
 
+	var nEditor = new NEditor( editor ); // need face info in sidebar
+	document.body.appendChild( nEditor.dom );
+
 	var backgroundAnimationCanvas = new BackgroundAnimationCanvas( editor );
 	document.body.appendChild( backgroundAnimationCanvas.dom );
 
@@ -179,9 +182,6 @@
 
 	var modal = new UI.Modal();
 	document.body.appendChild( modal.dom );
-
-	var nEditor = new NEditor( editor ); // need face info in sidebar
-	document.body.appendChild( nEditor.dom );
 
 	//
 

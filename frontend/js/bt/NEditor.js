@@ -12,6 +12,8 @@ var NEditor = function ( editor ) {
 
 	container.dom.style.zIndex = "5";
 
+	editor.node_editor = container;
+
 	var header = new UI.Panel();
 	header.setPadding( '10px' );
 	container.add( header );

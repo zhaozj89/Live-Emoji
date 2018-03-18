@@ -162,10 +162,19 @@ Sidebar.Camera = function ( editor ) {
 	container.setPaddingTop( '20px' );
 
 	var overlayedPanel = new UI.Panel();
+	// overlayedPanel.dom.setAttribute( 'title', 'Camera' );
+	// overlayedPanel.setWidth('250px');
+	// overlayedPanel.setHeight('50px');
+	// overlayedPanel.dom.style.zIndex = '10';
+
 	overlayedPanel.setWidth( '250px' );
 	overlayedPanel.setHeight( '200px' );
 
-	container.add( overlayedPanel );
+	editor.viewport.add( overlayedPanel );
+
+	overlayedPanel.setTop( '100px' );
+	overlayedPanel.setLeft( '100px' );
+	overlayedPanel.setPosition( 'absolute' );
 
 	// Webcam
 
@@ -174,6 +183,7 @@ Sidebar.Camera = function ( editor ) {
 	videoStream.setId( 'selfVideo' );
 	videoStream.dom.width = 250;
 	videoStream.dom.height = 200;
+	videoStream.setTop('50px');
 	// vid.setControls( true );
 	videoStream.setPreload( 'auto' );
 	videoStream.setLoop( true );
@@ -190,19 +200,26 @@ Sidebar.Camera = function ( editor ) {
 	videoStreamOverlay.setId( 'videoStreamOverlay' );
 	videoStreamOverlay.dom.width = 250;
 	videoStreamOverlay.dom.height = 200;
+	videoStreamOverlay.setTop('50px');
 
 	overlayedPanel.add( videoStreamOverlay );
 
-	var DebugCanvas = new UI.Canvas();
-	DebugCanvas.setPosition( 'absolute' );
-	DebugCanvas.setId( 'DebugCanvas' );
-	DebugCanvas.dom.width = 48;
-	DebugCanvas.dom.height = 48;
 
-	overlayedPanel.add( DebugCanvas );
+	$(function (  ) {
+		$( overlayedPanel.dom ).draggable();
+		// $(videoStream.dom).draggable();
+	});
 
-	var debugInf = new UI.Text( 'For debug usage' );
-	debugInf.setId( 'debugInf' );
+	// var DebugCanvas = new UI.Canvas();
+	// DebugCanvas.setPosition( 'absolute' );
+	// DebugCanvas.setId( 'DebugCanvas' );
+	// DebugCanvas.dom.width = 48;
+	// DebugCanvas.dom.height = 48;
+	//
+	// overlayedPanel.add( DebugCanvas );
+
+	// var debugInf = new UI.Text( 'For debug usage' );
+	// debugInf.setId( 'debugInf' );
 	// container.add( debugInf );
 
 	var startButton = new UI.Button( 'Start' );
@@ -240,7 +257,7 @@ Sidebar.Camera = function ( editor ) {
 	container.add( otherClients );
 
 	var videoStreamOverlayContext = videoStreamOverlay.getContext( '2d' );
-	var DebugCanvasContext = DebugCanvas.getContext( '2d' );
+	// var DebugCanvasContext = DebugCanvas.getContext( '2d' );
 
 	//
 	var faceTrackingStarted = false;
@@ -264,6 +281,8 @@ Sidebar.Camera = function ( editor ) {
 				videoStream.dom.width = videoStreamWidth;
 				videoStreamOverlay.dom.width = videoStreamWidth;
 				callerVideoStream.dom.width = videoStreamWidth;
+
+				overlayedPanel.setWidth(videoStreamWidth + 'px');
 			}
 
 			videoStream.dom.onloadedmetadata = function () {
@@ -664,8 +683,8 @@ Sidebar.Camera = function ( editor ) {
 					signals.followEmotion.dispatch( FACE_INFORMATION[ 'emotion' ] );
 
 				//show debug information about eyes and emotion, should delete it after completion
-				debugInf.setValue( 'left:' + FACE_INFORMATION[ 'left_eye' ] + '   right:' + FACE_INFORMATION[ 'right_eye' ] + ' ' +
-					"Predicted emotions: " + mostPossible + " " + "Possibilities of all emotions: " + emotionvalue );
+				// debugInf.setValue( 'left:' + FACE_INFORMATION[ 'left_eye' ] + '   right:' + FACE_INFORMATION[ 'right_eye' ] + ' ' +
+				// 	"Predicted emotions: " + mostPossible + " " + "Possibilities of all emotions: " + emotionvalue );
 			} )
 			.catch( err => {
 				console.log( err )
