@@ -65,6 +65,10 @@ var Sidebar2 = function ( editor ) {
 				$( heartValueText.dom ).text( ui.value );
 				let val = -19 * ui.value + 1981;
 				heart.style.animation = val + 'ms pulsate infinite alternate ease-in-out';
+
+				if( editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
+					editor.emotionCMDManager.currentNodeSession.triggerNode.arousal.setArg( ui.value );
+				}
 			}
 		} );
 
@@ -76,6 +80,10 @@ var Sidebar2 = function ( editor ) {
 				$( valenceText.dom ).text( ui.value );
 				let res = ui.value + 1;
 				valenceImg.src = './asset/valence_new/' + res + '.png';
+
+				if( editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
+					editor.emotionCMDManager.currentNodeSession.triggerNode.valence.setArg( ui.value );
+				}
 			}
 		} );
 	} );

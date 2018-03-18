@@ -108,7 +108,7 @@ Menubar.File = function ( editor ) {
 
 
 	// DO NOT load it for testing
-	PreLoadCharacterJSON();
+	// PreLoadCharacterJSON();
 
 	return container;
 

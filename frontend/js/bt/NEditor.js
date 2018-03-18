@@ -81,12 +81,12 @@ var NEditor = function ( editor ) {
 	// menu
 	let menu = new UI.UList();
 	menu.setId( 'menu' );
-	menu.addLi( 'Modules', 'ui-state-disabled' );
+	menu.addLi( 'Nodes', 'ui-state-disabled' );
 
-	let Trigger = menu.addLi( 'Trigger' );
-	let Composite = menu.addLi( 'Composite' );
+	let Trigger = menu.addLi( 'Root+' );
+	let Composite = menu.addLi( 'Sequence+' );
 	let Actions = menu.addLi( 'Action' );
-	let Runner = menu.addLi( 'Start' );
+	// let Runner = menu.addLi( 'Start' );
 
 	let menuActions = new UI.UList();
 	let buttonVibration = menuActions.addLi( 'Vibration' );
@@ -109,7 +109,7 @@ var NEditor = function ( editor ) {
 		if ( editor.emotionCMDManager.currentNodeSession === null ) emotionCMDManager.newCMD();
 	} );
 
-	let startBehaviorTree = false;
+	let startBehaviorTree = true;
 
 	$( function () {
 
@@ -145,14 +145,14 @@ var NEditor = function ( editor ) {
 			emotionCMDManager.addNode( 'viberation' );
 		} );
 
-		$( Runner ).click( function () {
-			if ( startBehaviorTree )
-				Runner.children[ 0 ].textContent = 'Start';
-			else
-				Runner.children[ 0 ].textContent = ' Stop';
-
-			startBehaviorTree = !startBehaviorTree;
-		} );
+		// $( Runner ).click( function () {
+		// 	if ( startBehaviorTree )
+		// 		Runner.children[ 0 ].textContent = 'Start';
+		// 	else
+		// 		Runner.children[ 0 ].textContent = ' Stop';
+		//
+		// 	startBehaviorTree = !startBehaviorTree;
+		// } );
 	} );
 
 	signals.editorCleared.add( function () {

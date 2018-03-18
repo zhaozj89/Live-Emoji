@@ -1,19 +1,19 @@
 class TriggerNode extends Node {
 	constructor ( type ) {
-		super( 'Trigger' );
+		super( 'Node+' );
 
 		this.type = type;
 
-		this.semanticName = new LeafInput( 'Emotion: ' );
+		this.semanticName = new LeafInput( 'Semantic: ' );
 		this.semanticName.addTextInput();
 		this.addInput( this.semanticName );
 
-		this.valence = new LeafInput( 'Happiness: ' );
-		this.valence.addTextInput();
+		this.valence = new LeafInput( 'Valence: ' );
+		this.valence.addTextLabel( '0' );
 		this.addInput( this.valence );
 
-		this.arousal = new LeafInput( 'Heartbeat: ' );
-		this.arousal.addTextInput();
+		this.arousal = new LeafInput( 'Arousal: ' );
+		this.arousal.addTextLabel( '1' );
 		this.addInput( this.arousal );
 
 		this.counter = 1;
@@ -25,7 +25,12 @@ class TriggerNode extends Node {
 		let spanner1 = new UI.Span();
 		let incrementer = new UI.Button( '+' );
 		let decrementer = new UI.Button( '-' );
-		let breaker = new UI.Break();
+		incrementer.setPadding( '1px' );
+		decrementer.setPadding( '1px' );
+		incrementer.setColor( '#00ea00' );
+		decrementer.setColor( '#00ea00' );
+		incrementer.setBackgroundColor( 'rgba(0,0,0,0.25)' );
+		decrementer.setBackgroundColor( 'rgba(0,0,0,0.25)' );
 
 		incrementer.setWidth( '50%' );
 		decrementer.setWidth( '50%' );
@@ -37,9 +42,9 @@ class TriggerNode extends Node {
 		rower.add( spanner1 );
 
 		this.addDOM( rower.dom );
-		this.addDOM( breaker.dom );
 
 		this.key = new NodeInput( this );
+		this.key.domElement.textContent = "Key: ";
 		this.key.addTextInput();
 		this.addInput( this.key );
 

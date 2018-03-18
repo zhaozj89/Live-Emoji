@@ -80,6 +80,8 @@ class LeafInput {
 
 		this.text = new UI.Input();
 		this.text.setValue( '' );
+		this.text.setMargin( '1px' );
+		this.text.setPadding( '0px' );
 		this.domElement.appendChild( this.text.dom );
 	}
 
@@ -143,6 +145,8 @@ class NodeInput {
 
 		this.text = new UI.Input();
 		this.text.setValue( '' );
+		this.text.setMargin( '1px' );
+		this.text.setPadding( '0px' );
 		this.domElement.appendChild( this.text.dom );
 	}
 

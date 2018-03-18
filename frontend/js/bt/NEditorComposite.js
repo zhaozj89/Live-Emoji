@@ -1,6 +1,6 @@
 class CompositeNode extends Node {
 	constructor ( type ) {
-		super( 'Composite' );
+		super( 'Sequence+' );
 
 		this.type = type;
 
@@ -22,7 +22,12 @@ class CompositeNode extends Node {
 		let spanner1 = new UI.Span();
 		let incrementer = new UI.Button( '+' );
 		let decrementer = new UI.Button( '-' );
-		let breaker = new UI.Break();
+		incrementer.setPadding( '1px' );
+		decrementer.setPadding( '1px' );
+		incrementer.setColor( '#00ea00' );
+		decrementer.setColor( '#00ea00' );
+		incrementer.setBackgroundColor( 'rgba(0,0,0,0.25)' );
+		decrementer.setBackgroundColor( 'rgba(0,0,0,0.25)' );
 
 		incrementer.setWidth( '50%' );
 		decrementer.setWidth( '50%' );
@@ -34,7 +39,6 @@ class CompositeNode extends Node {
 		rower.add( spanner1 );
 
 		this.addDOM( rower.dom );
-		this.addDOM( breaker.dom );
 
 		let input = new NodeInput( this );
 		input.addTextLabel('Channel ' + this.counter + ': ');
