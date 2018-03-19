@@ -62,7 +62,9 @@ var NEditor = function ( editor ) {
 		if ( NEDITOR_MOUSE_INFO.currentInput ) {
 			let path = NEDITOR_MOUSE_INFO.currentInput.path;
 			let inputPt = NEDITOR_MOUSE_INFO.currentInput.getAttachedPoint();
-			let outputPt = { x: event.pageX, y: event.pageY - 68 };
+
+			///////////////////////////////////////////////////////////
+			let outputPt = { x: event.pageX - 300, y: event.pageY - 74 };
 			let val = NEditorCreatePath( inputPt, outputPt );
 			path.setAttributeNS( null, 'd', val ); // namespace, name, value
 		}
