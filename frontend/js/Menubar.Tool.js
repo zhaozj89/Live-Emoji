@@ -11,6 +11,7 @@ Menubar.Tool = function ( editor ) {
 	var title = new UI.Panel();
 	title.setClass( 'title' );
 	title.setTextContent( 'Tool' );
+	title.addClass('h4');
 	container.add( title );
 
 	var options = new UI.Panel();

@@ -24,7 +24,8 @@ var DanmakuAnimationCanvas = function ( editor ) {
 	container.setId( 'DanmakuAnimation' );
 	container.setPosition( 'absolute' );
 	container.setTop( '32px' );
-	container.setRight( '600px' );
+	container.setLeft( '300px' );
+	container.setRight( '200px' );
 	container.setBottom( '32px' );
 	container.setLeft( '0px' );
 	container.setOpacity( 0.9 );

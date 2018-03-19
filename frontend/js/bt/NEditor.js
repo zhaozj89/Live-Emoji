@@ -64,7 +64,7 @@ var NEditor = function ( editor ) {
 			let inputPt = NEDITOR_MOUSE_INFO.currentInput.getAttachedPoint();
 
 			///////////////////////////////////////////////////////////
-			let outputPt = { x: event.pageX - 300, y: event.pageY - 74 };
+			let outputPt = { x: event.pageX - 300, y: event.pageY - 82 };
 			let val = NEditorCreatePath( inputPt, outputPt );
 			path.setAttributeNS( null, 'd', val ); // namespace, name, value
 		}
@@ -93,13 +93,13 @@ var NEditor = function ( editor ) {
 	menu.addClass('nav-pills');
 
 	menu.setPosition('absolute');
-	menu.setTop('70px');
+	menu.setTop('0px');
 	menu.setLeft('200px');
 	container.add(menu);
 
-	let menuTitle = menu.addLi( 'Nodes', 'nav-item', 'nav-link active' );
-	menuTitle.style.margin = '10px';
-	menuTitle.style.fontSize = '20px';
+	// let menuTitle = menu.addLi( 'Nodes', 'nav-item', 'nav-link active' );
+	// menuTitle.style.margin = '10px';
+	// menuTitle.style.fontSize = '20px';
 
 	let Trigger = menu.addLi( 'Root+' );
 	Trigger.classList.add('nav-item');
@@ -116,6 +116,11 @@ var NEditor = function ( editor ) {
 	Actions.style.margin = '12px';
 	Actions.style.fontSize = '20px';
 
+	let Tools = menu.addLi( 'Tools', 'nav-item dropdown', 'nav-link dropdown-toggle active' );
+	Tools.firstChild.setAttribute('data-toggle', 'dropdown');
+	Tools.style.margin = '12px';
+	Tools.style.fontSize = '20px';
+
 	let menuActions = new UI.UList();
 	menuActions.addClass( 'dropdown-menu' );
 	let buttonVibration = menuActions.addLi( 'Vibration' );    buttonVibration.classList.add('dropdown-item');
@@ -123,6 +128,15 @@ var NEditor = function ( editor ) {
 	let buttonSwap = menuActions.addLi( 'Swap [PUPPET]' );    buttonSwap.classList.add('dropdown-item');
 	let buttonExplode = menuActions.addLi( 'Particle [BG]' );    buttonExplode.classList.add('dropdown-item');
 	Actions.appendChild( menuActions.dom );
+
+	let menuTools = new UI.UList();
+	menuTools.addClass( 'dropdown-menu' );
+	let cmdNew = menuTools.addLi( 'New' );    cmdNew.classList.add('dropdown-item');
+	let cmdSave = menuTools.addLi( 'Save' );    cmdSave.classList.add('dropdown-item');
+	let cmdClean = menuTools.addLi( 'Clean' );    cmdClean.classList.add('dropdown-item');
+	let cmdImport = menuTools.addLi( 'Import' );    cmdImport.classList.add('dropdown-item');
+	let cmdExport = menuTools.addLi( 'Export' );    cmdExport.classList.add('dropdown-item');
+	Tools.appendChild( menuTools.dom );
 
 	Global_Graph_SVG = graphSVG;
 	Global_NEditor_Container = container.dom;
@@ -169,14 +183,66 @@ var NEditor = function ( editor ) {
 			emotionCMDManager.addNode( 'viberation' );
 		} );
 
-		// $( Runner ).click( function () {
-		// 	if ( startBehaviorTree )
-		// 		Runner.children[ 0 ].textContent = 'Start';
-		// 	else
-		// 		Runner.children[ 0 ].textContent = ' Stop';
-		//
-		// 	startBehaviorTree = !startBehaviorTree;
-		// } );
+
+		$( cmdNew ).click(function (  ) {
+			editor.emotionCMDManager.newCMD();
+		});
+
+		$(cmdSave).click(function (  ) {
+			editor.emotionCMDManager.save();
+		});
+
+		$(cmdClean).click(function (  ) {
+			editor.emotionCMDManager.cleanSVG();
+			editor.emotionCMDManager.newCMD();
+		});
+
+		$(cmdImport).click(function (  ) {
+			let LoadJSONFile = function ( filename ) {
+
+				let xhr = new XMLHttpRequest();
+				xhr.onreadystatechange = function () {
+					if ( this.readyState == 4 && this.status == 200 ) {
+						let jsonFile = JSON.parse( this.responseText );
+
+						editor.emotionCMDManager.fromJSON( jsonFile );
+
+						editor.emotionCMDManager.cleanSVG();
+
+						for ( let prop in editor.emotionCMDManager.allSerializedCMDs ) {
+
+							let info = editor.emotionCMDManager.allCMDs[ prop ].getInfo();
+
+							let msg = {
+								'info': info,
+								'nodeString': editor.emotionCMDManager.allSerializedCMDs[ prop ]
+							};
+
+							signals.saveEmotionCMD.dispatch( msg );
+						}
+					}
+				};
+
+				xhr.open( 'GET', './asset/' + filename, true );
+				xhr.send();
+			}
+
+			LoadJSONFile( 'test.json' );
+		});
+
+		$(cmdExport).click(function (  ) {
+			let text_file = JSON.stringify( editor.emotionCMDManager );
+
+			function download(text, name, type) {
+				let a = document.createElement("a");
+				let file = new Blob([text], {type: type});
+				a.href = URL.createObjectURL(file);
+				a.download = name;
+				a.click();
+			}
+			download(text_file, 'test.json', 'text/plain');
+		});
+
 	} );
 
 	signals.editorCleared.add( function () {

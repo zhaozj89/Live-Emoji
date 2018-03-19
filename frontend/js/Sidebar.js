@@ -10,45 +10,24 @@ var Sidebar = function ( editor ) {
 
 	//
 
-	// var sceneTab = new UI.Text( 'Scene' ).onClick( onClick );
-	// var cameraTab = new UI.Text( 'Camera' ).onClick( onClick );
-	// var historyTab = new UI.Text( 'History' ).onClick( onClick );
-	// var emotionTab = new UI.Text( 'Emotion' ).onClick( onClick );
-
-	// var tabs = new UI.Div();
-	// tabs.setId( 'tabs' );
-	// tabs.add( cameraTab, historyTab, sceneTab, emotionTab );
-	// tabs.add( emotionTab );
-	// container.add( tabs );
-
-	// function onClick( event ) {
-	//
-	// 	select( event.target.textContent );
-	//
-	// }
-
-	//
-	//
 	var scene = new UI.Span().add(
 		new Sidebar.Scene( editor ),
 		new Sidebar.Properties( editor )
 	);
-	// container.add( scene );
 
 	var camera = new UI.Span().add(
 		new Sidebar.Camera( editor )
 	);
-	// container.add( camera );
 
 	var history = new UI.Span().add(
 		new Sidebar.History( editor ),
 		new Sidebar.Settings( editor )
 	);
-	// container.add( history );
 
-	let titleMode = new UI.Text( 'Mode Selection Panel' );
+	let titleMode = new UI.Text( 'Mode' );
+	titleMode.addClass( 'h4' );
+	titleMode.setTextAlign('center');
 	titleMode.setColor( 'whitesmoke' );
-	titleMode.setMarginTop( '15px' );
 	titleMode.setWidth( '300px' );
 	titleMode.setBackgroundColor( 'blueviolet' );
 	container.add( titleMode );
@@ -124,8 +103,46 @@ var Sidebar = function ( editor ) {
 	preEditInput.dom.setAttribute( 'autocomplete', 'off' );
 	preEditLabel.add(preEditInput);
 
+	//
 
-	let titleEmotionCommand = new UI.Text( 'Emotion Command Panel' );
+	let triggerButtons = new UI.Div();
+	triggerButtons.setMargin( '5px' );
+	triggerButtons.addClass( 'btn-group' );
+	triggerButtons.addClass('btn-group-toggle');
+	triggerButtons.dom.setAttribute( 'data-toggle', 'buttons' );
+	container.add(triggerButtons);
+
+	let autoLabel = new UI.Label();
+	autoLabel.addClass('btn');
+	autoLabel.addClass('btn-secondary');
+	autoLabel.addClass('active');
+	autoLabel.setFontSize( '10' );
+	triggerButtons.add(autoLabel);
+	autoLabel.dom.innerHTML = 'Auto Trigger';
+
+	let autoInput = new UI.Input( '' );
+	autoInput.dom.setAttribute( 'type', 'radio' );
+	autoInput.dom.setAttribute( 'name', 'options' );
+	autoInput.dom.setAttribute( 'autocomplete', 'off' );
+	autoInput.dom.checked = true;
+	autoLabel.add(autoInput);
+
+	let manualLabel = new UI.Label();
+	manualLabel.addClass('btn');
+	manualLabel.addClass('btn-secondary');
+	triggerButtons.add(manualLabel);
+	manualLabel.dom.innerHTML = 'Manual';
+
+	let manualInput = new UI.Input( '' );
+	manualInput.dom.setAttribute( 'type', 'radio' );
+	manualInput.dom.setAttribute( 'name', 'options' );
+	manualInput.dom.setAttribute( 'autocomplete', 'off' );
+	manualLabel.add(manualInput);
+
+
+	let titleEmotionCommand = new UI.Text( 'Emotion Command' );
+	titleEmotionCommand.addClass( 'h4' );
+	titleEmotionCommand.setTextAlign('center');
 	titleEmotionCommand.setColor( 'whitesmoke' );
 	titleEmotionCommand.setMarginTop( '15px' );
 	titleEmotionCommand.setWidth( '300px' );
@@ -133,46 +150,8 @@ var Sidebar = function ( editor ) {
 	container.add( titleEmotionCommand );
 
 	let emotionCommandView = new Sidebar.EmotionCMD( editor );
-	// emotionCommandView.setTop( '100px' );
 	container.add( emotionCommandView );
 	editor.emotion_command_view = emotionCommandView;
-
-	//
-
-	// function select( section ) {
-	//
-	// 	sceneTab.setClass( '' );
-	// 	cameraTab.setClass( '' );
-	// 	historyTab.setClass( '' );
-	// 	emotionTab.setClass( '' );
-	//
-	// 	scene.setDisplay( 'none' );
-	// 	camera.setDisplay( 'none' );
-	// 	history.setDisplay( 'none' );
-	// 	emotion.setDisplay( 'none' );
-	//
-	// 	switch ( section ) {
-	// 		case 'Scene':
-	// 			sceneTab.setClass( 'selected' );
-	// 			scene.setDisplay( '' );
-	// 			break;
-	// 		case 'Camera':
-	// 			cameraTab.setClass( 'selected' );
-	// 			camera.setDisplay( '' );
-	// 			break;
-	// 		case 'History':
-	// 			historyTab.setClass( 'selected' );
-	// 			history.setDisplay( '' );
-	// 			break;
-	// 		case 'Emotion':
-	// 			emotionTab.setClass( 'selected' );
-	// 			emotion.setDisplay( '' );
-	// 			break;
-	// 	}
-	//
-	// }
-
-	// select( 'Emotion' );
 
 	return container;
 

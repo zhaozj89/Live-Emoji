@@ -3,7 +3,9 @@ var Sidebar2 = function ( editor ) {
 	var container = new UI.Panel();
 	container.setId( 'sidebar2' );
 
-	let titleValence = new UI.Text( 'Valence Panel' );
+	let titleValence = new UI.Text( 'Valence' );
+	titleValence.addClass( 'h4' );
+	titleValence.setTextAlign('center');
 	titleValence.setColor( 'whitesmoke' );
 	titleValence.setWidth( '200px' );
 	titleValence.setBackgroundColor( 'blueviolet' );
@@ -37,7 +39,9 @@ var Sidebar2 = function ( editor ) {
 	container.add( valenceText );
 	container.add( valenceSlider );
 
-	let titleArousal = new UI.Text( 'Arousal Panel' );
+	let titleArousal = new UI.Text( 'Arousal' );
+	titleArousal.addClass( 'h4' );
+	titleArousal.setTextAlign('center');
 	titleArousal.setColor( 'whitesmoke' );
 	titleArousal.setMarginTop( '15px' );
 	titleArousal.setWidth( '200px' );
@@ -116,12 +120,16 @@ var Sidebar2 = function ( editor ) {
 		}
 	} );
 
-	let titleRecommendation = new UI.Text( 'Recommendation Panel' );
-	titleRecommendation.setColor( 'whitesmoke' );
-	titleRecommendation.setMarginTop( '15px' );
-	titleRecommendation.setWidth( '200px' );
-	titleRecommendation.setBackgroundColor( 'blueviolet' );
-	container.add( titleRecommendation );
+	// let titleRecommendation = new UI.Text( 'Recommendation' );
+	// titleRecommendation.addClass( 'h4' );
+	// titleRecommendation.setTextAlign('center');
+	// titleRecommendation.setColor( 'whitesmoke' );
+	// titleRecommendation.setMarginTop( '15px' );
+	// titleRecommendation.setWidth( '200px' );
+	// titleRecommendation.setBackgroundColor( 'blueviolet' );
+	// container.add( titleRecommendation );
+
+	/*
 
 	// recommendation panel
 	let recommendationPanel = new UI.Panel();
@@ -276,6 +284,8 @@ var Sidebar2 = function ( editor ) {
 			}
 		}
 	} );
+
+*/
 
 	return container;
 };

@@ -12,6 +12,7 @@ Menubar.View = function ( editor ) {
 	var title = new UI.Panel();
 	title.setClass( 'title' );
 	title.setTextContent( 'View' );
+	title.addClass('h4');
 	container.add( title );
 
 	var options = new UI.Panel();
