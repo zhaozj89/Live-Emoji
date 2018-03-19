@@ -155,85 +155,72 @@ function loginFailure ( errorCode, message ) {
 
 Sidebar.Camera = function ( editor ) {
 
-	var signals = editor.signals;
+	let signals = editor.signals;
 
-	var container = new UI.Panel();
+	let container = new UI.Panel();
 	container.setBorderTop( '0' );
 	container.setPaddingTop( '20px' );
 
-	var overlayedPanel = new UI.Panel();
-	// overlayedPanel.dom.setAttribute( 'title', 'Camera' );
-	// overlayedPanel.setWidth('250px');
-	// overlayedPanel.setHeight('50px');
-	// overlayedPanel.dom.style.zIndex = '10';
+	let cameraView = new UI.Panel();
+	cameraView.setTop( '100px' );
+	cameraView.setLeft( '100px' );
+	cameraView.setPosition( 'absolute' );
 
+	let cameraViewHeader = new UI.Text( 'Camera View' );
+	cameraViewHeader.setWidth( '100%' );
+	cameraViewHeader.setBackgroundColor( 'rgba(50, 50, 50, 0.2)' );
+
+	let overlayedPanel = new UI.Panel();
 	overlayedPanel.setWidth( '250px' );
 	overlayedPanel.setHeight( '200px' );
 
-	editor.viewport.add( overlayedPanel );
+	cameraView.add( cameraViewHeader );
+	cameraView.add(overlayedPanel);
 
-	overlayedPanel.setTop( '100px' );
-	overlayedPanel.setLeft( '100px' );
-	overlayedPanel.setPosition( 'absolute' );
+	editor.viewport.add( cameraView );
+
+	$(function (  ) {
+		$( cameraView.dom ).draggable();
+	});
 
 	// Webcam
 
-	var videoStream = new UI.Video();
+	let videoStream = new UI.Video();
 	videoStream.setPosition( 'absolute' );
 	videoStream.setId( 'selfVideo' );
 	videoStream.dom.width = 250;
 	videoStream.dom.height = 200;
-	videoStream.setTop('50px');
-	// vid.setControls( true );
 	videoStream.setPreload( 'auto' );
 	videoStream.setLoop( true );
 	videoStream.setPlaysinline( true );
 	videoStream.setAutoplay( true );
 	videoStream.dom.muted = 'muted';
-	var videoStreamWidth = videoStream.dom.width;
-	var videoStreamHeight = videoStream.dom.height;
-
+	let videoStreamWidth = videoStream.dom.width;
+	let videoStreamHeight = videoStream.dom.height;
 	overlayedPanel.add( videoStream );
 
-	var videoStreamOverlay = new UI.Canvas();
+	let videoStreamOverlay = new UI.Canvas();
 	videoStreamOverlay.setPosition( 'absolute' );
 	videoStreamOverlay.setId( 'videoStreamOverlay' );
 	videoStreamOverlay.dom.width = 250;
 	videoStreamOverlay.dom.height = 200;
-	videoStreamOverlay.setTop('50px');
-
 	overlayedPanel.add( videoStreamOverlay );
 
 
-	$(function (  ) {
-		$( overlayedPanel.dom ).draggable();
-		// $(videoStream.dom).draggable();
-	});
-
-	// var DebugCanvas = new UI.Canvas();
-	// DebugCanvas.setPosition( 'absolute' );
-	// DebugCanvas.setId( 'DebugCanvas' );
-	// DebugCanvas.dom.width = 48;
-	// DebugCanvas.dom.height = 48;
-	//
-	// overlayedPanel.add( DebugCanvas );
-
-	// var debugInf = new UI.Text( 'For debug usage' );
-	// debugInf.setId( 'debugInf' );
-	// container.add( debugInf );
-
-	var startButton = new UI.Button( 'Start' );
+	let startButton = new UI.Button( 'Start' );
 	startButton.setValue( 'wait, loading video' );
 	startButton.setId( 'startButton' );
 	startButton.setType( 'button' );
 	startButton.setDisabled( 'disabled' );
-	startButton.setLeft( '10px' );
+	// startButton.setLeft( '10px' );
 
 	$( startButton.dom ).click( function () {
 		TurnONOFFFaceTracking();
 	} );
 
-	container.add( startButton );
+	cameraView.add( startButton );
+
+	// container.add( startButton );
 
 	// caller
 	var callerPanel = new UI.Panel();
