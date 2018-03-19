@@ -9,7 +9,7 @@ var Viewport = function ( editor ) {
 	var container = new UI.Panel();
 	container.setId( 'viewport' );
 	container.setPosition( 'absolute' );
-	container.dom.style.zIndex = '6';
+	container.dom.style.zIndex = '4';
 
 	// container.add( new Viewport.Info( editor ) );
 
@@ -45,7 +45,7 @@ var Viewport = function ( editor ) {
 		let bottom = editor.DEFAULT_CAMERA.bottom;
 
 		let ratio = ( right - left ) / ( bottom - top );
-		editor.backgroundSprite.scale.set( 12 * ratio, 12, 1 );
+		editor.backgroundSprite.scale.set( 11 * ratio, 11, 1 );
 
 		editor.backgroundSprite.position.z = 10;
 	} );

@@ -36,7 +36,7 @@ Menubar.View = function ( editor ) {
 	option.setClass( 'option' );
 	option.setTextContent( 'Camera' );
 	option.onClick( function () {
-
+		editor.camera_view.setDisplay('');
 	} );
 	options.add( option );
 
@@ -51,20 +51,6 @@ Menubar.View = function ( editor ) {
 	options.add( option );
 
 	//
-
-    var isStudents = new UI.Checkbox( false );
-    options.add( isStudents );
-
-    var isStudentsInfo = new UI.Text( 'Student Side' );
-    isStudentsInfo.setClass( 'option' );
-    options.add( isStudentsInfo );
-
-    isStudents.onChange(function (  ) {
-        if( isStudents.getValue()===true )
-            editor.isStudentsSide = true;
-        else
-            editor.isStudentsSide = false;
-    });
 
 	return container;
 

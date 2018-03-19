@@ -81,26 +81,46 @@ var NEditor = function ( editor ) {
 
 
 	// menu
+
 	let menu = new UI.UList();
+	menu.setBackgroundColor('rgba(100, 100, 100, 0.8)');
+	menu.dom.style.borderRadius = '10px';
+	menu.setWidth('500px');
 	menu.setId( 'menu' );
-	menu.addLi( 'Nodes', 'ui-state-disabled' );
+	menu.addClass('nav');
+	menu.addClass('nav-pills');
+
+	menu.setPosition('absolute');
+	menu.setTop('70px');
+	menu.setLeft('200px');
+	container.add(menu);
+
+	let menuTitle = menu.addLi( 'Nodes', 'nav-item', 'nav-link active' );
+	menuTitle.style.margin = '10px';
+	menuTitle.style.fontSize = '20px';
 
 	let Trigger = menu.addLi( 'Root+' );
+	Trigger.classList.add('nav-item');
+	Trigger.style.margin = '20px';
+	Trigger.style.fontSize = '20px';
+
 	let Composite = menu.addLi( 'Sequence+' );
-	let Actions = menu.addLi( 'Action' );
-	// let Runner = menu.addLi( 'Start' );
+	Composite.classList.add('nav-item');
+	Composite.style.margin = '20px';
+	Composite.style.fontSize = '20px';
+
+	let Actions = menu.addLi( 'Action', 'nav-item dropdown', 'nav-link dropdown-toggle' );
+	Actions.firstChild.setAttribute('data-toggle', 'dropdown');
+	Actions.style.margin = '12px';
+	Actions.style.fontSize = '20px';
 
 	let menuActions = new UI.UList();
-	let buttonVibration = menuActions.addLi( 'Vibration' );
-	let buttonDanmaku = menuActions.addLi( 'Danmaku [TXT]' );
-	let buttonSwap = menuActions.addLi( 'Swap [PUPPET]' );
-	let buttonExplode = menuActions.addLi( 'Particle [BG]' );
+	menuActions.addClass( 'dropdown-menu' );
+	let buttonVibration = menuActions.addLi( 'Vibration' );    buttonVibration.classList.add('dropdown-item');
+	let buttonDanmaku = menuActions.addLi( 'Danmaku [TXT]' );    buttonDanmaku.classList.add('dropdown-item');
+	let buttonSwap = menuActions.addLi( 'Swap [PUPPET]' );    buttonSwap.classList.add('dropdown-item');
+	let buttonExplode = menuActions.addLi( 'Particle [BG]' );    buttonExplode.classList.add('dropdown-item');
 	Actions.appendChild( menuActions.dom );
-
-	menu.dom.style.position = 'absolute';
-	menu.dom.style.left = '80px';
-	menu.dom.style.top = '300px';
-	container.add( menu );
 
 	Global_Graph_SVG = graphSVG;
 	Global_NEditor_Container = container.dom;
@@ -115,8 +135,8 @@ var NEditor = function ( editor ) {
 
 	$( function () {
 
-		$( menu.dom ).draggable();
-		$( "#menu" ).menu();
+		// $( menu.dom ).draggable();
+		// $( "#menu" ).menu();
 
 		$( Trigger ).click( function () {
 			if ( emotionCMDManager.currentNodeSession.triggerNode !== null ) {

@@ -5,13 +5,12 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-	<link rel="stylesheet" href="css/jquery-ui.min.css"/>
-	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="css/dark.css"/>
 	<link rel="stylesheet" href="css/main.css"/>
 	<link rel="stylesheet" href="css/NEditor.css">
 	<link rel="stylesheet" href="css/heart.css">
-	<link rel="stylesheet" href="css/RecommendationPanel.css">
+	<link rel="stylesheet" href="css/jquery-ui.min.css"/>
+	<link rel="stylesheet" href="css/bootstrap.css">
 
 	<!--numeric-->
 	<script src="js/libs/gaussian.js"></script>
@@ -26,7 +25,7 @@
 	<!--jquery-->
 	<script src="js/libs/jquery.min.js"></script>
 	<script src="js/libs/jquery-ui.min.js"></script>
-
+	<script src="https://unpkg.com/popper.js"></script>
 	<script src="js/libs/bootstrap.js"></script>
 
 	<!--signals-->
@@ -64,7 +63,6 @@
 	<script src="js/Menubar.Tool.js"></script>
 	<!--<script src="js/Menubar.Edit.js"></script>-->
 	<script src="js/Menubar.View.js"></script>
-	<script src="js/Menubar.Mode.js"></script>
 	<!--<script src="js/Menubar.Help.js"></script>-->
 	<!--<script src="js/Menubar.Status.js"></script>-->
 
@@ -180,8 +178,8 @@
 	var menubar = new Menubar( editor );
 	document.body.appendChild( menubar.dom );
 
-	var modal = new UI.Modal();
-	document.body.appendChild( modal.dom );
+	// var modal = new UI.Modal();
+	// document.body.appendChild( modal.dom );
 
 	//
 

@@ -51,8 +51,8 @@ select {
 #viewport {
 	position: absolute;
 	top: 32px;
-	left: 0;
-	right: 500px;
+	left: 300px;
+	right: 200px;
 	bottom: 0px;
 }
 
@@ -64,8 +64,8 @@ select {
 #nEditor {
 	position: absolute;
 	top: 32px;
-	left: 0;
-	right: 500px;
+	left: 300px;
+	right: 200px;
 	bottom: 0px;
 	opacity: 0.9;
 }
@@ -144,7 +144,7 @@ select {
 
 #sidebar {
 	position: absolute;
-	right: 0;
+	left: 0;
 	top: 32px;
 	bottom: 0;
 	width: 300px;
@@ -177,7 +177,7 @@ select {
 
 #sidebar2 {
 	position: absolute;
-	right: 300px;
+	right: 0;
 	top: 32px;
 	bottom: 0;
 	width: 200px;

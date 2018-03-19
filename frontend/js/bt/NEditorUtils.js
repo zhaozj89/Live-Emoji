@@ -34,5 +34,6 @@ var NEditorGetFullOffset = function ( el ) {
 
 	let offset = innerRecursive( el );
 	offset.top -= 74;
+	offset.left -= 300;
 	return offset;
 }

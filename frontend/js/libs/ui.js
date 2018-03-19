@@ -197,6 +197,36 @@ UI.Div = function () {
 UI.Div.prototype = Object.create( UI.Element.prototype );
 UI.Div.prototype.constructor = UI.Div;
 
+// Nav
+
+UI.Nav = function () {
+
+	UI.Element.call( this );
+
+	this.dom = document.createElement( 'nav' );
+
+	return this;
+
+};
+
+UI.Nav.prototype = Object.create( UI.Element.prototype );
+UI.Nav.prototype.constructor = UI.Nav;
+
+// Label
+
+UI.Label = function () {
+
+	UI.Element.call( this );
+
+	this.dom = document.createElement( 'label' );
+
+	return this;
+
+};
+
+UI.Label.prototype = Object.create( UI.Element.prototype );
+UI.Label.prototype.constructor = UI.Label;
+
 // Row
 
 UI.Row = function () {
@@ -1053,15 +1083,18 @@ UI.UList.prototype.setId = function ( value ) {
 	this.dom.id = value;
 };
 
-UI.UList.prototype.addLi = function ( text, className ) {
+UI.UList.prototype.addLi = function ( text, className0, className1 ) {
 	var dom0 = document.createElement( 'li' );
 	var dom1 = document.createElement( 'div' );
 	this.dom.appendChild( dom0 );
 	dom0.appendChild( dom1 );
 	dom1.textContent = text;
 
-	if( className!==null )
-		dom0.className = className;
+	if( className0!==null )
+		dom0.className = className0;
+
+	if( className1!==null )
+		dom1.className = className1;
 
 	return dom0;
 };

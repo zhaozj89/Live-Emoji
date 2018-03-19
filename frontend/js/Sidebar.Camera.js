@@ -165,10 +165,36 @@ Sidebar.Camera = function ( editor ) {
 	cameraView.setTop( '100px' );
 	cameraView.setLeft( '100px' );
 	cameraView.setPosition( 'absolute' );
+	cameraView.setDisplay( 'none' );
+	editor.camera_view = cameraView;
 
 	let cameraViewHeader = new UI.Text( 'Camera View' );
 	cameraViewHeader.setWidth( '100%' );
-	cameraViewHeader.setBackgroundColor( 'rgba(50, 50, 50, 0.2)' );
+	cameraViewHeader.setPadding( '10px' );
+	cameraViewHeader.setBackgroundColor( 'rgba(50, 50, 50, 0.5)' );
+
+	let buttonSVG = ( function () {
+		var svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
+		svg.setAttribute( 'width', 32 );
+		svg.setAttribute( 'height', 32 );
+		var path = document.createElementNS( 'http://www.w3.org/2000/svg', 'path' );
+		path.setAttribute( 'd', 'M 12,12 L 22,22 M 22,12 12,22' );
+		path.setAttribute( 'stroke', '#fff' );
+		svg.appendChild( path );
+		return svg;
+	} )();
+
+	let close = new UI.Element( buttonSVG );
+	close.setPosition( 'absolute' );
+	close.setTop( '3px' );
+	close.setRight( '1px' );
+	close.setCursor( 'pointer' );
+
+	close.onClick(function (  ) {
+		cameraView.setDisplay('none');
+	});
+
+	cameraViewHeader.add( close );
 
 	let overlayedPanel = new UI.Panel();
 	overlayedPanel.setWidth( '250px' );

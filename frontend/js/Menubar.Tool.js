@@ -67,7 +67,7 @@ Menubar.Tool = function ( editor ) {
 
 	var option = new UI.Row();
 	option.setClass( 'option' );
-	option.setTextContent( 'Background Image' );
+	option.setTextContent( 'Background' );
 	option.onClick( function () {
 
 		fileInput.click();

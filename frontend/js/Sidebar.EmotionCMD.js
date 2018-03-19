@@ -95,8 +95,8 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 	let container = new UI.Panel();
 
-	container.setBorderTop( '0' );
-	container.setPaddingTop( '10px' );
+	// container.setBorderTop( '0' );
+	// container.setPaddingTop( '10px' );
 
 	let newCMD = new UI.Button( 'New' );
 	let saveCMD = new UI.Button( 'Save' );
@@ -165,6 +165,14 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 	let cmdHelper = new UI.Div();
 	cmdHelper.setClass( 'EmotionCMD' );
+	cmdHelper.setWidth( '100%' );
+	cmdHelper.setPadding( '10px' );
+	cmdHelper.setPaddingLeft('0px');
+	cmdHelper.setPaddingRight('0px');
+	cmdHelper.setMarginLeft('0px');
+	cmdHelper.setMarginRight('0px');
+	cmdHelper.setLeft('0px');
+	cmdHelper.setRight('0px');
 	cmdHelper.add( newCMD, saveCMD, cleanSVG, importCMD, exportCMD );
 
 	container.add( cmdHelper );
