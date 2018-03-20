@@ -441,7 +441,7 @@ var VideoChar = function ( editor ) {
 		now = Date.now();
 		elapsed = now - then;
 
-		if ( elapsed > fpsInterval ) {
+		// if ( elapsed > fpsInterval ) {
 			then = now - ( elapsed % fpsInterval );
 
 			// predict
@@ -478,7 +478,7 @@ var VideoChar = function ( editor ) {
 			DrawLandmark();
 
 			StartMainLoop();
-		}
+		// }
 	}
 
 	function StartMainLoop () {

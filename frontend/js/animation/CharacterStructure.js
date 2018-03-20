@@ -65,22 +65,22 @@ CharacterStructure.prototype = Object.create( THREE.Group.prototype );
 CharacterStructure.prototype.constructor = CharacterStructure;
 
 CharacterStructure.prototype.check = function () {
-	if ( this.isCompleted === 51 ) {
+	if ( this.isCompleted === 50 ) {
 		this.editor.signals.add2Scene.dispatch( this );
 	}
 };
 
 CharacterStructure.prototype.addElement = function ( basicElement ) {
 	switch ( basicElement.name ) {
-		case 'accessory': {
-			basicElement.mesh.position.z -= 0.2;
-			this.accessory = basicElement;
-			this.add( basicElement.mesh );
-
-			this.isCompleted++;
-			this.check();
-			break;
-		}
+		// case 'accessory': {
+		// 	basicElement.mesh.position.z -= 0.2;
+		// 	this.accessory = basicElement;
+		// 	this.add( basicElement.mesh );
+		//
+		// 	this.isCompleted++;
+		// 	this.check();
+		// 	break;
+		// }
 		case 'face': {
 			this.face = basicElement;
 			this.add( basicElement.mesh );
@@ -100,10 +100,6 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 		case 'left_eye': {
 			basicElement.mesh.position.z -= 0.1;
 			if ( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
-
-			// // test
-			// if( basicElement.emotion === 'close' ) basicElement.mesh.visible = true;
-			// else basicElement.mesh.visible = false;
 
 			this.left_eye.push( basicElement );
 			this.left_eye_mesh.add( basicElement.mesh );
@@ -134,10 +130,6 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 		case 'mouth': {
 			basicElement.mesh.position.z -= 0.1;
 			if ( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
-			// if( basicElement.emotion === 'open' )
-			// 	basicElement.mesh.visible = true;
-			// else
-			// 	basicElement.mesh.visible = false;
 
 			this.mouth.push( basicElement );
 			this.mouth_mesh.add( basicElement.mesh );
@@ -168,10 +160,6 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 		case 'right_eye': {
 			basicElement.mesh.position.z -= 0.1;
 			if ( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
-
-			// // test
-			// if( basicElement.emotion === 'close' ) basicElement.mesh.visible = true;
-			// else basicElement.mesh.visible = false;
 
 			this.right_eye.push( basicElement );
 			this.right_eye_mesh.add( basicElement.mesh );

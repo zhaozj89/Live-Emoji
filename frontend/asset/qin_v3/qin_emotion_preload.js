@@ -1,5 +1,4 @@
 var PRELOAD_JSON = {
-	"accessory" : "images/accessory.png",
 	"face" : "images/face.png",
 	"left_ear" : "images/left_ear.png",
 	"left_eye" :
