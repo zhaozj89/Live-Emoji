@@ -79,6 +79,10 @@ var BackgroundAnimationCanvas = function ( editor ) {
 	editor.protonPixi4Renderer.proton = new Proton();
 	editor.protonPixi4Renderer.proton.addRenderer( new Proton.PixiRenderer( editor.protonPixi4Renderer.app.stage ) );
 
+	editor.protonPixi4Renderer.app.view.style.left = '300px';
+	editor.protonPixi4Renderer.app.view.style.right = '200px';
+	editor.protonPixi4Renderer.app.view.style.top = '40px';
+	editor.protonPixi4Renderer.app.view.style.bottom = '0px';
 
 	function backgroundUpdate () {
 		requestAnimationFrame( backgroundUpdate );
