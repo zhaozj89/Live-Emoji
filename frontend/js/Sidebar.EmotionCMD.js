@@ -2,19 +2,19 @@ var allUIThreeDOMInfo = {};
 
 class EmotionCMDThreeDOM {
 	constructor ( info, nodeString ) {
-		this.cell0 = document.createElement('td');
-		this.cell1 = document.createElement('td');
-		this.cell2 = document.createElement('td');
-		this.cell3 = document.createElement('td');
-		this.cell4 = document.createElement('td');
-		this.cell5 = document.createElement('td');
+		this.cell0 = document.createElement( 'td' );
+		this.cell1 = document.createElement( 'td' );
+		this.cell2 = document.createElement( 'td' );
+		this.cell3 = document.createElement( 'td' );
+		this.cell4 = document.createElement( 'td' );
+		this.cell5 = document.createElement( 'td' );
 
-		this.cell0.setAttribute( 'scope', 'col');
-		this.cell1.setAttribute( 'scope', 'col');
-		this.cell2.setAttribute( 'scope', 'col');
-		this.cell3.setAttribute( 'scope', 'col');
-		this.cell4.setAttribute( 'scope', 'col');
-		this.cell5.setAttribute( 'scope', 'col');
+		this.cell0.setAttribute( 'scope', 'col' );
+		this.cell1.setAttribute( 'scope', 'col' );
+		this.cell2.setAttribute( 'scope', 'col' );
+		this.cell3.setAttribute( 'scope', 'col' );
+		this.cell4.setAttribute( 'scope', 'col' );
+		this.cell5.setAttribute( 'scope', 'col' );
 
 		this.cell0.style.textAlign = 'center';
 		this.cell1.style.textAlign = 'center';
@@ -75,7 +75,7 @@ class EmotionCMDThreeDOM {
 			delete allUIThreeDOMInfo[ key ];
 		} );
 
-		this.row = document.createElement('tr');
+		this.row = document.createElement( 'tr' );
 		this.row.appendChild( this.cell0 );
 		this.row.appendChild( this.cell1 );
 		this.row.appendChild( this.cell2 );
@@ -89,10 +89,10 @@ class EmotionCMDThreeDOM {
 	}
 }
 
-function getIndexofRow(body, key) {
+function getIndexofRow ( body, key ) {
 	let rows = body.rows;
-	for(let i=0; i<rows.length; ++i) {
-		if(rows[i].cells[0].firstChild.getValue()===key)
+	for ( let i = 0; i < rows.length; ++i ) {
+		if ( rows[ i ].cells[ 0 ].firstChild.textContent === key )
 			return i;
 	}
 
@@ -106,31 +106,31 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 	let container = new UI.Panel();
 
-	let table = document.createElement("TABLE");
+	let table = document.createElement( "TABLE" );
 	table.style.class = 'table table-hover table-dark';
 	table.style.width = '100%';
 	let header = table.createTHead();
-	let headerRow = header.insertRow(0);
+	let headerRow = header.insertRow( 0 );
 
-	let headerCell0 = document.createElement('th');
-	let headerCell1 = document.createElement('th');
-	let headerCell2 = document.createElement('th');
-	let headerCell3 = document.createElement('th');
+	let headerCell0 = document.createElement( 'th' );
+	let headerCell1 = document.createElement( 'th' );
+	let headerCell2 = document.createElement( 'th' );
+	let headerCell3 = document.createElement( 'th' );
 
-	headerCell0.setAttribute( 'scope', 'col');
-	headerCell1.setAttribute( 'scope', 'col');
-	headerCell2.setAttribute( 'scope', 'col');
-	headerCell3.setAttribute( 'scope', 'col');
+	headerCell0.setAttribute( 'scope', 'col' );
+	headerCell1.setAttribute( 'scope', 'col' );
+	headerCell2.setAttribute( 'scope', 'col' );
+	headerCell3.setAttribute( 'scope', 'col' );
 
 	headerCell0.style.textAlign = 'center';
 	headerCell1.style.textAlign = 'center';
 	headerCell2.style.textAlign = 'center';
 	headerCell3.style.textAlign = 'center';
 
-	headerRow.appendChild(headerCell0);
-	headerRow.appendChild(headerCell1);
-	headerRow.appendChild(headerCell2);
-	headerRow.appendChild(headerCell3);
+	headerRow.appendChild( headerCell0 );
+	headerRow.appendChild( headerCell1 );
+	headerRow.appendChild( headerCell2 );
+	headerRow.appendChild( headerCell3 );
 
 	let keyDiv = new UI.Text( 'Key' );
 	let semanticDiv = new UI.Text( 'Semantic' );
@@ -176,7 +176,7 @@ Sidebar.EmotionCMD = function ( editor ) {
 				let prop_arousal = Number( info.arousal );
 				let prop_valence = Number( info.valence );
 
-				let dist = ( arousal - prop_arousal ) * ( arousal - prop_arousal ) + 10000 * ( valence - prop_valence/8 ) * ( valence - prop_valence/8 );
+				let dist = ( arousal - prop_arousal ) * ( arousal - prop_arousal ) + 10000 * ( valence - prop_valence / 8 ) * ( valence - prop_valence / 8 );
 
 				all_distprop.push( { val: dist, other: info } );
 			}
@@ -200,14 +200,23 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 			let parent = body;
 			let rows = body.rows;
-			if( rows.length >=3 ) {
+			if ( rows.length >= 3 ) {
 				let idx0 = getIndexofRow( body, all_distprop[ 0 ].other.key );
 				let idx1 = getIndexofRow( body, all_distprop[ 1 ].other.key );
 				let idx2 = getIndexofRow( body, all_distprop[ 2 ].other.key );
 
-				parent.insertBefore( rows[idx0], rows[0] );
-				parent.insertBefore( rows[idx1], rows[1] );
-				parent.insertBefore( rows[idx2], rows[2] );
+				parent.insertBefore( rows[ idx0 ], rows[ 0 ] );
+				parent.insertBefore( rows[ idx1 ], rows[ 1 ] );
+				parent.insertBefore( rows[ idx2 ], rows[ 2 ] );
+
+				let len = editor.emotion_cmd_tablebody.rows.length;
+				for( let i=0; i<len; ++i ) {
+					editor.emotion_cmd_tablebody.rows[i].style.backgroundColor = 'black';
+				}
+
+				editor.emotion_cmd_tablebody.rows[0].style.backgroundColor = 'chartreuse';
+				editor.emotion_cmd_tablebody.rows[1].style.backgroundColor = 'crimson';
+				editor.emotion_cmd_tablebody.rows[2].style.backgroundColor = 'aliceblue';
 
 				if ( editor.autoMode === 0 ) {
 					let key = all_distprop[ 0 ].other.key;

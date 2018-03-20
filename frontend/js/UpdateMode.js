@@ -1,21 +1,15 @@
 function UpdateUsageMode ( editor ) {
 	if ( editor.usageMode === 0 ) { // live animation
 		editor.camera_viewport.setDisplay( '' );
-
-		if( editor.emotion_cmd_tablebody!==null && editor.emotion_cmd_tablebody.rows.length > 3 ) {
-			editor.emotion_cmd_tablebody.rows[0].style.backgroundColor = 'chartreuse';
-			editor.emotion_cmd_tablebody.rows[1].style.backgroundColor = 'crimson';
-			editor.emotion_cmd_tablebody.rows[2].style.backgroundColor = 'aliceblue';
-		}
 	}
 
 	if ( editor.usageMode === 1 ) { // pre edit
 		editor.camera_viewport.setDisplay( 'none' );
 
-		if( editor.emotion_cmd_tablebody!==null && editor.emotion_cmd_tablebody.rows.length > 3 ) {
-			editor.emotion_cmd_tablebody.rows[0].style.backgroundColor = 'black';
-			editor.emotion_cmd_tablebody.rows[1].style.backgroundColor = 'black';
-			editor.emotion_cmd_tablebody.rows[2].style.backgroundColor = 'black';
+		if( editor.emotion_cmd_tablebody!==null && editor.emotion_cmd_tablebody.rows!==null ) {
+			for( let i=0; i<len; ++i ) {
+				editor.emotion_cmd_tablebody.rows[i].style.backgroundColor = 'black';
+			}
 		}
 	}
 }
