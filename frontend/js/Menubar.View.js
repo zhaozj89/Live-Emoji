@@ -4,18 +4,18 @@
 
 Menubar.View = function ( editor ) {
 
-	var signals = editor.signals;
+	let signals = editor.signals;
 
-	var container = new UI.Panel();
+	let container = new UI.Panel();
 	container.setClass( 'menu' );
 
-	var title = new UI.Panel();
+	let title = new UI.Panel();
 	title.setClass( 'title' );
 	title.setTextContent( 'View' );
-	title.addClass('h4');
+	title.addClass( 'h4' );
 	container.add( title );
 
-	var options = new UI.Panel();
+	let options = new UI.Panel();
 	options.setClass( 'options' );
 	container.add( options );
 
@@ -26,7 +26,7 @@ Menubar.View = function ( editor ) {
 	option.setTextContent( 'Emotion Editor' );
 	option.onClick( function () {
 
-		var object = editor.selected;
+		let object = editor.selected;
 		signals.editEmotionCMD.dispatch( object );
 	} );
 	options.add( option );
@@ -37,7 +37,7 @@ Menubar.View = function ( editor ) {
 	option.setClass( 'option' );
 	option.setTextContent( 'Camera' );
 	option.onClick( function () {
-		editor.camera_view.setDisplay('');
+		editor.camera_view.setDisplay( '' );
 	} );
 	options.add( option );
 
@@ -47,11 +47,9 @@ Menubar.View = function ( editor ) {
 	option.setClass( 'option' );
 	option.setTextContent( 'Student' );
 	option.onClick( function () {
-
+		editor.student_view.setDisplay( '' );
 	} );
 	options.add( option );
-
-	//
 
 	return container;
 

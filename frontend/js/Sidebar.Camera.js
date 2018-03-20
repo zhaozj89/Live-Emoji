@@ -146,7 +146,7 @@ function performCall ( otherEasyrtcid ) {
 
 function loginSuccess ( easyrtcid ) {
 	selfEasyrtcid = easyrtcid;
-	document.getElementById( "otherClients" ).innerHTML = "I am " + easyrtc.cleanId( easyrtcid );
+	// document.getElementById( "otherClients" ).innerHTML = "I am " + easyrtc.cleanId( easyrtcid );
 }
 
 function loginFailure ( errorCode, message ) {
@@ -168,10 +168,15 @@ Sidebar.Camera = function ( editor ) {
 	cameraView.setDisplay( 'none' );
 	editor.camera_view = cameraView;
 
+	editor.viewport.add( cameraView );
+
 	let cameraViewHeader = new UI.Text( 'Camera View' );
 	cameraViewHeader.setWidth( '100%' );
 	cameraViewHeader.setPadding( '10px' );
+	cameraViewHeader.dom.style.borderRadius = '5px';
 	cameraViewHeader.setBackgroundColor( 'rgba(50, 50, 50, 0.5)' );
+
+	cameraView.add( cameraViewHeader );
 
 	let buttonSVG = ( function () {
 		var svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
@@ -190,9 +195,9 @@ Sidebar.Camera = function ( editor ) {
 	close.setRight( '1px' );
 	close.setCursor( 'pointer' );
 
-	close.onClick(function (  ) {
-		cameraView.setDisplay('none');
-	});
+	close.onClick( function () {
+		cameraView.setDisplay( 'none' );
+	} );
 
 	cameraViewHeader.add( close );
 
@@ -200,16 +205,9 @@ Sidebar.Camera = function ( editor ) {
 	overlayedPanel.setWidth( '250px' );
 	overlayedPanel.setHeight( '200px' );
 
-	cameraView.add( cameraViewHeader );
-	cameraView.add(overlayedPanel);
+	cameraView.add( overlayedPanel );
 
-	editor.viewport.add( cameraView );
-
-	$(function (  ) {
-		$( cameraView.dom ).draggable();
-	});
-
-	// Webcam
+	// camera
 
 	let videoStream = new UI.Video();
 	videoStream.setPosition( 'absolute' );
@@ -232,13 +230,13 @@ Sidebar.Camera = function ( editor ) {
 	videoStreamOverlay.dom.height = 200;
 	overlayedPanel.add( videoStreamOverlay );
 
-
 	let startButton = new UI.Button( 'Start' );
 	startButton.setValue( 'wait, loading video' );
 	startButton.setId( 'startButton' );
 	startButton.setType( 'button' );
+	startButton.setWidth( '100%' );
+	startButton.dom.style.borderRadius = '5px';
 	startButton.setDisabled( 'disabled' );
-	// startButton.setLeft( '10px' );
 
 	$( startButton.dom ).click( function () {
 		TurnONOFFFaceTracking();
@@ -246,16 +244,55 @@ Sidebar.Camera = function ( editor ) {
 
 	cameraView.add( startButton );
 
-	// container.add( startButton );
-
 	// caller
-	var callerPanel = new UI.Panel();
+
+	let studentView = new UI.Panel();
+	studentView.setTop( '200px' );
+	studentView.setLeft( '200px' );
+	studentView.setPosition( 'absolute' );
+	studentView.setDisplay( 'none' );
+	editor.student_view = studentView;
+
+	editor.viewport.add( studentView );
+
+	let studentViewHeader = new UI.Text( 'Student View' );
+	studentViewHeader.setWidth( '100%' );
+	studentViewHeader.setPadding( '10px' );
+	studentViewHeader.dom.style.borderRadius = '5px';
+	studentViewHeader.setBackgroundColor( 'rgba(50, 50, 50, 0.5)' );
+
+	studentView.add( studentViewHeader );
+
+	let studentButtonSVG = ( function () {
+		let svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
+		svg.setAttribute( 'width', 32 );
+		svg.setAttribute( 'height', 32 );
+		let path = document.createElementNS( 'http://www.w3.org/2000/svg', 'path' );
+		path.setAttribute( 'd', 'M 12,12 L 22,22 M 22,12 12,22' );
+		path.setAttribute( 'stroke', '#fff' );
+		svg.appendChild( path );
+		return svg;
+	} )();
+
+	let studentClose = new UI.Element( studentButtonSVG );
+	studentClose.setPosition( 'absolute' );
+	studentClose.setTop( '3px' );
+	studentClose.setRight( '1px' );
+	studentClose.setCursor( 'pointer' );
+
+	studentClose.onClick( function () {
+		studentView.setDisplay( 'none' );
+	} );
+
+	studentViewHeader.add( studentClose );
+
+	let callerPanel = new UI.Panel();
 	callerPanel.setWidth( '250px' );
 	callerPanel.setHeight( '200px' );
 
-	container.add( callerPanel );
+	studentView.add( callerPanel );
 
-	var callerVideoStream = new UI.Video();
+	let callerVideoStream = new UI.Video();
 	callerVideoStream.setPosition( 'absolute' );
 	callerVideoStream.setId( 'callerVideo' );
 	callerVideoStream.dom.width = 250;
@@ -264,15 +301,24 @@ Sidebar.Camera = function ( editor ) {
 
 	callerPanel.add( callerVideoStream );
 
-	var otherClients = new UI.Div();
+	let otherClients = new UI.Div();
 	otherClients.setId( 'otherClients' );
 
-	container.add( otherClients );
-
-	var videoStreamOverlayContext = videoStreamOverlay.getContext( '2d' );
-	// var DebugCanvasContext = DebugCanvas.getContext( '2d' );
+	studentView.add( otherClients );
 
 	//
+
+	$( function () {
+		$( cameraView.dom ).draggable();
+		$( studentView.dom ).draggable();
+	} );
+
+	//
+
+	var videoStreamOverlayContext = videoStreamOverlay.getContext( '2d' );
+
+	//
+
 	var faceTrackingStarted = false;
 
 	// Initialization
@@ -295,7 +341,7 @@ Sidebar.Camera = function ( editor ) {
 				videoStreamOverlay.dom.width = videoStreamWidth;
 				callerVideoStream.dom.width = videoStreamWidth;
 
-				overlayedPanel.setWidth(videoStreamWidth + 'px');
+				overlayedPanel.setWidth( videoStreamWidth + 'px' );
 			}
 
 			videoStream.dom.onloadedmetadata = function () {
@@ -399,8 +445,8 @@ Sidebar.Camera = function ( editor ) {
 		now = Date.now();
 		elapsed = now - then;
 
-		if (elapsed > fpsInterval) {
-			then = now - (elapsed % fpsInterval);
+		if ( elapsed > fpsInterval ) {
+			then = now - ( elapsed % fpsInterval );
 
 			// predict
 			pred = FaceTracker.predict();

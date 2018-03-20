@@ -8,6 +8,7 @@ var Editor = function () {
 	this.viewport = null;
 	this.node_editor = null;
 	this.camera_view = null;
+	this.student_view = null;
 	this.emotion_command_view = null;
 
 	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -20, 20, -20, 20, -100, 100 );
