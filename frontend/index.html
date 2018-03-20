@@ -84,7 +84,7 @@
 
 	<script src="js/BackgroundAnimation.js"></script>
 	<script src="js/DanmakuAnimation.js"></script>
-	<script src="js/Sidebar2.js"></script>
+	<script src="js/SidebarRight.js"></script>
 
 	<script src="js/Viewport.js"></script>
 	<script src="js/CameraViewPort.js"></script>
@@ -137,6 +137,8 @@
 	<script src="js/face/clmtrackr.js"></script>
 	<script src="js/face/bundle.js"></script>
 	<script src="js/face/image_process.js"></script>
+
+	<script src="js/UpdateMode.js"></script>
 </head>
 <body onload="connect();">
 <script>
@@ -170,14 +172,11 @@
 	var sidebar = new Sidebar( editor );
 	document.body.appendChild( sidebar.dom );
 
-	var sidebar2 = new Sidebar2( editor );
-	document.body.appendChild( sidebar2.dom );
+	var sidebarRight = new SidebarRight( editor );
+	document.body.appendChild( sidebarRight.dom );
 
 	var menubar = new Menubar( editor );
 	document.body.appendChild( menubar.dom );
-
-	// var modal = new UI.Modal();
-	// document.body.appendChild( modal.dom );
 
 	//
 

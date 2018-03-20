@@ -194,7 +194,7 @@ background-color: #111;
 		margin-bottom: 10px;
 	}
 
-#sidebar2 {
+#sidebar_right {
 	position: absolute;
 	right: 0;
 	top: 40px;
@@ -204,35 +204,35 @@ background-color: #111;
 	overflow: auto;
 }
 
-	#sidebar2 * {
+	#sidebar_right * {
 		vertical-align: middle;
 	}
 
-	#sidebar2 .Panel {
+	#sidebar_right .Panel {
 		color: #888;
 		padding: 0px;
 		border-top: 1px solid #222;
 	}
 
-	#sidebar2 .Panel.collapsed {
+	#sidebar_right .Panel.collapsed {
 		margin-bottom: 0;
 	}
 
-	#sidebar2 .Panel.Material canvas {
+	#sidebar_right .Panel.Material canvas {
 		border: solid 1px #5A5A5A;
 	}
 
-	#sidebar2 .Row {
+	#sidebar_right .Row {
 		min-height: 20px;
 		margin-bottom: 10px;
 	}
 
-	#sidebar2 .heartView {
+	#sidebar_right .heartView {
 		width: 180px;
 		height: 180px;
 	}
 
-	#sidebar2 .valenceView {
+	#sidebar_right .valenceView {
 		width: 200px;
 		height: 200px;
 	}

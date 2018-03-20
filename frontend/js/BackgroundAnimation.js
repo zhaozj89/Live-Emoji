@@ -58,13 +58,13 @@ var BackgroundAnimationCanvas = function ( editor ) {
 	let container = new UI.Panel();
 	container.setId( 'BackgroundAnimationCanvas' );
 	container.setPosition( 'absolute' );
-	container.setTop( '32px' );
+	container.setTop( '40px' );
 	container.setLeft( '300px' );
 	container.setRight( '200px' );
-	container.setBottom( '32px' );
-	container.setLeft( '0px' );
 	container.setOpacity( 0.9 );
 	container.dom.style.zIndex = "2";
+
+	editor.background_animation = container;
 
 	let width = editor.protonPixi4Renderer.width;
 	let height = editor.protonPixi4Renderer.height;

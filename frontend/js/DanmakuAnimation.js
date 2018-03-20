@@ -23,13 +23,13 @@ var DanmakuAnimationCanvas = function ( editor ) {
 	let container = new UI.Panel();
 	container.setId( 'DanmakuAnimation' );
 	container.setPosition( 'absolute' );
-	container.setTop( '32px' );
+	container.setTop( '40px' );
 	container.setLeft( '300px' );
 	container.setRight( '200px' );
-	container.setBottom( '32px' );
-	container.setLeft( '0px' );
 	container.setOpacity( 0.9 );
 	container.dom.style.zIndex = "1";
+
+	editor.danmaku_animation = container;
 
 	let canvas = new UI.Canvas();
 	canvas.setId( 'DanmakuAnimationCanvas' );

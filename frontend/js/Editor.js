@@ -4,6 +4,13 @@
 
 var Editor = function () {
 
+	// Mode
+	this.roleMode = 1; // 0: student, 1: teacher
+	this.usageMode = 1; // 0: live animation, 1: pre-edit
+
+	this.studentLabel = null;
+	this.teacherLabel = null;
+
 	// components of editor
 	this.camera_viewport = null; // 4
 	this.camera_view = null;
@@ -12,7 +19,14 @@ var Editor = function () {
 	this.viewport = null; // 1
 
 	this.node_editor = null; // 5
-	this.emotion_command_view = null;
+
+	this.background_animation = null; // 3
+
+	this.danmaku_animation = null; // 2
+
+	this.sidebar = null; // 4
+
+	this.sidebar_right = null; // 4
 
 	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -20, 20, -20, 20, -100, 100 );
 	this.DEFAULT_CAMERA.name = 'Camera';
@@ -93,10 +107,6 @@ var Editor = function () {
 		key1: null,
 		key2: null
 	};
-
-	this.isLiveAnimationMode = false;
-
-	this.isStudentsSide = false;
 
 	this.protonPixi4Renderer = {
 		width: 840,

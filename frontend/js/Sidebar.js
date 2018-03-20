@@ -4,22 +4,24 @@
 
 var Sidebar = function ( editor ) {
 
-	var container = new UI.Panel();
+	let container = new UI.Panel();
 	container.setId( 'sidebar' );
 	container.dom.style.zIndex = '4';
 
+	editor.sidebar = container;
+
 	//
 
-	var scene = new UI.Span().add(
+	let scene = new UI.Span().add(
 		new Sidebar.Scene( editor ),
 		new Sidebar.Properties( editor )
 	);
 
-	var camera = new UI.Span().add(
+	let camera = new UI.Span().add(
 		new Sidebar.Camera( editor )
 	);
 
-	var history = new UI.Span().add(
+	let history = new UI.Span().add(
 		new Sidebar.History( editor ),
 		new Sidebar.Settings( editor )
 	);
@@ -32,6 +34,8 @@ var Sidebar = function ( editor ) {
 	titleMode.setBackgroundColor( 'blueviolet' );
 	container.add( titleMode );
 
+	// role radio buttons
+
 	let roleSideButtons = new UI.Div();
 	roleSideButtons.setMargin( '5px' );
 	roleSideButtons.addClass( 'btn-group' );
@@ -42,7 +46,6 @@ var Sidebar = function ( editor ) {
 	let studentLabel = new UI.Label();
 	studentLabel.addClass('btn');
 	studentLabel.addClass('btn-secondary');
-	studentLabel.addClass('active');
 	studentLabel.setFontSize( '10' );
 	roleSideButtons.add(studentLabel);
 	studentLabel.dom.innerHTML = 'Student';
@@ -53,12 +56,12 @@ var Sidebar = function ( editor ) {
 	studentInput.dom.setAttribute( 'type', 'radio' );
 	studentInput.dom.setAttribute( 'name', 'options' );
 	studentInput.dom.setAttribute( 'autocomplete', 'off' );
-	studentInput.dom.checked = true;
 	studentLabel.add(studentInput);
 
 	let teacherLabel = new UI.Label();
 	teacherLabel.addClass('btn');
 	teacherLabel.addClass('btn-secondary');
+	teacherLabel.addClass('active');
 	roleSideButtons.add(teacherLabel);
 	teacherLabel.dom.innerHTML = 'Teacher';
 
@@ -68,6 +71,10 @@ var Sidebar = function ( editor ) {
 	teacherInput.dom.setAttribute( 'autocomplete', 'off' );
 	teacherLabel.add(teacherInput);
 
+	editor.studentLabel = studentLabel;
+	editor.teacherLabel = teacherLabel;
+
+	// usage radio buttons
 
 	let usageButtons = new UI.Div();
 	usageButtons.setMargin( '5px' );
@@ -79,7 +86,6 @@ var Sidebar = function ( editor ) {
 	let liveAnimationLabel = new UI.Label();
 	liveAnimationLabel.addClass('btn');
 	liveAnimationLabel.addClass('btn-secondary');
-	liveAnimationLabel.addClass('active');
 	liveAnimationLabel.setFontSize( '10' );
 	usageButtons.add(liveAnimationLabel);
 	liveAnimationLabel.dom.innerHTML = 'Live Animation';
@@ -88,12 +94,12 @@ var Sidebar = function ( editor ) {
 	liveAnimationInput.dom.setAttribute( 'type', 'radio' );
 	liveAnimationInput.dom.setAttribute( 'name', 'options' );
 	liveAnimationInput.dom.setAttribute( 'autocomplete', 'off' );
-	liveAnimationInput.dom.checked = true;
 	liveAnimationLabel.add(liveAnimationInput);
 
 	let preEditLabel = new UI.Label();
 	preEditLabel.addClass('btn');
 	preEditLabel.addClass('btn-secondary');
+	preEditLabel.addClass('active');
 	usageButtons.add(preEditLabel);
 	preEditLabel.dom.innerHTML = 'Command Edit';
 
@@ -103,7 +109,31 @@ var Sidebar = function ( editor ) {
 	preEditInput.dom.setAttribute( 'autocomplete', 'off' );
 	preEditLabel.add(preEditInput);
 
-	//
+	studentLabel.dom.onclick = function (  ) {
+		editor.roleMode = 0;
+		UpdateRoleMode( editor );
+		liveAnimationLabel.dom.click();
+	}
+
+	teacherLabel.dom.onclick = function (  ) {
+		editor.roleMode = 1;
+		UpdateRoleMode( editor );
+		preEditLabel.dom.click();
+	}
+
+	liveAnimationLabel.dom.onclick = function (  ) {
+		editor.usageMode = 0;
+		UpdateUsageMode( editor );
+	}
+
+	preEditLabel.dom.onclick = function (  ) {
+		editor.usageMode = 1;
+		UpdateUsageMode( editor );
+	}
+
+	UpdateUsageMode( editor );
+
+	// auto trigger radio buttons
 
 	let triggerButtons = new UI.Div();
 	triggerButtons.setMargin( '5px' );
@@ -115,7 +145,6 @@ var Sidebar = function ( editor ) {
 	let autoLabel = new UI.Label();
 	autoLabel.addClass('btn');
 	autoLabel.addClass('btn-secondary');
-	autoLabel.addClass('active');
 	autoLabel.setFontSize( '10' );
 	triggerButtons.add(autoLabel);
 	autoLabel.dom.innerHTML = 'Auto Trigger';
@@ -124,12 +153,12 @@ var Sidebar = function ( editor ) {
 	autoInput.dom.setAttribute( 'type', 'radio' );
 	autoInput.dom.setAttribute( 'name', 'options' );
 	autoInput.dom.setAttribute( 'autocomplete', 'off' );
-	autoInput.dom.checked = true;
 	autoLabel.add(autoInput);
 
 	let manualLabel = new UI.Label();
 	manualLabel.addClass('btn');
 	manualLabel.addClass('btn-secondary');
+	manualLabel.addClass('active');
 	triggerButtons.add(manualLabel);
 	manualLabel.dom.innerHTML = 'Manual';
 
@@ -139,6 +168,7 @@ var Sidebar = function ( editor ) {
 	manualInput.dom.setAttribute( 'autocomplete', 'off' );
 	manualLabel.add(manualInput);
 
+	//
 
 	let titleEmotionCommand = new UI.Text( 'Emotion Command' );
 	titleEmotionCommand.addClass( 'h4' );
@@ -151,7 +181,6 @@ var Sidebar = function ( editor ) {
 
 	let emotionCommandView = new Sidebar.EmotionCMD( editor );
 	container.add( emotionCommandView );
-	editor.emotion_command_view = emotionCommandView;
 
 	return container;
 

@@ -1,7 +1,10 @@
-var Sidebar2 = function ( editor ) {
+var SidebarRight = function ( editor ) {
 
 	var container = new UI.Panel();
-	container.setId( 'sidebar2' );
+	container.setId( 'sidebar_right' );
+	container.dom.style.zIndex = '4';
+
+	editor.sidebar_right = container;
 
 	let titleValence = new UI.Text( 'Valence' );
 	titleValence.addClass( 'h4' );
@@ -110,7 +113,7 @@ var Sidebar2 = function ( editor ) {
 	} );
 
 	editor.signals.updateRecommendation.add( function ( valence_level ) {
-		if ( editor.isLiveAnimationMode === true ) {
+		if ( editor.usageMode === 0 ) {
 			let valence = Math.floor( valence_level * 8 );
 
 			$( valenceText.dom ).text( valence );
@@ -234,7 +237,7 @@ var Sidebar2 = function ( editor ) {
 
 	editor.signals.updateRecommendation.add( function ( valence_level ) { // 0 - 1
 
-		if ( editor.isLiveAnimationMode === true ) {
+		if ( editor.usageMode === 0 ) {
 			let arousal = editor.msgInputArousal; // 1 - 100
 			let valence = valence_level; // 0 - 1
 
