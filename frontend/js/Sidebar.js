@@ -143,13 +143,13 @@ var Sidebar = function ( editor ) {
 	studentLabel.dom.onclick = function () {
 		editor.roleMode = 0;
 		UpdateRoleMode( editor );
-		liveAnimationLabel.dom.click();
+		// liveAnimationLabel.dom.click();
 	}
 
 	teacherLabel.dom.onclick = function () {
 		editor.roleMode = 1;
 		UpdateRoleMode( editor );
-		preEditLabel.dom.click();
+		// preEditLabel.dom.click();
 	}
 
 	liveAnimationLabel.dom.onclick = function () {

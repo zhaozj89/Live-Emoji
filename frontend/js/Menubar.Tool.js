@@ -20,11 +20,15 @@ Menubar.Tool = function ( editor ) {
 	option.setClass( 'option' );
 	option.setTextContent( 'Reset' );
 	option.onClick( function () {
-		editor.selected.position.x = 0;
-		editor.selected.position.y = 0;
+		if( editor.selected!==null ) {
+			editor.selected.position.x = 0;
+			editor.selected.position.y = 0;
+		}
 
-		editor.backgroundSprite.position.x = 0;
-		editor.backgroundSprite.position.y = 0;
+		if( editor.backgroundSprite!==null ) {
+			editor.backgroundSprite.position.x = 0;
+			editor.backgroundSprite.position.y = 0;
+		}
 	} );
 	options.add( option );
 

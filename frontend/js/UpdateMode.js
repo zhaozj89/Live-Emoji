@@ -7,6 +7,7 @@ function UpdateUsageMode ( editor ) {
 		editor.camera_viewport.setDisplay( 'none' );
 
 		if( editor.emotion_cmd_tablebody!==null && editor.emotion_cmd_tablebody.rows!==null ) {
+			let len = editor.emotion_cmd_tablebody.rows;
 			for( let i=0; i<len; ++i ) {
 				editor.emotion_cmd_tablebody.rows[i].style.backgroundColor = 'black';
 			}
