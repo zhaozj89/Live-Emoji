@@ -60,4 +60,6 @@ function UpdateRoleMode ( editor ) {
 		editor.danmaku_animation.setLeft('300px');
 		editor.danmaku_animation.setRight('200px');
 	}
+
+	editor.signals.windowResize.dispatch();
 }

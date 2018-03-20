@@ -395,7 +395,7 @@ var NEditor = function ( editor ) {
 		}
 	} );
 
-	LoadEmotionCMDJSONFile( editor, 'test.json' );
+	// LoadEmotionCMDJSONFile( editor, 'test.json' );
 
 	return container;
 

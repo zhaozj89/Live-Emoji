@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title> my customized three.js / editor</title>
+	<title>  Live Emoji </title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
@@ -11,21 +11,20 @@
 	<link rel="stylesheet" href="css/jquery-ui.min.css"/>
 	<link rel="stylesheet" href="css/bootstrap.css">
 
+	<!--jquery-->
+	<script src="js/libs/jquery.min.js"></script>
+	<script src="js/libs/jquery-ui.min.js"></script>
+	<script src="js/libs/popper.js"></script>
+	<script src="js/libs/bootstrap.js"></script>
+
 	<!--numeric-->
 	<script src="js/libs/gaussian.js"></script>
 
 	<!--loading-->
 	<script src="asset/qin_v3/qin_emotion_preload.js"></script>
-	<script src="asset/background/background_preload.js"></script>
 
 	<!--ui-->
 	<script src="js/libs/ui.js"></script>
-
-	<!--jquery-->
-	<script src="js/libs/jquery.min.js"></script>
-	<script src="js/libs/jquery-ui.min.js"></script>
-	<script src="https://unpkg.com/popper.js"></script>
-	<script src="js/libs/bootstrap.js"></script>
 
 	<!--signals-->
 	<script src="js/libs/signals.min.js"></script>
@@ -35,10 +34,6 @@
 	<script src="js/libs/ui.three.js"></script>
 	<script src="js/libs/Tween.js"></script>
 
-	<script src="js/libs/pixi.js"></script>
-	<script src="js/libs/proton.js"></script>
-	<script src="js/libs/raphael.min.js"></script>
-
 	<!--other threejs modules-->
 	<script src="js/libs/examples/js/libs/system.min.js"></script>
 	<script src="js/libs/examples/js/renderers/Projector.js"></script>
@@ -47,6 +42,11 @@
 	<script src="js/libs/examples/js/renderers/SoftwareRenderer.js"></script>
 	<script src="js/libs/examples/js/renderers/SVGRenderer.js"></script>
 	<script src="js/libs/examples/js/loaders/OBJLoader.js"></script>
+
+	<!--graphics-->
+	<script src="js/libs/pixi.js"></script>
+	<script src="js/libs/proton.js"></script>
+	<script src="js/libs/raphael.min.js"></script>
 
 	<!-- easyrtc -->
 	<script src="js/rtc/socket.io.js"></script>
@@ -60,7 +60,6 @@
 
 	<script src="js/Menubar.js"></script>
 	<script src="js/Menubar.Tool.js"></script>
-	<!--<script src="js/Menubar.Edit.js"></script>-->
 	<script src="js/Menubar.View.js"></script>
 
 	<script src="js/Sidebar.js"></script>
@@ -84,10 +83,9 @@
 
 	<script src="js/BackgroundAnimation.js"></script>
 	<script src="js/DanmakuAnimation.js"></script>
-	<script src="js/SidebarRight.js"></script>
-
 	<script src="js/Viewport.js"></script>
 	<script src="js/CameraViewPort.js"></script>
+	<script src="js/SidebarRight.js"></script>
 
 	<script src="js/Command.js"></script>
 	<script src="js/commands/AddObjectCommand.js"></script>
@@ -245,6 +243,7 @@
 		signals.historyChanged.add( saveState );
 	} );
 
+
 	//
 
 	document.addEventListener( 'dragover', function ( event ) {
@@ -265,6 +264,7 @@
 		}
 
 	}, false );
+
 
 	function onWindowResize ( event ) {
 
@@ -303,7 +303,7 @@
 	}
 
 	$( function () {
-		var KeyboardTriggerFunction = function ( event ) {
+		let KeyboardTriggerFunction = function ( event ) {
 			let KEYBOARD_TRIGGER = {
 				type: 'keyboard',
 				keycode: null

@@ -61,6 +61,7 @@ Menubar.Tool = function ( editor ) {
 	option.setTextContent( 'Teacher' );
 	option.onClick( function () {
 		editor.teacherLabel.dom.click();
+		editor.signals.windowResize.dispatch();
 	} );
 	options.add( option );
 
