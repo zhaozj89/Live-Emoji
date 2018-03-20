@@ -83,8 +83,20 @@ class EmotionCMDThreeDOM {
 		this.row.appendChild( this.cell4 );
 		this.row.appendChild( this.cell5 );
 
+		this.row.style.backgroundColor = 'black';
+
 		return this.row;
 	}
+}
+
+function getIndexofRow(body, key) {
+	let rows = body.rows;
+	for(let i=0; i<rows.length; ++i) {
+		if(rows[i].cells[0].firstChild.getValue()===key)
+			return i;
+	}
+
+	return -1;
 }
 
 
@@ -131,9 +143,9 @@ Sidebar.EmotionCMD = function ( editor ) {
 	headerCell3.appendChild( arousalDiv.dom );
 
 	container.dom.appendChild( table );
-	// container.add( outliner );
 
 	let body = table.createTBody();
+	editor.emotion_cmd_tablebody = body;
 
 	signals.saveEmotionCMD.add( function ( msg ) {
 		if ( allUIThreeDOMInfo[ msg.info.key ] === undefined ) {
@@ -147,6 +159,69 @@ Sidebar.EmotionCMD = function ( editor ) {
 		else {
 			allUIThreeDOMInfo[ msg.info.key ].updateInfo( msg.info );
 			allUIThreeDOMInfo[ msg.info.key ].updateNodeString( msg.nodeString );
+		}
+	} );
+
+	let pre_key = null;
+
+	editor.signals.updateRecommendation.add( function ( valence_level ) { // 0 - 1
+
+		if ( editor.usageMode === 0 ) {
+			let arousal = editor.msgInputArousal; // 1 - 100
+			let valence = valence_level; // 0 - 1
+
+			let all_distprop = [];
+			for ( let prop in editor.emotionCMDManager.allCMDs ) {
+				let info = editor.emotionCMDManager.allCMDs[ prop ].getInfo();
+				let prop_arousal = Number( info.arousal );
+				let prop_valence = Number( info.valence );
+
+				let dist = ( arousal - prop_arousal ) * ( arousal - prop_arousal ) + 10000 * ( valence - prop_valence/8 ) * ( valence - prop_valence/8 );
+
+				all_distprop.push( { val: dist, other: info } );
+			}
+
+			let len = all_distprop.length;
+			for ( let i = 1; i < len; ++i ) {
+				let value = all_distprop[ i ].val;
+				for ( let j = i - 1; j >= 0; --j ) {
+					if ( all_distprop[ j ].val > value ) {
+						let tmp = all_distprop[ j ];
+						all_distprop[ j ] = all_distprop[ i ];
+						all_distprop[ i ] = tmp;
+						i = j;
+					}
+					else
+						break;
+				}
+			}
+
+			// re-order the command table
+
+			let parent = body;
+			let rows = body.rows;
+			if( rows.length >=3 ) {
+				let idx0 = getIndexofRow( body, all_distprop[ 0 ].other.key );
+				let idx1 = getIndexofRow( body, all_distprop[ 1 ].other.key );
+				let idx2 = getIndexofRow( body, all_distprop[ 2 ].other.key );
+
+				parent.insertBefore( rows[idx0], rows[0] );
+				parent.insertBefore( rows[idx1], rows[1] );
+				parent.insertBefore( rows[idx2], rows[2] );
+
+				if ( editor.autoMode === 0 ) {
+					let key = all_distprop[ 0 ].other.key;
+					if ( pre_key !== key ) {
+						editor.emotionCMDManager.allCMDs[ key ].run( key );
+						pre_key = key;
+					}
+				}
+				else {
+					editor.top3Keys.key0 = all_distprop[ 0 ].other.key;
+					editor.top3Keys.key1 = all_distprop[ 1 ].other.key;
+					editor.top3Keys.key2 = all_distprop[ 2 ].other.key;
+				}
+			}
 		}
 	} );
 

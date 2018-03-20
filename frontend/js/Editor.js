@@ -7,6 +7,7 @@ var Editor = function () {
 	// Mode
 	this.roleMode = 1; // 0: student, 1: teacher
 	this.usageMode = 1; // 0: live animation, 1: pre-edit
+	this.autoMode = 1; // 0: auto, 1: manual
 
 	this.studentLabel = null;
 	this.teacherLabel = null;
@@ -28,19 +29,21 @@ var Editor = function () {
 
 	this.sidebar_right = null; // 4
 
+	this.emotion_cmd_tablebody = null;
+
+	// camera settings
+
 	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -20, 20, -20, 20, -100, 100 );
 	this.DEFAULT_CAMERA.name = 'Camera';
 	this.DEFAULT_CAMERA.position.set( 0, 0, -50 );
 	this.DEFAULT_CAMERA.up.set( 0, -1, 0 );
 	this.DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
 
-	var Signal = signals.Signal;
+	let Signal = signals.Signal;
 
 	this.signals = {
 
 		teacherSendInfo2Students: new Signal(),
-
-		// adjustTriggerNodeValenceArousalInfo: new Signal(),
 
 		updateRecommendation: new Signal(),
 
@@ -95,9 +98,13 @@ var Editor = function () {
 
 	};
 
-	// my objects
+	// objects
+
+	this.selected = null; // character
+
 	this.emotionCMDManager = new EmotionCMDManager( this );
 
+	this.msgInputValence = null;
 	this.msgInputArousal = null;
 
 	this.backgroundSprite = null;
@@ -126,6 +133,8 @@ var Editor = function () {
 	this.emotionMutex = false;
 	this.facePositionMutex = false;
 
+	// not care now
+
 	this.config = new Config( 'threejs-editor' );
 	this.history = new History( this );
 	this.storage = new Storage();
@@ -137,14 +146,11 @@ var Editor = function () {
 	this.scene.name = 'Scene';
 	this.scene.background = new THREE.Color( 0x464646 );
 
-	this.sceneHelpers = new THREE.Scene();
-
 	this.object = {};
 	this.geometries = {};
 	this.materials = {};
 	this.textures = {};
 
-	this.selected = null;
 	this.helpers = {};
 };
 

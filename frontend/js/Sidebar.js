@@ -109,30 +109,6 @@ var Sidebar = function ( editor ) {
 	preEditInput.dom.setAttribute( 'autocomplete', 'off' );
 	preEditLabel.add(preEditInput);
 
-	studentLabel.dom.onclick = function (  ) {
-		editor.roleMode = 0;
-		UpdateRoleMode( editor );
-		liveAnimationLabel.dom.click();
-	}
-
-	teacherLabel.dom.onclick = function (  ) {
-		editor.roleMode = 1;
-		UpdateRoleMode( editor );
-		preEditLabel.dom.click();
-	}
-
-	liveAnimationLabel.dom.onclick = function (  ) {
-		editor.usageMode = 0;
-		UpdateUsageMode( editor );
-	}
-
-	preEditLabel.dom.onclick = function (  ) {
-		editor.usageMode = 1;
-		UpdateUsageMode( editor );
-	}
-
-	UpdateUsageMode( editor );
-
 	// auto trigger radio buttons
 
 	let triggerButtons = new UI.Div();
@@ -167,6 +143,39 @@ var Sidebar = function ( editor ) {
 	manualInput.dom.setAttribute( 'name', 'options' );
 	manualInput.dom.setAttribute( 'autocomplete', 'off' );
 	manualLabel.add(manualInput);
+
+	studentLabel.dom.onclick = function (  ) {
+		editor.roleMode = 0;
+		UpdateRoleMode( editor );
+		liveAnimationLabel.dom.click();
+	}
+
+	teacherLabel.dom.onclick = function (  ) {
+		editor.roleMode = 1;
+		UpdateRoleMode( editor );
+		preEditLabel.dom.click();
+	}
+
+	liveAnimationLabel.dom.onclick = function (  ) {
+		editor.usageMode = 0;
+		UpdateUsageMode( editor );
+	}
+
+	preEditLabel.dom.onclick = function (  ) {
+		editor.usageMode = 1;
+		UpdateUsageMode( editor );
+	}
+
+	autoLabel.dom.onclick = function (  ) {
+		editor.autoMode = 0;
+	}
+
+	manualLabel.dom.onclick = function (  ) {
+		editor.autoMode = 1;
+	}
+
+	preEditLabel.dom.click();
+	manualLabel.dom.click();
 
 	//
 

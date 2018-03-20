@@ -19,7 +19,6 @@ var Viewport = function ( editor ) {
 
 	var camera = editor.camera;
 	var scene = editor.scene;
-	var sceneHelpers = editor.sceneHelpers;
 
 	var objects = [];
 
@@ -245,16 +244,9 @@ var Viewport = function ( editor ) {
 
 	function render () {
 
-		sceneHelpers.updateMatrixWorld();
 		scene.updateMatrixWorld();
 
 		renderer.render( scene, camera );
-
-		if ( renderer instanceof THREE.RaytracingRenderer === false ) {
-
-			renderer.render( sceneHelpers, camera );
-
-		}
 
 	}
 
