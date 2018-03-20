@@ -82,7 +82,6 @@ var Sidebar = function ( editor ) {
 	let liveAnimationLabel = new UI.Label();
 	liveAnimationLabel.addClass( 'btn' );
 	liveAnimationLabel.addClass( 'btn-secondary' );
-	liveAnimationLabel.setFontSize( '10' );
 	usageButtons.add( liveAnimationLabel );
 	liveAnimationLabel.dom.innerHTML = 'Live Animation';
 
@@ -117,7 +116,6 @@ var Sidebar = function ( editor ) {
 	let autoLabel = new UI.Label();
 	autoLabel.addClass( 'btn' );
 	autoLabel.addClass( 'btn-secondary' );
-	autoLabel.setFontSize( '10' );
 	triggerButtons.add( autoLabel );
 	autoLabel.dom.innerHTML = 'Auto Trigger';
 
@@ -139,6 +137,40 @@ var Sidebar = function ( editor ) {
 	manualInput.dom.setAttribute( 'name', 'options' );
 	manualInput.dom.setAttribute( 'autocomplete', 'off' );
 	manualLabel.add( manualInput );
+
+	// choose boy or girl
+
+	let characterButtons = new UI.Div();
+	characterButtons.setMargin( '5px' );
+	characterButtons.addClass( 'btn-group' );
+	characterButtons.addClass( 'btn-group-toggle' );
+	characterButtons.dom.setAttribute( 'data-toggle', 'buttons' );
+	container.add( characterButtons );
+
+	let boyLabel = new UI.Label();
+	boyLabel.addClass( 'btn' );
+	boyLabel.addClass( 'btn-secondary' );
+	boyLabel.addClass( 'active' );
+	characterButtons.add( boyLabel );
+	boyLabel.dom.innerHTML = 'Boy';
+
+	let boyInput = new UI.Input( '' );
+	boyInput.dom.setAttribute( 'type', 'radio' );
+	boyInput.dom.setAttribute( 'name', 'options' );
+	boyInput.dom.setAttribute( 'autocomplete', 'off' );
+	boyLabel.add( boyInput );
+
+	let girlLabel = new UI.Label();
+	girlLabel.addClass( 'btn' );
+	girlLabel.addClass( 'btn-secondary' );
+	characterButtons.add( girlLabel );
+	girlLabel.dom.innerHTML = 'Girl';
+
+	let girlInput = new UI.Input( '' );
+	girlInput.dom.setAttribute( 'type', 'radio' );
+	girlInput.dom.setAttribute( 'name', 'options' );
+	girlInput.dom.setAttribute( 'autocomplete', 'off' );
+	girlLabel.add( girlInput );
 
 	studentLabel.dom.onclick = function () {
 		editor.roleMode = 0;
@@ -168,6 +200,28 @@ var Sidebar = function ( editor ) {
 
 	manualLabel.dom.onclick = function () {
 		editor.autoMode = 1;
+	}
+
+	boyLabel.dom.onclick = function () {
+		if( editor.boy===null )
+			alert( 'Please load the boy character first!' );
+
+		editor.selected = editor.boy;
+		editor.boy.visible = true;
+
+		if( editor.girl!==null )
+			editor.girl.visible = false;
+	}
+
+	girlLabel.dom.onclick = function () {
+		if( editor.girl===null )
+			alert( 'Please load the girl character first!' );
+
+		editor.selected = editor.girl;
+		editor.girl.visible = true;
+
+		if( editor.boy!==null )
+			editor.boy.visible = false;
 	}
 
 	preEditLabel.dom.click();

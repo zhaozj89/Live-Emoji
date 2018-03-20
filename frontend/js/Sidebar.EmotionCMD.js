@@ -63,6 +63,10 @@ class EmotionCMDThreeDOM {
 			let nodeSession = new NodeSession( editor );
 			nodeSession.fromJSON( JSON.parse( that.nodeString ) );
 			editor.emotionCMDManager.currentNodeSession = nodeSession;
+
+			editor.node_editor.setDisplay( '' );
+
+			that.editButton.dom.click();
 		} );
 
 		this.deleteButton.onClick( function () {

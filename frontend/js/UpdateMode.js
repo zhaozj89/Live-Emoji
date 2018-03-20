@@ -1,10 +1,14 @@
 function UpdateUsageMode ( editor ) {
 	if ( editor.usageMode === 0 ) { // live animation
 		editor.camera_viewport.setDisplay( '' );
+		editor.node_editor.remove( editor.camera_view );
+		editor.camera_viewport.add( editor.camera_view );
 	}
 
 	if ( editor.usageMode === 1 ) { // pre edit
 		editor.camera_viewport.setDisplay( 'none' );
+		editor.camera_viewport.remove( editor.camera_view );
+		editor.node_editor.add( editor.camera_view );
 
 		if( editor.emotion_cmd_tablebody!==null && editor.emotion_cmd_tablebody.rows!==null ) {
 			let len = editor.emotion_cmd_tablebody.rows;

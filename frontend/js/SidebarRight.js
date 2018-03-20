@@ -123,6 +123,18 @@ var SidebarRight = function ( editor ) {
 			valence += 1;
 			valenceImg.src = './asset/valence_new/' + valence + '.png';
 		}
+		else {
+			let valence = Math.floor( valence_level * 8 );
+
+			$( valenceText.dom ).text( valence );
+			$( "#valenceSlider" ).slider( 'value', valence );
+			valence += 1;
+			valenceImg.src = './asset/valence_new/' + valence + '.png';
+
+			if( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
+				editor.emotionCMDManager.currentNodeSession.triggerNode.valence.setArg( valence );
+			}
+		}
 	} );
 
 	return container;

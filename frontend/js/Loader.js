@@ -584,10 +584,10 @@ var Loader = function ( editor ) {
 
 };
 
-var LoadFileName = function ( characterStructure, name, emotion, filename ) {
+var LoadFileName = function ( characterStructure, name, emotion, path, filename ) {
 
 	var xhr = new XMLHttpRequest();
-	xhr.open( 'GET', './asset/qin_v3/' + filename, true );
+	xhr.open( 'GET', path + filename, true );
 	xhr.responseType = 'arraybuffer';
 
 	xhr.onload = function ( event ) {
@@ -619,12 +619,28 @@ var LoadFileName = function ( characterStructure, name, emotion, filename ) {
 	xhr.send();
 }
 
-var characterStructure = null;
-
-var PreLoadCharacterJSON = function ( editor ) {
+var PreLoadCharacterJSON = function ( editor, boy_or_gril ) {
 	let loader = PRELOAD_JSON;
 
-	characterStructure = new CharacterStructure( editor, 'qin_emotion' );
+	let characterStructure = null;
+	let path = null;
+	if( boy_or_gril==='boy' ) {
+		if(editor.boy!==null) return;
+
+		characterStructure = new CharacterStructure( editor, 'boy' );
+		path = './asset/boy/';
+
+		editor.boy = characterStructure;
+	}
+	else {
+		if(editor.girl!==null) return;
+
+		characterStructure = new CharacterStructure( editor, 'girl' );
+		path = './asset/girl/';
+
+		editor.girl = characterStructure;
+	}
+
 	editor.signals.add2Scene.add( function ( obj ) {
 		editor.selected = obj;
 		editor.execute( new AddObjectCommand( obj ) );
@@ -633,14 +649,16 @@ var PreLoadCharacterJSON = function ( editor ) {
 	for ( let prop in loader ) {
 
 		if ( typeof( loader[ prop ] ) === 'string' ) {
-			LoadFileName( characterStructure, prop, '', loader[ prop ] );
+			LoadFileName( characterStructure, prop, '', path, loader[ prop ] );
 			continue;
 		}
 
 		if ( typeof( loader[ prop ] ) === 'object' ) {
 			for ( let prop2 in loader[ prop ] )
-				LoadFileName( characterStructure, prop, prop2, loader[ prop ][ prop2 ] );
+				LoadFileName( characterStructure, prop, prop2, path, loader[ prop ][ prop2 ] );
 			continue;
 		}
 	}
+
+	editor.selected = characterStructure;
 };

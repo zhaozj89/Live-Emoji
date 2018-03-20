@@ -69,11 +69,23 @@ Menubar.Tool = function ( editor ) {
 	} );
 	options.add( option );
 
+	// load
+
 	var option = new UI.Row();
 	option.setClass( 'option' );
-	option.setTextContent( 'Load Character' );
+	option.setTextContent( 'Load Body' );
 	option.onClick( function () {
-		PreLoadCharacterJSON( editor );
+		PreLoadCharacterJSON( editor, 'boy' );
+	} );
+	options.add( option );
+
+	//
+
+	var option = new UI.Row();
+	option.setClass( 'option' );
+	option.setTextContent( 'Load Girl' );
+	option.onClick( function () {
+		PreLoadCharacterJSON( editor, 'girl' );
 	} );
 	options.add( option );
 

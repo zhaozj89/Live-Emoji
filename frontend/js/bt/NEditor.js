@@ -116,53 +116,62 @@ var NEditor = function ( editor ) {
 	// menu
 
 	let menu = new UI.UList();
-	menu.setBackgroundColor('rgba(100, 100, 100, 0.8)');
+	menu.setBackgroundColor( 'rgba(100, 100, 100, 0.8)' );
 	menu.dom.style.borderRadius = '10px';
-	menu.setWidth('500px');
+	menu.setWidth( '500px' );
 	menu.setId( 'menu' );
-	menu.addClass('nav');
-	menu.addClass('nav-pills');
+	menu.addClass( 'nav' );
+	menu.addClass( 'nav-pills' );
 
-	menu.setPosition('absolute');
-	menu.setTop('0px');
-	menu.setLeft('200px');
-	container.add(menu);
+	menu.setPosition( 'absolute' );
+	menu.setTop( '0px' );
+	menu.setLeft( '200px' );
+	container.add( menu );
 
 	let Trigger = menu.addLi( 'Root+' );
-	Trigger.classList.add('nav-item');
+	Trigger.classList.add( 'nav-item' );
 	Trigger.style.margin = '20px';
 	Trigger.style.fontSize = '20px';
 
 	let Composite = menu.addLi( 'Sequence+' );
-	Composite.classList.add('nav-item');
+	Composite.classList.add( 'nav-item' );
 	Composite.style.margin = '20px';
 	Composite.style.fontSize = '20px';
 
 	let Actions = menu.addLi( 'Action', 'nav-item dropdown', 'nav-link dropdown-toggle' );
-	Actions.firstChild.setAttribute('data-toggle', 'dropdown');
+	Actions.firstChild.setAttribute( 'data-toggle', 'dropdown' );
 	Actions.style.margin = '12px';
 	Actions.style.fontSize = '20px';
 
-	let Tools = menu.addLi( 'Tools', 'nav-item dropdown', 'nav-link dropdown-toggle active' );
-	Tools.firstChild.setAttribute('data-toggle', 'dropdown');
+	let Tools = menu.addLi( 'Edit', 'nav-item dropdown', 'nav-link dropdown-toggle active' );
+	Tools.firstChild.setAttribute( 'data-toggle', 'dropdown' );
 	Tools.style.margin = '12px';
 	Tools.style.fontSize = '20px';
 
 	let menuActions = new UI.UList();
 	menuActions.addClass( 'dropdown-menu' );
-	let buttonVibration = menuActions.addLi( 'Vibration' );    buttonVibration.classList.add('dropdown-item');
-	let buttonDanmaku = menuActions.addLi( 'Danmaku [TXT]' );    buttonDanmaku.classList.add('dropdown-item');
-	let buttonSwap = menuActions.addLi( 'Swap [PUPPET]' );    buttonSwap.classList.add('dropdown-item');
-	let buttonExplode = menuActions.addLi( 'Particle [BG]' );    buttonExplode.classList.add('dropdown-item');
+	let buttonVibration = menuActions.addLi( 'Vibration' );
+	buttonVibration.classList.add( 'dropdown-item' );
+	let buttonDanmaku = menuActions.addLi( 'Danmaku [TXT]' );
+	buttonDanmaku.classList.add( 'dropdown-item' );
+	let buttonSwap = menuActions.addLi( 'Swap [PUPPET]' );
+	buttonSwap.classList.add( 'dropdown-item' );
+	let buttonExplode = menuActions.addLi( 'Particle [BG]' );
+	buttonExplode.classList.add( 'dropdown-item' );
 	Actions.appendChild( menuActions.dom );
 
 	let menuTools = new UI.UList();
 	menuTools.addClass( 'dropdown-menu' );
-	let cmdNew = menuTools.addLi( 'New' );    cmdNew.classList.add('dropdown-item');
-	let cmdSave = menuTools.addLi( 'Save' );    cmdSave.classList.add('dropdown-item');
-	let cmdClean = menuTools.addLi( 'Clean' );    cmdClean.classList.add('dropdown-item');
-	let cmdImport = menuTools.addLi( 'Import' );    cmdImport.classList.add('dropdown-item');
-	let cmdExport = menuTools.addLi( 'Export' );    cmdExport.classList.add('dropdown-item');
+	// let cmdNew = menuTools.addLi( 'New' );
+	// cmdNew.classList.add( 'dropdown-item' );
+	let cmdSave = menuTools.addLi( 'Save' );
+	cmdSave.classList.add( 'dropdown-item' );
+	let cmdClean = menuTools.addLi( 'Clean' );
+	cmdClean.classList.add( 'dropdown-item' );
+	let cmdImport = menuTools.addLi( 'Import' );
+	cmdImport.classList.add( 'dropdown-item' );
+	let cmdExport = menuTools.addLi( 'Export' );
+	cmdExport.classList.add( 'dropdown-item' );
 	Tools.appendChild( menuTools.dom );
 
 	Global_Graph_SVG = graphSVG;
@@ -198,44 +207,45 @@ var NEditor = function ( editor ) {
 			emotionCMDManager.addNode( 'particle' );
 		} );
 
-		$( buttonDanmaku ).click( function (  ) {
+		$( buttonDanmaku ).click( function () {
 			emotionCMDManager.addNode( 'danmaku' );
 		} );
 
-		$( buttonVibration ).click( function (  ) {
+		$( buttonVibration ).click( function () {
 			emotionCMDManager.addNode( 'viberation' );
 		} );
 
-		$( cmdNew ).click(function (  ) {
-			editor.emotionCMDManager.newCMD();
-		});
+		// $( cmdNew ).click( function () {
+		// 	editor.emotionCMDManager.newCMD();
+		// } );
 
-		$(cmdSave).click(function (  ) {
+		$( cmdSave ).click( function () {
 			editor.emotionCMDManager.save();
-		});
+		} );
 
-		$(cmdClean).click(function (  ) {
+		$( cmdClean ).click( function () {
 			editor.emotionCMDManager.cleanSVG();
 			editor.emotionCMDManager.newCMD();
-		});
+		} );
 
-		$(cmdImport).click(function (  ) {
+		$( cmdImport ).click( function () {
 
 			LoadEmotionCMDJSONFile( editor, 'test.json' );
-		});
+		} );
 
-		$(cmdExport).click(function (  ) {
+		$( cmdExport ).click( function () {
 			let text_file = JSON.stringify( editor.emotionCMDManager );
 
-			function download(text, name, type) {
-				let a = document.createElement("a");
-				let file = new Blob([text], {type: type});
-				a.href = URL.createObjectURL(file);
+			function download ( text, name, type ) {
+				let a = document.createElement( "a" );
+				let file = new Blob( [ text ], { type: type } );
+				a.href = URL.createObjectURL( file );
 				a.download = name;
 				a.click();
 			}
-			download(text_file, 'test.json', 'text/plain');
-		});
+
+			download( text_file, 'test.json', 'text/plain' );
+		} );
 
 	} );
 
@@ -255,13 +265,13 @@ var NEditor = function ( editor ) {
 
 		if ( event[ 'type' ] === 'keyboard' ) {
 			let already_run = false;
-			if ( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode!==null) {
-				if( editor.emotionCMDManager.currentNodeSession.getInfo().key===event[ 'keycode' ] )
+			if ( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
+				if ( editor.emotionCMDManager.currentNodeSession.getInfo().key === event[ 'keycode' ] )
 					already_run = true;
 				editor.emotionCMDManager.currentNodeSession.run( event[ 'keycode' ] );
 			}
 
-			if(already_run===false) {
+			if ( already_run === false ) {
 				for ( let prop in editor.emotionCMDManager.allCMDs ) {
 					if ( event[ 'keycode' ] === prop ) {
 						editor.emotionCMDManager.allCMDs[ prop ].run( prop );
@@ -278,7 +288,7 @@ var NEditor = function ( editor ) {
 		let puppet = editor.selected;
 
 		if ( puppet !== null ) {
-			if( editor.facePositionMutex===false ) {
+			if ( editor.facePositionMutex === false ) {
 				puppet.position.x = event.x;
 				puppet.position.y = event.y;
 
@@ -323,16 +333,16 @@ var NEditor = function ( editor ) {
 					break;
 			}
 
-			if( editor.emotionMutex === false ) {
+			if ( editor.emotionMutex === false ) {
 				puppet.updateEmotion( emotion );
 				editor.signals.sceneGraphChanged.dispatch();
 
-                let info = {
-                    type: 'followEmotion',
-                    emotion: emotion
-                };
+				let info = {
+					type: 'followEmotion',
+					emotion: emotion
+				};
 
-                editor.signals.teacherSendInfo2Students.dispatch( info );
+				editor.signals.teacherSendInfo2Students.dispatch( info );
 			}
 		}
 
@@ -346,12 +356,12 @@ var NEditor = function ( editor ) {
 			puppet.updateLeftEye( state );
 			editor.signals.sceneGraphChanged.dispatch();
 
-            let info = {
-                type: 'followLeftEye',
-                state: state
-            };
+			let info = {
+				type: 'followLeftEye',
+				state: state
+			};
 
-            editor.signals.teacherSendInfo2Students.dispatch( info );
+			editor.signals.teacherSendInfo2Students.dispatch( info );
 		}
 	} );
 
@@ -363,12 +373,12 @@ var NEditor = function ( editor ) {
 			puppet.updateRightEye( state );
 			editor.signals.sceneGraphChanged.dispatch();
 
-            let info = {
-                type: 'followRightEye',
-                state: state
-            };
+			let info = {
+				type: 'followRightEye',
+				state: state
+			};
 
-            editor.signals.teacherSendInfo2Students.dispatch( info );
+			editor.signals.teacherSendInfo2Students.dispatch( info );
 		}
 	} );
 
@@ -380,12 +390,12 @@ var NEditor = function ( editor ) {
 			puppet.updateMouth( state );
 			editor.signals.sceneGraphChanged.dispatch();
 
-            let info = {
-                type: 'followMouth',
-                state: state
-            };
+			let info = {
+				type: 'followMouth',
+				state: state
+			};
 
-            editor.signals.teacherSendInfo2Students.dispatch( info );
+			editor.signals.teacherSendInfo2Students.dispatch( info );
 		}
 	} );
 

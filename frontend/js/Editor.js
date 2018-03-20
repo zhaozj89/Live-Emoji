@@ -102,6 +102,9 @@ var Editor = function () {
 
 	// objects
 
+	this.boy = null;
+	this.girl = null;
+
 	this.selected = null; // character
 
 	this.emotionCMDManager = new EmotionCMDManager( this );
