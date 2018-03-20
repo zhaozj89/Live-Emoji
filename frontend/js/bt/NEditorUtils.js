@@ -33,7 +33,7 @@ var NEditorGetFullOffset = function ( el ) {
 	};
 
 	let offset = innerRecursive( el );
-	offset.top -= 82;
+	offset.top -= 84;
 	offset.left -= 300;
 	return offset;
 }

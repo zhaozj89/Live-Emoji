@@ -128,8 +128,8 @@ var Editor = function () {
 		paper: null,
 		width: 840,
 		height: 681,
-		left: 0,
-		top: 32
+		left: 300,
+		top: 40
 	};
 
 	this.emotionMutex = false;

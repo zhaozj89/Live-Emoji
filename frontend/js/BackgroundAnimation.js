@@ -27,7 +27,7 @@ class BackgroundAnimationController {
 		this.emitter.removeAllInitializers();
 		this.emitter.removeAllBehaviours();
 
-		let filename = "./asset/background/images/" + _name + ".png";
+		let filename = "./asset/background/small/" + _name + ".png";
 		this.emitter.addInitialize( new Proton.Body( filename ) );
 
 		let mass = 1 / Number(_mass);
@@ -62,7 +62,7 @@ var BackgroundAnimationCanvas = function ( editor ) {
 	container.setLeft( '300px' );
 	container.setRight( '200px' );
 	container.setOpacity( 0.9 );
-	container.dom.style.zIndex = "2";
+	container.dom.style.zIndex = "3";
 
 	editor.background_animation = container;
 

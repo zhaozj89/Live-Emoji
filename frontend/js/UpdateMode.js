@@ -37,8 +37,8 @@ function UpdateRoleMode ( editor ) {
 		editor.background_animation.setLeft('0px');
 		editor.background_animation.setRight('0px');
 
-		editor.danmaku_animation.setLeft('0px');
-		editor.danmaku_animation.setRight('0px');
+		editor.danmaku_animation.style.left = '0px';
+		editor.danmaku_animation.style.right = '0px';
 	}
 
 	if ( editor.roleMode === 1 ) { // teacher
@@ -57,8 +57,8 @@ function UpdateRoleMode ( editor ) {
 		editor.background_animation.setLeft('300px');
 		editor.background_animation.setRight('200px');
 
-		editor.danmaku_animation.setLeft('300px');
-		editor.danmaku_animation.setRight('200px');
+		editor.danmaku_animation.style.left = '300px';
+		editor.danmaku_animation.style.right = '200px';
 	}
 
 	editor.signals.windowResize.dispatch();

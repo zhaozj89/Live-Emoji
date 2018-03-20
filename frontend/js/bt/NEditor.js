@@ -36,7 +36,7 @@ var NEditor = function ( editor ) {
 	let container = new UI.Panel();
 	container.setId( 'nEditor' );
 	container.setPosition( 'absolute' );
-	container.setBackgroundColor( '#272822' );
+	container.setBackgroundColor( 'rgba(20,20,20,0.8)' );
 	container.setDisplay( 'none' );
 
 	container.dom.style.zIndex = "5";
@@ -93,9 +93,11 @@ var NEditor = function ( editor ) {
 			let inputPt = NEDITOR_MOUSE_INFO.currentInput.getAttachedPoint();
 
 			///////////////////////////////////////////////////////////
-			let outputPt = { x: event.pageX - 300, y: event.pageY - 82 };
+			let outputPt = { x: event.pageX - 300, y: event.pageY - 84 };
 			let val = NEditorCreatePath( inputPt, outputPt );
 			path.setAttributeNS( null, 'd', val ); // namespace, name, value
+			path.setAttribute( 'stroke-width', '5' );
+			path.setAttribute( 'stroke', 'coral' );
 		}
 	};
 

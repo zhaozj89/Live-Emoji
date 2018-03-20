@@ -24,7 +24,7 @@ var Viewport = function ( editor ) {
 
 	// add background
 
-	var spriteMap = new THREE.TextureLoader().load( "./asset/stage/background.jpg" );
+	var spriteMap = new THREE.TextureLoader().load( "./asset/stage/background.png" );
 	var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
 	editor.backgroundSprite = new THREE.Sprite( spriteMaterial );
 

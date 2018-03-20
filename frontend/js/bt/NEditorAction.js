@@ -267,13 +267,6 @@ class ViberationNode extends Node {
 		this.addInput( this.amplitude );
 		this.amplitude.setArg( 'middle' );
 
-		this.manner = new LeafInput( 'Manner: ' );
-		this.manner.addSelectionInput( {
-			'normal': 'normal'
-		} );
-		this.addInput( this.manner );
-		this.manner.setArg( 'normal' );
-
 		this.addOutput();
 
 		this.moveTo( { x: 300, y: 80 } );
@@ -285,8 +278,7 @@ class ViberationNode extends Node {
 			type: this.type,
 			offset: this.getOffset(),
 			frequency: this.frequency.getArg(),
-			amplitude: this.amplitude.getArg(),
-			manner: this.manner.getArg()
+			amplitude: this.amplitude.getArg()
 		};
 	}
 
@@ -295,7 +287,6 @@ class ViberationNode extends Node {
 		this.setOffset( state.offset );
 		this.frequency.setArg( state.frequency );
 		this.amplitude.setArg( state.amplitude );
-		this.manner.setArg( state.manner );
 	}
 
 	run ( component ) {
