@@ -88,6 +88,7 @@ class NodeSession {
 			case 'particle': {
 				node = new ParticleNode( type, this.editor );
 				node.initUI();
+				this.editor.allParticleNodes.push( node );
 				break;
 			}
 

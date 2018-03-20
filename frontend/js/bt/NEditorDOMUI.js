@@ -22,7 +22,9 @@ var CreateRemoveButton = function ( that ) {
 			that.parentInput.domElement.classList.add( 'empty' );
 
 			for ( let i = 0; i < that.parentInput.currentNode.inputs.length; ++i ) {
-				that.parentInput.currentNode.inputs[ i ].node = null;
+				if( that.parentInput.currentNode.inputs[ i ].node === that ) {
+					that.parentInput.currentNode.inputs.splice( i, 1 );
+				}
 			}
 
 			that.detachInput( that.parentInput );

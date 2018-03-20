@@ -285,6 +285,8 @@ class Node {
 		let outputPt = this.getOutputPoint();
 
 		input.path.setAttributeNS( null, 'd', NEditorCreatePath( inputPt, outputPt ) );
+		input.path.setAttribute( 'stroke-width', '5' );
+		input.path.setAttribute( 'stroke', 'coral' );
 	}
 
 	moveTo ( point ) {

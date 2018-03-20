@@ -31,13 +31,15 @@ class SwapNode extends Node {
 
 		let that = this;
 		let puppet = that.editor.selected;
-		that.editor.emotionMutex = true;
-		puppet.updateEmotion( that.emotion.getArg() );
-		that.editor.signals.sceneGraphChanged.dispatch();
+		if( puppet!==null ) {
+			that.editor.emotionMutex = true;
+			puppet.updateEmotion( that.emotion.getArg() );
+			that.editor.signals.sceneGraphChanged.dispatch();
 
-		setTimeout( function () {
-			that.editor.emotionMutex = false;
-		}, 500 );
+			setTimeout( function () {
+				that.editor.emotionMutex = false;
+			}, 500 );
+		}
 	}
 
 	toJSON () {
@@ -98,6 +100,19 @@ class ParticleNode extends Node {
 		this.addOutput();
 
 		this.particleController = new BackgroundAnimationController( editor, this.emitterX, this.emitterY );
+
+		this.editor.currentEmitter = this.particleController.emitter;
+
+		let that = this;
+		this.domElement.onclick = function (  ) {
+			that.editor.currentEmitter = that.particleController.emitter;
+
+			let len = that.editor.allParticleNodes.length;
+			for( let i=0; i<len; ++i ) {
+				that.editor.allParticleNodes[i].domElement.style.backgroundColor = 'rgba(100,100,100,0.8)';
+			}
+			that.domElement.style.backgroundColor = 'rgba(200,100,100,0.8)';
+		}
 
 		this.moveTo( { x: 300, y: 80 } );
 	}

@@ -8,18 +8,21 @@ class BackgroundAnimationController {
 		this.emitter.p.x = outX.getArg();
 		this.emitter.p.y = outY.getArg();
 
-		let canvas = document.getElementById('BackgroundAnimationCanvas').firstChild;
+		let canvas = document.getElementById( 'BackgroundAnimationCanvas' ).firstChild;
 
 		let that = this;
 		canvas.addEventListener( 'mouseup', function ( e ) {
 			let X = e.offsetX || e.layerX;
 			let Y = e.offsetY || e.layerY;
-			that.emitter.p.x = X;
-			that.emitter.p.y = Y;
-			outX.setArg(X);
-			outY.setArg(Y);
-			that.emitter.emit( 'once' );
-		});
+
+			if( that.editor.currentEmitter!==null && that.editor.currentEmitter===that.emitter ) {
+				that.editor.currentEmitter.p.x = X;
+				that.editor.currentEmitter.p.y = Y;
+				outX.setArg( X );
+				outY.setArg( Y );
+				that.editor.currentEmitter.emit( 'once' );
+			}
+		} );
 	}
 
 	updateEmitter ( _name, _mass, _X, _Y ) {
@@ -30,11 +33,11 @@ class BackgroundAnimationController {
 		let filename = "./asset/background/small/" + _name + ".png";
 		this.emitter.addInitialize( new Proton.Body( filename ) );
 
-		let mass = 1 / Number(_mass);
+		let mass = 1 / Number( _mass );
 		this.emitter.addInitialize( new Proton.Mass( mass ) );
 
-		this.emitter.p.x = Number(_X);
-		this.emitter.p.y = Number(_Y);
+		this.emitter.p.x = Number( _X );
+		this.emitter.p.y = Number( _Y );
 
 		this.emitter.addInitialize( new Proton.Velocity( new Proton.Span( 3, 9 ), new Proton.Span( 0, 30, true ), 'polar' ) );
 
@@ -77,7 +80,7 @@ var BackgroundAnimationCanvas = function ( editor ) {
 	editor.protonPixi4Renderer.proton.addRenderer( new Proton.PixiRenderer( editor.protonPixi4Renderer.app.stage ) );
 
 
-	function backgroundUpdate() {
+	function backgroundUpdate () {
 		requestAnimationFrame( backgroundUpdate );
 
 		editor.protonPixi4Renderer.proton.update();

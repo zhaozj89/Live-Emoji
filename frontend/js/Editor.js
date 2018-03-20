@@ -109,6 +109,10 @@ var Editor = function () {
 	this.msgInputValence = null;
 	this.msgInputArousal = null;
 
+	this.currentEmitter = null;
+
+	this.allParticleNodes = [];
+
 	this.backgroundSprite = null;
 
 	this.top3Keys = {
