@@ -166,7 +166,7 @@ var VideoChar = function ( editor ) {
 
 	editor.camera_viewport.add( cameraView );
 
-	let cameraViewHeader = new UI.Text( 'Camera View' );
+	let cameraViewHeader = new UI.Text( 'Teacher View' );
 	cameraViewHeader.setWidth( '100%' );
 	cameraViewHeader.setPadding( '10px' );
 	cameraViewHeader.dom.style.borderRadius = '5px';
@@ -218,6 +218,8 @@ var VideoChar = function ( editor ) {
 	let videoStreamWidth = videoStream.dom.width;
 	let videoStreamHeight = videoStream.dom.height;
 	overlayedPanel.add( videoStream );
+
+	editor.video_stream = videoStream.dom;
 
 	let videoStreamOverlay = new UI.Canvas();
 	videoStreamOverlay.setPosition( 'absolute' );

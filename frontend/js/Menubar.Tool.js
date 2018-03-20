@@ -62,7 +62,7 @@ Menubar.Tool = function ( editor ) {
 
 	var option = new UI.Row();
 	option.setClass( 'option' );
-	option.setTextContent( 'Teacher' );
+	option.setTextContent( 'Teacher Layout' );
 	option.onClick( function () {
 		editor.teacherLabel.dom.click();
 		editor.signals.windowResize.dispatch();

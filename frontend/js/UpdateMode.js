@@ -1,17 +1,26 @@
 function UpdateUsageMode ( editor ) {
 	if ( editor.usageMode === 0 ) { // live animation
 		editor.camera_viewport.setDisplay( '' );
-		editor.node_editor.remove( editor.camera_view );
-		editor.camera_viewport.add( editor.camera_view );
+
+		if( editor.camera_view_which_side === 'pre_edit' ) {
+			editor.node_editor.remove( editor.camera_view );
+			editor.camera_viewport.add( editor.camera_view );
+			editor.video_stream.play();
+			editor.camera_view_which_side = 'live_animation';
+		}
 	}
 
 	if ( editor.usageMode === 1 ) { // pre edit
 		editor.camera_viewport.setDisplay( 'none' );
-		editor.camera_viewport.remove( editor.camera_view );
-		editor.node_editor.add( editor.camera_view );
+		if( editor.camera_view_which_side === 'live_animation' ) {
+			editor.camera_viewport.remove( editor.camera_view );
+			editor.node_editor.add( editor.camera_view );
+			editor.video_stream.play();
+			editor.camera_view_which_side = 'pre_edit';
+		}
 
 		if( editor.emotion_cmd_tablebody!==null && editor.emotion_cmd_tablebody.rows!==null ) {
-			let len = editor.emotion_cmd_tablebody.rows;
+			let len = editor.emotion_cmd_tablebody.rows.length;
 			for( let i=0; i<len; ++i ) {
 				editor.emotion_cmd_tablebody.rows[i].style.backgroundColor = 'black';
 			}

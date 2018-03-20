@@ -14,7 +14,7 @@ var Editor = function () {
 
 	// components of editor
 	this.camera_viewport = null; // 4
-	this.camera_view = null;
+	this.camera_view = null;    this.video_stream = null;   this.camera_view_which_side = 'live_animation';
 	this.student_view = null;
 
 	this.viewport = null; // 1
