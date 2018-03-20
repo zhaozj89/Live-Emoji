@@ -6,13 +6,14 @@ class BasicElement {
 	}
 };
 
-function CharacterStructure ( name ) {
+function CharacterStructure ( editor, name ) {
 	THREE.Group.call( this );
 
 	this.name = name;
 	this.emotion = 'neutral';
 
-	this.add2Scene = new signals.Signal();
+	this.editor = editor;
+
 	this.isCompleted = 0;
 
 	this.left_eye_mesh = new THREE.Group();
@@ -65,7 +66,7 @@ CharacterStructure.prototype.constructor = CharacterStructure;
 
 CharacterStructure.prototype.check = function () {
 	if ( this.isCompleted === 51 ) {
-		this.add2Scene.dispatch( this );
+		this.editor.signals.add2Scene.dispatch( this );
 	}
 };
 

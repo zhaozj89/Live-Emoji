@@ -155,6 +155,8 @@ function loginFailure ( errorCode, message ) {
 
 var VideoChar = function ( editor ) {
 
+	signals = editor.signals;
+
 	let cameraView = new UI.Panel();
 	cameraView.setTop( '100px' );
 	cameraView.setLeft( '100px' );
@@ -501,7 +503,7 @@ var VideoChar = function ( editor ) {
 			ctrack.start( videoStream.dom );
 			faceTrackingStarted = true;
 
-			let fps = 45;
+			let fps = 60;
 			fpsInterval = 1000 / fps;
 			then = Date.now();
 

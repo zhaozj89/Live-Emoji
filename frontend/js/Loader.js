@@ -612,8 +612,6 @@ var LoadFileName = function ( characterStructure, name, emotion, filename ) {
 
 				let basicElement = new BasicElement( name, mesh, emotion );
 				characterStructure.addElement( basicElement );
-
-				// editor.execute( new AddObjectCommand( mesh ) );
 			} );
 		}
 	};
@@ -621,57 +619,13 @@ var LoadFileName = function ( characterStructure, name, emotion, filename ) {
 	xhr.send();
 }
 
-
-// var LoadCharacterJSON = function ( file ) {
-//
-// 	let filename = file.name;
-// 	let extension = filename.split( '.' ).pop().toLowerCase();
-//
-// 	let reader = new FileReader();
-//
-// 	switch ( extension ) {
-//
-// 		case 'json':
-//
-// 			reader.addEventListener( 'load', function ( event ) {
-// 				let loader = JSON.parse( event.target.result );
-//
-// 				let characterStructure = new CharacterStructure( file.name.slice( 0, -5 ) );
-// 				characterStructure.add2Scene.add( function ( obj ) {
-// 					editor.execute( new AddObjectCommand( obj ) );
-// 				} );
-//
-// 				for ( let prop in loader ) {
-//
-// 					if ( typeof( loader[ prop ] ) === 'string' ) {
-// 						LoadFileName( characterStructure, prop, '', loader[ prop ] );
-// 						continue;
-// 					}
-//
-// 					if ( typeof( loader[ prop ] ) === 'object' ) {
-// 						for ( let prop2 in loader[ prop ] ) LoadFileName( characterStructure, prop, prop2, loader[ prop ][ prop2 ] );
-// 						continue;
-// 					}
-// 				}
-// 			} );
-// 			reader.readAsText( file );
-// 			break;
-//
-// 		default:
-//
-// 			alert( 'Unsupported file format (' + extension + ').' );
-//
-// 			break;
-// 	}
-// };
-
 var characterStructure = null;
 
-var PreLoadCharacterJSON = function () {
+var PreLoadCharacterJSON = function ( editor ) {
 	let loader = PRELOAD_JSON;
 
-	characterStructure = new CharacterStructure( 'qin_emotion' );
-	characterStructure.add2Scene.add( function ( obj ) {
+	characterStructure = new CharacterStructure( editor, 'qin_emotion' );
+	editor.signals.add2Scene.add( function ( obj ) {
 		editor.selected = obj;
 		editor.execute( new AddObjectCommand( obj ) );
 	} );
@@ -684,7 +638,8 @@ var PreLoadCharacterJSON = function () {
 		}
 
 		if ( typeof( loader[ prop ] ) === 'object' ) {
-			for ( let prop2 in loader[ prop ] ) LoadFileName( characterStructure, prop, prop2, loader[ prop ][ prop2 ] );
+			for ( let prop2 in loader[ prop ] )
+				LoadFileName( characterStructure, prop, prop2, loader[ prop ][ prop2 ] );
 			continue;
 		}
 	}

@@ -65,8 +65,13 @@ Menubar.Tool = function ( editor ) {
 	} );
 	options.add( option );
 
-	// DO NOT load it for testing
-	// PreLoadCharacterJSON();
+	var option = new UI.Row();
+	option.setClass( 'option' );
+	option.setTextContent( 'Load Character' );
+	option.onClick( function () {
+		PreLoadCharacterJSON( editor );
+	} );
+	options.add( option );
 
 	return container;
 

@@ -27,7 +27,7 @@ class BackgroundAnimationController {
 		this.emitter.removeAllInitializers();
 		this.emitter.removeAllBehaviours();
 
-		let filename = "./asset/background/small/" + _name + ".png";
+		let filename = "./asset/background/images/" + _name + ".png";
 		this.emitter.addInitialize( new Proton.Body( filename ) );
 
 		let mass = 1 / Number(_mass);

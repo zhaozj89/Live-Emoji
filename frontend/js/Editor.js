@@ -43,6 +43,8 @@ var Editor = function () {
 
 	this.signals = {
 
+		add2Scene: new Signal(),
+
 		teacherSendInfo2Students: new Signal(),
 
 		updateRecommendation: new Signal(),
