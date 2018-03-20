@@ -9,9 +9,7 @@ var Viewport = function ( editor ) {
 	var container = new UI.Panel();
 	container.setId( 'viewport' );
 	container.setPosition( 'absolute' );
-	container.dom.style.zIndex = '4';
-
-	// container.add( new Viewport.Info( editor ) );
+	container.dom.style.zIndex = '1';
 
 	editor.viewport = container;
 
@@ -24,13 +22,6 @@ var Viewport = function ( editor ) {
 	var sceneHelpers = editor.sceneHelpers;
 
 	var objects = [];
-
-	// var selectionBox = new THREE.BoxHelper();
-	// selectionBox.material = new THREE.LineBasicMaterial( { color: 0xff0000 } );
-	// selectionBox.material.depthTest = false;
-	// selectionBox.material.transparent = true;
-	// selectionBox.visible = false;
-	// sceneHelpers.add( selectionBox );
 
 	// add background
 
@@ -95,27 +86,12 @@ var Viewport = function ( editor ) {
 
 	signals.objectSelected.add( function ( object ) {
 
-		// selectionBox.visible = false;
-		//
-		// if ( object !== null && object !== scene && object !== camera ) {
-		//
-		// 	selectionBox.setFromObject( object );
-		// 	selectionBox.visible = true;
-		//
-		// }
-
 		render();
 
 	} );
 
 
 	signals.geometryChanged.add( function ( object ) {
-
-		// if ( object !== undefined ) {
-		//
-		// 	selectionBox.setFromObject( object );
-		//
-		// }
 
 		render();
 
@@ -132,12 +108,6 @@ var Viewport = function ( editor ) {
 	} );
 
 	signals.objectChanged.add( function ( object ) {
-
-		// if ( editor.selected === object ) {
-		//
-		// 	selectionBox.setFromObject( object );
-		//
-		// }
 
 		if ( object instanceof THREE.PerspectiveCamera ) {
 

@@ -62,8 +62,6 @@
 	<script src="js/Menubar.Tool.js"></script>
 	<!--<script src="js/Menubar.Edit.js"></script>-->
 	<script src="js/Menubar.View.js"></script>
-	<!--<script src="js/Menubar.Help.js"></script>-->
-	<!--<script src="js/Menubar.Status.js"></script>-->
 
 	<script src="js/Sidebar.js"></script>
 	<script src="js/Sidebar.History.js"></script>
@@ -89,10 +87,9 @@
 	<script src="js/Sidebar2.js"></script>
 
 	<script src="js/Viewport.js"></script>
-	<script src="js/Viewport.Info.js"></script>
+	<script src="js/CameraViewPort.js"></script>
 
 	<script src="js/Command.js"></script>
-
 	<script src="js/commands/AddObjectCommand.js"></script>
 	<script src="js/commands/RemoveObjectCommand.js"></script>
 	<script src="js/commands/MoveObjectCommand.js"></script>
@@ -104,8 +101,7 @@
 	<script src="js/commands/SetColorCommand.js"></script>
 	<script src="js/commands/SetGeometryCommand.js"></script>
 	<script src="js/commands/SetGeometryValueCommand.js"></script>
-	<script src="js/c
-	ommands/MultiCmdsCommand.js"></script>
+	<script src="js/commands/MultiCmdsCommand.js"></script>
 	<script src="js/commands/SetMaterialCommand.js"></script>
 	<script src="js/commands/SetMaterialValueCommand.js"></script>
 	<script src="js/commands/SetMaterialColorCommand.js"></script>
@@ -158,6 +154,9 @@
 
 	var viewport = new Viewport( editor );
 	document.body.appendChild( viewport.dom );
+
+	var camera_viewport = new CameraViewport( editor );
+	document.body.appendChild( camera_viewport.dom );
 
 	var nEditor = new NEditor( editor ); // need face info in sidebar
 	document.body.appendChild( nEditor.dom );

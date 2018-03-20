@@ -5,10 +5,13 @@
 var Editor = function () {
 
 	// components of editor
-	this.viewport = null;
-	this.node_editor = null;
+	this.camera_viewport = null; // 4
 	this.camera_view = null;
 	this.student_view = null;
+
+	this.viewport = null; // 1
+
+	this.node_editor = null; // 5
 	this.emotion_command_view = null;
 
 	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -20, 20, -20, 20, -100, 100 );

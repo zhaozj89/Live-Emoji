@@ -72,6 +72,14 @@ background-color: #111;
 	bottom: 0px;
 }
 
+#camera_viewport {
+	position: absolute;
+	top: 40px;
+	left: 300px;
+	right: 200px;
+	bottom: 0px;
+}
+
 #nEditor {
 	position: absolute;
 	top: 40px;

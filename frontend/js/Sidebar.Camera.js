@@ -168,7 +168,7 @@ Sidebar.Camera = function ( editor ) {
 	cameraView.setDisplay( 'none' );
 	editor.camera_view = cameraView;
 
-	editor.viewport.add( cameraView );
+	editor.camera_viewport.add( cameraView );
 
 	let cameraViewHeader = new UI.Text( 'Camera View' );
 	cameraViewHeader.setWidth( '100%' );
@@ -253,7 +253,7 @@ Sidebar.Camera = function ( editor ) {
 	studentView.setDisplay( 'none' );
 	editor.student_view = studentView;
 
-	editor.viewport.add( studentView );
+	editor.camera_viewport.add( studentView );
 
 	let studentViewHeader = new UI.Text( 'Student View' );
 	studentViewHeader.setWidth( '100%' );
