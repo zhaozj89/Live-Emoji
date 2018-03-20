@@ -153,13 +153,7 @@ function loginFailure ( errorCode, message ) {
 	easyrtc.showError( errorCode, message );
 }
 
-Sidebar.Camera = function ( editor ) {
-
-	let signals = editor.signals;
-
-	let container = new UI.Panel();
-	container.setBorderTop( '0' );
-	container.setPaddingTop( '20px' );
+var VideoChar = function ( editor ) {
 
 	let cameraView = new UI.Panel();
 	cameraView.setTop( '100px' );
@@ -795,7 +789,5 @@ Sidebar.Camera = function ( editor ) {
 			ctrack.draw( videoStreamOverlay.dom );
 		}
 	}
-
-	return container;
 
 };

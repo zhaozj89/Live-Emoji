@@ -126,10 +126,6 @@ var NEditor = function ( editor ) {
 	menu.setLeft('200px');
 	container.add(menu);
 
-	// let menuTitle = menu.addLi( 'Nodes', 'nav-item', 'nav-link active' );
-	// menuTitle.style.margin = '10px';
-	// menuTitle.style.fontSize = '20px';
-
 	let Trigger = menu.addLi( 'Root+' );
 	Trigger.classList.add('nav-item');
 	Trigger.style.margin = '20px';
@@ -179,10 +175,6 @@ var NEditor = function ( editor ) {
 	let startBehaviorTree = true;
 
 	$( function () {
-
-		// $( menu.dom ).draggable();
-		// $( "#menu" ).menu();
-
 		$( Trigger ).click( function () {
 			if ( emotionCMDManager.currentNodeSession.triggerNode !== null ) {
 				alert( 'Currently ONLY one trigger node is allowed!' );

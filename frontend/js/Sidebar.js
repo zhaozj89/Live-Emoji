@@ -17,10 +17,6 @@ var Sidebar = function ( editor ) {
 		new Sidebar.Properties( editor )
 	);
 
-	let camera = new UI.Span().add(
-		new Sidebar.Camera( editor )
-	);
-
 	let history = new UI.Span().add(
 		new Sidebar.History( editor ),
 		new Sidebar.Settings( editor )

@@ -62,9 +62,10 @@
 	<script src="js/Menubar.Tool.js"></script>
 	<script src="js/Menubar.View.js"></script>
 
+	<script src="js/VideoChat.js"></script>
+
 	<script src="js/Sidebar.js"></script>
 	<script src="js/Sidebar.History.js"></script>
-	<script src="js/Sidebar.Camera.js"></script>
 	<script src="js/Sidebar.Properties.js"></script>
 	<script src="js/Sidebar.Settings.js"></script>
 	<script src="js/Sidebar.Settings.Shortcuts.js"></script>
@@ -158,7 +159,7 @@
 	var camera_viewport = new CameraViewport( editor );
 	document.body.appendChild( camera_viewport.dom );
 
-	var nEditor = new NEditor( editor ); // need face info in sidebar
+	var nEditor = new NEditor( editor );
 	document.body.appendChild( nEditor.dom );
 
 	var backgroundAnimationCanvas = new BackgroundAnimationCanvas( editor );

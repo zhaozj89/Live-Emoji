@@ -7,5 +7,7 @@ var CameraViewport = function ( editor ) {
 
 	editor.camera_viewport = container;
 
+	VideoChar( editor );
+
 	return container;
 }
