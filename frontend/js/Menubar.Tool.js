@@ -73,7 +73,7 @@ Menubar.Tool = function ( editor ) {
 
 	var option = new UI.Row();
 	option.setClass( 'option' );
-	option.setTextContent( 'Load Body' );
+	option.setTextContent( 'Load Boy' );
 	option.onClick( function () {
 		PreLoadCharacterJSON( editor, 'boy' );
 	} );

@@ -340,6 +340,7 @@ var VideoChar = function ( editor ) {
 				callerVideoStream.dom.width = videoStreamWidth;
 
 				overlayedPanel.setWidth( videoStreamWidth + 'px' );
+				callerPanel.setWidth( videoStreamWidth + 'px' );
 			}
 
 			videoStream.dom.onloadedmetadata = function () {
