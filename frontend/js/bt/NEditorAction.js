@@ -79,7 +79,7 @@ class ParticleNode extends Node {
 		this.image.setArg( 'yellowbubble' );
 
 		// initialization configuration
-		this.mass = new LeafInput( 'Mass: ' );
+		this.mass = new LeafInput( 'Speed: ' );
 		this.mass.addSelectionInput( {
 			1: 1,
 			2: 2,
