@@ -52,12 +52,18 @@ class BackgroundAnimationController {
 	}
 
 	display () {
+		let content = this.editor.videoStartButton.dom.textContent;
+
+		this.editor.signals.startParticleSignal.dispatch();
+
 		this.emitter.emit( 'once' );
 
-		let that = this;
-		// setTimeout( function (  ) {
-		// 	that.editor.finishParticleFlag = true;
-		// }, 500 );
+		if( content==='Stop' ) {
+			let that = this;
+			setTimeout( function (  ) {
+				this.editor.signals.finishParticleSignal.dispatch();
+			}, 3000 );
+		}
 	}
 }
 

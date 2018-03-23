@@ -497,6 +497,20 @@ var VideoChar = function ( editor ) {
 		}
 	}
 
+	editor.signals.startParticleSignal.add(function (  ) {
+		if( startButton.dom.textContent = 'Stop' ) {
+			TurnONOFFFaceTracking();
+		}
+	});
+
+	editor.signals.finishParticleSignal.add(function (  ) {
+		if( startButton.dom.textContent === 'Start' ) {
+			TurnONOFFFaceTracking();
+		}
+	});
+
+	editor.videoStartButton = startButton;
+
 	function TurnONOFFFaceTracking () {
 
 		if ( startButton.dom.textContent === 'Start' ) {

@@ -43,6 +43,10 @@ var Editor = function () {
 
 	this.signals = {
 
+		// particle
+		startParticleSignal: new Signal(),
+		finishParticleSignal: new Signal(),
+
 		add2Scene: new Signal(),
 
 		teacherSendInfo2Students: new Signal(),
@@ -142,7 +146,7 @@ var Editor = function () {
 	this.emotionMutex = false;
 	this.facePositionMutex = false;
 
-	this.finishParticleFlag = true;
+	this.videoStartButton = null;
 
 	// not care now
 

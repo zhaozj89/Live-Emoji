@@ -187,7 +187,7 @@ Sidebar.EmotionCMD = function ( editor ) {
 				let prop_arousal = Number( info.arousal );
 				let prop_valence = Number( info.valence );
 
-				let dist = ( arousal - prop_arousal ) * ( arousal - prop_arousal ) + 10000 * ( valence - prop_valence / 8 ) * ( valence - prop_valence / 8 );
+				let dist = ( arousal - prop_arousal ) * ( arousal - prop_arousal ) + 10000 * ( valence - prop_valence ) * ( valence - prop_valence ) / 64;
 
 				all_distprop.push( { val: dist, other: info } );
 			}
@@ -231,11 +231,9 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 				if ( editor.autoMode === 0 ) {
 					let key = all_distprop[ 0 ].other.key;
-					if ( editor.finishParticleFlag===true ) {
+					if ( pre_key !== key ) {
 						editor.emotionCMDManager.allCMDs[ key ].run( key );
 						pre_key = key;
-
-						editor.finishParticleFlag = false;
 					}
 				}
 				else {
