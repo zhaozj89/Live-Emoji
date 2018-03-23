@@ -36,7 +36,7 @@ var NEditor = function ( editor ) {
 	let container = new UI.Panel();
 	container.setId( 'nEditor' );
 	container.setPosition( 'absolute' );
-	container.setBackgroundColor( 'rgba(20,20,20,0.8)' );
+	container.setBackgroundColor( 'rgba(20,20,20,0.6)' );
 	container.setDisplay( 'none' );
 
 	container.dom.style.zIndex = "5";
@@ -398,8 +398,6 @@ var NEditor = function ( editor ) {
 			editor.signals.teacherSendInfo2Students.dispatch( info );
 		}
 	} );
-
-	LoadEmotionCMDJSONFile( editor, 'test.json' );
 
 	return container;
 

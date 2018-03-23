@@ -80,28 +80,36 @@ var BackgroundAnimationCanvas = function ( editor ) {
 
 	editor.background_animation = container;
 
-	let width = editor.protonPixi4Renderer.width;
-	let height = editor.protonPixi4Renderer.height;
+	// let width = editor.protonPixi4Renderer.width;
+	// let height = editor.protonPixi4Renderer.height;
 
-	// initialize proton in editor
-	editor.protonPixi4Renderer.app = new PIXI.Application( width, height, { transparent: true } );
-	container.dom.appendChild( editor.protonPixi4Renderer.app.view );
+    $( function(){
+        let width = document.getElementById('viewport').clientWidth;
+        let height = document.getElementById('viewport').clientHeight;
 
-	editor.protonPixi4Renderer.proton = new Proton();
-	editor.protonPixi4Renderer.proton.addRenderer( new Proton.PixiRenderer( editor.protonPixi4Renderer.app.stage ) );
+        // initialize proton in editor
+        editor.protonPixi4Renderer.app = new PIXI.Application( width, height, { transparent: true } );
+        container.dom.appendChild( editor.protonPixi4Renderer.app.view );
 
-	editor.protonPixi4Renderer.app.view.style.left = '300px';
-	editor.protonPixi4Renderer.app.view.style.right = '200px';
-	editor.protonPixi4Renderer.app.view.style.top = '40px';
-	editor.protonPixi4Renderer.app.view.style.bottom = '0px';
+        editor.protonPixi4Renderer.proton = new Proton();
+        editor.protonPixi4Renderer.proton.addRenderer( new Proton.PixiRenderer( editor.protonPixi4Renderer.app.stage ) );
 
-	function backgroundUpdate () {
-		requestAnimationFrame( backgroundUpdate );
+        // editor.protonPixi4Renderer.app.view.style.left = '300px';
+        // editor.protonPixi4Renderer.app.view.style.right = '200px';
+        // editor.protonPixi4Renderer.app.view.style.top = '40px';
+        // editor.protonPixi4Renderer.app.view.style.bottom = '0px';
+        // editor.protonPixi4Renderer.app.view.style.backgroundColor = 'black';
 
-		editor.protonPixi4Renderer.proton.update();
-	}
+        function backgroundUpdate () {
+            requestAnimationFrame( backgroundUpdate );
 
-	backgroundUpdate();
+            editor.protonPixi4Renderer.proton.update();
+        }
+
+        backgroundUpdate();
+
+        LoadEmotionCMDJSONFile( editor, 'test.json' );
+    } );
 
 	return container;
 

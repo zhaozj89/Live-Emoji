@@ -48,8 +48,16 @@ var DanmakuAnimationCanvas = function ( editor ) {
 	editor.raphaelRenderer.paper.canvas.style.right = '200px';
 	editor.raphaelRenderer.paper.canvas.style.top = '40px';
 	editor.raphaelRenderer.paper.canvas.style.bottom = '0px';
+    // editor.raphaelRenderer.paper.canvas.style.backgroundColor = 'black';
 
 	editor.danmaku_animation = editor.raphaelRenderer.paper.canvas;
+
+	$(function () {
+		let width = document.getElementById('viewport').clientWidth;
+		let height = document.getElementById('viewport').clientHeight;
+
+        editor.raphaelRenderer.paper.setSize( width, height );
+    });
 
 	// test
 	// let text = editor.raphaelRenderer.paper.text( 400, 200, 'Good morning' );
