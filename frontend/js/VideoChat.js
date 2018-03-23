@@ -185,7 +185,7 @@ var VideoChat = function ( editor ) {
 	startButton.setType( 'button' );
 	startButton.setWidth( '100%' );
 	startButton.dom.style.borderRadius = '5px';
-	startButton.setDisabled( 'disabled' );
+	// startButton.setDisabled( 'disabled' );
 
 	$( startButton.dom ).click( function () {
 		TurnONOFFFaceTracking();
@@ -259,9 +259,10 @@ var VideoChat = function ( editor ) {
     connectButton.setType( 'button' );
     connectButton.setWidth( '100%' );
     connectButton.dom.style.borderRadius = '5px';
-    connectButton.setDisabled( 'connectButton' );
+    // connectButton.setDisabled( 'connectButton' );
 
-    $(connectButton.dom).on('click', function () {
+    $(connectButton.dom).click( function () {
+    	alert( editor.rtcid );
         if( editor.rtcid===null || editor.rtcid===undefined )
         	return;
         else
