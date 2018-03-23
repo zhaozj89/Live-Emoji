@@ -6,6 +6,54 @@
 
 var selfEasyrtcid = "";
 
+class RecommendedCMD {
+    constructor ( _key, _semantic, _valence, _arousal ) {
+        this.cell0 = document.createElement( 'td' );
+        this.cell1 = document.createElement( 'td' );
+        this.cell2 = document.createElement( 'td' );
+        this.cell3 = document.createElement( 'td' );
+
+        this.cell0.setAttribute( 'scope', 'col' );
+        this.cell1.setAttribute( 'scope', 'col' );
+        this.cell2.setAttribute( 'scope', 'col' );
+        this.cell3.setAttribute( 'scope', 'col' );
+
+        this.cell0.style.textAlign = 'center';
+        this.cell1.style.textAlign = 'center';
+        this.cell2.style.textAlign = 'center';
+        this.cell3.style.textAlign = 'center';
+
+        this.keyDiv = new UI.Text( _key );
+        this.semanticDiv = new UI.Text( _semantic );
+        this.valenceDiv = new UI.Text( _valence );
+        this.arousalDiv = new UI.Text( _arousal );
+
+        this.cell0.appendChild( this.keyDiv.dom );
+        this.cell1.appendChild( this.semanticDiv.dom );
+        this.cell2.appendChild( this.valenceDiv.dom );
+        this.cell3.appendChild( this.arousalDiv.dom );
+    }
+
+    updateInfo ( _key, _semantic, _valence, _arousal ) {
+        this.keyDiv.setValue( _key );
+        this.semanticDiv.setValue( _semantic );
+        this.valenceDiv.setValue( _valence );
+        this.arousalDiv.setValue( _arousal );
+    }
+
+    createDOM ( editor ) {
+
+        this.row = document.createElement( 'tr' );
+        this.row.appendChild( this.cell0 );
+        this.row.appendChild( this.cell1 );
+        this.row.appendChild( this.cell2 );
+        this.row.appendChild( this.cell3 );
+
+        return this.row;
+    }
+}
+
+
 function performCall ( otherEasyrtcid ) {
     easyrtc.hangupAll();
     let successCB = function () {};
@@ -95,7 +143,7 @@ function convertListToButtons ( roomName, data, isPrimary ) {
 
 	let rtcid = Object.keys( data )[ 0 ]; // Only allowing ONE client
 
-	alert( rtcid );
+	// alert( rtcid );
 
 	editor.rtcid = rtcid;
 
@@ -238,7 +286,7 @@ var VideoChat = function ( editor ) {
 	let callerPanel = new UI.Panel();
 	callerPanel.setWidth( '250px' );
 	callerPanel.setHeight( '200px' );
-	// callerPanel.setBackgroundColor( 'rgba(200, 200, 200, 0.8)' );
+	callerPanel.setBackgroundColor( 'rgba(120, 120, 120, 0.6)' );
 
 	studentView.add( callerPanel );
 
@@ -251,25 +299,98 @@ var VideoChat = function ( editor ) {
 
 	callerPanel.add( callerVideoStream );
 
-	// let otherClients = new UI.Div();
-	// otherClients.setId( 'otherClients' );
+    let recommendationPanel = new UI.Panel();
+    recommendationPanel.setPosition( 'absolute' );
+    recommendationPanel.setBottom( '30px' );
+    recommendationPanel.dom.width = 250;
+    recommendationPanel.setHeight( '100px' );
+    recommendationPanel.setBackgroundColor( 'rgba(0, 0, 0, 0)' );
+
+    callerPanel.add( recommendationPanel );
+
+    //
+
+    let table = document.createElement( "TABLE" );
+    table.style.class = 'table table-hover table-dark';
+    table.style.width = '100%';
+    let header = table.createTHead();
+    let headerRow = header.insertRow( 0 );
+
+    let headerCell0 = document.createElement( 'th' );
+    let headerCell1 = document.createElement( 'th' );
+    let headerCell2 = document.createElement( 'th' );
+    let headerCell3 = document.createElement( 'th' );
+
+    headerCell0.setAttribute( 'scope', 'col' );
+    headerCell1.setAttribute( 'scope', 'col' );
+    headerCell2.setAttribute( 'scope', 'col' );
+    headerCell3.setAttribute( 'scope', 'col' );
+
+    headerCell0.style.textAlign = 'center';
+    headerCell1.style.textAlign = 'center';
+    headerCell2.style.textAlign = 'center';
+    headerCell3.style.textAlign = 'center';
+
+    headerRow.appendChild( headerCell0 );
+    headerRow.appendChild( headerCell1 );
+    headerRow.appendChild( headerCell2 );
+    headerRow.appendChild( headerCell3 );
+
+    let keyDiv = new UI.Text( 'Key' );
+    let semanticDiv = new UI.Text( 'Semantic' );
+    let valenceDiv = new UI.Text( 'Valence' );
+    let arousalDiv = new UI.Text( 'Arousal' );
+
+    headerCell0.appendChild( keyDiv.dom );
+    headerCell1.appendChild( semanticDiv.dom );
+    headerCell2.appendChild( valenceDiv.dom );
+    headerCell3.appendChild( arousalDiv.dom );
+
+    recommendationPanel.dom.appendChild( table );
+
+    let body = table.createTBody();
+
+    let top0 = 	new RecommendedCMD( '','','','' );
+    let top1 = 	new RecommendedCMD( '','','','' );
+    let top2 = 	new RecommendedCMD( '','','','' );
+
+    let dom0 = top0.createDOM();
+    let dom1 = top1.createDOM();
+    let dom2 = top2.createDOM();
+
+    dom0.style.backgroundColor = 'chartreuse';
+    dom1.style.backgroundColor = 'crimson';
+    dom2.style.backgroundColor = 'aliceblue';
+
+    body.appendChild( dom0 );
+    body.appendChild( dom1 );
+    body.appendChild( dom2 );
 
     let connectButton = new UI.Button( 'Connect' );
     connectButton.setId( 'connectButton' );
     connectButton.setType( 'button' );
     connectButton.setWidth( '100%' );
     connectButton.dom.style.borderRadius = '5px';
-    // connectButton.setDisabled( 'connectButton' );
 
     $(connectButton.dom).click( function () {
-    	alert( editor.rtcid );
-        if( editor.rtcid===null || editor.rtcid===undefined )
+        if( editor.rtcid===null || editor.rtcid===undefined ) {
+        	alert( 'Peer computer is not set up!' );
         	return;
+		}
         else
         	performCall( editor.rtcid );
     });
 
 	studentView.add( connectButton );
+
+    editor.signals.displayRecommendationInAudienceView.add(function () {
+    	let row0 = editor.emotion_cmd_tablebody.rows[0];
+        let row1 = editor.emotion_cmd_tablebody.rows[1];
+        let row2 = editor.emotion_cmd_tablebody.rows[2];
+        top0.updateInfo( row0.cells[0].innerText, row0.cells[1].innerText, row0.cells[2].innerText, row0.cells[3].innerText );
+        top1.updateInfo( row1.cells[0].innerText, row1.cells[1].innerText, row1.cells[2].innerText, row1.cells[3].innerText );
+        top2.updateInfo( row2.cells[0].innerText, row2.cells[1].innerText, row2.cells[2].innerText, row2.cells[3].innerText );
+    });
 
 	//
 
@@ -308,6 +429,8 @@ var VideoChat = function ( editor ) {
 
 				overlayedPanel.setWidth( videoStreamWidth + 'px' );
 				callerPanel.setWidth( videoStreamWidth + 'px' );
+
+				recommendationPanel.setWidth( videoStreamWidth + 'px' );
 			}
 
 			videoStream.dom.onloadedmetadata = function () {

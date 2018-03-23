@@ -229,6 +229,8 @@ Sidebar.EmotionCMD = function ( editor ) {
 				editor.emotion_cmd_tablebody.rows[1].style.backgroundColor = 'crimson';
 				editor.emotion_cmd_tablebody.rows[2].style.backgroundColor = 'aliceblue';
 
+                editor.signals.displayRecommendationInAudienceView.dispatch();
+
 				if ( editor.autoMode === 0 ) {
 					let key = all_distprop[ 0 ].other.key;
 					if ( pre_key !== key ) {

@@ -43,6 +43,9 @@ var Editor = function () {
 
 	this.signals = {
 
+		// to communication view
+		displayRecommendationInAudienceView: new Signal(),
+
 		// particle
 		startParticleSignal: new Signal(),
 		finishParticleSignal: new Signal(),
