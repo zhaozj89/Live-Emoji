@@ -178,6 +178,16 @@ class DanmakuNode extends Node {
 		this.addInput( this.size );
 		this.size.setArg( '100' );
 
+		this.font = new LeafInput( 'Font: ' );
+		this.font.addSelectionInput( {
+			'cursive': 'cursive',
+			'fantasy': 'fantasy',
+			'monospace': 'monospace',
+			'unset': 'unset'
+		} );
+		this.addInput( this.font );
+		this.font.setArg( 'cursive' );
+
 		this.elasp = new LeafInput( 'Moving Time: ' );
 		this.elasp.addSelectionInput( {
 			'100': '100',
@@ -228,10 +238,11 @@ class DanmakuNode extends Node {
 		let text = this.text.getArg();
 		let color = this.color.getArg();
 		let size = Number( this.size.getArg() );
+		let font = this.font.getArg();
 		let elapse = Number( this.elasp.getArg() );
 		let manner = this.getManner( this.manner.getArg() );
 
-		this.danmakuController.display( text, color, size, elapse, manner );
+		this.danmakuController.display( text, color, size, font, elapse, manner );
 	}
 
 	toJSON () {
@@ -241,6 +252,7 @@ class DanmakuNode extends Node {
 			text: this.text.getArg(),
 			color: this.color.getArg(),
 			size: this.size.getArg(),
+			font: this.font.getArg(),
 			elapse: this.elasp.getArg(),
 			manner: this.manner.getArg()
 		};
@@ -252,6 +264,7 @@ class DanmakuNode extends Node {
 		this.text.setArg( state.text );
 		this.color.setArg( state.color );
 		this.size.setArg( state.size );
+		this.font.setArg( state.font );
 		this.elasp.setArg( state.elapse );
 		this.manner.setArg( state.manner );
 	}

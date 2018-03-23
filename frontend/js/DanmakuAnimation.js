@@ -4,10 +4,11 @@ class DanmakuController {
 		this.paper = editor.raphaelRenderer.paper;
 	}
 
-	display ( _text, _color, _size, _elapse, _manner ) {
+	display ( _text, _color, _size, _font, _elapse, _manner ) {
 		this.text = this.paper.text( _manner.sx, _manner.sy, _text );
 		this.text.attr( 'font-size', _size );
 		this.text.attr( 'fill', _color );
+		this.text.attr( 'font-family', _font );
 
 		this.text.animate( { x: _manner.ex, y: _manner.ey }, _elapse, 'bounce', deleteText );
 
@@ -49,6 +50,11 @@ var DanmakuAnimationCanvas = function ( editor ) {
 	editor.raphaelRenderer.paper.canvas.style.bottom = '0px';
 
 	editor.danmaku_animation = editor.raphaelRenderer.paper.canvas;
+
+	// test
+	// let text = editor.raphaelRenderer.paper.text( 400, 200, 'Good morning' );
+	// text.attr('font-size', 100);
+	// text.attr( 'font', 'sans-serif' );
 
 	// return container;
 };
