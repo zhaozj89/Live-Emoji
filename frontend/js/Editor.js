@@ -148,6 +148,8 @@ var Editor = function () {
 
 	this.videoStartButton = null;
 
+	this.rtcid = null;
+
 	// not care now
 
 	this.config = new Config( 'threejs-editor' );

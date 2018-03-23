@@ -6,6 +6,25 @@
 
 var selfEasyrtcid = "";
 
+function performCall ( otherEasyrtcid ) {
+    easyrtc.hangupAll();
+    let successCB = function () {};
+    let failureCB = function () {};
+    easyrtc.call( otherEasyrtcid, successCB, failureCB );
+}
+
+function sendStuffWS ( otherEasyrtcid, info ) {
+    easyrtc.sendDataWS( otherEasyrtcid, "message", info );
+}
+
+function loginSuccess ( easyrtcid ) {
+    selfEasyrtcid = easyrtcid;
+}
+
+function loginFailure ( errorCode, message ) {
+    easyrtc.showError( errorCode, message );
+}
+
 function addToConversation ( who, msgType, info ) {
 	// alert( 'Received message from ' + who + ', as: ' + content );
 
@@ -71,89 +90,21 @@ function connect () {
 	easyrtc.easyApp( "easyrtc.audioVideoSimple", "selfVideo", [ "callerVideo" ], loginSuccess, loginFailure );
 }
 
-function clearConnectList () {
-	var otherClientDiv = document.getElementById( 'otherClients' );
-	while ( otherClientDiv.hasChildNodes() ) {
-		otherClientDiv.removeChild( otherClientDiv.lastChild );
-	}
-}
-
 function convertListToButtons ( roomName, data, isPrimary ) {
-	// console.log(data);
-	clearConnectList();
-	var otherClientDiv = document.getElementById( 'otherClients' );
+	let connectButton = document.getElementById( 'connectButton' );
 
-	var rtcid = Object.keys( data )[ 0 ]; // Only allowing ONE client
+	let rtcid = Object.keys( data )[ 0 ]; // Only allowing ONE client
 
-	var button = document.createElement( 'button' );
-	button.onclick = function ( easyrtcid ) {
-		return function () {
-			performCall( easyrtcid );
+	alert( rtcid );
 
-			// sendStuffWS( easyrtcid );
-		};
-	}( rtcid );
-
-	var label = document.createTextNode( 'Connect' );
-	button.appendChild( label );
-	otherClientDiv.appendChild( button );
+	editor.rtcid = rtcid;
 
 	editor.signals.teacherSendInfo2Students.add( function ( info ) {
-		// console.log( info );
 		sendStuffWS( rtcid, info );
 	} );
-
-	// for ( var easyrtcid in data ) {
-	// 	var button = document.createElement( 'button' );
-	// 	button.onclick = function ( easyrtcid ) {
-	// 		return function () {
-	// 			performCall( easyrtcid );
-	//
-	// 			sendStuffWS( easyrtcid );
-	// 		};
-	// 	}( easyrtcid );
-	//
-	// 	// var label = document.createTextNode( 'Connect/Send to: ' + easyrtc.idToName( easyrtcid ) );
-	// 	var label = document.createTextNode( 'Connect' );
-	// 	button.appendChild( label );
-	// 	otherClientDiv.appendChild( button );
-	//
-	// 	editor.signals.teacherSendInfo2Students.add(function () {
-	//
-	//    });
-	// }
 }
 
-function sendStuffWS ( otherEasyrtcid, info ) {
-	// var text = 'Hello World!';
-
-	easyrtc.sendDataWS( otherEasyrtcid, "message", info );
-
-	// alert( 'Send to ' + easyrtc.idToName( otherEasyrtcid ) + ': ' + text );
-}
-
-function performCall ( otherEasyrtcid ) {
-	easyrtc.hangupAll();
-
-	var successCB = function () {
-	};
-	var failureCB = function () {
-	};
-	easyrtc.call( otherEasyrtcid, successCB, failureCB );
-
-	//
-}
-
-function loginSuccess ( easyrtcid ) {
-	selfEasyrtcid = easyrtcid;
-	// document.getElementById( "otherClients" ).innerHTML = "I am " + easyrtc.cleanId( easyrtcid );
-}
-
-function loginFailure ( errorCode, message ) {
-	easyrtc.showError( errorCode, message );
-}
-
-var VideoChar = function ( editor ) {
+var VideoChat = function ( editor ) {
 
 	signals = editor.signals;
 
@@ -229,7 +180,7 @@ var VideoChar = function ( editor ) {
 	overlayedPanel.add( videoStreamOverlay );
 
 	let startButton = new UI.Button( 'Start' );
-	startButton.setValue( 'wait, loading video' );
+	// startButton.setValue( 'wait, loading video' );
 	startButton.setId( 'startButton' );
 	startButton.setType( 'button' );
 	startButton.setWidth( '100%' );
@@ -287,6 +238,7 @@ var VideoChar = function ( editor ) {
 	let callerPanel = new UI.Panel();
 	callerPanel.setWidth( '250px' );
 	callerPanel.setHeight( '200px' );
+	// callerPanel.setBackgroundColor( 'rgba(200, 200, 200, 0.8)' );
 
 	studentView.add( callerPanel );
 
@@ -299,10 +251,24 @@ var VideoChar = function ( editor ) {
 
 	callerPanel.add( callerVideoStream );
 
-	let otherClients = new UI.Div();
-	otherClients.setId( 'otherClients' );
+	// let otherClients = new UI.Div();
+	// otherClients.setId( 'otherClients' );
 
-	studentView.add( otherClients );
+    let connectButton = new UI.Button( 'Connect' );
+    connectButton.setId( 'connectButton' );
+    connectButton.setType( 'button' );
+    connectButton.setWidth( '100%' );
+    connectButton.dom.style.borderRadius = '5px';
+    connectButton.setDisabled( 'connectButton' );
+
+    $(connectButton.dom).on('click', function () {
+        if( editor.rtcid===null || editor.rtcid===undefined )
+        	return;
+        else
+        	performCall( editor.rtcid );
+    });
+
+	studentView.add( connectButton );
 
 	//
 
