@@ -142,6 +142,8 @@ var Editor = function () {
 	this.emotionMutex = false;
 	this.facePositionMutex = false;
 
+	this.finishParticleFlag = true;
+
 	// not care now
 
 	this.config = new Config( 'threejs-editor' );

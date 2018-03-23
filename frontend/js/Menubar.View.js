@@ -35,7 +35,7 @@ Menubar.View = function ( editor ) {
 
 	var option = new UI.Row();
 	option.setClass( 'option' );
-	option.setTextContent( 'Teacher View' );
+	option.setTextContent( 'Performer View' );
 	option.onClick( function () {
 		editor.camera_view.setDisplay( '' );
 	} );
@@ -45,7 +45,7 @@ Menubar.View = function ( editor ) {
 
 	var option = new UI.Row();
 	option.setClass( 'option' );
-	option.setTextContent( 'Student View' );
+	option.setTextContent( 'Audience View' );
 	option.onClick( function () {
 		editor.student_view.setDisplay( '' );
 	} );

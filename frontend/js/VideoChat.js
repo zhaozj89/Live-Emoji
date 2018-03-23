@@ -166,7 +166,7 @@ var VideoChar = function ( editor ) {
 
 	editor.camera_viewport.add( cameraView );
 
-	let cameraViewHeader = new UI.Text( 'Teacher View' );
+	let cameraViewHeader = new UI.Text( 'Performer View' );
 	cameraViewHeader.setWidth( '100%' );
 	cameraViewHeader.setPadding( '10px' );
 	cameraViewHeader.dom.style.borderRadius = '5px';
@@ -253,7 +253,7 @@ var VideoChar = function ( editor ) {
 
 	editor.camera_viewport.add( studentView );
 
-	let studentViewHeader = new UI.Text( 'Student View' );
+	let studentViewHeader = new UI.Text( 'Audience View' );
 	studentViewHeader.setWidth( '100%' );
 	studentViewHeader.setPadding( '10px' );
 	studentViewHeader.dom.style.borderRadius = '5px';
@@ -704,7 +704,12 @@ var VideoChar = function ( editor ) {
 				emotions[ 5 ] = { value: outputData.output[ 5 ], label: 'surprised' };
 				emotions[ 6 ] = { value: outputData.output[ 6 ], label: 'neutral' };
 
-				signals.updateRecommendation.dispatch( outputData.output[ 3 ] );
+				let valence_level = {
+					'happy': outputData.output[ 3 ],
+					'sad': outputData.output[ 4 ]
+				};
+
+				signals.updateRecommendation.dispatch( valence_level );
 
 				var emotionvalue = '';
 				var mostPossible = '';

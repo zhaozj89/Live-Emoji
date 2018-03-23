@@ -20,7 +20,7 @@ var SidebarRight = function ( editor ) {
 	valenceView.dom.style.padding = '5px';
 
 	var valenceImg = document.createElement( "img" );
-	valenceImg.src = './asset/valence_new/1.png';
+	valenceImg.src = './asset/valence_new/5.png';
 	valenceImg.style.verticalAlign = 'middle';
 	valenceView.dom.appendChild( valenceImg );
 
@@ -28,7 +28,7 @@ var SidebarRight = function ( editor ) {
 	valenceText.setId( 'valenceText' );
 	valenceText.setWidth( '20px' );
 	valenceText.setHeight( '20px' );
-	valenceText.setTextContent( '0' );
+	valenceText.setTextContent( '5' );
 	valenceText.setBackgroundColor('yellow');
 	valenceText.setMargin('5px');
 	valenceText.setMarginLeft('90px');
@@ -59,7 +59,7 @@ var SidebarRight = function ( editor ) {
 	heartValueText.setId( 'heartValueText' );
 	heartValueText.setWidth( '40px' );
 	heartValueText.setHeight( '20px' );
-	heartValueText.setTextContent( '1' );
+	heartValueText.setTextContent( '70' );
 	heartValueText.setBackgroundColor('red');
 	heartValueText.setMargin('5px');
 	heartValueText.setMarginLeft('80px');
@@ -80,14 +80,14 @@ var SidebarRight = function ( editor ) {
 		let heart = document.getElementsByClassName( 'heart' )[ 0 ];
 
 		$( "#heartSlider" ).slider( {
-			value: 1,
-			min: 1,
-			max: 100,
+			value: 70,
+			min: 50,
+			max: 90,
 			slide: function ( event, ui ) {
 				editor.msgInputArousal = Number( ui.value );
 
 				$( heartValueText.dom ).text( ui.value );
-				let val = -19 * ui.value + 1981;
+				let val = -15 * ui.value + 2100;
 				heart.style.animation = val + 'ms pulsate infinite alternate ease-in-out';
 
 				if( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
@@ -97,14 +97,14 @@ var SidebarRight = function ( editor ) {
 		} );
 
 		$( "#valenceSlider" ).slider( {
-			value: 0,
-			min: 0,
-			max: 8,
+			value: 5,
+			min: 1,
+			max: 9,
 			slide: function ( event, ui ) {
 				editor.msgInputValence = Number( ui.value );
 
 				$( valenceText.dom ).text( ui.value );
-				let res = ui.value + 1;
+				let res = ui.value;
 				valenceImg.src = './asset/valence_new/' + res + '.png';
 
 				if( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
@@ -116,19 +116,30 @@ var SidebarRight = function ( editor ) {
 
 	editor.signals.updateRecommendation.add( function ( valence_level ) {
 		if ( editor.usageMode === 0 ) {
-			let valence = Math.floor( valence_level * 8 );
+
+			let valence = null;
+			if( valence_level['happy']>valence_level['sad'] ) {
+				valence = Math.floor( valence_level['happy']*4 ) + 5;
+			}
+			else {
+				valence = Math.floor( valence_level['sad']*4 ) + 1;
+			}
 
 			$( valenceText.dom ).text( valence );
 			$( "#valenceSlider" ).slider( 'value', valence );
-			valence += 1;
 			valenceImg.src = './asset/valence_new/' + valence + '.png';
 		}
 		else {
-			let valence = Math.floor( valence_level * 8 );
+			let valence = null;
+			if( valence_level['happy']>valence_level['sad'] ) {
+				valence = Math.floor( valence_level['happy']*4 ) + 5;
+			}
+			else {
+				valence = Math.floor( valence_level['sad']*4 ) + 1;
+			}
 
 			$( valenceText.dom ).text( valence );
 			$( "#valenceSlider" ).slider( 'value', valence );
-			valence += 1;
 			valenceImg.src = './asset/valence_new/' + valence + '.png';
 
 			if( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {

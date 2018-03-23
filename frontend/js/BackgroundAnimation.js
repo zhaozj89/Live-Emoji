@@ -53,6 +53,11 @@ class BackgroundAnimationController {
 
 	display () {
 		this.emitter.emit( 'once' );
+
+		let that = this;
+		// setTimeout( function (  ) {
+		// 	that.editor.finishParticleFlag = true;
+		// }, 500 );
 	}
 }
 

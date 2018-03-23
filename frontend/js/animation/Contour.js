@@ -68,13 +68,17 @@ var ZContour = function ( png ) {
 		return ( pixel[ 0 ] + pixel[ 1 ] + pixel[ 2 ] ) > 0;
 	}
 
-	let points_out = MarchingSquares( grid_function, width, height );
+	let points_out_clone = MarchingSquares( grid_function, width, height );
 
+	let points_out = [];
 	let contour = new Array();
-	for ( let i = 0; i < points_out.length; ++i ) {
-		points_out[ i ][ 0 ] = points_out[ i ][ 0 ] / width;
-		points_out[ i ][ 1 ] = points_out[ i ][ 1 ] / height;
-		contour.push( { x: points_out[ i ][ 0 ], y: points_out[ i ][ 1 ], id: i } );
+	let idx = 0;
+	for ( let i = 0; i < points_out_clone.length; ++i ) {
+		let _x = points_out_clone[ i ][ 0 ] / width;
+		let _y = points_out_clone[ i ][ 1 ] / height;
+		points_out.push( [_x, _y] );
+		contour.push( { x: _x, y: _y, id: idx } );
+		idx++;
 		// console.log(contour[i][0]/width + ' ' + contour[i][1]/height);
 	}
 

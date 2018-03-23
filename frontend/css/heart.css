@@ -14,7 +14,7 @@
     animation-dely:1s;
 }
 .heart.animated {
-    animation: 10000ms pulsate infinite alternate ease-in-out;
+    animation: 1050ms pulsate infinite alternate ease-in-out;
 }
 .heart:before,
 .heart:after {

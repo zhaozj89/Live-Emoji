@@ -172,7 +172,14 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 		if ( editor.usageMode === 0 ) {
 			let arousal = editor.msgInputArousal; // 1 - 100
-			let valence = valence_level; // 0 - 1
+
+			let valence = null; // 0 - 1
+			if( valence_level['happy']>valence_level['sad'] ) {
+				valence = Math.floor( valence_level['happy']*4 ) + 5;
+			}
+			else {
+				valence = Math.floor( valence_level['sad']*4 ) + 1;
+			}
 
 			let all_distprop = [];
 			for ( let prop in editor.emotionCMDManager.allCMDs ) {
@@ -224,9 +231,11 @@ Sidebar.EmotionCMD = function ( editor ) {
 
 				if ( editor.autoMode === 0 ) {
 					let key = all_distprop[ 0 ].other.key;
-					if ( pre_key !== key ) {
+					if ( editor.finishParticleFlag===true ) {
 						editor.emotionCMDManager.allCMDs[ key ].run( key );
 						pre_key = key;
+
+						editor.finishParticleFlag = false;
 					}
 				}
 				else {
