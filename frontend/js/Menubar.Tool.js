@@ -58,37 +58,6 @@ Menubar.Tool = function ( editor ) {
 	} );
 	options.add( option );
 
-	// Teacher
-
-	var option = new UI.Row();
-	option.setClass( 'option' );
-	option.setTextContent( 'Teacher Layout' );
-	option.onClick( function () {
-		editor.teacherLabel.dom.click();
-		editor.signals.windowResize.dispatch();
-	} );
-	options.add( option );
-
-	// load
-
-	var option = new UI.Row();
-	option.setClass( 'option' );
-	option.setTextContent( 'Load Boy' );
-	option.onClick( function () {
-		PreLoadCharacterJSON( editor, 'boy' );
-	} );
-	options.add( option );
-
-	//
-
-	var option = new UI.Row();
-	option.setClass( 'option' );
-	option.setTextContent( 'Load Girl' );
-	option.onClick( function () {
-		PreLoadCharacterJSON( editor, 'girl' );
-	} );
-	options.add( option );
-
 	return container;
 
 };

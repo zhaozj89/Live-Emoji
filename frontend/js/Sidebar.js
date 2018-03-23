@@ -42,9 +42,10 @@ var Sidebar = function ( editor ) {
 	let studentLabel = new UI.Label();
 	studentLabel.addClass( 'btn' );
 	studentLabel.addClass( 'btn-secondary' );
+	studentLabel.setWidth( '135px' );
 	studentLabel.setFontSize( '10' );
 	roleSideButtons.add( studentLabel );
-	studentLabel.dom.innerHTML = 'Student';
+	studentLabel.dom.innerHTML = 'Audience';
 
 	let studentInput = new UI.Input( '' );
 	studentInput.setPadding( '0px' );
@@ -57,9 +58,10 @@ var Sidebar = function ( editor ) {
 	let teacherLabel = new UI.Label();
 	teacherLabel.addClass( 'btn' );
 	teacherLabel.addClass( 'btn-secondary' );
+	teacherLabel.setWidth( '135px' );
 	teacherLabel.addClass( 'active' );
 	roleSideButtons.add( teacherLabel );
-	teacherLabel.dom.innerHTML = 'Teacher';
+	teacherLabel.dom.innerHTML = 'Performer';
 
 	let teacherInput = new UI.Input( '' );
 	teacherInput.dom.setAttribute( 'type', 'radio' );
@@ -82,6 +84,7 @@ var Sidebar = function ( editor ) {
 	let liveAnimationLabel = new UI.Label();
 	liveAnimationLabel.addClass( 'btn' );
 	liveAnimationLabel.addClass( 'btn-secondary' );
+	liveAnimationLabel.setWidth( '135px' );
 	usageButtons.add( liveAnimationLabel );
 	liveAnimationLabel.dom.innerHTML = 'Live Animation';
 
@@ -94,6 +97,7 @@ var Sidebar = function ( editor ) {
 	let preEditLabel = new UI.Label();
 	preEditLabel.addClass( 'btn' );
 	preEditLabel.addClass( 'btn-secondary' );
+	preEditLabel.setWidth( '135px' );
 	preEditLabel.addClass( 'active' );
 	usageButtons.add( preEditLabel );
 	preEditLabel.dom.innerHTML = 'Command Edit';
@@ -116,6 +120,7 @@ var Sidebar = function ( editor ) {
 	let autoLabel = new UI.Label();
 	autoLabel.addClass( 'btn' );
 	autoLabel.addClass( 'btn-secondary' );
+	autoLabel.setWidth( '135px' );
 	triggerButtons.add( autoLabel );
 	autoLabel.dom.innerHTML = 'Auto Trigger';
 
@@ -128,6 +133,7 @@ var Sidebar = function ( editor ) {
 	let manualLabel = new UI.Label();
 	manualLabel.addClass( 'btn' );
 	manualLabel.addClass( 'btn-secondary' );
+	manualLabel.setWidth( '135px' );
 	manualLabel.addClass( 'active' );
 	triggerButtons.add( manualLabel );
 	manualLabel.dom.innerHTML = 'Manual';
@@ -151,6 +157,7 @@ var Sidebar = function ( editor ) {
 	boyLabel.addClass( 'btn' );
 	boyLabel.addClass( 'btn-secondary' );
 	boyLabel.addClass( 'active' );
+	boyLabel.setWidth( '135px' );
 	characterButtons.add( boyLabel );
 	boyLabel.dom.innerHTML = 'Boy';
 
@@ -163,6 +170,7 @@ var Sidebar = function ( editor ) {
 	let girlLabel = new UI.Label();
 	girlLabel.addClass( 'btn' );
 	girlLabel.addClass( 'btn-secondary' );
+	girlLabel.setWidth( '135px' );
 	characterButtons.add( girlLabel );
 	girlLabel.dom.innerHTML = 'Girl';
 
@@ -175,57 +183,89 @@ var Sidebar = function ( editor ) {
 	studentLabel.dom.onclick = function () {
 		editor.roleMode = 0;
 		UpdateRoleMode( editor );
-		// liveAnimationLabel.dom.click();
+
+		studentLabel.setOpacity( '1' );
+		teacherLabel.setOpacity( '0.2' );
 	}
 
 	teacherLabel.dom.onclick = function () {
 		editor.roleMode = 1;
 		UpdateRoleMode( editor );
-		// preEditLabel.dom.click();
+
+		studentLabel.setOpacity( '0.2' );
+		teacherLabel.setOpacity( '1' );
 	}
 
 	liveAnimationLabel.dom.onclick = function () {
 		editor.usageMode = 0;
 		UpdateUsageMode( editor );
+
+		liveAnimationLabel.setOpacity( '1' );
+		preEditLabel.setOpacity( '0.2' );
 	}
 
 	preEditLabel.dom.onclick = function () {
 		editor.usageMode = 1;
 		UpdateUsageMode( editor );
+
+		liveAnimationLabel.setOpacity( '0.2' );
+		preEditLabel.setOpacity( '1' );
 	}
 
 	autoLabel.dom.onclick = function () {
 		editor.autoMode = 0;
+
+		autoLabel.setOpacity( '1' );
+		manualLabel.setOpacity( '0.2' );
 	}
 
 	manualLabel.dom.onclick = function () {
 		editor.autoMode = 1;
+
+		autoLabel.setOpacity( '0.2' );
+		manualLabel.setOpacity( '1' );
 	}
 
 	boyLabel.dom.onclick = function () {
-		if( editor.boy===null )
+		if( editor.boy===null ) {
 			alert( 'Please load the boy character first!' );
+			return;
+		}
 
 		editor.selected = editor.boy;
 		editor.boy.visible = true;
 
 		if( editor.girl!==null )
 			editor.girl.visible = false;
+
+		boyLabel.setOpacity( '1' );
+		girlLabel.setOpacity( '0.2' );
 	}
 
 	girlLabel.dom.onclick = function () {
-		if( editor.girl===null )
+		if( editor.girl===null ) {
 			alert( 'Please load the girl character first!' );
+			return;
+		}
 
 		editor.selected = editor.girl;
 		editor.girl.visible = true;
 
 		if( editor.boy!==null )
 			editor.boy.visible = false;
+
+		boyLabel.setOpacity( '0.2' );
+		girlLabel.setOpacity( '1' );
 	}
+
+	teacherLabel.setOpacity( '1' );
+	studentLabel.setOpacity( '0.2' );
 
 	preEditLabel.dom.click();
 	manualLabel.dom.click();
+
+	boyLabel.setOpacity( '1' );
+	girlLabel.setOpacity( '0.2' );
 
 	//
 
