@@ -4,6 +4,10 @@
 
 var Editor = function () {
 
+	this.runAtLeastOneCMD = false;
+
+	this.currentEditedKey = null;
+
 	//
 	this.boyLoaded = false;
 	this.girlLoaded = false;

@@ -16,6 +16,7 @@ class DanmakuController {
 		function deleteText () {
 			that.paper.clear();
 
+			console.log( 'text+' );
 			editor.emotionCMDDurationMutex += 1;
 		}
 	}

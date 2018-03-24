@@ -125,13 +125,15 @@ class NodeSession {
 
 		if ( key === keycode ) {
 
-			if( this.editor.emotionCMDDurationMutex === 2 ) {
+			if( this.editor.emotionCMDDurationMutex >= 2 ) {
 				this.editor.emotionCMDDurationMutex = 0;
 
 				// editor.background_animation.dom.style.zIndex = '3'; // this is weird, but necessary
 			}
 			else
 				return;
+
+			this.editor.runAtLeastOneCMD = true;
 
 			let trigger_node_children = this.triggerNode.getChildren();
 			for ( let i = 0; i < trigger_node_children.length; ++i ) {

@@ -19,6 +19,8 @@ class EmotionCMDManager {
 
 		let nodeSession = new NodeSession( this.editor );
 		this.currentNodeSession = nodeSession;
+
+		this.editor.currentEmitter = null;
 	}
 
 	cleanSVG () {

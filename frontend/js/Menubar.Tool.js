@@ -29,6 +29,8 @@ Menubar.Tool = function ( editor ) {
 			editor.backgroundSprite.position.x = 0;
 			editor.backgroundSprite.position.y = 0;
 		}
+
+		editor.emotionCMDDurationMutex = 2;
 	} );
 	options.add( option );
 

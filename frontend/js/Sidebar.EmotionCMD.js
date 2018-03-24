@@ -54,19 +54,39 @@ class EmotionCMDThreeDOM {
 	createEmotionCMDThreeDOM ( editor ) {
 
 		let that = this;
+		let thatKey = this.keyDiv.getValue();
 		this.editButton.onClick( function () {
-			for ( let i = 0; i < Global_All_DOM_In_SVG.length; ++i ) {
-				Global_All_DOM_In_SVG[ i ].remove();
+
+			if( editor.currentEditedKey===thatKey ) {
+				editor.node_editor.setDisplay( '' );
 			}
-			$( Global_Graph_SVG ).empty();
+			else {
+				editor.currentEditedKey = thatKey;
 
-			let nodeSession = new NodeSession( editor );
-			nodeSession.fromJSON( JSON.parse( that.nodeString ) );
-			editor.emotionCMDManager.currentNodeSession = nodeSession;
+				for ( let i = 0; i < Global_All_DOM_In_SVG.length; ++i ) {
+					Global_All_DOM_In_SVG[ i ].remove();
+				}
+				$( Global_Graph_SVG ).empty();
 
-			editor.node_editor.setDisplay( '' );
+				var nodeSession = new NodeSession( editor );
+				nodeSession.fromJSON( JSON.parse( that.nodeString ) );
+				editor.emotionCMDManager.currentNodeSession = nodeSession;
 
-			that.editButton.dom.click();
+				editor.node_editor.setDisplay( '' );
+
+				for ( let i = 0; i < Global_All_DOM_In_SVG.length; ++i ) {
+					Global_All_DOM_In_SVG[ i ].remove();
+				}
+				$( Global_Graph_SVG ).empty();
+
+				var nodeSession = new NodeSession( editor );
+				nodeSession.fromJSON( JSON.parse( that.nodeString ) );
+				editor.emotionCMDManager.currentNodeSession = nodeSession;
+
+				editor.currentEmitter = null;
+
+				editor.node_editor.setDisplay( '' );
+			}
 		} );
 
 		this.deleteButton.onClick( function () {

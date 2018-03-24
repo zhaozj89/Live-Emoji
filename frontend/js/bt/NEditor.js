@@ -68,6 +68,20 @@ var NEditor = function ( editor ) {
 	close.setCursor( 'pointer' );
 	close.onClick( function () {
 
+		if( editor.emotionCMDManager.currentNodeSession.triggerNode!==null ) {
+			if( editor.currentEditedKey===editor.emotionCMDManager.currentNodeSession.triggerNode.key.getArg() ) {
+				editor.emotionCMDManager.save();
+				container.setDisplay( 'none' );
+				return;
+			}
+		}
+
+		if (confirm('Save the emotion command?')) {
+			editor.emotionCMDManager.save();
+		} else {
+			// Do nothing!
+		}
+
 		container.setDisplay( 'none' );
 
 	} );
@@ -251,7 +265,7 @@ var NEditor = function ( editor ) {
 		container.setDisplay( 'none' );
 	} );
 
-	signals.editEmotionCMD.add( function ( character ) {
+	signals.editEmotionCMD.add( function () {
 		container.setDisplay( '' );
 	} );
 

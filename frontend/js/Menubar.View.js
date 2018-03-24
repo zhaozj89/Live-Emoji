@@ -25,9 +25,7 @@ Menubar.View = function ( editor ) {
 	option.setClass( 'option' );
 	option.setTextContent( 'Emotion Editor' );
 	option.onClick( function () {
-
-		let object = editor.selected;
-		signals.editEmotionCMD.dispatch( object );
+		signals.editEmotionCMD.dispatch();
 	} );
 	options.add( option );
 

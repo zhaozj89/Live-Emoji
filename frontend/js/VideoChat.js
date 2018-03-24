@@ -586,8 +586,6 @@ var VideoChat = function ( editor ) {
 					res.x *= 10;
 					res.y *= 10;
 
-					console.log( res );
-
 					signals.followFace.dispatch( res );
 				}
 			}

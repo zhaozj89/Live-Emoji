@@ -97,11 +97,18 @@ class ParticleNode extends Node {
 		this.emitterY.addTextLabel( editor.protonPixi4Renderer.height / 2 );
 		this.addInput( this.emitterY );
 
+		this.manner = new LeafInput( 'Manner: ' );
+		this.manner.addSelectionInput( {
+			'rain': 'rain',
+			'explode': 'explode',
+			'jet': 'jet'
+		} );
+		this.addInput( this.manner );
+		this.manner.setArg( 'explode' );
+
 		this.addOutput();
 
 		this.particleController = new BackgroundAnimationController( editor, this.emitterX, this.emitterY );
-
-		this.editor.currentEmitter = this.particleController.emitter;
 
 		let that = this;
 		this.domElement.onclick = function (  ) {
@@ -127,6 +134,7 @@ class ParticleNode extends Node {
 		this.particleController.updateEmitter(
 			this.image.getArg(),
 			this.mass.getArg(),
+			this.manner.getArg(),
 			this.emitterX.getArg(),
 			this.emitterY.getArg() );
 		this.particleController.display();
@@ -138,6 +146,7 @@ class ParticleNode extends Node {
 			offset: this.getOffset(),
 			image: this.image.getArg(),
 			mass: this.mass.getArg(),
+			manner: this.manner.getArg(),
 			emitterX: this.emitterX.getArg(),
 			emitterY: this.emitterY.getArg()
 		};
@@ -148,6 +157,7 @@ class ParticleNode extends Node {
 		this.setOffset( state.offset );
 		this.image.setArg( state.image );
 		this.mass.setArg( state.mass );
+		this.manner.setArg( state.manner );
 		this.emitterX.setArg( state.emitterX );
 		this.emitterY.setArg( state.emitterY );
 	}
@@ -397,7 +407,6 @@ class ViberationNode extends Node {
 			tween0.chain( tween1 );
 			tween0.chain( tween2 );
 			tween0.repeat( 10 );
-			tween0.start();
 
 			if ( component === 'puppet' ) {
 				let that = this;
@@ -406,6 +415,8 @@ class ViberationNode extends Node {
 					that.editor.emotionMutex = false;
 				}, 2000 );
 			}
+
+			tween0.start();
 		}
 	}
 }
