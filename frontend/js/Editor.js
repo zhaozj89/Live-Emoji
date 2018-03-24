@@ -4,6 +4,9 @@
 
 var Editor = function () {
 
+	// one emotion command is finished
+	this.emotionCMDDurationMutex = 2;
+
 	// Mode
 	this.roleMode = 1; // 0: student, 1: teacher
 	this.usageMode = 1; // 0: live animation, 1: pre-edit
@@ -48,10 +51,6 @@ var Editor = function () {
 
 		// to communication view
 		displayRecommendationInAudienceView: new Signal(),
-
-		// particle
-		startParticleSignal: new Signal(),
-		finishParticleSignal: new Signal(),
 
 		add2Scene: new Signal(),
 

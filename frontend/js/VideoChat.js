@@ -548,14 +548,16 @@ var VideoChat = function ( editor ) {
 
 	let fpsInterval, now, then, elapsed;
 
+
 	function MainLoop () {
 		requestId = undefined;
 
-		now = Date.now();
-		elapsed = now - then;
+		// now = Date.now();
+		// elapsed = now - then;
 
-		// if ( elapsed > fpsInterval ) {
-			then = now - ( elapsed % fpsInterval );
+		if( editor.emotionCMDDurationMutex===2 ) {
+			// if ( elapsed > fpsInterval ) {
+			// 	then = now - ( elapsed % fpsInterval );
 
 			// predict
 			pred = FaceTracker.predict();
@@ -590,8 +592,10 @@ var VideoChat = function ( editor ) {
 
 			DrawLandmark();
 
-			StartMainLoop();
-		// }
+
+			// }
+		}
+		StartMainLoop();
 	}
 
 	function StartMainLoop () {
@@ -606,18 +610,6 @@ var VideoChat = function ( editor ) {
 			requestId = undefined;
 		}
 	}
-
-	editor.signals.startParticleSignal.add(function (  ) {
-		if( startButton.dom.textContent = 'Stop' ) {
-			TurnONOFFFaceTracking();
-		}
-	});
-
-	editor.signals.finishParticleSignal.add(function (  ) {
-		if( startButton.dom.textContent === 'Start' ) {
-			TurnONOFFFaceTracking();
-		}
-	});
 
 	editor.videoStartButton = startButton;
 

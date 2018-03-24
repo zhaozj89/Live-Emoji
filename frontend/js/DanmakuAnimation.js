@@ -15,31 +15,13 @@ class DanmakuController {
 		let that = this;
 		function deleteText () {
 			that.paper.clear();
+
+			editor.emotionCMDDurationMutex += 1;
 		}
 	}
 }
 
 var DanmakuAnimationCanvas = function ( editor ) {
-
-	// let container = new UI.Panel();
-	// container.setId( 'DanmakuAnimation' );
-	// container.setPosition( 'absolute' );
-	// container.setTop( '40px' );
-	// container.setLeft( '300px' );
-	// container.setRight( '200px' );
-	// container.setBottom( '0px' );
-	// container.setOpacity( 0.9 );
-	// container.dom.style.zIndex = "2";
-
-	// editor.danmaku_animation = container;
-
-	// let canvas = new UI.Canvas();
-	// canvas.setId( 'DanmakuAnimationCanvas' );
-	// canvas.setPosition( 'absolute' );
-	// canvas.dom.style.width = '100%';
-	// canvas.dom.style.height = '100%';
-
-	// container.add( canvas );
 
 	editor.raphaelRenderer.paper = Raphael( editor.raphaelRenderer.left, editor.raphaelRenderer.top, editor.raphaelRenderer.width, editor.raphaelRenderer.height );
 
@@ -64,5 +46,5 @@ var DanmakuAnimationCanvas = function ( editor ) {
 	// text.attr('font-size', 100);
 	// text.attr( 'font', 'sans-serif' );
 
-	// return container;
+	return editor.raphaelRenderer.paper.canvas;
 };

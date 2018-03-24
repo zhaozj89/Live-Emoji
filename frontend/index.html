@@ -167,7 +167,8 @@
 	var backgroundAnimationCanvas = new BackgroundAnimationCanvas( editor );
 	document.body.appendChild( backgroundAnimationCanvas.dom );
 
-	DanmakuAnimationCanvas( editor );
+	var danmarkuAnimationCanvasDOM = DanmakuAnimationCanvas( editor );
+	document.body.appendChild( danmarkuAnimationCanvasDOM );
 
 	var sidebar = new Sidebar( editor );
 	document.body.appendChild( sidebar.dom );

@@ -125,6 +125,12 @@ class NodeSession {
 
 		if ( key === keycode ) {
 
+			if( this.editor.emotionCMDDurationMutex === 2 ) {
+				this.editor.emotionCMDDurationMutex = 0;
+			}
+			else
+				return;
+
 			let trigger_node_children = this.triggerNode.getChildren();
 			for ( let i = 0; i < trigger_node_children.length; ++i ) {
 

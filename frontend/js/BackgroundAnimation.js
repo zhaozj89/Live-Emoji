@@ -36,6 +36,8 @@ class BackgroundAnimationController {
 		let mass = 1 / Number( _mass );
 		this.emitter.addInitialize( new Proton.Mass( mass ) );
 
+		this.emitter.addInitialize(new Proton.Life(1, 3));
+
 		this.emitter.p.x = Number( _X );
 		this.emitter.p.y = Number( _Y );
 
@@ -52,18 +54,7 @@ class BackgroundAnimationController {
 	}
 
 	display () {
-		let content = this.editor.videoStartButton.dom.textContent;
-
-		this.editor.signals.startParticleSignal.dispatch();
-
 		this.emitter.emit( 'once' );
-
-		if( content==='Stop' ) {
-			let that = this;
-			setTimeout( function (  ) {
-				this.editor.signals.finishParticleSignal.dispatch();
-			}, 3000 );
-		}
 	}
 }
 
@@ -76,29 +67,22 @@ var BackgroundAnimationCanvas = function ( editor ) {
 	container.setLeft( '300px' );
 	container.setRight( '200px' );
 	container.setOpacity( 0.9 );
-	container.dom.style.zIndex = "3";
+	container.dom.style.zIndex = "2";
 
 	editor.background_animation = container;
 
-	// let width = editor.protonPixi4Renderer.width;
-	// let height = editor.protonPixi4Renderer.height;
+	editor.protonPixi4Renderer.proton = new Proton();
+	console.log( editor.protonPixi4Renderer.proton.emitters );
 
     $( function(){
         let width = document.getElementById('viewport').clientWidth;
         let height = document.getElementById('viewport').clientHeight;
 
         // initialize proton in editor
-        editor.protonPixi4Renderer.app = new PIXI.Application( width, height, { autoStart: true, transparent: true } );
+        editor.protonPixi4Renderer.app = new PIXI.Application( width, height, { transparent: true } );
         container.dom.appendChild( editor.protonPixi4Renderer.app.view );
 
-        editor.protonPixi4Renderer.proton = new Proton();
         editor.protonPixi4Renderer.proton.addRenderer( new Proton.PixiRenderer( editor.protonPixi4Renderer.app.stage ) );
-
-        // editor.protonPixi4Renderer.app.view.style.left = '300px';
-        // editor.protonPixi4Renderer.app.view.style.right = '200px';
-        // editor.protonPixi4Renderer.app.view.style.top = '40px';
-        // editor.protonPixi4Renderer.app.view.style.bottom = '0px';
-        // editor.protonPixi4Renderer.app.view.style.backgroundColor = 'black';
 
         function backgroundUpdate () {
             requestAnimationFrame( backgroundUpdate );
@@ -110,12 +94,19 @@ var BackgroundAnimationCanvas = function ( editor ) {
 
         LoadEmotionCMDJSONFile( editor, 'test.json' );
 
-
-        ///
-
 		// let emitter = new Proton.BehaviourEmitter();
 		// editor.protonPixi4Renderer.proton.addEmitter( emitter );
-		// emitter.emit( 'once' );
+		// emitter.emit(  );
+
+		editor.protonPixi4Renderer.proton.addEventListener(Proton.PARTICLE_DEAD, function(particle) {
+
+			let num = editor.protonPixi4Renderer.proton.getCount();
+
+			if( num===1 ) {
+				editor.emotionCMDDurationMutex += 1;
+			}
+		});
+
     } );
 
 	return container;
