@@ -127,6 +127,8 @@ class NodeSession {
 
 			if( this.editor.emotionCMDDurationMutex === 2 ) {
 				this.editor.emotionCMDDurationMutex = 0;
+
+				// editor.background_animation.dom.style.zIndex = '3'; // this is weird, but necessary
 			}
 			else
 				return;

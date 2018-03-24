@@ -232,6 +232,12 @@ var Sidebar = function ( editor ) {
 	}
 
 	boyLabel.dom.onclick = function () {
+
+		if( editor.boyLoaded===false ) {
+			alert( 'Please load boy character first!' );
+			return;
+		}
+
 		if( editor.boy!==null ) {
 			editor.selected = editor.boy;
 			editor.boy.visible = true;
@@ -248,6 +254,12 @@ var Sidebar = function ( editor ) {
 	}
 
 	girlLabel.dom.onclick = function () {
+
+		if( editor.girlLoaded===false ) {
+			alert( 'Please load girl character first!' );
+			return;
+		}
+
 		if( editor.girl!==null ) {
 			editor.selected = editor.girl;
 			editor.girl.visible = true;

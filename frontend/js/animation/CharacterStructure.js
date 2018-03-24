@@ -66,6 +66,14 @@ CharacterStructure.prototype.constructor = CharacterStructure;
 
 CharacterStructure.prototype.check = function () {
 	if ( this.isCompleted === 50 ) {
+		if( this.name==='boy' ) {
+			this.editor.boyLoaded = true;
+			this.editor.boyLabel.dom.click();
+		}
+		if( this.name==='girl' ) {
+			this.editor.girlLoaded = true;
+			this.editor.girlLabel.dom.click();
+		}
 		this.editor.signals.add2Scene.dispatch( this );
 	}
 };

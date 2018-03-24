@@ -399,11 +399,13 @@ class ViberationNode extends Node {
 			tween0.repeat( 10 );
 			tween0.start();
 
-			let that = this;
-			that.editor.facePositionMutex = true;
-			setTimeout( function () {
-				that.editor.emotionMutex = false;
-			}, 2000 );
+			if ( component === 'puppet' ) {
+				let that = this;
+				that.editor.facePositionMutex = true;
+				setTimeout( function () {
+					that.editor.emotionMutex = false;
+				}, 2000 );
+			}
 		}
 	}
 }

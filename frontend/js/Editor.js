@@ -4,6 +4,10 @@
 
 var Editor = function () {
 
+	//
+	this.boyLoaded = false;
+	this.girlLoaded = false;
+
 	// one emotion command is finished
 	this.emotionCMDDurationMutex = 2;
 

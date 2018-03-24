@@ -67,7 +67,7 @@ var BackgroundAnimationCanvas = function ( editor ) {
 	container.setLeft( '300px' );
 	container.setRight( '200px' );
 	container.setOpacity( 0.9 );
-	container.dom.style.zIndex = "2";
+	container.dom.style.zIndex = "3";
 
 	editor.background_animation = container;
 

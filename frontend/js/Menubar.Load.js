@@ -20,7 +20,6 @@ Menubar.Load = function ( editor ) {
 	option.setTextContent( 'Load Boy' );
 	option.onClick( function () {
 		PreLoadCharacterJSON( editor, 'boy' );
-		editor.boyLabel.dom.click();
 	} );
 	options.add( option );
 
@@ -31,7 +30,6 @@ Menubar.Load = function ( editor ) {
 	option.setTextContent( 'Load Girl' );
 	option.onClick( function () {
 		PreLoadCharacterJSON( editor, 'girl' );
-		editor.girlLabel.dom.click();
 	} );
 	options.add( option );
 
