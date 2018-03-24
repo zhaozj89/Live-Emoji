@@ -36,7 +36,7 @@ var NEditor = function ( editor ) {
 	let container = new UI.Panel();
 	container.setId( 'nEditor' );
 	container.setPosition( 'absolute' );
-	container.setBackgroundColor( 'rgba(20,20,20,0.6)' );
+	container.setBackgroundColor( 'rgba(20,20,20,0.5)' );
 	container.setDisplay( 'none' );
 
 	container.dom.style.zIndex = "5";
@@ -162,8 +162,6 @@ var NEditor = function ( editor ) {
 
 	let menuTools = new UI.UList();
 	menuTools.addClass( 'dropdown-menu' );
-	// let cmdNew = menuTools.addLi( 'New' );
-	// cmdNew.classList.add( 'dropdown-item' );
 	let cmdSave = menuTools.addLi( 'Save' );
 	cmdSave.classList.add( 'dropdown-item' );
 	let cmdClean = menuTools.addLi( 'Clean' );

@@ -301,12 +301,19 @@ var VideoChat = function ( editor ) {
 
     let recommendationPanel = new UI.Panel();
     recommendationPanel.setPosition( 'absolute' );
-    recommendationPanel.setBottom( '30px' );
+    recommendationPanel.setBottom( '50px' );
     recommendationPanel.dom.width = 250;
     recommendationPanel.setHeight( '100px' );
-    recommendationPanel.setBackgroundColor( 'rgba(0, 0, 0, 0)' );
+    recommendationPanel.setBackgroundColor( 'rgba(0,0,0,0)' );
 
     callerPanel.add( recommendationPanel );
+
+    //
+
+	// $(function (  ) {
+	// 	$(cameraView.dom).resizable();
+	// 	$(studentView.dom).resizable();
+	// });
 
     //
 
@@ -341,6 +348,11 @@ var VideoChat = function ( editor ) {
     let valenceDiv = new UI.Text( 'Valence' );
     let arousalDiv = new UI.Text( 'Arousal' );
 
+    keyDiv.setOpacity( '0.5' );
+	semanticDiv.setOpacity( '0.5' );
+	valenceDiv.setOpacity( '0.5' );
+	arousalDiv.setOpacity( '0.5' );
+
     headerCell0.appendChild( keyDiv.dom );
     headerCell1.appendChild( semanticDiv.dom );
     headerCell2.appendChild( valenceDiv.dom );
@@ -358,9 +370,17 @@ var VideoChat = function ( editor ) {
     let dom1 = top1.createDOM();
     let dom2 = top2.createDOM();
 
-    dom0.style.backgroundColor = 'chartreuse';
-    dom1.style.backgroundColor = 'crimson';
-    dom2.style.backgroundColor = 'aliceblue';
+    dom0.style.color = 'chartreuse';
+    dom1.style.color = 'crimson';
+    dom2.style.color = 'aliceblue';
+
+	dom0.style.opacity = '0.5';
+	dom1.style.opacity = '0.5';
+	dom2.style.opacity = '0.5';
+
+	dom0.style.backgroundColor = 'rgba(100,100,100,0.1)';
+	dom1.style.backgroundColor = 'rgba(100,100,100,0.1)';
+	dom2.style.backgroundColor = 'rgba(100,100,100,0.1)';
 
     body.appendChild( dom0 );
     body.appendChild( dom1 );

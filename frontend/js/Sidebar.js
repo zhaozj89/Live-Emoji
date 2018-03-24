@@ -42,7 +42,7 @@ var Sidebar = function ( editor ) {
 	let studentLabel = new UI.Label();
 	studentLabel.addClass( 'btn' );
 	studentLabel.addClass( 'btn-secondary' );
-	studentLabel.setWidth( '135px' );
+	studentLabel.setWidth( '140px' );
 	studentLabel.setFontSize( '10' );
 	roleSideButtons.add( studentLabel );
 	studentLabel.dom.innerHTML = 'Audience';
@@ -58,7 +58,7 @@ var Sidebar = function ( editor ) {
 	let teacherLabel = new UI.Label();
 	teacherLabel.addClass( 'btn' );
 	teacherLabel.addClass( 'btn-secondary' );
-	teacherLabel.setWidth( '135px' );
+	teacherLabel.setWidth( '150px' );
 	teacherLabel.addClass( 'active' );
 	roleSideButtons.add( teacherLabel );
 	teacherLabel.dom.innerHTML = 'Performer';
@@ -84,7 +84,7 @@ var Sidebar = function ( editor ) {
 	let liveAnimationLabel = new UI.Label();
 	liveAnimationLabel.addClass( 'btn' );
 	liveAnimationLabel.addClass( 'btn-secondary' );
-	liveAnimationLabel.setWidth( '135px' );
+	liveAnimationLabel.setWidth( '140px' );
 	usageButtons.add( liveAnimationLabel );
 	liveAnimationLabel.dom.innerHTML = 'Live Animation';
 
@@ -97,7 +97,7 @@ var Sidebar = function ( editor ) {
 	let preEditLabel = new UI.Label();
 	preEditLabel.addClass( 'btn' );
 	preEditLabel.addClass( 'btn-secondary' );
-	preEditLabel.setWidth( '135px' );
+	preEditLabel.setWidth( '150px' );
 	preEditLabel.addClass( 'active' );
 	usageButtons.add( preEditLabel );
 	preEditLabel.dom.innerHTML = 'Command Edit';
@@ -120,7 +120,7 @@ var Sidebar = function ( editor ) {
 	let autoLabel = new UI.Label();
 	autoLabel.addClass( 'btn' );
 	autoLabel.addClass( 'btn-secondary' );
-	autoLabel.setWidth( '135px' );
+	autoLabel.setWidth( '140px' );
 	triggerButtons.add( autoLabel );
 	autoLabel.dom.innerHTML = 'Auto Trigger';
 
@@ -133,7 +133,7 @@ var Sidebar = function ( editor ) {
 	let manualLabel = new UI.Label();
 	manualLabel.addClass( 'btn' );
 	manualLabel.addClass( 'btn-secondary' );
-	manualLabel.setWidth( '135px' );
+	manualLabel.setWidth( '150px' );
 	manualLabel.addClass( 'active' );
 	triggerButtons.add( manualLabel );
 	manualLabel.dom.innerHTML = 'Manual';
@@ -157,7 +157,7 @@ var Sidebar = function ( editor ) {
 	boyLabel.addClass( 'btn' );
 	boyLabel.addClass( 'btn-secondary' );
 	boyLabel.addClass( 'active' );
-	boyLabel.setWidth( '135px' );
+	boyLabel.setWidth( '140px' );
 	characterButtons.add( boyLabel );
 	boyLabel.dom.innerHTML = 'Boy';
 
@@ -170,7 +170,7 @@ var Sidebar = function ( editor ) {
 	let girlLabel = new UI.Label();
 	girlLabel.addClass( 'btn' );
 	girlLabel.addClass( 'btn-secondary' );
-	girlLabel.setWidth( '135px' );
+	girlLabel.setWidth( '150px' );
 	characterButtons.add( girlLabel );
 	girlLabel.dom.innerHTML = 'Girl';
 

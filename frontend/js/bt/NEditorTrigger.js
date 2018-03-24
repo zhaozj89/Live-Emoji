@@ -45,6 +45,7 @@ class TriggerNode extends Node {
 
 		this.key = new NodeInput( this );
 		this.key.domElement.textContent = "Key: ";
+		this.key.domElement.setAttribute( 'title', 'Trigger to preview' );
 		this.key.addTextInput();
 		this.addInput( this.key );
 
