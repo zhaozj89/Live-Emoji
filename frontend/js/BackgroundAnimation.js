@@ -88,7 +88,7 @@ var BackgroundAnimationCanvas = function ( editor ) {
         let height = document.getElementById('viewport').clientHeight;
 
         // initialize proton in editor
-        editor.protonPixi4Renderer.app = new PIXI.Application( width, height, { transparent: true } );
+        editor.protonPixi4Renderer.app = new PIXI.Application( width, height, { autoStart: true, transparent: true } );
         container.dom.appendChild( editor.protonPixi4Renderer.app.view );
 
         editor.protonPixi4Renderer.proton = new Proton();
@@ -109,6 +109,13 @@ var BackgroundAnimationCanvas = function ( editor ) {
         backgroundUpdate();
 
         LoadEmotionCMDJSONFile( editor, 'test.json' );
+
+
+        ///
+
+		// let emitter = new Proton.BehaviourEmitter();
+		// editor.protonPixi4Renderer.proton.addEmitter( emitter );
+		// emitter.emit( 'once' );
     } );
 
 	return container;

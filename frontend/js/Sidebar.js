@@ -22,6 +22,9 @@ var Sidebar = function ( editor ) {
 		new Sidebar.Settings( editor )
 	);
 
+	// for debug
+	// container.add( scene );
+
 	let titleMode = new UI.Text( 'Mode' );
 	titleMode.addClass( 'h4' );
 	titleMode.setTextAlign( 'center' );
@@ -156,7 +159,6 @@ var Sidebar = function ( editor ) {
 	let boyLabel = new UI.Label();
 	boyLabel.addClass( 'btn' );
 	boyLabel.addClass( 'btn-secondary' );
-	boyLabel.addClass( 'active' );
 	boyLabel.setWidth( '140px' );
 	characterButtons.add( boyLabel );
 	boyLabel.dom.innerHTML = 'Boy';
@@ -179,6 +181,9 @@ var Sidebar = function ( editor ) {
 	girlInput.dom.setAttribute( 'name', 'options' );
 	girlInput.dom.setAttribute( 'autocomplete', 'off' );
 	girlLabel.add( girlInput );
+
+	editor.boyLabel = boyLabel;
+	editor.girlLabel = girlLabel;
 
 	studentLabel.dom.onclick = function () {
 		editor.roleMode = 0;
@@ -227,32 +232,32 @@ var Sidebar = function ( editor ) {
 	}
 
 	boyLabel.dom.onclick = function () {
-		if( editor.boy===null ) {
-			alert( 'Please load the boy character first!' );
-			return;
+		if( editor.boy!==null ) {
+			editor.selected = editor.boy;
+			editor.boy.visible = true;
+
+			if( editor.girl!==null )
+				editor.girl.visible = false;
 		}
 
-		editor.selected = editor.boy;
-		editor.boy.visible = true;
-
-		if( editor.girl!==null )
-			editor.girl.visible = false;
+		boyLabel.addClass( 'active' );
+		girlLabel.removeClass( 'active' );
 
 		boyLabel.setOpacity( '1' );
 		girlLabel.setOpacity( '0.2' );
 	}
 
 	girlLabel.dom.onclick = function () {
-		if( editor.girl===null ) {
-			alert( 'Please load the girl character first!' );
-			return;
+		if( editor.girl!==null ) {
+			editor.selected = editor.girl;
+			editor.girl.visible = true;
+
+			if( editor.boy!==null )
+				editor.boy.visible = false;
 		}
 
-		editor.selected = editor.girl;
-		editor.girl.visible = true;
-
-		if( editor.boy!==null )
-			editor.boy.visible = false;
+		boyLabel.removeClass( 'active' );
+		girlLabel.addClass( 'active' );
 
 		boyLabel.setOpacity( '0.2' );
 		girlLabel.setOpacity( '1' );
@@ -264,7 +269,7 @@ var Sidebar = function ( editor ) {
 	preEditLabel.dom.click();
 	manualLabel.dom.click();
 
-	boyLabel.setOpacity( '1' );
+	boyLabel.setOpacity( '0.2' );
 	girlLabel.setOpacity( '0.2' );
 
 	//

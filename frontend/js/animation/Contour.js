@@ -71,28 +71,23 @@ var ZContour = function ( png ) {
 	let points_out_clone = MarchingSquares( grid_function, width, height );
 
 	let points_out = [];
-	let contour = new Array();
-	let idx = 0;
+	let flatten_points = [];
 	for ( let i = 0; i < points_out_clone.length; ++i ) {
 		let _x = points_out_clone[ i ][ 0 ] / width;
 		let _y = points_out_clone[ i ][ 1 ] / height;
 		points_out.push( [_x, _y] );
-		contour.push( { x: _x, y: _y, id: idx } );
-		idx++;
-		// console.log(contour[i][0]/width + ' ' + contour[i][1]/height);
+		flatten_points.push( _x );
+		flatten_points.push( _y );
 	}
 
-	let swctx = new poly2tri.SweepContext( contour );
-	swctx.triangulate();
+	// earcut triangulation
+	let result = earcut(flatten_points, [], 2);
 
-	let tris_swctx = swctx.getTriangles();
-
-	let tris_out = new Array();
-	tris_swctx.forEach( function ( t ) {
-		t.getPoints().forEach( function ( p ) {
-			tris_out.push( p.id );
-		} );
-	} );
+	let tris_out = [];
+	for (let i = 0; i < result.length; i++) {
+		let index = result[i];
+		tris_out.push([flatten_points[index * 2], flatten_points[index * 2 + 1], index]);
+	}
 
 	let geometry = new THREE.Geometry();
 
@@ -101,11 +96,11 @@ var ZContour = function ( png ) {
 
 
 	for ( let i = 0; i < tris_out.length; i += 3 ) {
-		geometry.faces.push( new THREE.Face3( tris_out[ i ], tris_out[ i + 1 ], tris_out[ i + 2 ] ) );
+		geometry.faces.push( new THREE.Face3( tris_out[ i ][2], tris_out[ i + 1 ][2], tris_out[ i + 2 ][2] ) );
 		geometry.faceVertexUvs[ 0 ].push( [
-			new Vector2( points_out[ tris_out[ i ] ][ 0 ], 1 - points_out[ tris_out[ i ] ][ 1 ] ),
-			new Vector2( points_out[ tris_out[ i + 1 ] ][ 0 ], 1 - points_out[ tris_out[ i + 1 ] ][ 1 ] ),
-			new Vector2( points_out[ tris_out[ i + 2 ] ][ 0 ], 1 - points_out[ tris_out[ i + 2 ] ][ 1 ] )
+			new Vector2( tris_out[ i ][ 0 ], 1 - tris_out[ i ][ 1 ] ),
+			new Vector2( tris_out[ i + 1 ][ 0 ], 1 - tris_out[ i + 1 ][ 1 ] ),
+			new Vector2( tris_out[ i + 2 ][ 0 ], 1 - tris_out[ i + 2 ][ 1 ] )
 		] );
 	}
 

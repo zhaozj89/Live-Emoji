@@ -91,6 +91,13 @@ UI.Element.prototype = {
 		return this;
 	},
 
+	removeClass: function ( name ) {
+
+		this.dom.classList.remove( name );
+
+		return this;
+	},
+
 	setStyle: function ( style, array ) {
 
 		for ( var i = 0; i < array.length; i ++ ) {
