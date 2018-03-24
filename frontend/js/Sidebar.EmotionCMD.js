@@ -63,6 +63,8 @@ class EmotionCMDThreeDOM {
 			else {
 				editor.currentEditedKey = thatKey;
 
+				editor.runAtLeastOneCMD = false;
+
 				for ( let i = 0; i < Global_All_DOM_In_SVG.length; ++i ) {
 					Global_All_DOM_In_SVG[ i ].remove();
 				}

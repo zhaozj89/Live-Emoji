@@ -15,6 +15,8 @@ class BackgroundAnimationController {
 			let X = e.offsetX || e.layerX;
 			let Y = e.offsetY || e.layerY;
 
+			// alert( X + ', ' + Y );
+
 			if( that.editor.currentEmitter!==null && that.editor.runAtLeastOneCMD===true) { // && that.editor.currentEmitter===that.emitter ) {
 				that.editor.currentEmitter.p.x = X;
 				that.editor.currentEmitter.p.y = Y;
@@ -43,7 +45,7 @@ class BackgroundAnimationController {
 				this.emitter.rate = new Proton.Rate( new Proton.Span( 20, 40 ), new Proton.Span( .2, .4 ) );
 
 				this.emitter.addInitialize(new Proton.Life(1, 3));
-				this.emitter.addInitialize(new Proton.Position(new Proton.CircleZone(Number( _X ), Number( _Y ), 500)));
+				this.emitter.addInitialize(new Proton.Position(new Proton.CircleZone(0, 0, 500)));
 				this.emitter.addInitialize( new Proton.Velocity( new Proton.Span( 1, 1 ), new Proton.Span( 180, 180, true ), 'polar' ) );
 
 				this.emitter.addBehaviour( new Proton.Gravity( 4 ) );
@@ -67,7 +69,7 @@ class BackgroundAnimationController {
 			case 'jet': {
 				this.emitter.rate = new Proton.Rate(new Proton.Span(40, 80), 0.1);
 
-				this.emitter.addInitialize(new Proton.P(new Proton.CircleZone(Number( _X ), Number( _Y ), 10)));
+				// this.emitter.addInitialize(new Proton.P(new Proton.CircleZone(Number( _X ), Number( _Y ), 10)));
 				this.emitter.addInitialize(new Proton.Life(5, 7));
 				this.emitter.addInitialize(new Proton.V(new Proton.Span(2, 3), new Proton.Span(0, 30, true), 'polar'));
 
