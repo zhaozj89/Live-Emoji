@@ -1,6 +1,8 @@
 class NodeSession {
 	constructor ( editor ) {
 		this.triggerNode = null;
+		this.particleNodes = [];
+		this.danmakuNodes = [];
 
 		this.editor = editor;
 	}
@@ -89,12 +91,14 @@ class NodeSession {
 				node = new ParticleNode( type, this.editor );
 				node.initUI();
 				this.editor.allParticleNodes.push( node );
+				this.particleNodes.push( node );
 				break;
 			}
 
 			case 'danmaku': {
 				node = new DanmakuNode( type, this.editor );
 				node.initUI();
+				this.danmakuNodes.push( node );
 				break;
 			}
 
@@ -125,13 +129,24 @@ class NodeSession {
 
 		if ( key === keycode ) {
 
-			if( this.editor.emotionCMDDurationMutex >= 2 ) {
-				this.editor.emotionCMDDurationMutex = 0;
+			let counter = 0;
+			if( this.particleNodes.length!==0 ) counter++;
+			if( this.danmakuNodes.length!==0 ) counter++;
 
-				// editor.background_animation.dom.style.zIndex = '3'; // this is weird, but necessary
+			if( counter===2 ) {
+				if( this.editor.emotionCMDDurationMutex >= 2 ) {
+					this.editor.emotionCMDDurationMutex = 0;
+				}
+				else
+					return;
 			}
-			else
-				return;
+			else if( counter===1 ) {
+				if( this.editor.emotionCMDDurationMutex >= 2 ) {
+					this.editor.emotionCMDDurationMutex = 1;
+				}
+				else
+					return;
+			}
 
 			this.editor.runAtLeastOneCMD = true;
 

@@ -193,11 +193,12 @@ Sidebar.EmotionCMD = function ( editor ) {
 	editor.signals.updateRecommendation.add( function ( valence_level ) { // 0 - 1
 
 		if ( editor.usageMode === 0 ) {
-			let arousal = editor.msgInputArousal; // 1 - 100
+			let arousal = editor.msgInputArousal; // 50 - 90
 
-			let valence = null; // 0 - 1
-			if( valence_level['happy']>valence_level['sad'] ) {
-				valence = Math.floor( valence_level['happy']*4 ) + 5;
+			let valence = null; // 1 - 9
+			if( valence_level['happy'] + 0.2 > valence_level['sad'] ) {
+				let res = Math.pow( valence_level['happy'], 0.5 );
+				valence = Math.floor( res*4 ) + 5;
 			}
 			else {
 				valence = Math.floor( valence_level['sad']*4 ) + 1;
@@ -209,7 +210,7 @@ Sidebar.EmotionCMD = function ( editor ) {
 				let prop_arousal = Number( info.arousal );
 				let prop_valence = Number( info.valence );
 
-				let dist = ( arousal - prop_arousal ) * ( arousal - prop_arousal ) + 10000 * ( valence - prop_valence ) * ( valence - prop_valence ) / 64;
+				let dist = 4 * ( arousal - prop_arousal ) * ( arousal - prop_arousal ) + 25 * ( valence - prop_valence ) * ( valence - prop_valence ) / 2;
 
 				all_distprop.push( { val: dist, other: info } );
 			}

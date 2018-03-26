@@ -157,8 +157,8 @@ var VideoChat = function ( editor ) {
 	signals = editor.signals;
 
 	let cameraView = new UI.Panel();
-	cameraView.setTop( '100px' );
-	cameraView.setLeft( '100px' );
+	cameraView.setTop( '0px' );
+	cameraView.setLeft( '0px' );
 	cameraView.setPosition( 'absolute' );
 	cameraView.setDisplay( 'none' );
 	editor.camera_view = cameraView;
@@ -244,8 +244,8 @@ var VideoChat = function ( editor ) {
 	// caller
 
 	let studentView = new UI.Panel();
-	studentView.setTop( '200px' );
-	studentView.setLeft( '200px' );
+	studentView.setTop( '0px' );
+	studentView.setRight( '0px' );
 	studentView.setPosition( 'absolute' );
 	studentView.setDisplay( 'none' );
 	editor.student_view = studentView;

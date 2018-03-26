@@ -73,7 +73,7 @@ var SidebarRight = function ( editor ) {
 	container.add( heartValueText );
 	container.add( heartSlider );
 
-	editor.msgInputArousal = 1;
+	editor.msgInputArousal = 70;
 
 	$( function () {
 
@@ -118,7 +118,7 @@ var SidebarRight = function ( editor ) {
 		if ( editor.usageMode === 0 ) {
 
 			let valence = null;
-			if( valence_level['happy']>valence_level['sad'] ) {
+			if( valence_level['happy']+0.2>valence_level['sad'] ) {
 				valence = Math.floor( valence_level['happy']*4 ) + 5;
 			}
 			else {
@@ -131,7 +131,7 @@ var SidebarRight = function ( editor ) {
 		}
 		else {
 			let valence = null;
-			if( valence_level['happy']>valence_level['sad'] ) {
+			if( valence_level['happy']+0.2>valence_level['sad'] ) {
 				valence = Math.floor( valence_level['happy']*4 ) + 5;
 			}
 			else {
