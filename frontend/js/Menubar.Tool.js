@@ -31,6 +31,11 @@ Menubar.Tool = function ( editor ) {
 		}
 
 		editor.emotionCMDDurationMutex = 2;
+
+
+		let particles = editor.protonPixi4Renderer.proton.getAllParticles();
+		let len = particles.length;
+		for(let i=0; i<len; ++i) particles[i].dead = true;
 	} );
 	options.add( option );
 

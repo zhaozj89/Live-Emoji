@@ -245,7 +245,7 @@ var VideoChat = function ( editor ) {
 
 	let studentView = new UI.Panel();
 	studentView.setTop( '0px' );
-	studentView.setRight( '0px' );
+	// studentView.setRight( '0px' );
 	studentView.setPosition( 'absolute' );
 	studentView.setDisplay( 'none' );
 	editor.student_view = studentView;
