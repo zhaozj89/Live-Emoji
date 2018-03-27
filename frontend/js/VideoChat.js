@@ -129,6 +129,19 @@ function addToConversation ( who, msgType, info ) {
 			}
 			break;
 		}
+
+		case 'emotionCMD': {
+			let puppet = editor.selected;
+
+			if ( puppet !== null ) {
+				let nodeSession = new NodeSession( editor );
+				nodeSession.fromJSON( info.cmd );
+
+				nodeSession.run( info.key );
+				editor.signals.sceneGraphChanged.dispatch();
+			}
+			break;
+		}
 	}
 }
 

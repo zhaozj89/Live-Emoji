@@ -326,12 +326,37 @@ var NEditor = function ( editor ) {
 				if ( editor.emotionCMDManager.currentNodeSession.getInfo().key === event[ 'keycode' ] )
 					already_run = true;
 				editor.emotionCMDManager.currentNodeSession.run( event[ 'keycode' ] );
+
+				//
+
+				let info = {
+					type: 'emotionCMD',
+					cmd: JSON.stringify( editor.emotionCMDManager.currentNodeSession ),
+					key: event[ 'keycode' ]
+				};
+
+				editor.signals.teacherSendInfo2Students.dispatch( info );
+
+				//
+
 			}
 
 			if ( already_run === false ) {
 				for ( let prop in editor.emotionCMDManager.allCMDs ) {
 					if ( event[ 'keycode' ] === prop ) {
 						editor.emotionCMDManager.allCMDs[ prop ].run( prop );
+
+						//
+
+						let info = {
+							type: 'emotionCMD',
+							cmd: JSON.stringify( editor.emotionCMDManager.allCMDs[ prop ] ),
+							key: prop
+						};
+
+						editor.signals.teacherSendInfo2Students.dispatch( info );
+
+						//
 					}
 				}
 			}
