@@ -166,16 +166,18 @@ var NEditor = function ( editor ) {
 	menuActions.addClass( 'dropdown-menu' );
 	let buttonVibration = menuActions.addLi( 'Vibration' );
 	buttonVibration.classList.add( 'dropdown-item' );
-	let buttonDanmaku = menuActions.addLi( 'Danmaku [TXT]' );
+	let buttonDanmaku = menuActions.addLi( 'Danmaku [Text]' );
 	buttonDanmaku.classList.add( 'dropdown-item' );
-	let buttonSwap = menuActions.addLi( 'Swap [PUPPET]' );
+	let buttonSwap = menuActions.addLi( 'Swap [Puppet]' );
 	buttonSwap.classList.add( 'dropdown-item' );
-	let buttonExplode = menuActions.addLi( 'Particle [BG]' );
+	let buttonExplode = menuActions.addLi( 'Particle [Background]' );
 	buttonExplode.classList.add( 'dropdown-item' );
 	Actions.appendChild( menuActions.dom );
 
 	let menuTools = new UI.UList();
 	menuTools.addClass( 'dropdown-menu' );
+	let cmdNew = menuTools.addLi( 'New' );
+	cmdNew.classList.add( 'dropdown-item' );
 	let cmdSave = menuTools.addLi( 'Save' );
 	cmdSave.classList.add( 'dropdown-item' );
 	let cmdClean = menuTools.addLi( 'Clean' );
@@ -227,9 +229,9 @@ var NEditor = function ( editor ) {
 			emotionCMDManager.addNode( 'viberation' );
 		} );
 
-		// $( cmdNew ).click( function () {
-		// 	editor.emotionCMDManager.newCMD();
-		// } );
+		$( cmdNew ).click( function () {
+			editor.emotionCMDManager.newCMD();
+		} );
 
 		$( cmdSave ).click( function () {
 			editor.emotionCMDManager.save();
@@ -240,9 +242,52 @@ var NEditor = function ( editor ) {
 			editor.emotionCMDManager.newCMD();
 		} );
 
+		let form = document.createElement( 'form' );
+		form.style.display = 'none';
+		document.body.appendChild( form );
+
+		//
+
+		let fileInput = document.createElement( 'input' );
+		fileInput.type = 'file';
+		fileInput.addEventListener( 'change', function ( event ) {
+
+			let file = fileInput.files[ 0 ];
+
+			let reader = new FileReader();
+
+			reader.addEventListener( 'load', function ( event ) {
+				let contents = event.target.result;
+
+				let jsonFile = JSON.parse( contents );
+
+				editor.emotionCMDManager.fromJSON( jsonFile );
+
+				editor.emotionCMDManager.cleanSVG();
+
+				for ( let prop in editor.emotionCMDManager.allSerializedCMDs ) {
+
+					let info = editor.emotionCMDManager.allCMDs[ prop ].getInfo();
+
+					let msg = {
+						'info': info,
+						'nodeString': editor.emotionCMDManager.allSerializedCMDs[ prop ]
+					};
+
+					editor.signals.saveEmotionCMD.dispatch( msg );
+				}
+			});
+			reader.readAsText( file );
+			form.reset();
+
+		} );
+		form.appendChild( fileInput );
+
+		//
+
 		$( cmdImport ).click( function () {
 
-			LoadEmotionCMDJSONFile( editor, 'test.json' );
+			fileInput.click();
 		} );
 
 		$( cmdExport ).click( function () {

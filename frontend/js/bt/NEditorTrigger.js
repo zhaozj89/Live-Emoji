@@ -53,7 +53,7 @@ class TriggerNode extends Node {
 
 		incrementer.onClick( function () {
 			let input = new NodeInput( this );
-			input.addTextLabel( 'Channel ' + that.counter + ': ' );
+			input.addTextLabel( '' );
 			that.addInput( input );
 			++that.counter;
 		} );
