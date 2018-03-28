@@ -56,8 +56,12 @@ class RecommendedCMD {
 
 function performCall ( otherEasyrtcid ) {
     easyrtc.hangupAll();
-    let successCB = function () {};
-    let failureCB = function () {};
+    let successCB = function () {
+		console.log( 'Calling ' + otherEasyrtcid + ' succeed!' );
+	};
+    let failureCB = function () {
+    	alert( 'Calling ' + otherEasyrtcid + ' fails!' );
+	};
     easyrtc.call( otherEasyrtcid, successCB, failureCB );
 }
 
@@ -135,7 +139,7 @@ function addToConversation ( who, msgType, info ) {
 
 			if ( puppet !== null ) {
 				let nodeSession = new NodeSession( editor );
-				nodeSession.fromJSON( info.cmd );
+				nodeSession.fromJSON( JSON.parse(info.cmd) );
 
 				nodeSession.run( info.key );
 				editor.signals.sceneGraphChanged.dispatch();
@@ -410,8 +414,10 @@ var VideoChat = function ( editor ) {
         	alert( 'Peer computer is not set up!' );
         	return;
 		}
-        else
-        	performCall( editor.rtcid );
+        else {
+        	console.log( 'calling: ' + editor.rtcid );
+			performCall( editor.rtcid );
+		}
     });
 
 	studentView.add( connectButton );
