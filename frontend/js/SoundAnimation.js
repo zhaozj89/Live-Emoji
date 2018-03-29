@@ -108,7 +108,7 @@ var SoundAnimation = function ( editor ) {
 		}
 	] );
 
-	player.play();
+	// player.play();
 
 	return null;
 };

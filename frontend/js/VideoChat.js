@@ -158,6 +158,58 @@ var VideoChat = function ( editor ) {
 
 	//
 
+	// audio detection
+	window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
+	let audioContext = new AudioContext();
+	let mediaStreamSource = null;
+	let meter = null;
+
+	try {
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+		navigator.getUserMedia(
+			{
+				"audio": {
+					"mandatory": {
+						"googEchoCancellation": "false",
+						"googAutoGainControl": "false",
+						"googNoiseSuppression": "false",
+						"googHighpassFilter": "false"
+					},
+					"optional": []
+				},
+			}, gotStream, didntGetStream);
+	} catch (e) {
+		alert('getUserMedia threw exception :' + e);
+	}
+
+	function didntGetStream() {
+		alert('Stream generation failed.');
+	}
+
+	function gotStream(stream) {
+		mediaStreamSource = audioContext.createMediaStreamSource(stream);
+
+		meter = createAudioMeter(audioContext);
+		mediaStreamSource.connect(meter);
+
+		// soundLoop();
+	}
+
+	// function soundLoop() {
+	// 	// console.log( meter.volume );
+	//
+	// 	if ( meter.volume > 0.01 ) {
+	// 		signals.followMouth.dispatch( 'open' );
+	// 	}
+	// 	else {
+	// 		signals.followMouth.dispatch( 'close' );
+	// 	}
+	//
+	// 	requestAnimationFrame( soundLoop );
+	// }
+
 	//define canvas for image processing
 	let captureCanvas = document.createElement( 'canvas' );		// internal canvas for capturing full images from video stream
 	captureCanvas.width = 250;  //should be the same as videoStream.dom.width in Camera.js
@@ -608,6 +660,14 @@ var VideoChat = function ( editor ) {
 
 		DrawLandmark();
 
+		console.log( meter.volume );
+		if ( meter.volume > 0.01 ) {
+			signals.followMouth.dispatch( 'open' );
+		}
+		else {
+			signals.followMouth.dispatch( 'close' );
+		}
+
 		if( editor.runningEmotionCMDState.running===false )
 			GetFaceEmotion();
 
@@ -676,15 +736,15 @@ var VideoChat = function ( editor ) {
 		if ( faceLandmarkPosition !== null ) {
 			let positions = faceLandmarkPosition;
 
-			// open mouth detection
-			let mousedist = positions[ 57 ][ 1 ] - positions[ 60 ][ 1 ];
-			let mouthwidth = positions[ 50 ][ 0 ] - positions[ 44 ][ 0 ];
-			if ( mousedist > mouthwidth * 0.18 ) {
-				signals.followMouth.dispatch( 'open' );
-			}
-			else {
-				signals.followMouth.dispatch( 'close' );
-			}
+			// // open mouth detection
+			// let mousedist = positions[ 57 ][ 1 ] - positions[ 60 ][ 1 ];
+			// let mouthwidth = positions[ 50 ][ 0 ] - positions[ 44 ][ 0 ];
+			// if ( mousedist > mouthwidth * 0.18 ) {
+			// 	signals.followMouth.dispatch( 'open' );
+			// }
+			// else {
+			// 	signals.followMouth.dispatch( 'close' );
+			// }
 
 			//Blink & Emotion detection
 			eyeRectRight.x = positions[ 23 ][ 0 ] - 5;
