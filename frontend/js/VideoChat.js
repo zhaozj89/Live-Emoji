@@ -181,6 +181,10 @@ var VideoChat = function ( editor ) {
 
 	//
 
+	let faceLandmarkPosition = null;
+
+	//
+
 	let cameraView = new UI.Panel();
 	cameraView.setTop( '0px' );
 	cameraView.setLeft( '0px' );
@@ -623,8 +627,6 @@ var VideoChat = function ( editor ) {
 		}
 	}
 
-	editor.videoStartButton = startButton;
-
 	function TurnONOFFFaceTracking () {
 
 		if ( startButton.dom.textContent === 'Start' ) {
@@ -671,8 +673,8 @@ var VideoChat = function ( editor ) {
 	} );
 
 	function GetFaceEmotion () { // kerasjs
-		if ( editor.faceLandmarkPosition !== null ) {
-			let positions = editor.faceLandmarkPosition;
+		if ( faceLandmarkPosition !== null ) {
+			let positions = faceLandmarkPosition;
 
 			// open mouth detection
 			let mousedist = positions[ 57 ][ 1 ] - positions[ 60 ][ 1 ];
@@ -785,34 +787,12 @@ var VideoChat = function ( editor ) {
 				return emotionmodel.predict( inputData )
 			} )
 			.then( outputData => {
-				// let emotions = new Array();
-				// emotions[ 0 ] = { value: outputData.output[ 0 ], label: 'angry' };
-				// emotions[ 1 ] = { value: outputData.output[ 1 ], label: 'disgust' };
-				// emotions[ 2 ] = { value: outputData.output[ 2 ], label: 'fear' };
-				// emotions[ 3 ] = { value: outputData.output[ 3 ], label: 'happy' };
-				// emotions[ 4 ] = { value: outputData.output[ 4 ], label: 'sad' };
-				// emotions[ 5 ] = { value: outputData.output[ 5 ], label: 'surprised' };
-				// emotions[ 6 ] = { value: outputData.output[ 6 ], label: 'neutral' };
-
 				let valence_level = {
 					'happy': outputData.output[ 3 ],
 					'sad': outputData.output[ 4 ]
 				};
 
 				signals.updateRecommendation.dispatch( valence_level );
-
-				/*
-				let emotionvalue = '';
-				let mostPossible = '';
-				let temp = 0;
-				for ( i = 0; i < 7; i++ ) {
-					emotionvalue += emotions[ i ].label + ": " + ( emotions[ i ].value * 100 ).toFixed( 1 ) + "% ";//e.g. disgusted: 15.1%
-					if ( temp < emotions[ i ].value ) {
-						temp = emotions[ i ].value;
-						mostPossible = emotions[ i ].label;
-					}
-				}
-				*/
 			} )
 			.catch( err => {
 				console.log( err )
@@ -824,7 +804,7 @@ var VideoChat = function ( editor ) {
 		let positions = ctrack.getCurrentPosition();
 
 		if ( positions ) {
-			editor.faceLandmarkPosition = positions;
+			faceLandmarkPosition = positions;
 
 			let resX = 0;
 			let resY = 0;

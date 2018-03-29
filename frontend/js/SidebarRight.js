@@ -101,8 +101,6 @@ var SidebarRight = function ( editor ) {
 			min: 1,
 			max: 9,
 			slide: function ( event, ui ) {
-				editor.msgInputValence = Number( ui.value );
-
 				$( valenceText.dom ).text( ui.value );
 				let res = ui.value;
 				valenceImg.src = './asset/valence_new/' + res + '.png';

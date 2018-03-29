@@ -4,6 +4,8 @@
 
 var Editor = function () {
 
+	// mutex
+
 	let that = this;
 
 	this.runningEmotionCMDState = {
@@ -23,16 +25,11 @@ var Editor = function () {
 		}
 	}
 
-	this.faceLandmarkPosition = null;
-
 	this.runAtLeastOneCMD = false;
 
+	this.facePositionMutex = false;
+
 	this.currentEditedKey = null;
-
-	//
-	this.boyLoaded = false;
-	this.girlLoaded = false;
-
 
 	// Mode
 	this.roleMode = 1; // 0: student, 1: teacher
@@ -45,32 +42,27 @@ var Editor = function () {
 	this.boyLabel = null;
 	this.girlLabel = null;
 
+	this.boyLoaded = false;
+	this.girlLoaded = false;
+
 	// components of editor
-	this.camera_viewport = null; // 4
+	this.camera_viewport = null;
 	this.camera_view = null;    this.video_stream = null;   this.camera_view_which_side = 'live_animation';
 	this.student_view = null;
 
-	this.viewport = null; // 1
+	this.viewport = null;
 
-	this.node_editor = null; // 5
+	this.node_editor = null;
 
-	this.background_animation = null; // 3
+	this.background_animation = null;
 
-	this.danmaku_animation = null; // 2
+	this.danmaku_animation = null;
 
-	this.sidebar = null; // 4
+	this.sidebar = null;
 
-	this.sidebar_right = null; // 4
+	this.sidebar_right = null;
 
 	this.emotion_cmd_tablebody = null;
-
-	// camera settings
-
-	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -20, 20, -20, 20, -100, 100 );
-	this.DEFAULT_CAMERA.name = 'Camera';
-	this.DEFAULT_CAMERA.position.set( 0, 0, -50 );
-	this.DEFAULT_CAMERA.up.set( 0, -1, 0 );
-	this.DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
 
 	let Signal = signals.Signal;
 
@@ -144,7 +136,6 @@ var Editor = function () {
 
 	this.emotionCMDManager = new EmotionCMDManager( this );
 
-	this.msgInputValence = null;
 	this.msgInputArousal = null;
 
 	this.currentEmitter = null;
@@ -174,13 +165,17 @@ var Editor = function () {
 		top: 40
 	};
 
-	this.facePositionMutex = false;
-
-	this.videoStartButton = null;
-
 	this.rtcid = null;
 
 	// not care now
+
+	// camera settings
+
+	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -20, 20, -20, 20, -100, 100 );
+	this.DEFAULT_CAMERA.name = 'Camera';
+	this.DEFAULT_CAMERA.position.set( 0, 0, -50 );
+	this.DEFAULT_CAMERA.up.set( 0, -1, 0 );
+	this.DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
 
 	this.config = new Config( 'threejs-editor' );
 	this.history = new History( this );
