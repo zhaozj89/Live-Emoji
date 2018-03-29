@@ -4,6 +4,8 @@
 
 var Editor = function () {
 
+	this.faceLandmarkPosition = null;
+
 	this.runAtLeastOneCMD = false;
 
 	this.currentEditedKey = null;

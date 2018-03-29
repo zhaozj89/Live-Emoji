@@ -78,9 +78,6 @@ function loginFailure ( errorCode, message ) {
 }
 
 function addToConversation ( who, msgType, info ) {
-	// alert( 'Received message from ' + who + ', as: ' + content );
-
-	// console.log(content);
 	switch ( info.type ) {
 		case 'followFace': {
 			let puppet = editor.selected;
@@ -146,11 +143,7 @@ function connect () {
 }
 
 function convertListToButtons ( roomName, data, isPrimary ) {
-	let connectButton = document.getElementById( 'connectButton' );
-
 	let rtcid = Object.keys( data )[ 0 ]; // Only allowing ONE client
-
-	// alert( rtcid );
 
 	editor.rtcid = rtcid;
 
@@ -554,49 +547,47 @@ var VideoChat = function ( editor ) {
 	function MainLoop () {
 		requestId = undefined;
 
-		// now = Date.now();
-		// elapsed = now - then;
+		now = Date.now();
+		elapsed = now - then;
 
-		if( editor.emotionCMDDurationMutex===2 ) {
-			// if ( elapsed > fpsInterval ) {
-			// 	then = now - ( elapsed % fpsInterval );
+		// if( editor.emotionCMDDurationMutex===2 ) {
+		// 	if ( elapsed > fpsInterval ) {
+				then = now;
 
-			// predict
-			pred = FaceTracker.predict();
+				// predict
+				pred = FaceTracker.predict();
 
-			// measure
-			measurement = GetFaceEmotionAndLandmark();
+				// measure
+				measurement = GetFaceEmotionAndLandmark();
 
-			// correct
-			if ( measurement === null ) {
-				corr = pred;
-			}
-			else {
-				corr = FaceTracker.correct( measurement.x, measurement.y );
-			}
-
-			// send signal
-			if ( corr !== null ) {
-
-				let lpfCorr = lpf( corr, 0.6 );
-				if ( lpfCorr !== null ) {
-					let res = { x: 0, y: 0 };
-
-					res.x = lpfCorr.x / videoStreamWidth - 0.5;
-					res.y = lpfCorr.y / videoStreamHeight - 0.5;
-
-					res.x *= 10;
-					res.y *= 10;
-
-					signals.followFace.dispatch( res );
+				// correct
+				if ( measurement === null ) {
+					corr = pred;
 				}
-			}
+				else {
+					corr = FaceTracker.correct( measurement.x, measurement.y );
+				}
 
-			DrawLandmark();
+				// send signal
+				if ( corr !== null ) {
 
+					let lpfCorr = lpf( corr, 0.6 );
+					if ( lpfCorr !== null ) {
+						let res = { x: 0, y: 0 };
 
+						res.x = lpfCorr.x / videoStreamWidth - 0.5;
+						res.y = lpfCorr.y / videoStreamHeight - 0.5;
+
+						res.x *= 10;
+						res.y *= 10;
+
+						signals.followFace.dispatch( res );
+					}
+				}
+
+				DrawLandmark();
 			// }
-		}
+		// }
 		StartMainLoop();
 	}
 
@@ -624,7 +615,7 @@ var VideoChat = function ( editor ) {
 			ctrack.start( videoStream.dom );
 			faceTrackingStarted = true;
 
-			let fps = 60;
+			let fps = 10;
 			fpsInterval = 1000 / fps;
 			then = Date.now();
 
@@ -681,10 +672,9 @@ var VideoChat = function ( editor ) {
 	RightEyeCanvas.height = 24;
 	var RightEyeContext = RightEyeCanvas.getContext( '2d' );
 
-	function GetFaceEmotionAndLandmark () {
-		let positions = ctrack.getCurrentPosition();
-
-		if ( positions ) {
+	function GetFaceEmotion (  ) { // kerasjs
+		if( editor.faceLandmarkPosition!==null ) {
+			let positions = editor.faceLandmarkPosition;
 
 			// open mouth detection
 			let mousedist = positions[ 57 ][ 1 ] - positions[ 60 ][ 1 ];
@@ -696,10 +686,6 @@ var VideoChat = function ( editor ) {
 				signals.followMouth.dispatch( 'close' );
 			}
 
-			// let normalizedPositions = positions.map( function( arr ) {
-			// 	return arr.slice();
-			// } );
-
 			//Blink & Emotion detection
 			eyeRectRight.x = positions[ 23 ][ 0 ] - 5;
 			eyeRectRight.y = positions[ 24 ][ 1 ] - 7;
@@ -710,13 +696,6 @@ var VideoChat = function ( editor ) {
 			eyeRectLeft.y = positions[ 29 ][ 1 ] - 7;
 			eyeRectLeft.w = positions[ 28 ][ 0 ] - positions[ 30 ][ 0 ] + 10;
 			eyeRectLeft.h = positions[ 31 ][ 1 ] - positions[ 29 ][ 1 ] + 14;
-
-			/*
-			FaceRect.x = positions[0][0] - 5;
-			FaceRect.y = positions[20][1] - 7;
-			FaceRect.w = positions[14][0] - positions[0][0] + 10;
-			FaceRect.h = positions[7][1] - positions[20][1] + 14;
-			*/
 
 			FaceRect.x = positions[ 0 ][ 0 ] - 20;
 			FaceRect.y = positions[ 20 ][ 1 ] - 30;
@@ -798,7 +777,6 @@ var VideoChat = function ( editor ) {
 				console.log( err )
 			} )
 
-
 			emotionmodel.ready()
 			.then( () => {
 				var dataTensor = ndarray( new Float32Array( Facedata ), [ FaceCanvas.width, FaceCanvas.height, 4 ] );
@@ -868,11 +846,14 @@ var VideoChat = function ( editor ) {
 			.catch( err => {
 				console.log( err )
 			} );
+		}
+	}
 
-			//show debug information about eyes, should delete it after completion
-			//debugInf.setValue('left:'+ FACE_INFORMATION['left_eye'] + '   right:' + FACE_INFORMATION['right_eye'] + ' ' +
-			//"Predicted emotions: " + mostPossible + " " + "Possibilities of all emotions: " + emotionvalue);
+	function GetFaceEmotionAndLandmark () {
+		let positions = ctrack.getCurrentPosition();
 
+		if ( positions ) {
+			editor.faceLandmarkPositions = positions;
 
 			let resX = 0;
 			let resY = 0;
