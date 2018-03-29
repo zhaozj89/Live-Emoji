@@ -5,19 +5,20 @@ class DanmakuController {
 	}
 
 	display ( _text, _color, _size, _font, _elapse, _manner ) {
-		this.text = this.paper.text( _manner.sx, _manner.sy, _text );
-		this.text.attr( 'font-size', _size );
-		this.text.attr( 'fill', _color );
-		this.text.attr( 'font-family', _font );
+		let text = this.paper.text( _manner.sx, _manner.sy, _text );
+		text.attr( 'font-size', _size );
+		text.attr( 'fill', _color );
+		text.attr( 'font-family', _font );
 
-		this.text.animate( { x: _manner.ex, y: _manner.ey }, _elapse, 'bounce', deleteText );
+		text.animate( { x: _manner.ex, y: _manner.ey }, _elapse, 'bounce', deleteText );
 
 		let that = this;
 		function deleteText () {
 			that.paper.clear();
 
-			console.log( 'text+' );
-			editor.emotionCMDDurationMutex += 1;
+			if( editor.runningEmotionCMDState.num_danmaku_node!==0 )
+				editor.runningEmotionCMDState.num_danmaku_node--;
+			editor.updateRunningEmotionCMDState();
 		}
 	}
 }

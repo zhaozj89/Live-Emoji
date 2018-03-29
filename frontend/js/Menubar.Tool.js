@@ -30,9 +30,6 @@ Menubar.Tool = function ( editor ) {
 			editor.backgroundSprite.position.y = 0;
 		}
 
-		editor.emotionCMDDurationMutex = 2;
-
-
 		let particles = editor.protonPixi4Renderer.proton.getAllParticles();
 		let len = particles.length;
 		for(let i=0; i<len; ++i) particles[i].dead = true;

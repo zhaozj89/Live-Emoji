@@ -4,6 +4,25 @@
 
 var Editor = function () {
 
+	let that = this;
+
+	this.runningEmotionCMDState = {
+		running: false,
+		has_particle_node: false,
+		num_danmaku_node: 0
+	};
+
+	this.updateRunningEmotionCMDState = function (  ) {
+		if( that.runningEmotionCMDState.has_particle_node===false && that.runningEmotionCMDState.num_danmaku_node===0 ) {
+			that.runningEmotionCMDState.running = false;
+
+			if( editor.selected!==null ) {
+				editor.selected.updateEmotion( 'neutral' );
+				editor.signals.sceneGraphChanged.dispatch();
+			}
+		}
+	}
+
 	this.faceLandmarkPosition = null;
 
 	this.runAtLeastOneCMD = false;
@@ -14,8 +33,6 @@ var Editor = function () {
 	this.boyLoaded = false;
 	this.girlLoaded = false;
 
-	// one emotion command is finished
-	this.emotionCMDDurationMutex = 2;
 
 	// Mode
 	this.roleMode = 1; // 0: student, 1: teacher

@@ -1,10 +1,33 @@
 class NodeSession {
 	constructor ( editor ) {
 		this.triggerNode = null;
-		this.particleNodes = [];
-		this.danmakuNodes = [];
-
 		this.editor = editor;
+	}
+
+	getState() {
+		let has_particle_node = false;
+		let num_danmaku_node = 0;
+
+		let trigger_node_children = this.triggerNode.getChildren();
+		for ( let i = 0; i < trigger_node_children.length; ++i ) {
+			let composite_node = trigger_node_children[ i ];
+			let composite_node_children = composite_node.getChildren();
+			for ( let j = 0; j < composite_node_children.length; ++j ) {
+
+				let action_node = composite_node_children[ j ];
+
+				if( action_node.type==='danmaku' )
+					num_danmaku_node++;
+
+				if( action_node.type==='particle' )
+					has_particle_node = true;
+			}
+		}
+
+		return {
+			has_particle_node: has_particle_node,
+			num_danmaku_node: num_danmaku_node
+		};
 	}
 
 	toJSON () {
@@ -91,14 +114,12 @@ class NodeSession {
 				node = new ParticleNode( type, this.editor );
 				node.initUI();
 				this.editor.allParticleNodes.push( node );
-				this.particleNodes.push( node );
 				break;
 			}
 
 			case 'danmaku': {
 				node = new DanmakuNode( type, this.editor );
 				node.initUI();
-				this.danmakuNodes.push( node );
 				break;
 			}
 
@@ -129,23 +150,12 @@ class NodeSession {
 
 		if ( key === keycode ) {
 
-			let counter = 0;
-			if( this.particleNodes.length!==0 ) counter++;
-			if( this.danmakuNodes.length!==0 ) counter++;
-
-			if( counter===2 ) {
-				if( this.editor.emotionCMDDurationMutex >= 2 ) {
-					this.editor.emotionCMDDurationMutex = 0;
-				}
-				else
-					return;
-			}
-			else if( counter===1 ) {
-				if( this.editor.emotionCMDDurationMutex >= 2 ) {
-					this.editor.emotionCMDDurationMutex = 1;
-				}
-				else
-					return;
+			if( this.editor.runningEmotionCMDState.running===true ) return;
+			else {
+				this.editor.runningEmotionCMDState.running = true;
+				let cmd_state = this.getState();
+				this.editor.runningEmotionCMDState.has_particle_node = cmd_state.has_particle_node;
+				this.editor.runningEmotionCMDState.num_danmaku_node = cmd_state.num_danmaku_node;
 			}
 
 			this.editor.runAtLeastOneCMD = true;
@@ -164,8 +174,6 @@ class NodeSession {
 					action_node.run( component );
 				}
 			}
-
-			alert( 'I am finished!' );
 		}
 		return;
 	}

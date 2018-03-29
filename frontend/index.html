@@ -333,6 +333,8 @@
 
 		requestAnimationFrame( animate );
 
+		editor.updateRunningEmotionCMDState();
+
 		TWEEN.update();
 
 		editor.signals.sceneGraphChanged.dispatch();

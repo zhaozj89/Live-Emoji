@@ -408,7 +408,7 @@ class ViberationNode extends Node {
 				that.editor.facePositionMutex = true;
 				setTimeout( function () {
 					that.editor.facePositionMutex = false;
-				}, 2000 );
+				}, 5000 );
 			}
 
 			tween0.start();

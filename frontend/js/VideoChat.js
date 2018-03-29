@@ -604,7 +604,8 @@ var VideoChat = function ( editor ) {
 
 		DrawLandmark();
 
-		GetFaceEmotion();
+		if( editor.runningEmotionCMDState.running===false )
+			GetFaceEmotion();
 
 		StartMainLoop();
 	}
