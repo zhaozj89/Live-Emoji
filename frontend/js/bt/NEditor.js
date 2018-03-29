@@ -387,49 +387,6 @@ var NEditor = function ( editor ) {
 		}
 	} );
 
-	signals.followEmotion.add( function ( emotion ) {
-		let puppet = editor.selected;
-
-		if ( puppet !== null ) {
-			switch ( emotion ) {
-				case EMOTION_TYPE.HAPPY:
-					emotion = 'happy';
-					break;
-				case EMOTION_TYPE.SAD:
-					emotion = 'sad';
-					break;
-				case EMOTION_TYPE.ANGRY:
-					emotion = 'angry';
-					break;
-				case EMOTION_TYPE.FEARFUL:
-					emotion = 'fearful';
-					break;
-				case EMOTION_TYPE.SURPRISED:
-					emotion = 'surprised';
-					break;
-				case EMOTION_TYPE.DISGUSTED:
-					emotion = 'disgusted';
-					break;
-				case EMOTION_TYPE.NEUTRAL:
-					emotion = 'neutral';
-					break;
-			}
-
-			if ( editor.emotionMutex === false ) {
-				puppet.updateEmotion( emotion );
-				editor.signals.sceneGraphChanged.dispatch();
-
-				let info = {
-					type: 'followEmotion',
-					emotion: emotion
-				};
-
-				editor.signals.teacherSendInfo2Students.dispatch( info );
-			}
-		}
-
-	} );
-
 	signals.followLeftEye.add( function ( state ) {
 		let puppet = editor.selected;
 

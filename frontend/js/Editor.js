@@ -71,7 +71,6 @@ var Editor = function () {
 
 		// face following
 		followFace: new Signal(),
-		followEmotion: new Signal(),
 		followLeftEye: new Signal(),
 		followRightEye: new Signal(),
 		followMouth: new Signal(),

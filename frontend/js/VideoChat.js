@@ -94,16 +94,6 @@ function addToConversation ( who, msgType, info ) {
 			break;
 		}
 
-		case 'followEmotion': {
-			let puppet = editor.selected;
-
-			if ( puppet !== null ) {
-				puppet.updateEmotion( info.emotion );
-				editor.signals.sceneGraphChanged.dispatch();
-			}
-			break;
-		}
-
 		case 'followLeftEye': {
 			let puppet = editor.selected;
 
@@ -324,13 +314,6 @@ var VideoChat = function ( editor ) {
     recommendationPanel.setBackgroundColor( 'rgba(0,0,0,0)' );
 
     callerPanel.add( recommendationPanel );
-
-    //
-
-	// $(function (  ) {
-	// 	$(cameraView.dom).resizable();
-	// 	$(studentView.dom).resizable();
-	// });
 
     //
 
@@ -877,8 +860,6 @@ var VideoChat = function ( editor ) {
 						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
 						break;
 				}
-				if ( FACE_INFORMATION[ 'emotion' ] === EMOTION_TYPE.NEUTRAL || FACE_INFORMATION[ 'emotion' ] === EMOTION_TYPE.HAPPY )
-					signals.followEmotion.dispatch( FACE_INFORMATION[ 'emotion' ] );
 
 				//show debug information about eyes and emotion, should delete it after completion
 				// debugInf.setValue( 'left:' + FACE_INFORMATION[ 'left_eye' ] + '   right:' + FACE_INFORMATION[ 'right_eye' ] + ' ' +
