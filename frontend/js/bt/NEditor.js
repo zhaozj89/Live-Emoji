@@ -68,7 +68,7 @@ var NEditor = function ( editor ) {
 	close.setCursor( 'pointer' );
 	close.onClick( function () {
 
-		if( editor.emotionCMDManager.currentNodeSession.triggerNode!==null ) {
+		if( editor.emotionCMDManager.currentNodeSession!==null && editor.emotionCMDManager.currentNodeSession.triggerNode!==null ) {
 			if( editor.currentEditedKey===editor.emotionCMDManager.currentNodeSession.triggerNode.key.getArg() ) {
 				editor.emotionCMDManager.save();
 				container.setDisplay( 'none' );
