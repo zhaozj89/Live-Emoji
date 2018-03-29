@@ -1,3 +1,13 @@
+var EMOTION_TYPE = {
+	HAPPY: 0,
+	SAD: 1,
+	ANGRY: 2,
+	FEARFUL: 3,
+	SURPRISED: 4,
+	DISGUSTED: 5,
+	NEUTRAL: 6
+};
+
 class BasicElement {
 	constructor ( name, mesh, emotion ) {
 		this.name = name;
@@ -66,11 +76,11 @@ CharacterStructure.prototype.constructor = CharacterStructure;
 
 CharacterStructure.prototype.check = function () {
 	if ( this.isCompleted === 50 ) {
-		if( this.name==='boy' ) {
+		if ( this.name === 'boy' ) {
 			this.editor.boyLoaded = true;
 			this.editor.boyLabel.dom.click();
 		}
-		if( this.name==='girl' ) {
+		if ( this.name === 'girl' ) {
 			this.editor.girlLoaded = true;
 			this.editor.girlLabel.dom.click();
 		}
@@ -214,37 +224,37 @@ CharacterStructure.prototype.updateEmotion = function ( emotion ) {
 		if ( this.nose[ i ].emotion === emotion ) this.nose[ i ].mesh.visible = true;
 	}
 
-	for ( let i = 0; i < Object.keys( EMOTION_TYPE ).length+1; ++i ) {
+	for ( let i = 0; i < Object.keys( EMOTION_TYPE ).length + 1; ++i ) {
 
 		if ( this.left_eye[ i ].emotion === emotion ) {
-			if( this.left_eye_close === false ) {
+			if ( this.left_eye_close === false ) {
 				this.left_eye[ i ].mesh.visible = true;
 			}
 		}
 		else {
-			if( this.left_eye_close === false ) {
+			if ( this.left_eye_close === false ) {
 				this.left_eye[ i ].mesh.visible = false;
 			}
 		}
 
 		if ( this.right_eye[ i ].emotion === emotion ) {
-			if( this.right_eye_close === false ) {
+			if ( this.right_eye_close === false ) {
 				this.right_eye[ i ].mesh.visible = true;
 			}
 		}
 		else {
-			if( this.right_eye_close === false ) {
+			if ( this.right_eye_close === false ) {
 				this.right_eye[ i ].mesh.visible = false;
 			}
 		}
 
 		if ( this.mouth[ i ].emotion === emotion ) {
-			if( this.mouth_open === false ) {
+			if ( this.mouth_open === false ) {
 				this.mouth[ i ].mesh.visible = true;
 			}
 		}
 		else {
-			if( this.mouth_open === false ) {
+			if ( this.mouth_open === false ) {
 				this.mouth[ i ].mesh.visible = false;
 			}
 		}
@@ -305,7 +315,7 @@ CharacterStructure.prototype.updateRightEye = function ( state ) {
 
 CharacterStructure.prototype.updateMouth = function ( state ) {
 
-	if( state === 'open' ) {
+	if ( state === 'open' ) {
 		for ( let i = 0; i < Object.keys( EMOTION_TYPE ).length + 1; ++i ) {
 			if ( this.mouth[ i ].emotion === 'open' ) {
 				this.mouth[ i ].mesh.visible = true;

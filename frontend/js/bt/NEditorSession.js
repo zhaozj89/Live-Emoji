@@ -164,6 +164,8 @@ class NodeSession {
 					action_node.run( component );
 				}
 			}
+
+			alert( 'I am finished!' );
 		}
 		return;
 	}

@@ -157,7 +157,6 @@ var Editor = function () {
 		top: 40
 	};
 
-	this.emotionMutex = false;
 	this.facePositionMutex = false;
 
 	this.videoStartButton = null;

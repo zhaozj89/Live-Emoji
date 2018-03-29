@@ -31,14 +31,9 @@ class SwapNode extends Node {
 
 		let that = this;
 		let puppet = that.editor.selected;
-		if( puppet!==null ) {
-			that.editor.emotionMutex = true;
+		if ( puppet !== null ) {
 			puppet.updateEmotion( that.emotion.getArg() );
 			that.editor.signals.sceneGraphChanged.dispatch();
-
-			setTimeout( function () {
-				that.editor.emotionMutex = false;
-			}, 500 );
 		}
 	}
 
@@ -111,12 +106,12 @@ class ParticleNode extends Node {
 		this.particleController = new BackgroundAnimationController( editor, this.emitterX, this.emitterY );
 
 		let that = this;
-		this.domElement.onclick = function (  ) {
+		this.domElement.onclick = function () {
 			that.editor.currentEmitter = that.particleController.emitter;
 
 			let len = that.editor.allParticleNodes.length;
-			for( let i=0; i<len; ++i ) {
-				that.editor.allParticleNodes[i].domElement.style.backgroundColor = 'rgba(100,100,100,0.8)';
+			for ( let i = 0; i < len; ++i ) {
+				that.editor.allParticleNodes[ i ].domElement.style.backgroundColor = 'rgba(100,100,100,0.8)';
 			}
 			that.domElement.style.backgroundColor = 'rgba(200,100,100,0.8)';
 		}
@@ -412,7 +407,7 @@ class ViberationNode extends Node {
 				let that = this;
 				that.editor.facePositionMutex = true;
 				setTimeout( function () {
-					that.editor.emotionMutex = false;
+					that.editor.facePositionMutex = false;
 				}, 2000 );
 			}
 

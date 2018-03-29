@@ -7,74 +7,74 @@
 var selfEasyrtcid = "";
 
 class RecommendedCMD {
-    constructor ( _key, _semantic, _valence, _arousal ) {
-        this.cell0 = document.createElement( 'td' );
-        this.cell1 = document.createElement( 'td' );
-        this.cell2 = document.createElement( 'td' );
-        this.cell3 = document.createElement( 'td' );
+	constructor ( _key, _semantic, _valence, _arousal ) {
+		this.cell0 = document.createElement( 'td' );
+		this.cell1 = document.createElement( 'td' );
+		this.cell2 = document.createElement( 'td' );
+		this.cell3 = document.createElement( 'td' );
 
-        this.cell0.setAttribute( 'scope', 'col' );
-        this.cell1.setAttribute( 'scope', 'col' );
-        this.cell2.setAttribute( 'scope', 'col' );
-        this.cell3.setAttribute( 'scope', 'col' );
+		this.cell0.setAttribute( 'scope', 'col' );
+		this.cell1.setAttribute( 'scope', 'col' );
+		this.cell2.setAttribute( 'scope', 'col' );
+		this.cell3.setAttribute( 'scope', 'col' );
 
-        this.cell0.style.textAlign = 'center';
-        this.cell1.style.textAlign = 'center';
-        this.cell2.style.textAlign = 'center';
-        this.cell3.style.textAlign = 'center';
+		this.cell0.style.textAlign = 'center';
+		this.cell1.style.textAlign = 'center';
+		this.cell2.style.textAlign = 'center';
+		this.cell3.style.textAlign = 'center';
 
-        this.keyDiv = new UI.Text( _key );
-        this.semanticDiv = new UI.Text( _semantic );
-        this.valenceDiv = new UI.Text( _valence );
-        this.arousalDiv = new UI.Text( _arousal );
+		this.keyDiv = new UI.Text( _key );
+		this.semanticDiv = new UI.Text( _semantic );
+		this.valenceDiv = new UI.Text( _valence );
+		this.arousalDiv = new UI.Text( _arousal );
 
-        this.cell0.appendChild( this.keyDiv.dom );
-        this.cell1.appendChild( this.semanticDiv.dom );
-        this.cell2.appendChild( this.valenceDiv.dom );
-        this.cell3.appendChild( this.arousalDiv.dom );
-    }
+		this.cell0.appendChild( this.keyDiv.dom );
+		this.cell1.appendChild( this.semanticDiv.dom );
+		this.cell2.appendChild( this.valenceDiv.dom );
+		this.cell3.appendChild( this.arousalDiv.dom );
+	}
 
-    updateInfo ( _key, _semantic, _valence, _arousal ) {
-        this.keyDiv.setValue( _key );
-        this.semanticDiv.setValue( _semantic );
-        this.valenceDiv.setValue( _valence );
-        this.arousalDiv.setValue( _arousal );
-    }
+	updateInfo ( _key, _semantic, _valence, _arousal ) {
+		this.keyDiv.setValue( _key );
+		this.semanticDiv.setValue( _semantic );
+		this.valenceDiv.setValue( _valence );
+		this.arousalDiv.setValue( _arousal );
+	}
 
-    createDOM ( editor ) {
+	createDOM ( editor ) {
 
-        this.row = document.createElement( 'tr' );
-        this.row.appendChild( this.cell0 );
-        this.row.appendChild( this.cell1 );
-        this.row.appendChild( this.cell2 );
-        this.row.appendChild( this.cell3 );
+		this.row = document.createElement( 'tr' );
+		this.row.appendChild( this.cell0 );
+		this.row.appendChild( this.cell1 );
+		this.row.appendChild( this.cell2 );
+		this.row.appendChild( this.cell3 );
 
-        return this.row;
-    }
+		return this.row;
+	}
 }
 
 
 function performCall ( otherEasyrtcid ) {
-    easyrtc.hangupAll();
-    let successCB = function () {
+	easyrtc.hangupAll();
+	let successCB = function () {
 		console.log( 'Calling ' + otherEasyrtcid + ' succeed!' );
 	};
-    let failureCB = function () {
-    	alert( 'Calling ' + otherEasyrtcid + ' fails!' );
+	let failureCB = function () {
+		alert( 'Calling ' + otherEasyrtcid + ' fails!' );
 	};
-    easyrtc.call( otherEasyrtcid, successCB, failureCB );
+	easyrtc.call( otherEasyrtcid, successCB, failureCB );
 }
 
 function sendStuffWS ( otherEasyrtcid, info ) {
-    easyrtc.sendDataWS( otherEasyrtcid, "message", info );
+	easyrtc.sendDataWS( otherEasyrtcid, "message", info );
 }
 
 function loginSuccess ( easyrtcid ) {
-    selfEasyrtcid = easyrtcid;
+	selfEasyrtcid = easyrtcid;
 }
 
 function loginFailure ( errorCode, message ) {
-    easyrtc.showError( errorCode, message );
+	easyrtc.showError( errorCode, message );
 }
 
 function addToConversation ( who, msgType, info ) {
@@ -126,7 +126,7 @@ function addToConversation ( who, msgType, info ) {
 
 			if ( puppet !== null ) {
 				let nodeSession = new NodeSession( editor );
-				nodeSession.fromJSON( JSON.parse(info.cmd) );
+				nodeSession.fromJSON( JSON.parse( info.cmd ) );
 
 				nodeSession.run( info.key );
 				editor.signals.sceneGraphChanged.dispatch();
@@ -155,6 +155,31 @@ function convertListToButtons ( roomName, data, isPrimary ) {
 var VideoChat = function ( editor ) {
 
 	signals = editor.signals;
+
+	//
+
+	//define canvas for image processing
+	let captureCanvas = document.createElement( 'canvas' );		// internal canvas for capturing full images from video stream
+	captureCanvas.width = 250;  //should be the same as videoStream.dom.width in Camera.js
+	captureCanvas.height = 200; //should be the same as videoStream.dom.height in Camera.js
+	let captureContext = captureCanvas.getContext( '2d' );
+
+	let FaceCanvas = document.createElement( 'canvas' );
+	FaceCanvas.width = 48;
+	FaceCanvas.height = 48;
+	let FaceContext = FaceCanvas.getContext( '2d' );
+
+	let LeftEyeCanvas = document.createElement( 'canvas' );
+	LeftEyeCanvas.width = 24;
+	LeftEyeCanvas.height = 24;
+	let LeftEyeContext = LeftEyeCanvas.getContext( '2d' );
+
+	let RightEyeCanvas = document.createElement( 'canvas' );
+	RightEyeCanvas.width = 24;
+	RightEyeCanvas.height = 24;
+	let RightEyeContext = RightEyeCanvas.getContext( '2d' );
+
+	//
 
 	let cameraView = new UI.Panel();
 	cameraView.setTop( '0px' );
@@ -299,73 +324,73 @@ var VideoChat = function ( editor ) {
 
 	callerPanel.add( callerVideoStream );
 
-    let recommendationPanel = new UI.Panel();
-    recommendationPanel.setPosition( 'absolute' );
-    recommendationPanel.setBottom( '50px' );
-    recommendationPanel.dom.width = 250;
-    recommendationPanel.setHeight( '100px' );
-    recommendationPanel.setBackgroundColor( 'rgba(0,0,0,0)' );
+	let recommendationPanel = new UI.Panel();
+	recommendationPanel.setPosition( 'absolute' );
+	recommendationPanel.setBottom( '50px' );
+	recommendationPanel.dom.width = 250;
+	recommendationPanel.setHeight( '100px' );
+	recommendationPanel.setBackgroundColor( 'rgba(0,0,0,0)' );
 
-    callerPanel.add( recommendationPanel );
+	callerPanel.add( recommendationPanel );
 
-    //
+	//
 
-    let table = document.createElement( "TABLE" );
-    table.style.class = 'table table-hover table-dark';
-    table.style.width = '100%';
-    let header = table.createTHead();
-    let headerRow = header.insertRow( 0 );
+	let table = document.createElement( "TABLE" );
+	table.style.class = 'table table-hover table-dark';
+	table.style.width = '100%';
+	let header = table.createTHead();
+	let headerRow = header.insertRow( 0 );
 
-    let headerCell0 = document.createElement( 'th' );
-    let headerCell1 = document.createElement( 'th' );
-    let headerCell2 = document.createElement( 'th' );
-    let headerCell3 = document.createElement( 'th' );
+	let headerCell0 = document.createElement( 'th' );
+	let headerCell1 = document.createElement( 'th' );
+	let headerCell2 = document.createElement( 'th' );
+	let headerCell3 = document.createElement( 'th' );
 
-    headerCell0.setAttribute( 'scope', 'col' );
-    headerCell1.setAttribute( 'scope', 'col' );
-    headerCell2.setAttribute( 'scope', 'col' );
-    headerCell3.setAttribute( 'scope', 'col' );
+	headerCell0.setAttribute( 'scope', 'col' );
+	headerCell1.setAttribute( 'scope', 'col' );
+	headerCell2.setAttribute( 'scope', 'col' );
+	headerCell3.setAttribute( 'scope', 'col' );
 
-    headerCell0.style.textAlign = 'center';
-    headerCell1.style.textAlign = 'center';
-    headerCell2.style.textAlign = 'center';
-    headerCell3.style.textAlign = 'center';
+	headerCell0.style.textAlign = 'center';
+	headerCell1.style.textAlign = 'center';
+	headerCell2.style.textAlign = 'center';
+	headerCell3.style.textAlign = 'center';
 
-    headerRow.appendChild( headerCell0 );
-    headerRow.appendChild( headerCell1 );
-    headerRow.appendChild( headerCell2 );
-    headerRow.appendChild( headerCell3 );
+	headerRow.appendChild( headerCell0 );
+	headerRow.appendChild( headerCell1 );
+	headerRow.appendChild( headerCell2 );
+	headerRow.appendChild( headerCell3 );
 
-    let keyDiv = new UI.Text( 'Key' );
-    let semanticDiv = new UI.Text( 'Semantic' );
-    let valenceDiv = new UI.Text( 'Valence' );
-    let arousalDiv = new UI.Text( 'Arousal' );
+	let keyDiv = new UI.Text( 'Key' );
+	let semanticDiv = new UI.Text( 'Semantic' );
+	let valenceDiv = new UI.Text( 'Valence' );
+	let arousalDiv = new UI.Text( 'Arousal' );
 
-    keyDiv.setOpacity( '0.5' );
-	semanticDiv.setOpacity( '0.5' );
-	valenceDiv.setOpacity( '0.5' );
-	arousalDiv.setOpacity( '0.5' );
+	keyDiv.setOpacity( '0.8' );
+	semanticDiv.setOpacity( '0.8' );
+	valenceDiv.setOpacity( '0.8' );
+	arousalDiv.setOpacity( '0.8' );
 
-    headerCell0.appendChild( keyDiv.dom );
-    headerCell1.appendChild( semanticDiv.dom );
-    headerCell2.appendChild( valenceDiv.dom );
-    headerCell3.appendChild( arousalDiv.dom );
+	headerCell0.appendChild( keyDiv.dom );
+	headerCell1.appendChild( semanticDiv.dom );
+	headerCell2.appendChild( valenceDiv.dom );
+	headerCell3.appendChild( arousalDiv.dom );
 
-    recommendationPanel.dom.appendChild( table );
+	recommendationPanel.dom.appendChild( table );
 
-    let body = table.createTBody();
+	let body = table.createTBody();
 
-    let top0 = 	new RecommendedCMD( '','','','' );
-    let top1 = 	new RecommendedCMD( '','','','' );
-    let top2 = 	new RecommendedCMD( '','','','' );
+	let top0 = new RecommendedCMD( '', '', '', '' );
+	let top1 = new RecommendedCMD( '', '', '', '' );
+	let top2 = new RecommendedCMD( '', '', '', '' );
 
-    let dom0 = top0.createDOM();
-    let dom1 = top1.createDOM();
-    let dom2 = top2.createDOM();
+	let dom0 = top0.createDOM();
+	let dom1 = top1.createDOM();
+	let dom2 = top2.createDOM();
 
-    dom0.style.color = 'chartreuse';
-    dom1.style.color = 'crimson';
-    dom2.style.color = 'aliceblue';
+	dom0.style.color = 'chartreuse';
+	dom1.style.color = 'crimson';
+	dom2.style.color = 'aliceblue';
 
 	dom0.style.opacity = '0.5';
 	dom1.style.opacity = '0.5';
@@ -375,37 +400,37 @@ var VideoChat = function ( editor ) {
 	dom1.style.backgroundColor = 'rgba(100,100,100,0.1)';
 	dom2.style.backgroundColor = 'rgba(100,100,100,0.1)';
 
-    body.appendChild( dom0 );
-    body.appendChild( dom1 );
-    body.appendChild( dom2 );
+	body.appendChild( dom0 );
+	body.appendChild( dom1 );
+	body.appendChild( dom2 );
 
-    let connectButton = new UI.Button( 'Connect' );
-    connectButton.setId( 'connectButton' );
-    connectButton.setType( 'button' );
-    connectButton.setWidth( '100%' );
-    connectButton.dom.style.borderRadius = '5px';
+	let connectButton = new UI.Button( 'Connect' );
+	connectButton.setId( 'connectButton' );
+	connectButton.setType( 'button' );
+	connectButton.setWidth( '100%' );
+	connectButton.dom.style.borderRadius = '5px';
 
-    $(connectButton.dom).click( function () {
-        if( editor.rtcid===null || editor.rtcid===undefined ) {
-        	alert( 'Peer computer is not set up!' );
-        	return;
+	$( connectButton.dom ).click( function () {
+		if ( editor.rtcid === null || editor.rtcid === undefined ) {
+			alert( 'Peer computer is not set up!' );
+			return;
 		}
-        else {
-        	console.log( 'calling: ' + editor.rtcid );
+		else {
+			console.log( 'calling: ' + editor.rtcid );
 			performCall( editor.rtcid );
 		}
-    });
+	} );
 
 	studentView.add( connectButton );
 
-    editor.signals.displayRecommendationInAudienceView.add(function () {
-    	let row0 = editor.emotion_cmd_tablebody.rows[0];
-        let row1 = editor.emotion_cmd_tablebody.rows[1];
-        let row2 = editor.emotion_cmd_tablebody.rows[2];
-        top0.updateInfo( row0.cells[0].innerText, row0.cells[1].innerText, row0.cells[2].innerText, row0.cells[3].innerText );
-        top1.updateInfo( row1.cells[0].innerText, row1.cells[1].innerText, row1.cells[2].innerText, row1.cells[3].innerText );
-        top2.updateInfo( row2.cells[0].innerText, row2.cells[1].innerText, row2.cells[2].innerText, row2.cells[3].innerText );
-    });
+	editor.signals.displayRecommendationInAudienceView.add( function () {
+		let row0 = editor.emotion_cmd_tablebody.rows[ 0 ];
+		let row1 = editor.emotion_cmd_tablebody.rows[ 1 ];
+		let row2 = editor.emotion_cmd_tablebody.rows[ 2 ];
+		top0.updateInfo( row0.cells[ 0 ].innerText, row0.cells[ 1 ].innerText, row0.cells[ 2 ].innerText, row0.cells[ 3 ].innerText );
+		top1.updateInfo( row1.cells[ 0 ].innerText, row1.cells[ 1 ].innerText, row1.cells[ 2 ].innerText, row1.cells[ 3 ].innerText );
+		top2.updateInfo( row2.cells[ 0 ].innerText, row2.cells[ 1 ].innerText, row2.cells[ 2 ].innerText, row2.cells[ 3 ].innerText );
+	} );
 
 	//
 
@@ -416,11 +441,11 @@ var VideoChat = function ( editor ) {
 
 	//
 
-	var videoStreamOverlayContext = videoStreamOverlay.getContext( '2d' );
+	let videoStreamOverlayContext = videoStreamOverlay.getContext( '2d' );
 
 	//
 
-	var faceTrackingStarted = false;
+	let faceTrackingStarted = false;
 
 	// Initialization
 	{
@@ -436,15 +461,16 @@ var VideoChat = function ( editor ) {
 			}
 
 			function adjustVideoProportions () {
-				var proportion = videoStream.dom.videoWidth / videoStream.dom.videoHeight;
+				let proportion = videoStream.dom.videoWidth / videoStream.dom.videoHeight;
 				videoStreamWidth = Math.round( videoStreamHeight * proportion );
 				videoStream.dom.width = videoStreamWidth;
 				videoStreamOverlay.dom.width = videoStreamWidth;
 				callerVideoStream.dom.width = videoStreamWidth;
 
+				captureCanvas.width = videoStreamWidth;
+
 				overlayedPanel.setWidth( videoStreamWidth + 'px' );
 				callerPanel.setWidth( videoStreamWidth + 'px' );
-
 				recommendationPanel.setWidth( videoStreamWidth + 'px' );
 			}
 
@@ -505,11 +531,9 @@ var VideoChat = function ( editor ) {
 	}
 
 
-	// Setup Models
-	var ctrack = new clm.tracker( { useWebGL: true } );
+	// setup model
+	let ctrack = new clm.tracker( { useWebGL: true } );
 	ctrack.init();
-
-	// Start Detection / Tracking
 
 	let resVals = [];
 	let bufSize = 20;
@@ -547,47 +571,41 @@ var VideoChat = function ( editor ) {
 	function MainLoop () {
 		requestId = undefined;
 
-		now = Date.now();
-		elapsed = now - then;
+		// predict
+		pred = FaceTracker.predict();
 
-		// if( editor.emotionCMDDurationMutex===2 ) {
-		// 	if ( elapsed > fpsInterval ) {
-				then = now;
+		// measure
+		measurement = GetFaceLandmark();
 
-				// predict
-				pred = FaceTracker.predict();
+		// correct
+		if ( measurement === null ) {
+			corr = pred;
+		}
+		else {
+			corr = FaceTracker.correct( measurement.x, measurement.y );
+		}
 
-				// measure
-				measurement = GetFaceEmotionAndLandmark();
+		// send signal
+		if ( corr !== null ) {
 
-				// correct
-				if ( measurement === null ) {
-					corr = pred;
-				}
-				else {
-					corr = FaceTracker.correct( measurement.x, measurement.y );
-				}
+			let lpfCorr = lpf( corr, 0.6 );
+			if ( lpfCorr !== null ) {
+				let res = { x: 0, y: 0 };
 
-				// send signal
-				if ( corr !== null ) {
+				res.x = lpfCorr.x / videoStreamWidth - 0.5;
+				res.y = lpfCorr.y / videoStreamHeight - 0.5;
 
-					let lpfCorr = lpf( corr, 0.6 );
-					if ( lpfCorr !== null ) {
-						let res = { x: 0, y: 0 };
+				res.x *= 10;
+				res.y *= 10;
 
-						res.x = lpfCorr.x / videoStreamWidth - 0.5;
-						res.y = lpfCorr.y / videoStreamHeight - 0.5;
+				signals.followFace.dispatch( res );
+			}
+		}
 
-						res.x *= 10;
-						res.y *= 10;
+		DrawLandmark();
 
-						signals.followFace.dispatch( res );
-					}
-				}
+		GetFaceEmotion();
 
-				DrawLandmark();
-			// }
-		// }
 		StartMainLoop();
 	}
 
@@ -634,9 +652,9 @@ var VideoChat = function ( editor ) {
 	}
 
 	//load models
-	var KerasJS = require( "keras-js" );
-	var ndarray = require( "ndarray" );
-	var ops = require( "ndarray-ops" );
+	let KerasJS = require( "keras-js" );
+	let ndarray = require( "ndarray" );
+	let ops = require( "ndarray-ops" );
 	const blinkmodelLeft = new KerasJS.Model( {
 		filepath: './js/face/blink.bin',
 		gpu: true
@@ -651,29 +669,8 @@ var VideoChat = function ( editor ) {
 		gpu: true
 	} );
 
-	//define canvas for image processing
-	var captureCanvas = document.createElement( 'canvas' );		// internal canvas for capturing full images from video stream
-	captureCanvas.width = 250;  //should be the same as videoStream.dom.width in Camera.js
-	captureCanvas.height = 200; //should be the same as videoStream.dom.height in Camera.js
-	var captureContext = captureCanvas.getContext( '2d' );
-
-	var FaceCanvas = document.createElement( 'canvas' );
-	FaceCanvas.width = 48;
-	FaceCanvas.height = 48;
-	var FaceContext = FaceCanvas.getContext( '2d' );
-
-	var LeftEyeCanvas = document.createElement( 'canvas' );
-	LeftEyeCanvas.width = 24;
-	LeftEyeCanvas.height = 24;
-	var LeftEyeContext = LeftEyeCanvas.getContext( '2d' );
-
-	var RightEyeCanvas = document.createElement( 'canvas' );
-	RightEyeCanvas.width = 24;
-	RightEyeCanvas.height = 24;
-	var RightEyeContext = RightEyeCanvas.getContext( '2d' );
-
-	function GetFaceEmotion (  ) { // kerasjs
-		if( editor.faceLandmarkPosition!==null ) {
+	function GetFaceEmotion () { // kerasjs
+		if ( editor.faceLandmarkPosition !== null ) {
 			let positions = editor.faceLandmarkPosition;
 
 			// open mouth detection
@@ -702,46 +699,44 @@ var VideoChat = function ( editor ) {
 			//FaceRect.w = positions[14][0] - positions[0][0] + 10;
 			FaceRect.w = FaceRect.h = positions[ 7 ][ 1 ] - positions[ 20 ][ 1 ] + 30;
 
-			var width = 24;
-			var height = 24;
+			let width = 24;
+			let height = 24;
 			captureContext.drawImage( videoStream.dom, 0, 0, videoStreamWidth, videoStreamHeight );
 
 			LeftEyeContext.drawImage( captureCanvas, eyeRectLeft.x, eyeRectLeft.y, eyeRectLeft.w, eyeRectLeft.h, 0, 0, LeftEyeCanvas.width, LeftEyeCanvas.height );
-			var LeftImageData = LeftEyeContext.getImageData( 0, 0, LeftEyeCanvas.width, LeftEyeCanvas.height );
-			var LeftImageGray = grayscale( LeftImageData, 0.5 );
-			var LeftEyedata = LeftImageGray.data;
+			let LeftImageData = LeftEyeContext.getImageData( 0, 0, LeftEyeCanvas.width, LeftEyeCanvas.height );
+			let LeftImageGray = grayscale( LeftImageData, 0.5 );
+			let LeftEyedata = LeftImageGray.data;
 
 			RightEyeContext.drawImage( captureCanvas, eyeRectRight.x, eyeRectRight.y, eyeRectRight.w, eyeRectRight.h, 0, 0, RightEyeCanvas.width, RightEyeCanvas.height );
-			var RightImageData = RightEyeContext.getImageData( 0, 0, RightEyeCanvas.width, RightEyeCanvas.height );
-			var RightImageGray = grayscale( RightImageData, 0.5 );
-			var RightEyedata = RightImageGray.data;
+			let RightImageData = RightEyeContext.getImageData( 0, 0, RightEyeCanvas.width, RightEyeCanvas.height );
+			let RightImageGray = grayscale( RightImageData, 0.5 );
+			let RightEyedata = RightImageGray.data;
 
 			FaceContext.drawImage( captureCanvas, FaceRect.x, FaceRect.y, FaceRect.w, FaceRect.h, 0, 0, FaceCanvas.width, FaceCanvas.height );
-			var FaceImageData = FaceContext.getImageData( 0, 0, FaceCanvas.width, FaceCanvas.height );
-			var FaceImageGray = grayscale( FaceImageData, 0 );
-			var Facedata = FaceImageGray.data;
+			let FaceImageData = FaceContext.getImageData( 0, 0, FaceCanvas.width, FaceCanvas.height );
+			let FaceImageGray = grayscale( FaceImageData, 0 );
+			let Facedata = FaceImageGray.data;
 
 			blinkmodelLeft.ready()
 			.then( () => {
-				var dataTensor = ndarray( new Float32Array( LeftEyedata ), [ width, height, 4 ] )
-				var dataProcessedTensor = ndarray( new Float32Array( width * height * 3 ), [ width, height, 3 ] )
+				let dataTensor = ndarray( new Float32Array( LeftEyedata ), [ width, height, 4 ] )
+				let dataProcessedTensor = ndarray( new Float32Array( width * height * 3 ), [ width, height, 3 ] )
 				ops.divseq( dataTensor, 255 )
 				ops.subseq( dataTensor, 0.5 )
 				ops.mulseq( dataTensor, 2 )
 				ops.assign( dataProcessedTensor.pick( null, null, 0 ), dataTensor.pick( null, null, 0 ) )
 				ops.assign( dataProcessedTensor.pick( null, null, 1 ), dataTensor.pick( null, null, 1 ) )
 				ops.assign( dataProcessedTensor.pick( null, null, 2 ), dataTensor.pick( null, null, 2 ) )
-				var preprocessedData = dataProcessedTensor.data;
-				var inputData = { "input": preprocessedData }
+				let preprocessedData = dataProcessedTensor.data;
+				let inputData = { "input": preprocessedData }
 				return blinkmodelLeft.predict( inputData )
 			} )
 			.then( outputData => {
 				if ( outputData.output < 0.2 ) {
-					FACE_INFORMATION[ 'left_eye' ] = EYE_STATUS.CLOSE;
 					signals.followLeftEye.dispatch( 'close' );
 				}
 				else {
-					FACE_INFORMATION[ 'left_eye' ] = EYE_STATUS.OPEN;
 					signals.followLeftEye.dispatch( 'open' );
 				}
 			} )
@@ -751,25 +746,23 @@ var VideoChat = function ( editor ) {
 
 			blinkmodelRight.ready()
 			.then( () => {
-				var dataTensor = ndarray( new Float32Array( RightEyedata ), [ width, height, 4 ] )
-				var dataProcessedTensor = ndarray( new Float32Array( width * height * 3 ), [ width, height, 3 ] )
+				let dataTensor = ndarray( new Float32Array( RightEyedata ), [ width, height, 4 ] )
+				let dataProcessedTensor = ndarray( new Float32Array( width * height * 3 ), [ width, height, 3 ] )
 				ops.divseq( dataTensor, 255 )
 				ops.subseq( dataTensor, 0.5 )
 				ops.mulseq( dataTensor, 2 )
 				ops.assign( dataProcessedTensor.pick( null, null, 0 ), dataTensor.pick( null, null, 0 ) )
 				ops.assign( dataProcessedTensor.pick( null, null, 1 ), dataTensor.pick( null, null, 1 ) )
 				ops.assign( dataProcessedTensor.pick( null, null, 2 ), dataTensor.pick( null, null, 2 ) )
-				var preprocessedData = dataProcessedTensor.data;
-				var inputData = { "input": preprocessedData }
+				let preprocessedData = dataProcessedTensor.data;
+				let inputData = { "input": preprocessedData }
 				return blinkmodelRight.predict( inputData )
 			} )
 			.then( outputData => {
 				if ( outputData.output < 0.2 ) {
-					FACE_INFORMATION[ 'right_eye' ] = EYE_STATUS.CLOSE;
 					signals.followRightEye.dispatch( 'close' );
 				}
 				else {
-					FACE_INFORMATION[ 'right_eye' ] = EYE_STATUS.OPEN;
 					signals.followRightEye.dispatch( 'open' );
 				}
 			} )
@@ -779,26 +772,26 @@ var VideoChat = function ( editor ) {
 
 			emotionmodel.ready()
 			.then( () => {
-				var dataTensor = ndarray( new Float32Array( Facedata ), [ FaceCanvas.width, FaceCanvas.height, 4 ] );
-				var dataProcessedTensor = ndarray( new Float32Array( FaceCanvas.width * FaceCanvas.height * 1 ), [ FaceCanvas.width, FaceCanvas.height, 1 ] );
+				let dataTensor = ndarray( new Float32Array( Facedata ), [ FaceCanvas.width, FaceCanvas.height, 4 ] );
+				let dataProcessedTensor = ndarray( new Float32Array( FaceCanvas.width * FaceCanvas.height * 1 ), [ FaceCanvas.width, FaceCanvas.height, 1 ] );
 
 				ops.divseq( dataTensor, 255 )
 				ops.subseq( dataTensor, 0.5 )
 				ops.mulseq( dataTensor, 2 )
 				ops.assign( dataProcessedTensor.pick( null, null, 0 ), dataTensor.pick( null, null, 0 ) )
-				var preprocessedData = dataProcessedTensor.data
-				var inputData = { "input": preprocessedData }
+				let preprocessedData = dataProcessedTensor.data
+				let inputData = { "input": preprocessedData }
 				return emotionmodel.predict( inputData )
 			} )
 			.then( outputData => {
-				var emotions = new Array();
-				emotions[ 0 ] = { value: outputData.output[ 0 ], label: 'angry' };
-				emotions[ 1 ] = { value: outputData.output[ 1 ], label: 'disgust' };
-				emotions[ 2 ] = { value: outputData.output[ 2 ], label: 'fear' };
-				emotions[ 3 ] = { value: outputData.output[ 3 ], label: 'happy' };
-				emotions[ 4 ] = { value: outputData.output[ 4 ], label: 'sad' };
-				emotions[ 5 ] = { value: outputData.output[ 5 ], label: 'surprised' };
-				emotions[ 6 ] = { value: outputData.output[ 6 ], label: 'neutral' };
+				// let emotions = new Array();
+				// emotions[ 0 ] = { value: outputData.output[ 0 ], label: 'angry' };
+				// emotions[ 1 ] = { value: outputData.output[ 1 ], label: 'disgust' };
+				// emotions[ 2 ] = { value: outputData.output[ 2 ], label: 'fear' };
+				// emotions[ 3 ] = { value: outputData.output[ 3 ], label: 'happy' };
+				// emotions[ 4 ] = { value: outputData.output[ 4 ], label: 'sad' };
+				// emotions[ 5 ] = { value: outputData.output[ 5 ], label: 'surprised' };
+				// emotions[ 6 ] = { value: outputData.output[ 6 ], label: 'neutral' };
 
 				let valence_level = {
 					'happy': outputData.output[ 3 ],
@@ -807,41 +800,18 @@ var VideoChat = function ( editor ) {
 
 				signals.updateRecommendation.dispatch( valence_level );
 
-				var emotionvalue = '';
-				var mostPossible = '';
-				var temp = 0;
+				/*
+				let emotionvalue = '';
+				let mostPossible = '';
+				let temp = 0;
 				for ( i = 0; i < 7; i++ ) {
 					emotionvalue += emotions[ i ].label + ": " + ( emotions[ i ].value * 100 ).toFixed( 1 ) + "% ";//e.g. disgusted: 15.1%
-					if ( temp < emotions[ i ].value ) { //获取最高概率的情绪mostPossible
+					if ( temp < emotions[ i ].value ) {
 						temp = emotions[ i ].value;
 						mostPossible = emotions[ i ].label;
 					}
 				}
-
-				switch ( mostPossible ) {
-					case 'happy':
-						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.HAPPY;
-						break;
-					case 'sad':
-						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SAD;
-						break;
-					case 'surprised':
-						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.SURPRISED;
-						break;
-					case 'angry':
-						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.ANGRY;
-						break;
-					case 'neutral':
-						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
-						break;
-					default:
-						FACE_INFORMATION[ 'emotion' ] = EMOTION_TYPE.NEUTRAL;
-						break;
-				}
-
-				//show debug information about eyes and emotion, should delete it after completion
-				// debugInf.setValue( 'left:' + FACE_INFORMATION[ 'left_eye' ] + '   right:' + FACE_INFORMATION[ 'right_eye' ] + ' ' +
-				// 	"Predicted emotions: " + mostPossible + " " + "Possibilities of all emotions: " + emotionvalue );
+				*/
 			} )
 			.catch( err => {
 				console.log( err )
@@ -849,11 +819,11 @@ var VideoChat = function ( editor ) {
 		}
 	}
 
-	function GetFaceEmotionAndLandmark () {
+	function GetFaceLandmark () {
 		let positions = ctrack.getCurrentPosition();
 
 		if ( positions ) {
-			editor.faceLandmarkPositions = positions;
+			editor.faceLandmarkPosition = positions;
 
 			let resX = 0;
 			let resY = 0;
