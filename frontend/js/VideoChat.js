@@ -674,7 +674,7 @@ var VideoChat = function ( editor ) {
 		wave.setAmplitude( meter.volume * 10 );
 		editor.voiceMeter = meter.volume * 10;
 
-		if ( meter.volume > 0.01 ) {
+		if ( meter.volume > 0.02 ) {
 			// wave.start();
 			signals.followMouth.dispatch( 'open' );
 		}
@@ -727,6 +727,8 @@ var VideoChat = function ( editor ) {
 
 			StopMainLoop();
 		}
+
+		editor.facetracking_running = faceTrackingStarted;
 	}
 
 	//load models

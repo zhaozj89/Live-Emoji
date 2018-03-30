@@ -111,42 +111,6 @@ var Sidebar = function ( editor ) {
 	preEditInput.dom.setAttribute( 'autocomplete', 'off' );
 	preEditLabel.add( preEditInput );
 
-	// auto trigger radio buttons
-
-	let triggerButtons = new UI.Div();
-	triggerButtons.setMargin( '5px' );
-	triggerButtons.addClass( 'btn-group' );
-	triggerButtons.addClass( 'btn-group-toggle' );
-	triggerButtons.dom.setAttribute( 'data-toggle', 'buttons' );
-	container.add( triggerButtons );
-
-	let autoLabel = new UI.Label();
-	autoLabel.addClass( 'btn' );
-	autoLabel.addClass( 'btn-secondary' );
-	autoLabel.setWidth( '140px' );
-	triggerButtons.add( autoLabel );
-	autoLabel.dom.innerHTML = 'Auto Trigger';
-
-	let autoInput = new UI.Input( '' );
-	autoInput.dom.setAttribute( 'type', 'radio' );
-	autoInput.dom.setAttribute( 'name', 'options' );
-	autoInput.dom.setAttribute( 'autocomplete', 'off' );
-	autoLabel.add( autoInput );
-
-	let manualLabel = new UI.Label();
-	manualLabel.addClass( 'btn' );
-	manualLabel.addClass( 'btn-secondary' );
-	manualLabel.setWidth( '150px' );
-	manualLabel.addClass( 'active' );
-	triggerButtons.add( manualLabel );
-	manualLabel.dom.innerHTML = 'Manual';
-
-	let manualInput = new UI.Input( '' );
-	manualInput.dom.setAttribute( 'type', 'radio' );
-	manualInput.dom.setAttribute( 'name', 'options' );
-	manualInput.dom.setAttribute( 'autocomplete', 'off' );
-	manualLabel.add( manualInput );
-
 	// choose boy or girl
 
 	let characterButtons = new UI.Div();
@@ -217,20 +181,6 @@ var Sidebar = function ( editor ) {
 		preEditLabel.setOpacity( '1' );
 	}
 
-	autoLabel.dom.onclick = function () {
-		editor.autoMode = 0;
-
-		autoLabel.setOpacity( '1' );
-		manualLabel.setOpacity( '0.2' );
-	}
-
-	manualLabel.dom.onclick = function () {
-		editor.autoMode = 1;
-
-		autoLabel.setOpacity( '0.2' );
-		manualLabel.setOpacity( '1' );
-	}
-
 	boyLabel.dom.onclick = function () {
 
 		if( editor.boyLoaded===false ) {
@@ -279,7 +229,6 @@ var Sidebar = function ( editor ) {
 	studentLabel.setOpacity( '0.2' );
 
 	preEditLabel.dom.click();
-	manualLabel.dom.click();
 
 	boyLabel.setOpacity( '0.2' );
 	girlLabel.setOpacity( '0.2' );

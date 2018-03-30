@@ -4,6 +4,10 @@
 
 var Editor = function () {
 
+	//
+
+	this.facetracking_running = false;
+
 	// mutex
 
 	let that = this;
@@ -69,6 +73,9 @@ var Editor = function () {
 	let Signal = signals.Signal;
 
 	this.signals = {
+
+		// update emotion panel values
+		updateEmotionPanelValues: new Signal(),
 
 		// to communication view
 		displayRecommendationInAudienceView: new Signal(),

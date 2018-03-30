@@ -83,7 +83,7 @@ var SidebarRight = function ( editor ) {
 			max: 90,
 			slide: function ( event, ui ) {
 				$( heartValueText.dom ).text( ui.value );
-				let val = -15 * ui.value + 2100;
+				let val = Math.floor( -15 * ui.value + 2100 );
 				heart.style.animation = val + 'ms pulsate infinite alternate ease-in-out';
 
 				if( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
@@ -109,39 +109,24 @@ var SidebarRight = function ( editor ) {
 	} );
 
 
-	// editor.signals.updateRecommendation.add( function ( valence_level ) {
-	// 	if ( editor.usageMode === 0 ) {
-	//
-	// 		let valence = null;
-	// 		if( valence_level['happy']+0.2>valence_level['sad'] ) {
-	// 			valence = Math.floor( valence_level['happy']*4 ) + 5;
-	// 		}
-	// 		else {
-	// 			valence = Math.floor( valence_level['sad']*4 ) + 1;
-	// 		}
-	//
-	// 		$( valenceText.dom ).text( valence );
-	// 		$( "#valenceSlider" ).slider( 'value', valence );
-	// 		valenceImg.src = './asset/valence_new/' + valence + '.png';
-	// 	}
-	// 	else {
-	// 		let valence = null;
-	// 		if( valence_level['happy']+0.2>valence_level['sad'] ) {
-	// 			valence = Math.floor( valence_level['happy']*4 ) + 5;
-	// 		}
-	// 		else {
-	// 			valence = Math.floor( valence_level['sad']*4 ) + 1;
-	// 		}
-	//
-	// 		$( valenceText.dom ).text( valence );
-	// 		$( "#valenceSlider" ).slider( 'value', valence );
-	// 		valenceImg.src = './asset/valence_new/' + valence + '.png';
-	//
-	// 		if( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
-	// 			editor.emotionCMDManager.currentNodeSession.triggerNode.valence.setArg( valence );
-	// 		}
-	// 	}
-	// } );
+	editor.signals.updateEmotionPanelValues.add( function ( vals ) {
+		if ( editor.usageMode === 0 ) {
+
+			$( valenceText.dom ).text( vals.valence );
+			$( "#valenceSlider" ).slider( 'value', vals.valence );
+			valenceImg.src = './asset/valence_new/' + vals.valence + '.png';
+
+			$( heartValueText.dom ).text( vals.arousal );
+			$( "#heartSlider" ).slider( 'value', vals.arousal );
+
+			let heart_val = Math.floor( -15 * vals.arousal + 2100 );
+			let heart = document.getElementsByClassName( 'heart' )[ 0 ];
+			heart.style.animation = heart_val + 'ms pulsate infinite alternate ease-in-out';
+		}
+		else{
+			// set emotion command valence with face, tuning it later
+		}
+	} );
 
 	return container;
 };

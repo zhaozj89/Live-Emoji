@@ -199,6 +199,21 @@ Sidebar.EmotionCMD = function ( editor ) {
 			let valence = max_valence.val;
 			let arousal = editor.autoArousalLevel;
 
+			if( max_valence.pm==='positive' ) {
+				valence = Math.floor( valence * 4 ) + 5;
+			}
+			// else if(max_valence.pm==='neutral') {
+			// 	valence = 5;
+			// }
+			else {
+				valence = Math.floor( valence * 4 ) + 1;
+			}
+
+			editor.signals.updateEmotionPanelValues.dispatch( {
+				valence: valence,
+				arousal: arousal
+			} );
+
 			let all_distprop = [];
 			for ( let prop in editor.emotionCMDManager.allCMDs ) {
 				let info = editor.emotionCMDManager.allCMDs[ prop ].getInfo();

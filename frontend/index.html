@@ -337,15 +337,18 @@
 		document.addEventListener( 'keydown', KeyboardTriggerFunction );
 	} );
 
+	let voice_pre = editor.voiceMeter;
+
 	function animate () {
 
 		requestAnimationFrame( animate );
 
-		if( editor.usageMode === 0 ) {
-			editor.autoArousalLevel = editor.autoArousalLevel * Math.exp( -0.002 ) + editor.voiceMeter * 10;
+		if( editor.facetracking_running === true ) {
+			editor.autoArousalLevel = editor.autoArousalLevel * Math.exp( -0.001 ) + editor.voiceMeter - voice_pre;
 			if( editor.autoArousalLevel>90 ) editor.autoArousalLevel = 90;
 			if( editor.autoArousalLevel<50 ) editor.autoArousalLevel = 50;
 			editor.allArousals.push( editor.autoArousalLevel );
+
 		}
 		else {
 			editor.autoArousalLevel = 70;

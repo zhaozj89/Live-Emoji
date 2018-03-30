@@ -57,7 +57,7 @@ function MostPossibleEmotion( list ) {
 			max_pm = 'positive';
 			break;
 		case 'neutral':
-			max_pm = 'positive';
+			max_pm = 'neutral';
 			break;
 	}
 
