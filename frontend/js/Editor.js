@@ -138,7 +138,10 @@ var Editor = function () {
 
 	this.emotionCMDManager = new EmotionCMDManager( this );
 
-	this.msgInputArousal = null;
+	this.autoArousalLevel = 70;
+	this.allArousals = [];
+
+	this.voiceMeter = 0;
 
 	this.currentEmitter = null;
 

@@ -193,16 +193,11 @@ Sidebar.EmotionCMD = function ( editor ) {
 	editor.signals.updateRecommendation.add( function ( valence_level ) { // 0 - 1
 
 		if ( editor.usageMode === 0 ) {
-			let arousal = editor.msgInputArousal; // 50 - 90
 
-			let valence = null; // 1 - 9
-			if( valence_level['happy'] + 0.2 > valence_level['sad'] ) {
-				let res = Math.pow( valence_level['happy'], 0.5 );
-				valence = Math.floor( res*4 ) + 5;
-			}
-			else {
-				valence = Math.floor( valence_level['sad']*4 ) + 1;
-			}
+			let max_valence = MostPossibleEmotion( valence_level );
+
+			let valence = max_valence.val;
+			let arousal = editor.autoArousalLevel;
 
 			let all_distprop = [];
 			for ( let prop in editor.emotionCMDManager.allCMDs ) {
@@ -230,18 +225,41 @@ Sidebar.EmotionCMD = function ( editor ) {
 				}
 			}
 
+			let positive_distprop = [];
+			let negative_distprop = [];
+			let dist_size = all_distprop.length;
+			for(let i=0; i<dist_size; ++i) {
+				let res = GetPositiveOrNegative( all_distprop[ i ].other.semantic );
+				if( res==='positive' )
+					positive_distprop.push( all_distprop[ i ] );
+				else
+					negative_distprop.push( all_distprop[ i ] );
+			}
+
 			// re-order the command table
 
 			let parent = body;
 			let rows = body.rows;
 			if ( rows.length >= 3 ) {
-				let idx0 = getIndexofRow( body, all_distprop[ 0 ].other.key );
-				let idx1 = getIndexofRow( body, all_distprop[ 1 ].other.key );
-				let idx2 = getIndexofRow( body, all_distprop[ 2 ].other.key );
+				let idx = [];
+				if( max_valence.pm==='positive' ) {
+					for(let i=0; i<positive_distprop.length; ++i)
+						idx.push( getIndexofRow( body, positive_distprop[ i ].other.key ) );
 
-				parent.insertBefore( rows[ idx0 ], rows[ 0 ] );
-				parent.insertBefore( rows[ idx1 ], rows[ 1 ] );
-				parent.insertBefore( rows[ idx2 ], rows[ 2 ] );
+					for(let i=0; i<negative_distprop.length; ++i)
+						idx.push( getIndexofRow( body, negative_distprop[ i ].other.key ) );
+				}
+				else {
+					for(let i=0; i<negative_distprop.length; ++i)
+						idx.push( getIndexofRow( body, negative_distprop[ i ].other.key ) );
+
+					for(let i=0; i<positive_distprop.length; ++i)
+						idx.push( getIndexofRow( body, positive_distprop[ i ].other.key ) );
+				}
+
+				parent.insertBefore( rows[ idx[0] ], rows[ 0 ] );
+				parent.insertBefore( rows[ idx[1] ], rows[ 1 ] );
+				parent.insertBefore( rows[ idx[2] ], rows[ 2 ] );
 
 				let len = editor.emotion_cmd_tablebody.rows.length;
 				for( let i=0; i<len; ++i ) {
@@ -254,18 +272,9 @@ Sidebar.EmotionCMD = function ( editor ) {
 
                 editor.signals.displayRecommendationInAudienceView.dispatch();
 
-				if ( editor.autoMode === 0 ) {
-					let key = all_distprop[ 0 ].other.key;
-					if ( pre_key !== key ) {
-						editor.emotionCMDManager.allCMDs[ key ].run( key );
-						pre_key = key;
-					}
-				}
-				else {
-					editor.top3Keys.key0 = all_distprop[ 0 ].other.key;
-					editor.top3Keys.key1 = all_distprop[ 1 ].other.key;
-					editor.top3Keys.key2 = all_distprop[ 2 ].other.key;
-				}
+				editor.top3Keys.key0 = rows[ 0 ].cells[0].textContent;
+				editor.top3Keys.key1 = rows[ 1 ].cells[0].textContent;
+				editor.top3Keys.key2 = rows[ 2 ].cells[0].textContent;
 			}
 		}
 	} );

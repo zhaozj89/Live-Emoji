@@ -20,19 +20,19 @@ Menubar.Tool = function ( editor ) {
 	option.setClass( 'option' );
 	option.setTextContent( 'Reset' );
 	option.onClick( function () {
-		if( editor.selected!==null ) {
+		if ( editor.selected !== null ) {
 			editor.selected.position.x = 0;
 			editor.selected.position.y = 0;
 		}
 
-		if( editor.backgroundSprite!==null ) {
+		if ( editor.backgroundSprite !== null ) {
 			editor.backgroundSprite.position.x = 0;
 			editor.backgroundSprite.position.y = 0;
 		}
 
 		let particles = editor.protonPixi4Renderer.proton.getAllParticles();
 		let len = particles.length;
-		for(let i=0; i<len; ++i) particles[i].dead = true;
+		for ( let i = 0; i < len; ++i ) particles[ i ].dead = true;
 	} );
 	options.add( option );
 
@@ -58,6 +58,29 @@ Menubar.Tool = function ( editor ) {
 	option.onClick( function () {
 
 		fileInput.click();
+
+	} );
+	options.add( option );
+
+	var option = new UI.Row();
+	option.setClass( 'option' );
+	option.setTextContent( 'Download Arousal' );
+	option.onClick( function () {
+
+		let rows = editor.allArousals;
+		let csvContent = "data:text/csv;charset=utf-8,";
+		rows.forEach( function ( rowArray ) {
+			// let row = rowArray.join( "," );
+			csvContent += rowArray + "\r\n";
+		} );
+
+		let encodedUri = encodeURI( csvContent );
+		let link = document.createElement( "a" );
+		link.setAttribute( "href", encodedUri );
+		link.setAttribute( "download", "my_data.csv" );
+		document.body.appendChild( link );
+
+		link.click();
 
 	} );
 	options.add( option );

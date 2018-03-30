@@ -144,6 +144,7 @@
 
 	<script src="js/UpdateMode.js"></script>
 	<script src="js/SoundAnimation.js"></script>
+	<script src="js/RecommendationUtil.js"></script>
 </head>
 <body onload="connect();">
 <script>
@@ -339,6 +340,17 @@
 	function animate () {
 
 		requestAnimationFrame( animate );
+
+		if( editor.usageMode === 0 ) {
+			editor.autoArousalLevel = editor.autoArousalLevel * Math.exp( -0.002 ) + editor.voiceMeter * 10;
+			if( editor.autoArousalLevel>90 ) editor.autoArousalLevel = 90;
+			if( editor.autoArousalLevel<50 ) editor.autoArousalLevel = 50;
+			editor.allArousals.push( editor.autoArousalLevel );
+		}
+		else {
+			editor.autoArousalLevel = 70;
+			editor.allArousals = [];
+		}
 
 		editor.updateRunningEmotionCMDState();
 

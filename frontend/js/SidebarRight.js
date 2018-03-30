@@ -73,8 +73,6 @@ var SidebarRight = function ( editor ) {
 	container.add( heartValueText );
 	container.add( heartSlider );
 
-	editor.msgInputArousal = 70;
-
 	$( function () {
 
 		let heart = document.getElementsByClassName( 'heart' )[ 0 ];
@@ -84,8 +82,6 @@ var SidebarRight = function ( editor ) {
 			min: 50,
 			max: 90,
 			slide: function ( event, ui ) {
-				editor.msgInputArousal = Number( ui.value );
-
 				$( heartValueText.dom ).text( ui.value );
 				let val = -15 * ui.value + 2100;
 				heart.style.animation = val + 'ms pulsate infinite alternate ease-in-out';
@@ -112,39 +108,40 @@ var SidebarRight = function ( editor ) {
 		} );
 	} );
 
-	editor.signals.updateRecommendation.add( function ( valence_level ) {
-		if ( editor.usageMode === 0 ) {
 
-			let valence = null;
-			if( valence_level['happy']+0.2>valence_level['sad'] ) {
-				valence = Math.floor( valence_level['happy']*4 ) + 5;
-			}
-			else {
-				valence = Math.floor( valence_level['sad']*4 ) + 1;
-			}
-
-			$( valenceText.dom ).text( valence );
-			$( "#valenceSlider" ).slider( 'value', valence );
-			valenceImg.src = './asset/valence_new/' + valence + '.png';
-		}
-		else {
-			let valence = null;
-			if( valence_level['happy']+0.2>valence_level['sad'] ) {
-				valence = Math.floor( valence_level['happy']*4 ) + 5;
-			}
-			else {
-				valence = Math.floor( valence_level['sad']*4 ) + 1;
-			}
-
-			$( valenceText.dom ).text( valence );
-			$( "#valenceSlider" ).slider( 'value', valence );
-			valenceImg.src = './asset/valence_new/' + valence + '.png';
-
-			if( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
-				editor.emotionCMDManager.currentNodeSession.triggerNode.valence.setArg( valence );
-			}
-		}
-	} );
+	// editor.signals.updateRecommendation.add( function ( valence_level ) {
+	// 	if ( editor.usageMode === 0 ) {
+	//
+	// 		let valence = null;
+	// 		if( valence_level['happy']+0.2>valence_level['sad'] ) {
+	// 			valence = Math.floor( valence_level['happy']*4 ) + 5;
+	// 		}
+	// 		else {
+	// 			valence = Math.floor( valence_level['sad']*4 ) + 1;
+	// 		}
+	//
+	// 		$( valenceText.dom ).text( valence );
+	// 		$( "#valenceSlider" ).slider( 'value', valence );
+	// 		valenceImg.src = './asset/valence_new/' + valence + '.png';
+	// 	}
+	// 	else {
+	// 		let valence = null;
+	// 		if( valence_level['happy']+0.2>valence_level['sad'] ) {
+	// 			valence = Math.floor( valence_level['happy']*4 ) + 5;
+	// 		}
+	// 		else {
+	// 			valence = Math.floor( valence_level['sad']*4 ) + 1;
+	// 		}
+	//
+	// 		$( valenceText.dom ).text( valence );
+	// 		$( "#valenceSlider" ).slider( 'value', valence );
+	// 		valenceImg.src = './asset/valence_new/' + valence + '.png';
+	//
+	// 		if( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
+	// 			editor.emotionCMDManager.currentNodeSession.triggerNode.valence.setArg( valence );
+	// 		}
+	// 	}
+	// } );
 
 	return container;
 };

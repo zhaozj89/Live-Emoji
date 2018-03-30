@@ -404,7 +404,7 @@ var VideoChat = function ( editor ) {
 			cover: true,
 			// speed: 0.03,
 			speed: 0.2,
-			amplitude: 0.0001,
+			amplitude: 0.000001,
 			// amplitude: 0.7,
 			frequency: 2
 		});
@@ -672,6 +672,8 @@ var VideoChat = function ( editor ) {
 
 		// console.log( meter.volume );
 		wave.setAmplitude( meter.volume * 10 );
+		editor.voiceMeter = meter.volume * 10;
+
 		if ( meter.volume > 0.01 ) {
 			// wave.start();
 			signals.followMouth.dispatch( 'open' );
@@ -861,8 +863,13 @@ var VideoChat = function ( editor ) {
 			} )
 			.then( outputData => {
 				let valence_level = {
+					'angry': outputData.output[ 0 ],
+					'disgusted': outputData.output[ 1 ],
+					'fearful': outputData.output[ 2 ],
 					'happy': outputData.output[ 3 ],
-					'sad': outputData.output[ 4 ]
+					'sad': outputData.output[ 4 ],
+					'surprised': outputData.output[ 5 ],
+					'neutral': outputData.output[ 6 ]
 				};
 
 				signals.updateRecommendation.dispatch( valence_level );
