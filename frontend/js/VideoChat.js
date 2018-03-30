@@ -7,38 +7,26 @@
 var selfEasyrtcid = "";
 
 class RecommendedCMD {
-	constructor ( _key, _semantic, _valence, _arousal ) {
+	constructor ( _key, _semantic ) {
 		this.cell0 = document.createElement( 'td' );
 		this.cell1 = document.createElement( 'td' );
-		this.cell2 = document.createElement( 'td' );
-		this.cell3 = document.createElement( 'td' );
 
 		this.cell0.setAttribute( 'scope', 'col' );
 		this.cell1.setAttribute( 'scope', 'col' );
-		this.cell2.setAttribute( 'scope', 'col' );
-		this.cell3.setAttribute( 'scope', 'col' );
 
 		this.cell0.style.textAlign = 'center';
 		this.cell1.style.textAlign = 'center';
-		this.cell2.style.textAlign = 'center';
-		this.cell3.style.textAlign = 'center';
 
 		this.keyDiv = new UI.Text( _key );
 		this.semanticDiv = new UI.Text( _semantic );
-		this.valenceDiv = new UI.Text( _valence );
-		this.arousalDiv = new UI.Text( _arousal );
 
 		this.cell0.appendChild( this.keyDiv.dom );
 		this.cell1.appendChild( this.semanticDiv.dom );
-		this.cell2.appendChild( this.valenceDiv.dom );
-		this.cell3.appendChild( this.arousalDiv.dom );
 	}
 
-	updateInfo ( _key, _semantic, _valence, _arousal ) {
+	updateInfo ( _key, _semantic ) {
 		this.keyDiv.setValue( _key );
 		this.semanticDiv.setValue( _semantic );
-		this.valenceDiv.setValue( _valence );
-		this.arousalDiv.setValue( _arousal );
 	}
 
 	createDOM ( editor ) {
@@ -46,13 +34,10 @@ class RecommendedCMD {
 		this.row = document.createElement( 'tr' );
 		this.row.appendChild( this.cell0 );
 		this.row.appendChild( this.cell1 );
-		this.row.appendChild( this.cell2 );
-		this.row.appendChild( this.cell3 );
 
 		return this.row;
 	}
 }
-
 
 function performCall ( otherEasyrtcid ) {
 	easyrtc.hangupAll();
@@ -158,6 +143,8 @@ var VideoChat = function ( editor ) {
 
 	//
 
+	let wave = null;
+
 	// audio detection
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
@@ -193,22 +180,7 @@ var VideoChat = function ( editor ) {
 
 		meter = createAudioMeter(audioContext);
 		mediaStreamSource.connect(meter);
-
-		// soundLoop();
 	}
-
-	// function soundLoop() {
-	// 	// console.log( meter.volume );
-	//
-	// 	if ( meter.volume > 0.01 ) {
-	// 		signals.followMouth.dispatch( 'open' );
-	// 	}
-	// 	else {
-	// 		signals.followMouth.dispatch( 'close' );
-	// 	}
-	//
-	// 	requestAnimationFrame( soundLoop );
-	// }
 
 	//define canvas for image processing
 	let captureCanvas = document.createElement( 'canvas' );		// internal canvas for capturing full images from video stream
@@ -382,63 +354,101 @@ var VideoChat = function ( editor ) {
 
 	let recommendationPanel = new UI.Panel();
 	recommendationPanel.setPosition( 'absolute' );
-	recommendationPanel.setBottom( '50px' );
-	recommendationPanel.dom.width = 250;
-	recommendationPanel.setHeight( '100px' );
+	recommendationPanel.setRight( '0px' );
+	recommendationPanel.setBottom( '28px' );
+	recommendationPanel.dom.width = 125;
 	recommendationPanel.setBackgroundColor( 'rgba(0,0,0,0)' );
 
+	// let voicePanel = new UI.Panel();
+	// voicePanel.setPosition( 'absolute' );
+	// voicePanel.setLeft( '0px' );
+	// voicePanel.setBottom( '28px' );
+	// voicePanel.setWidth( '40px' );
+	// voicePanel.setHeight( '30px' );
+	// voicePanel.dom.style.borderRadius = '5px';
+	// voicePanel.setBackgroundColor( 'rgba(100,100,100,0.5)' );
+	//
+	// callerPanel.add( voicePanel );
 	callerPanel.add( recommendationPanel );
+
+	//
+
+	let waveform = new UI.Panel();
+	waveform.setId( 'waveform' );
+	waveform.setWidth( '100%' );
+	waveform.setHeight( '30%' );
+	waveform.setPosition( 'absolute' );
+	waveform.setLeft( '0' );
+	waveform.setTop( '50%' );
+	waveform.setMargin( '-15% auto' );
+	waveform.setOpacity( '0.8' );
+
+	let bar = new UI.Panel();
+	bar.setId( 'bar' );
+	bar.setPosition( 'absolute' );
+	bar.setTop( '50%' );
+	bar.setWidth( '100%' );
+	bar.setHeight( '1px' );
+	bar.setBackgroundColor( 'rgba(255,255,255,0.9)' );
+	bar.dom.style.boxShadow = '1px 1px 2px rgba(0, 0, 0, 0.33)';
+	bar.setOpacity( '0.6' );
+
+	studentView.add( waveform );
+	studentView.add( bar );
+
+	$(function (  ) {
+		wave = new SiriWave({
+			container: waveform.dom,
+			width: studentView.dom.innerWidth,
+			height: studentView.dom.innerHeight * 0.3,
+			cover: true,
+			// speed: 0.03,
+			speed: 0.2,
+			amplitude: 0.0001,
+			// amplitude: 0.7,
+			frequency: 2
+		});
+
+		wave.start();
+	});
 
 	//
 
 	let table = document.createElement( "TABLE" );
 	table.style.class = 'table table-hover table-dark';
 	table.style.width = '100%';
-	let header = table.createTHead();
-	let headerRow = header.insertRow( 0 );
-
-	let headerCell0 = document.createElement( 'th' );
-	let headerCell1 = document.createElement( 'th' );
-	let headerCell2 = document.createElement( 'th' );
-	let headerCell3 = document.createElement( 'th' );
-
-	headerCell0.setAttribute( 'scope', 'col' );
-	headerCell1.setAttribute( 'scope', 'col' );
-	headerCell2.setAttribute( 'scope', 'col' );
-	headerCell3.setAttribute( 'scope', 'col' );
-
-	headerCell0.style.textAlign = 'center';
-	headerCell1.style.textAlign = 'center';
-	headerCell2.style.textAlign = 'center';
-	headerCell3.style.textAlign = 'center';
-
-	headerRow.appendChild( headerCell0 );
-	headerRow.appendChild( headerCell1 );
-	headerRow.appendChild( headerCell2 );
-	headerRow.appendChild( headerCell3 );
-
-	let keyDiv = new UI.Text( 'Key' );
-	let semanticDiv = new UI.Text( 'Semantic' );
-	let valenceDiv = new UI.Text( 'Valence' );
-	let arousalDiv = new UI.Text( 'Arousal' );
-
-	keyDiv.setOpacity( '0.8' );
-	semanticDiv.setOpacity( '0.8' );
-	valenceDiv.setOpacity( '0.8' );
-	arousalDiv.setOpacity( '0.8' );
-
-	headerCell0.appendChild( keyDiv.dom );
-	headerCell1.appendChild( semanticDiv.dom );
-	headerCell2.appendChild( valenceDiv.dom );
-	headerCell3.appendChild( arousalDiv.dom );
+	table.style.borderRadius = '10px';
+	// let header = table.createTHead();
+	// let headerRow = header.insertRow( 0 );
+	//
+	// let headerCell0 = document.createElement( 'th' );
+	// let headerCell1 = document.createElement( 'th' );
+	//
+	// headerCell0.setAttribute( 'scope', 'col' );
+	// headerCell1.setAttribute( 'scope', 'col' );
+	//
+	// headerCell0.style.textAlign = 'center';
+	// headerCell1.style.textAlign = 'center';
+	//
+	// headerRow.appendChild( headerCell0 );
+	// headerRow.appendChild( headerCell1 );
+	//
+	// let keyDiv = new UI.Text( 'Key' );
+	// let semanticDiv = new UI.Text( 'Semantic' );
+	//
+	// keyDiv.setOpacity( '0.8' );
+	// semanticDiv.setOpacity( '0.8' );
+	//
+	// headerCell0.appendChild( keyDiv.dom );
+	// headerCell1.appendChild( semanticDiv.dom );
 
 	recommendationPanel.dom.appendChild( table );
 
 	let body = table.createTBody();
 
-	let top0 = new RecommendedCMD( '', '', '', '' );
-	let top1 = new RecommendedCMD( '', '', '', '' );
-	let top2 = new RecommendedCMD( '', '', '', '' );
+	let top0 = new RecommendedCMD( '', '' );
+	let top1 = new RecommendedCMD( '', '' );
+	let top2 = new RecommendedCMD( '', '' );
 
 	let dom0 = top0.createDOM();
 	let dom1 = top1.createDOM();
@@ -448,9 +458,9 @@ var VideoChat = function ( editor ) {
 	dom1.style.color = 'crimson';
 	dom2.style.color = 'aliceblue';
 
-	dom0.style.opacity = '0.5';
-	dom1.style.opacity = '0.5';
-	dom2.style.opacity = '0.5';
+	dom0.style.opacity = '0.8';
+	dom1.style.opacity = '0.8';
+	dom2.style.opacity = '0.8';
 
 	dom0.style.backgroundColor = 'rgba(100,100,100,0.1)';
 	dom1.style.backgroundColor = 'rgba(100,100,100,0.1)';
@@ -483,9 +493,9 @@ var VideoChat = function ( editor ) {
 		let row0 = editor.emotion_cmd_tablebody.rows[ 0 ];
 		let row1 = editor.emotion_cmd_tablebody.rows[ 1 ];
 		let row2 = editor.emotion_cmd_tablebody.rows[ 2 ];
-		top0.updateInfo( row0.cells[ 0 ].innerText, row0.cells[ 1 ].innerText, row0.cells[ 2 ].innerText, row0.cells[ 3 ].innerText );
-		top1.updateInfo( row1.cells[ 0 ].innerText, row1.cells[ 1 ].innerText, row1.cells[ 2 ].innerText, row1.cells[ 3 ].innerText );
-		top2.updateInfo( row2.cells[ 0 ].innerText, row2.cells[ 1 ].innerText, row2.cells[ 2 ].innerText, row2.cells[ 3 ].innerText );
+		top0.updateInfo( row0.cells[ 0 ].innerText, row0.cells[ 1 ].innerText );
+		top1.updateInfo( row1.cells[ 0 ].innerText, row1.cells[ 1 ].innerText );
+		top2.updateInfo( row2.cells[ 0 ].innerText, row2.cells[ 1 ].innerText );
 	} );
 
 	//
@@ -527,7 +537,7 @@ var VideoChat = function ( editor ) {
 
 				overlayedPanel.setWidth( videoStreamWidth + 'px' );
 				callerPanel.setWidth( videoStreamWidth + 'px' );
-				recommendationPanel.setWidth( videoStreamWidth + 'px' );
+				recommendationPanel.setWidth( videoStreamWidth/2 + 'px' );
 			}
 
 			videoStream.dom.onloadedmetadata = function () {
@@ -660,11 +670,14 @@ var VideoChat = function ( editor ) {
 
 		DrawLandmark();
 
-		console.log( meter.volume );
+		// console.log( meter.volume );
+		wave.setAmplitude( meter.volume * 10 );
 		if ( meter.volume > 0.01 ) {
+			// wave.start();
 			signals.followMouth.dispatch( 'open' );
 		}
 		else {
+			// wave.stop();
 			signals.followMouth.dispatch( 'close' );
 		}
 
