@@ -415,3 +415,63 @@ class ViberationNode extends Node {
 		}
 	}
 }
+
+class SoundNode extends Node {
+	constructor ( type, editor ) {
+		super( 'Actioin: ' + type );
+
+		this.type = type;
+		this.editor = editor;
+
+		this.sound = new LeafInput( 'Sound: ' );
+		this.sound.addSelectionInput( {
+			'bill': 'bill',
+			'burp': 'burp',
+			'cry': 'cry',
+			'laugh': 'laugh',
+			'scream': 'scream',
+			'slurp': 'slurp'
+		} );
+		this.addInput( this.sound );
+		this.sound.setArg( 'laugh' );
+
+		this.addOutput();
+
+		this.moveTo( { x: 300, y: 80 } );
+	}
+
+	toJSON () {
+		return {
+			type: this.type,
+			offset: this.getOffset(),
+			sound: this.sound.getArg()
+		}
+	}
+
+	fromJSON ( state ) {
+		this.type = state.type;
+		this.setOffset( state.offset );
+		this.sound.setArg( state.sound );
+	}
+
+	getIdx ( name ) {
+		switch ( name ) {
+			case 'bill':
+				return 0;
+			case 'burp':
+				return 1;
+			case 'cry':
+				return 2;
+			case 'laugh':
+				return 3;
+			case 'scream':
+				return 4;
+			case 'slurp':
+				return 5;
+		}
+	}
+
+	run ( component ) {
+		this.editor.soundPlayer.play( this.getIdx( this.sound.getArg() ) );
+	}
+}

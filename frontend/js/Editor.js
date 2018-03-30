@@ -64,6 +64,8 @@ var Editor = function () {
 
 	this.emotion_cmd_tablebody = null;
 
+	this.soundPlayer = null;
+
 	let Signal = signals.Signal;
 
 	this.signals = {

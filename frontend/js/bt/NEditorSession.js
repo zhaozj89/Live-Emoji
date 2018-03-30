@@ -128,6 +128,12 @@ class NodeSession {
 				node.initUI();
 				break;
 			}
+
+			case 'sound': {
+				node = new SoundNode( type, this.editor );
+				node.initUI();
+				break;
+			}
 		}
 
 		Global_All_DOM_In_SVG.push( node.domElement );

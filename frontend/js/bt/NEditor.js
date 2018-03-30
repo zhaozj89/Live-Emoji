@@ -166,6 +166,10 @@ var NEditor = function ( editor ) {
 	menuActions.addClass( 'dropdown-menu' );
 	let buttonVibration = menuActions.addLi( 'Vibration' );
 	buttonVibration.classList.add( 'dropdown-item' );
+
+	let buttonSound = menuActions.addLi( 'Sound' );
+	buttonSound.classList.add( 'dropdown-item' );
+
 	let buttonDanmaku = menuActions.addLi( 'Danmaku [Text]' );
 	buttonDanmaku.classList.add( 'dropdown-item' );
 	let buttonSwap = menuActions.addLi( 'Swap [Puppet]' );
@@ -227,6 +231,10 @@ var NEditor = function ( editor ) {
 
 		$( buttonVibration ).click( function () {
 			emotionCMDManager.addNode( 'viberation' );
+		} );
+
+		$( buttonSound ).click( function (  ) {
+			emotionCMDManager.addNode( 'sound' );
 		} );
 
 		$( cmdNew ).click( function () {

@@ -102,11 +102,38 @@ var SoundAnimation = function ( editor ) {
 
 	let player = new SoundPlayer( [
 		{
+			title: 'bill',
+			file: 'bill',
+			howl: null
+		},
+		{
+			title: 'burp',
+			file: 'burp',
+			howl: null
+		},
+		{
+			title: 'cry',
+			file: 'cry',
+			howl: null
+		},
+		{
+			title: 'laugh',
+			file: 'laugh',
+			howl: null
+		},
+		{
 			title: 'scream',
 			file: 'scream',
 			howl: null
+		},
+		{
+			title: 'slurp',
+			file: 'slurp',
+			howl: null
 		}
 	] );
+
+	editor.soundPlayer = player;
 
 	// player.play();
 
