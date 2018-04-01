@@ -90,7 +90,7 @@ class TriggerNode extends Node {
 		this.counter = state.counter;
 		for ( let i = 1; i < state.counter; ++i ) {
 			let input = new NodeInput( this );
-			input.addTextLabel( 'Channel ' + i + ': ' );
+			input.addTextLabel( '' );
 			this.addInput( input );
 		}
 	}

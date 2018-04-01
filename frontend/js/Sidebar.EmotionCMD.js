@@ -276,6 +276,10 @@ Sidebar.EmotionCMD = function ( editor ) {
 						idx.push( getIndexofRow( body, positive_distprop[ i ].other.key ) );
 				}
 
+				// idx[0] = getIndexofRow( body, 'c' );
+				// idx[1] = getIndexofRow( body, 'a' );
+				// idx[2] = getIndexofRow( body, 'l' );
+
 				parent.insertBefore( rows[ idx[0] ], rows[ 0 ] );
 				parent.insertBefore( rows[ idx[1] ], rows[ 1 ] );
 				parent.insertBefore( rows[ idx[2] ], rows[ 2 ] );
