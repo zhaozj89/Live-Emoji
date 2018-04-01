@@ -46,7 +46,7 @@ function CharacterStructure ( editor, name ) {
 	this.add( this.nose_mesh );
 	this.add( this.mouth_mesh );
 
-	this.accessory = null;
+	this.hair = null;
 	this.face = null;
 	this.left_ear = null;
 
@@ -75,7 +75,7 @@ CharacterStructure.prototype = Object.create( THREE.Group.prototype );
 CharacterStructure.prototype.constructor = CharacterStructure;
 
 CharacterStructure.prototype.check = function () {
-	if ( this.isCompleted === 50 ) {
+	if ( this.isCompleted === 51 ) {
 		if ( this.name === 'boy' ) {
 			this.editor.boyLoaded = true;
 			this.editor.boyLabel.dom.click();
@@ -90,15 +90,15 @@ CharacterStructure.prototype.check = function () {
 
 CharacterStructure.prototype.addElement = function ( basicElement ) {
 	switch ( basicElement.name ) {
-		// case 'accessory': {
-		// 	basicElement.mesh.position.z -= 0.2;
-		// 	this.accessory = basicElement;
-		// 	this.add( basicElement.mesh );
-		//
-		// 	this.isCompleted++;
-		// 	this.check();
-		// 	break;
-		// }
+		case 'hair': {
+			basicElement.mesh.position.z -= 0.2;
+			this.hair = basicElement;
+			this.add( basicElement.mesh );
+
+			this.isCompleted++;
+			this.check();
+			break;
+		}
 		case 'face': {
 			this.face = basicElement;
 			this.add( basicElement.mesh );
@@ -108,6 +108,7 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 			break;
 		}
 		case 'left_ear': {
+			basicElement.mesh.position.z -= 0.3;
 			this.left_ear = basicElement;
 			this.add( basicElement.mesh );
 
@@ -167,7 +168,7 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 			break;
 		}
 		case 'right_ear': {
-			basicElement.mesh.position.z -= 0.1;
+			basicElement.mesh.position.z -= 0.3;
 			this.right_ear = basicElement;
 			this.add( basicElement.mesh );
 
@@ -214,48 +215,54 @@ CharacterStructure.prototype.updateEmotion = function ( emotion ) {
 
 	for ( let i = 0; i < Object.keys( EMOTION_TYPE ).length; ++i ) {
 
-		this.left_eyebrow[ i ].mesh.visible = false;
-		if ( this.left_eyebrow[ i ].emotion === emotion ) this.left_eyebrow[ i ].mesh.visible = true;
+		if( this.left_eyebrow[ i ] ) {
+			this.left_eyebrow[ i ].mesh.visible = false;
+			if ( this.left_eyebrow[ i ].emotion === emotion ) this.left_eyebrow[ i ].mesh.visible = true;
+		}
 
-		this.right_eyebrow[ i ].mesh.visible = false;
-		if ( this.right_eyebrow[ i ].emotion === emotion ) this.right_eyebrow[ i ].mesh.visible = true;
+		if( this.right_eyebrow[ i ] ) {
+			this.right_eyebrow[ i ].mesh.visible = false;
+			if ( this.right_eyebrow[ i ].emotion === emotion ) this.right_eyebrow[ i ].mesh.visible = true;
+		}
 
-		this.nose[ i ].mesh.visible = false;
-		if ( this.nose[ i ].emotion === emotion ) this.nose[ i ].mesh.visible = true;
+		if( this.nose[ i ] ) {
+			this.nose[ i ].mesh.visible = false;
+			if ( this.nose[ i ].emotion === emotion ) this.nose[ i ].mesh.visible = true;
+		}
 	}
 
 	for ( let i = 0; i < Object.keys( EMOTION_TYPE ).length + 1; ++i ) {
 
 		if ( this.left_eye[ i ].emotion === emotion ) {
 			if ( this.left_eye_close === false ) {
-				this.left_eye[ i ].mesh.visible = true;
+				if( this.left_eye[ i ] ) this.left_eye[ i ].mesh.visible = true;
 			}
 		}
 		else {
 			if ( this.left_eye_close === false ) {
-				this.left_eye[ i ].mesh.visible = false;
+				if( this.left_eye[ i ] ) this.left_eye[ i ].mesh.visible = false;
 			}
 		}
 
 		if ( this.right_eye[ i ].emotion === emotion ) {
 			if ( this.right_eye_close === false ) {
-				this.right_eye[ i ].mesh.visible = true;
+				if( this.right_eye[ i ] ) this.right_eye[ i ].mesh.visible = true;
 			}
 		}
 		else {
 			if ( this.right_eye_close === false ) {
-				this.right_eye[ i ].mesh.visible = false;
+				if( this.right_eye[ i ] ) this.right_eye[ i ].mesh.visible = false;
 			}
 		}
 
 		if ( this.mouth[ i ].emotion === emotion ) {
 			if ( this.mouth_open === false ) {
-				this.mouth[ i ].mesh.visible = true;
+				if( this.mouth[ i ] ) this.mouth[ i ].mesh.visible = true;
 			}
 		}
 		else {
 			if ( this.mouth_open === false ) {
-				this.mouth[ i ].mesh.visible = false;
+				if( this.mouth[ i ] ) this.mouth[ i ].mesh.visible = false;
 			}
 		}
 	}

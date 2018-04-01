@@ -1,5 +1,6 @@
 var PRELOAD_JSON = {
 	"face" : "face.png",
+	"hair" : "hair.png",
 	"left_ear" : "left_ear.png",
 	"left_eye" :
 	{
