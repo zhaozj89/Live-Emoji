@@ -199,6 +199,10 @@ Sidebar.EmotionCMD = function ( editor ) {
 			let valence = max_valence.val;
 			let arousal = editor.autoArousalLevel;
 
+			// console.log( 'arousal: '  + arousal);
+
+			if( arousal===0 ) arousal = 70; // non-detected value
+
 			if( max_valence.pm==='positive' ) {
 				valence = Math.floor( valence * 4 ) + 5;
 			}
