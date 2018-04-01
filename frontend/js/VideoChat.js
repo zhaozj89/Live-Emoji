@@ -795,7 +795,7 @@ var VideoChat = function ( editor ) {
 
 			FaceContext.drawImage( captureCanvas, FaceRect.x, FaceRect.y, FaceRect.w, FaceRect.h, 0, 0, FaceCanvas.width, FaceCanvas.height );
 			let FaceImageData = FaceContext.getImageData( 0, 0, FaceCanvas.width, FaceCanvas.height );
-			let FaceImageGray = grayscale( FaceImageData, 0 );
+			let FaceImageGray = grayscale( FaceImageData, 0.2 );
 			let Facedata = FaceImageGray.data;
 
 			blinkmodelLeft.ready()
