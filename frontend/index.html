@@ -340,23 +340,25 @@
 		document.addEventListener( 'keydown', KeyboardTriggerFunction );
 	} );
 
-	let voice_pre = editor.voiceMeter;
-
 	let peak_detect_offset = 20;
 	let peak_mininum_interval = 300;
 
 	let out_heart_rate = 0;
 
 	$( function () {
-		let socket = io.connect( 'https://10.89.55.70:8080' );
+		// let socket = io.connect( 'https://10.89.55.70:8080' );
+		let socket = io.connect( 'https://localhost:8080' );
 	    	let pulse_data = [];
-	    	let totalPoints = 100;
-	    	let lastPeak = Date.now();
+	    	let totalPoints = 300;
 	    	let peakDiffs = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ];
 	    	let freq = 0;
 
-		let drawFinished = true;
+		while ( pulse_data.length < totalPoints ) {
+			pulse_data.push( 0 );
+		}
 
+		let lastPeak = Date.now();
+		let drawFinished = true;
 		socket.on( 'pulse', function ( data ) {
 			// console.log( 'received data: ' + data );
 
@@ -370,26 +372,24 @@
 
 			if ( data > ( pulse_data[ totalPoints - 10 ] + peak_detect_offset ) ) {
 				freq = Date.now() - lastPeak;
-				// debounce
+
 				if ( freq > peak_mininum_interval ) {
 					lastPeak = Date.now();
 					peakDiffs.push( freq );
 					peakDiffs.shift();
 					let heart_rate = parseInt( 60 * 1000 / freq * 100 / 100, 10 );
 
-					if ( heart_rate >= 50 && heart_rate <= 90 ) { // [50-150] -> [50-90]
-						out_heart_rate	= Math.floor( heart_rate );
-					} else {
-						out_heart_rate	= 0;
-					}
+					if( heart_rate>90 )
+						heart_rate = 90;
+					if( heart_rate<50 )
+						heart_rate = 50;
+
+					out_heart_rate	= heart_rate;
+					console.log( out_heart_rate );
 				}
 			}
 			drawFinished = true;
 		} );
-
-		while ( pulse_data.length < totalPoints ) {
-			pulse_data.push( 0 );
-		}
 	} );
 
 	function animate () {
@@ -397,8 +397,17 @@
 		requestAnimationFrame( animate );
 
 		if ( editor.facetracking_running === true ) {
-			editor.autoArousalLevel = out_heart_rate
-			editor.allArousals.push( out_heart_rate );
+
+			let increase = out_heart_rate - 60;
+
+			if( increase>0 ){
+				editor.autoArousalLevel = 70 + Math.min( 20, Math.abs(increase) );
+			}
+			else {
+				editor.autoArousalLevel = 70 - Math.min( 20, Math.abs(increase) );
+			}
+
+			editor.allArousals.push( editor.autoArousalLevel );
 
 		}
 		else {
