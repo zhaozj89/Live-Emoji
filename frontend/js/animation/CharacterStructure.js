@@ -233,36 +233,43 @@ CharacterStructure.prototype.updateEmotion = function ( emotion ) {
 
 	for ( let i = 0; i < Object.keys( EMOTION_TYPE ).length + 1; ++i ) {
 
-		if ( this.left_eye[ i ].emotion === emotion ) {
-			if ( this.left_eye_close === false ) {
-				if( this.left_eye[ i ] ) this.left_eye[ i ].mesh.visible = true;
+		if( this.left_eye[ i ] ) {
+			if ( this.left_eye[ i ].emotion === emotion ) {
+				if ( this.left_eye_close === false ) {
+					this.left_eye[ i ].mesh.visible = true;
+				}
 			}
-		}
-		else {
-			if ( this.left_eye_close === false ) {
-				if( this.left_eye[ i ] ) this.left_eye[ i ].mesh.visible = false;
-			}
-		}
-
-		if ( this.right_eye[ i ].emotion === emotion ) {
-			if ( this.right_eye_close === false ) {
-				if( this.right_eye[ i ] ) this.right_eye[ i ].mesh.visible = true;
-			}
-		}
-		else {
-			if ( this.right_eye_close === false ) {
-				if( this.right_eye[ i ] ) this.right_eye[ i ].mesh.visible = false;
+			else {
+				if ( this.left_eye_close === false ) {
+					this.left_eye[ i ].mesh.visible = false;
+				}
 			}
 		}
 
-		if ( this.mouth[ i ].emotion === emotion ) {
-			if ( this.mouth_open === false ) {
-				if( this.mouth[ i ] ) this.mouth[ i ].mesh.visible = true;
+		if( this.right_eye[ i ] ) {
+			if ( this.right_eye[ i ].emotion === emotion ) {
+				if ( this.right_eye_close === false ) {
+					this.right_eye[ i ].mesh.visible = true;
+				}
+			}
+			else {
+				if ( this.right_eye_close === false ) {
+					this.right_eye[ i ].mesh.visible = false;
+				}
 			}
 		}
-		else {
-			if ( this.mouth_open === false ) {
-				if( this.mouth[ i ] ) this.mouth[ i ].mesh.visible = false;
+
+		if( this.mouth[ i ] ) {
+
+			if ( this.mouth[ i ].emotion === emotion ) {
+				if ( this.mouth_open === false ) {
+					this.mouth[ i ].mesh.visible = true;
+				}
+			}
+			else {
+				if ( this.mouth_open === false ) {
+					this.mouth[ i ].mesh.visible = false;
+				}
 			}
 		}
 	}
