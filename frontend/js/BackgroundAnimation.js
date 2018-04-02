@@ -121,7 +121,8 @@ var BackgroundAnimationCanvas = function ( editor ) {
         editor.protonPixi4Renderer.app = new PIXI.Application( width, height, { transparent: true } );
         container.dom.appendChild( editor.protonPixi4Renderer.app.view );
 
-        editor.protonPixi4Renderer.proton.addRenderer( new Proton.PixiRenderer( editor.protonPixi4Renderer.app.stage ) );
+		editor.protonPixi4Renderer.render = new Proton.PixiRenderer( editor.protonPixi4Renderer.app.stage );
+        editor.protonPixi4Renderer.proton.addRenderer( editor.protonPixi4Renderer.render );
 
         function backgroundUpdate () {
             requestAnimationFrame( backgroundUpdate );
@@ -142,75 +143,6 @@ var BackgroundAnimationCanvas = function ( editor ) {
 				editor.updateRunningEmotionCMDState();
 			}
 		});
-
-
-		// for testing
-
-		// rain
-/*
-		var emitter = new Proton.BehaviourEmitter();
-
-		emitter.p.x = 500;
-		emitter.p.y = 100;
-
-		emitter.rate = new Proton.Rate( new Proton.Span( 20, 40 ), new Proton.Span( .2, .4 ) );
-
-		editor.protonPixi4Renderer.proton.addEmitter( emitter );
-		emitter.emit( 'once' );
-
-		emitter.addInitialize( new Proton.Body( "./asset/background/small/raindrop.png" ) );
-		emitter.addInitialize( new Proton.Mass( 1 ) );
-		emitter.addInitialize(new Proton.Life(1, 3));
-		emitter.addInitialize(new Proton.Position(new Proton.CircleZone(0, 0, 500)));
-		emitter.addInitialize( new Proton.Velocity( new Proton.Span( 1, 1 ), new Proton.Span( 180, 180, true ), 'polar' ) );
-
-		emitter.addBehaviour( new Proton.Gravity( 4 ) );
-		emitter.addBehaviour( new Proton.Alpha( 1, 0.6 ) );
-*/
-
-		// bubble
-
-		/*
-		var emitter = new Proton.BehaviourEmitter();
-
-		emitter.p.x = 500;
-		emitter.p.y = 400;
-
-		emitter.rate = new Proton.Rate( new Proton.Span( 25, 40 ), new Proton.Span( .2, .5 ) );
-
-		editor.protonPixi4Renderer.proton.addEmitter( emitter );
-		emitter.emit( 'once' );
-
-		emitter.addInitialize( new Proton.Body( "./asset/background/small/yellowbubble.png" ) );
-		emitter.addInitialize( new Proton.Mass( 1 ) );
-		emitter.addInitialize(new Proton.Life(1, 3));
-		emitter.addInitialize( new Proton.Velocity( new Proton.Span( 3, 9 ), new Proton.Span( 0, 30, true ), 'polar' ) );
-
-		emitter.addBehaviour( new Proton.Gravity( 8 ) );
-		emitter.addBehaviour( new Proton.Scale( new Proton.Span( 1, 3 ), 0.3 ) );
-		emitter.addBehaviour( new Proton.Alpha( 1, 0.5 ) );
-		emitter.addBehaviour( new Proton.Rotate( 0, Proton.getSpan( -8, 9 ), 'add' ) );
-*/
-
-		// var emitter = new Proton.BehaviourEmitter();
-		//
-		// emitter.p.x = 200;
-		// emitter.p.y = 200;
-		//
-		// emitter.rate = new Proton.Rate(new Proton.Span(40, 80), 0.1);
-		//
-		// editor.protonPixi4Renderer.proton.addEmitter( emitter );
-		// emitter.emit( 'once' );
-		//
-		// emitter.addInitialize( new Proton.Body( "./asset/background/small/fire.png" ) );
-		// emitter.addInitialize(new Proton.Mass(1));
-		// emitter.addInitialize(new Proton.P(new Proton.CircleZone(200, 200, 10)));
-		// emitter.addInitialize(new Proton.Life(5, 7));
-		// emitter.addInitialize(new Proton.V(new Proton.Span(2, 3), new Proton.Span(0, 30, true), 'polar'));
-		//
-		// emitter.addBehaviour(new Proton.Scale(1, .2));
-		// emitter.addBehaviour(new Proton.Alpha(1, .2));
-
     } );
 
 	return container;

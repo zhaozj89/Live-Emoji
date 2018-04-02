@@ -166,6 +166,7 @@ var Editor = function () {
 		width: 840,
 		height: 681,
 		app: null,
+		render: null,
 		proton: null
 	};
 

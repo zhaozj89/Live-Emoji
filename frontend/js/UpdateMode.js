@@ -30,43 +30,19 @@ function UpdateUsageMode ( editor ) {
 
 function UpdateRoleMode ( editor ) {
 	if ( editor.roleMode === 0 ) { // student
-		editor.sidebar.setDisplay( 'none' );
-		editor.sidebar_right.setDisplay( 'none' );
+		let sidebar = document.getElementById('sidebar_overlay');
+		sidebar.style.zIndex = 5;
 
-		editor.viewport.setLeft('0px');
-		editor.viewport.setRight('0px');
-
-		editor.camera_viewport.setLeft('0px');
-		editor.camera_viewport.setRight('0px');
-
-		editor.node_editor.setLeft('0px');
-		editor.node_editor.setRight('0px');
-
-		editor.background_animation.setLeft('0px');
-		editor.background_animation.setRight('0px');
-
-		editor.danmaku_animation.style.left = '0px';
-		editor.danmaku_animation.style.right = '0px';
+		let sidebar_right = document.getElementById('sidebar_right_overlay');
+		sidebar_right.style.zIndex = 5;
 	}
 
 	if ( editor.roleMode === 1 ) { // teacher
-		editor.sidebar.setDisplay( '' );
-		editor.sidebar_right.setDisplay( '' );
+		let sidebar = document.getElementById('sidebar_overlay');
+		sidebar.style.zIndex = 0;
 
-		editor.viewport.setLeft('300px');
-		editor.viewport.setRight('200px');
-
-		editor.camera_viewport.setLeft('300px');
-		editor.camera_viewport.setRight('200px');
-
-		editor.node_editor.setLeft('300px');
-		editor.node_editor.setRight('200px');
-
-		editor.background_animation.setLeft('300px');
-		editor.background_animation.setRight('200px');
-
-		editor.danmaku_animation.style.left = '300px';
-		editor.danmaku_animation.style.right = '200px';
+		let sidebar_right = document.getElementById('sidebar_right_overlay');
+		sidebar_right.style.zIndex = 0;
 	}
 
 	editor.signals.windowResize.dispatch();

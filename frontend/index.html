@@ -189,6 +189,15 @@
 
 	var soundAnimation = new SoundAnimation( editor );
 
+
+	var sidebar_overlay = new UI.Div();
+	sidebar_overlay.setId( 'sidebar_overlay' );
+	document.body.appendChild( sidebar_overlay.dom );
+
+	var sidebar_right_overlay = new UI.Div();
+	sidebar_right_overlay.setId( 'sidebar_right_overlay' );
+	document.body.appendChild( sidebar_right_overlay.dom );
+
 	//
 
 	editor.storage.init( function () {
