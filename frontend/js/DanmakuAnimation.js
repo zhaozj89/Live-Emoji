@@ -10,7 +10,7 @@ class DanmakuController {
 		text.attr( 'fill', _color );
 		text.attr( 'font-family', _font );
 
-		text.animate( { x: _manner.ex, y: _manner.ey }, _elapse, 'bounce', deleteText );
+		text.animate( { x: _manner.ex, y: _manner.ey }, _elapse, '', deleteText );
 
 		let that = this;
 		function deleteText () {

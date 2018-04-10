@@ -176,9 +176,9 @@ class DanmakuNode extends Node {
 
 		this.size = new LeafInput( 'Size: ' );
 		this.size.addSelectionInput( {
-			'50': 'small',
-			'100': 'middle',
-			'200': 'big'
+			'20': 'small',
+			'50': 'middle',
+			'100': 'big'
 		} );
 		this.addInput( this.size );
 		this.size.setArg( '100' );
@@ -198,10 +198,22 @@ class DanmakuNode extends Node {
 			'100': '100',
 			'500': '500',
 			'1000': '1000',
-			'5000': '5000'
+			'5000': '5000',
+			'10000': '10000',
+			'20000': '20000'
 		} );
 		this.addInput( this.elasp );
 		this.elasp.setArg( '1000' );
+
+		this.shift = new LeafInput( 'Shift:' );
+		this.shift.addSelectionInput( {
+			'no': 'no',
+			'small': 'small',
+			'middle': 'middle',
+			'big': 'big'
+		} );
+		this.addInput( this.shift );
+		this.shift.setArg( 'no' );
 
 		this.manner = new LeafInput( 'Manner: ' );
 		this.manner.addSelectionInput( {
@@ -220,16 +232,32 @@ class DanmakuNode extends Node {
 		this.moveTo( { x: 300, y: 80 } );
 	}
 
-	getManner ( val ) {
+	getManner ( val, _shift ) {
+		let shift = 0;
+		switch ( _shift ) {
+			case 'no':
+				shift=0;
+				break;
+			case 'small':
+				shift = 50;
+				break;
+			case 'middle':
+				shift = 100;
+				break;
+			case 'big':
+				shift = 200;
+				break;
+		}
+
 		switch ( val ) {
 			case 'l2r_top':
-				return { sx: 0, sy: 100, ex: 800, ey: 100 };
+				return { sx: 0, sy: 100+shift, ex: 800, ey: 100+shift };
 			case 'r2l_top':
-				return { sx: 800, sy: 100, ex: 0, ey: 100 };
+				return { sx: 800, sy: 100+shift, ex: 0, ey: 100+shift };
 			case 'l2r_bottom':
-				return { sx: 0, sy: 500, ex: 800, ey: 500 };
+				return { sx: 0, sy: 500+shift, ex: 800, ey: 500+shift };
 			case 'r2l_bottom':
-				return { sx: 800, sy: 500, ex: 0, ey: 500 };
+				return { sx: 800, sy: 500+shift, ex: 0, ey: 500+shift };
 		}
 	}
 
@@ -245,7 +273,7 @@ class DanmakuNode extends Node {
 		let size = Number( this.size.getArg() );
 		let font = this.font.getArg();
 		let elapse = Number( this.elasp.getArg() );
-		let manner = this.getManner( this.manner.getArg() );
+		let manner = this.getManner( this.manner.getArg(), this.shift.getArg() );
 
 		this.danmakuController.display( text, color, size, font, elapse, manner );
 	}
@@ -259,7 +287,8 @@ class DanmakuNode extends Node {
 			size: this.size.getArg(),
 			font: this.font.getArg(),
 			elapse: this.elasp.getArg(),
-			manner: this.manner.getArg()
+			manner: this.manner.getArg(),
+			shift: this.shift.getArg()
 		};
 	}
 
@@ -272,6 +301,7 @@ class DanmakuNode extends Node {
 		this.font.setArg( state.font );
 		this.elasp.setArg( state.elapse );
 		this.manner.setArg( state.manner );
+		this.shift.setArg( state.shift );
 	}
 }
 
@@ -345,15 +375,15 @@ class ViberationNode extends Node {
 
 			switch ( this.amplitude.getArg() ) {
 				case 'low': {
-					diststep = 0.05;
+					diststep = 0.5;
 					break;
 				}
 				case 'middle': {
-					diststep = 0.1;
+					diststep = 1;
 					break;
 				}
 				case 'high': {
-					diststep = 0.2;
+					diststep = 2;
 					break;
 				}
 			}
@@ -401,7 +431,7 @@ class ViberationNode extends Node {
 
 			tween0.chain( tween1 );
 			tween0.chain( tween2 );
-			tween0.repeat( 10 );
+			tween0.repeat( 100 );
 
 			if ( component === 'puppet' ) {
 				let that = this;
