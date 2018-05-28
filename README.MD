@@ -27,6 +27,10 @@ Pre-authoring for 2D live animation
 * `node server.js`
 * `https://localhost:8080/`, `https://localhost:8080/robot.html`
 
+# How to monitor heart beat?
+
+https://github.com/neiltron/node-pulsesensor
+
 #### Dependencies
 
 * three.js r89
