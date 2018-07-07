@@ -1,67 +1,86 @@
 class CompositeNode extends Node {
 	constructor ( type ) {
-		super ( 'Composite: ' + type );
+		super( 'Sequence+' );
+
+		this.type = type;
 
 		this.addOutput();
 
-		this.setUI();
-	}
+		this.component = new LeafInput( 'Component: ' );
+		this.component.addSelectionInput({
+			'puppet': 'puppet',
+			'background': 'background',
+			'text': 'text'
+		});
+		this.addInput( this.component );
+		this.component.setArg( 'background' );
 
-	setUI() {
 		this.counter = 0;
 
 		let rower = new UI.Row();
 		let spanner0 = new UI.Span();
 		let spanner1 = new UI.Span();
-		this.incrementer = new UI.Button( '+' );
-		this.decrementer = new UI.Button( '-' );
-		let breaker = new UI.Break();
+		let incrementer = new UI.Button( '+' );
+		let decrementer = new UI.Button( '-' );
+		incrementer.setPadding( '1px' );
+		decrementer.setPadding( '1px' );
+		incrementer.setColor( '#00ea00' );
+		decrementer.setColor( '#00ea00' );
+		incrementer.setBackgroundColor( 'rgba(0,0,0,0.25)' );
+		decrementer.setBackgroundColor( 'rgba(0,0,0,0.25)' );
 
-		this.incrementer.setWidth( '50%' );
-		this.decrementer.setWidth( '50%' );
+		incrementer.setWidth( '50%' );
+		decrementer.setWidth( '50%' );
 
-		spanner0.add( this.incrementer );
-		spanner1.add( this.decrementer );
+		spanner0.add( incrementer );
+		spanner1.add( decrementer );
 
 		rower.add( spanner0 );
 		rower.add( spanner1 );
-		this.domElement.appendChild( rower.dom );
-		this.domElement.appendChild( breaker.dom );
 
-		this.input = new NodeInput( this );
-		this.input.domElement.textContent = 'channel ' + this.counter + ': ';
-		this.addInput(this.input);
+		this.addDOM( rower.dom );
+
+		let input = new NodeInput( this );
+		input.addTextLabel('Channel ' + this.counter + ': ');
+		this.addInput( input );
 		++this.counter;
 
 		let that = this;
-		$( this.incrementer.dom ).click( function() {
-			let input = new NodeInput( this );
-			input.domElement.textContent = 'channel ' + that.counter + ': ';
+		incrementer.onClick( function () {
+			let input = new NodeInput( that );
+			input.addTextLabel('Channel ' + that.counter + ': ');
 			that.addInput( input );
 			++that.counter;
 		} );
 
-		$( this.decrementer.dom ).click( function() {
-			if( that.counter<=1 ) return;
+		decrementer.onClick( function () {
+			if ( that.counter <= 1 ) return;
 			--that.counter;
 			that.removeInput();
 		} );
+
+		this.moveTo( { x: 300, y: 80 } );
 	}
 
 	toJSON () {
 		return {
-			type: 'sequence',
+			type: this.type,
+			offset: this.getOffset(),
+			component: this.component.getArg(),
 			counter: this.counter
 		};
 	}
 
-	fromJSON (state) {
-		this.counter = state.counter;
+	fromJSON ( state ) {
+		this.type = state.type;
+		this.setOffset( state.offset );
+		this.component.setArg( state.component );
 
-		for (let i=1; i<state.counter; ++i) {
+		this.counter = state.counter;
+		for ( let i = 1; i < state.counter; ++i ) {
 			let input = new NodeInput( this );
 
-			input.domElement.textContent = 'channel ' + i + ': ';
+			input.domElement.textContent = 'Channel ' + i + ': ';
 			this.addInput( input );
 		}
 	}

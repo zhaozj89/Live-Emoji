@@ -2,14 +2,44 @@ class LeafInput {
 	constructor ( title ) {
 		this.title = title;
 
-		this.type="LeafInput";
+		this.type = "LeafInput";
 
 		// need it for node to work
 		this.node = null;
 
-		this.arg = null;
+		this.inputType = null;
 
 		this.domElement = this.createInput( this );
+	}
+
+	setArg ( val ) {
+		switch ( this.inputType ) {
+			case 'text': {
+				this.text.setValue( val );
+				break;
+			}
+			case 'select': {
+				this.selectMenu.setValue( val );
+				break;
+			}
+			case 'color': {
+				this.color.setValue( val );
+			}
+		}
+	}
+
+	getArg () {
+		switch ( this.inputType ) {
+			case 'text': {
+				return this.text.getValue();
+			}
+			case 'select': {
+				return this.selectMenu.getValue();
+			}
+			case 'color': {
+				return this.color.getValue();
+			}
+		}
 	}
 
 	createInput ( that ) {
@@ -28,171 +58,108 @@ class LeafInput {
 		return this.box.dom;
 	}
 
-	addTextInput () {
-		this.text = new UI.Input();
-		this.text.setValue('');
+	addTextLabel ( val ) {
+		this.inputType = 'text';
 
-		let that = this;
-		$( that.text.dom ).change(function (  ) {
-			that.arg = that.text.getValue();
-		});
-
+		this.text = new UI.Text();
+		this.text.setValue( val );
 		this.domElement.appendChild( this.text.dom );
 	}
 
-	addObjectInput () {
-		let that = this;
-		this.domElement.textContent = 'object: ';
-		let selectMenu = new UI.Select();
-		selectMenu.setOptions( {
-			"character": "character",
-			"texture": "texture",
-			"text": "text"
-		} );
-		this.domElement.appendChild( selectMenu.dom );
-		$( selectMenu.dom ).change( function () {
-			that.arg = selectMenu.getValue();
-		} );
+	addColorInput () {
+		this.inputType = 'color';
+
+		this.color = new UI.Input( '' );
+		this.color.dom.type = 'color';
+		this.color.setValue( '#ff0000' );
+		this.domElement.appendChild( this.color.dom );
 	}
 
-	addColorInput () {
-		this.inp = new UI.Input( '' );
-		this.inp.dom.type = 'color';
-		// inp.setId( 'html5colorpicker' );
-		this.inp.setValue( '#ff0000' );
+	addTextInput () {
+		this.inputType = 'text';
 
-		this.domElement.appendChild( this.inp.dom );
-
-		let that = this;
-		$( that.inp.dom ).change(function (  ) {
-			that.arg = that.inp.getValue();
-		});
-
-		return this.inp;
+		this.text = new UI.Input();
+		this.text.setValue( '' );
+		this.text.setMargin( '1px' );
+		this.text.setPadding( '0px' );
+		this.domElement.appendChild( this.text.dom );
 	}
 
 	addSelectionInput ( options ) {
+		this.inputType = 'select';
+
 		this.selectMenu = new UI.Select();
 		this.selectMenu.setOptions( options );
-
-		let that = this;
-		$( that.selectMenu.dom ).change(function (  ) {
-			that.arg = that.selectMenu.getValue();
-		});
-
-		this.domElement.appendChild( that.selectMenu.dom );
+		this.domElement.appendChild( this.selectMenu.dom );
 	}
 }
 
-
-// each Node contains multiple NodeInput
-// @arg contains the argument of this NodeInput
-// @node contains the child Node of this NodeInput / Node
-// @currentNode contains the current Node
 class NodeInput {
 	constructor ( currentNode ) {
-		this.arg = null;
 		this.node = null;
 
-		this.type="NodeInput";
+		this.type = "NodeInput";
 
 		this.currentNode = currentNode;
 
 		this.domElement = CreateInput( this );
 		this.path = CreatePath( Global_Graph_SVG );
+
+		this.inputType = null;
 	}
 
-	addNumberInput () {
-		let that = this;
-		let input = document.createElement( 'input' );
-		this.domElement.textContent = 'milliseconds (>0): ';
-		input.setAttribute( 'type', 'text' );
-		this.domElement.textContent += '';
-		this.domElement.appendChild( input );
-		$( input ).change( function () {
-			that.arg = input.value;
-		} );
+	setArg ( val ) {
+		switch ( this.inputType ) {
+			case 'text': {
+				this.text.setValue( val );
+				break;
+			}
+			case 'select': {
+				this.selectMenu.setValue( val );
+				break;
+			}
+		}
 	}
 
-	addTextInput () {
-		this.text = new UI.Input();
-		this.text.setValue('');
+	getArg () {
+		switch ( this.inputType ) {
+			case 'text': {
+				return this.text.getValue();
+			}
+			case 'select': {
+				return this.selectMenu.getValue();
+			}
+		}
+	}
 
-		let that = this;
-		$( that.text.dom ).change(function (  ) {
-			that.arg = that.text.getValue();
-		});
+	addTextLabel ( val ) {
+		this.inputType = 'text';
 
+		this.text = new UI.Text();
+		this.text.setValue( val );
 		this.domElement.appendChild( this.text.dom );
 	}
 
-	addEmotionInput () {
-		let that = this;
-		this.domElement.textContent = 'emotion: ';
-		this.selectMenu = new UI.Select();
-		this.selectMenu.setOptions( {
-			"happy": "happy",
-			"sad": "sad",
-			"disgusted": "disgusted",
-			"fearful": "fearful",
-			"neutral": "neutral",
-			"surprised": "surprised",
-			"angry": "angry"
-		} );
-		this.domElement.appendChild( this.selectMenu.dom );
-		$( that.selectMenu.dom ).change( function () {
-			that.arg = that.selectMenu.getValue();
-		} );
+	addTextInput () {
+		this.inputType = 'text';
+
+		this.text = new UI.Input();
+		this.text.setValue( '' );
+		this.text.setMargin( '1px' );
+		this.text.setPadding( '0px' );
+		this.domElement.appendChild( this.text.dom );
 	}
 
-	addCharacterInput () {
-		this.arg = '';
+	addSelectionInput ( options ) {
+		this.inputType = 'select';
 
-		this.domElement.textContent = 'character: ';
-
-		let allEmotions = {
-			'happy': 'happy',
-			'sad': 'sad',
-			'surprised': 'surprised',
-			'disgusted': 'disgusted',
-			'angry': 'angry',
-			'fearful': 'fearful',
-			'neutral': 'neutral'
-		};
-
-		let that = this;
 		this.selectMenu = new UI.Select();
-		this.selectMenu.setOptions( allEmotions );
-
+		this.selectMenu.setOptions( options );
 		this.domElement.appendChild( this.selectMenu.dom );
-		$( that.selectMenu.dom ).change( function () {
-			that.arg = allEmotions[ that.selectMenu.getValue() ];
-			// console.log( that.arg );
-		} );
-	}
-
-	addTextureInput () {
-		this.arg = '';
-
-		this.domElement.textContent = 'texture: ';
-
-		let allEmotions = {
-			'fire': 'fire'
-		};
-
-		let that = this;
-		this.selectMenu = new UI.Select();
-		this.selectMenu.setOptions( allEmotions );
-
-		this.domElement.appendChild( this.selectMenu.dom );
-		$( that.selectMenu.dom ).change( function () {
-			that.arg = allEmotions[ that.selectMenu.getValue() ];
-			console.log( that.arg );
-		} );
 	}
 
 	getAttachedPoint () {
-		var offset = NEditorGetFullOffset( this.domElement );
+		let offset = NEditorGetFullOffset( this.domElement );
 		return {
 			x: offset.left + this.domElement.offsetWidth - 2,
 			y: offset.top + this.domElement.offsetHeight / 2
@@ -200,11 +167,10 @@ class NodeInput {
 	}
 }
 
-
 class Node {
-	constructor ( type ) {
-		if( type===null ) return;
-		this.type = type;
+	constructor ( title ) {
+		if ( title === null ) return;
+		this.title = title;
 
 		this.output = null;
 		this.inputs = [];
@@ -214,10 +180,14 @@ class Node {
 		this.attachedPaths = [];
 		this.connected = false;
 
-		this.domElement = CreateTitle( this.type );
+		this.domElement = CreateTitle( this.title );
 
 		let removeButton = CreateRemoveButton( this );
 		this.domElement.appendChild( removeButton );
+	}
+
+	addDOM ( dom ) {
+		this.domElement.appendChild( dom );
 	}
 
 	addOutput () {
@@ -226,17 +196,15 @@ class Node {
 		this.output = outputDom;
 	}
 
-	getInputForSerializationOnly() {
-		for(let i=0; i<this.inputs.length; ++i) {
-			if(this.inputs[i].domElement.classList.contains('filled')===true || this.inputs[i].type==='LeafInput') continue;
-			else return this.inputs[i];
+	getAnInputForSerializationOnly () {
+		for ( let i = 0; i < this.inputs.length; ++i ) {
+			if ( this.inputs[ i ].domElement.classList.contains( 'filled' ) === true || this.inputs[ i ].type === 'LeafInput' ) continue;
+			else return this.inputs[ i ];
 		}
 	}
 
 	addInput ( input ) {
 		this.inputs.push( input );
-		// let br = new UI.Break();
-		// this.domElement.appendChild( br.dom );
 		this.domElement.appendChild( input.domElement );
 	}
 
@@ -317,6 +285,8 @@ class Node {
 		let outputPt = this.getOutputPoint();
 
 		input.path.setAttributeNS( null, 'd', NEditorCreatePath( inputPt, outputPt ) );
+		input.path.setAttribute( 'stroke-width', '5' );
+		input.path.setAttribute( 'stroke', 'coral' );
 	}
 
 	moveTo ( point ) {
@@ -341,9 +311,6 @@ class Node {
 		this.updatePosition();
 	}
 
-
-	// currently, one input can ONLY connect to one output (but one output can have multiple inputs)
-	// AND, no method is provied for getting parent
 	getChildren () {
 		let res = [];
 		for ( let k = 0; k < this.inputs.length; ++k ) {
@@ -355,18 +322,27 @@ class Node {
 	getArgs () {
 		let res = [];
 		for ( let i = 0; i < this.inputs.length; ++i ) {
-			if ( this.inputs[ i ].arg !== null ) res.push( this.inputs[ i ].arg );
+			let arg = this.inputs[ i ].getArg();
+			if ( arg !== null ) res.push( arg );
+			else res.push( null );
 		}
 
 		return res;
 	}
 
 	getArg () {
-		// if ( this.inputs.length !== 1 ) {
-		// 	alert( 'Error in Node.getArg()! More than one arguments! ' );
-		// }
-		// else {
-			return this.inputs[ 0 ].arg;
-		// }
+		return this.inputs[ 0 ].getArg();
+	}
+
+	getOffset () {
+		return {
+			top: this.domElement.style.top,
+			left: this.domElement.style.left
+		}
+	}
+
+	setOffset ( val ) {
+		this.domElement.style.top = val.top;
+		this.domElement.style.left = val.left;
 	}
 }

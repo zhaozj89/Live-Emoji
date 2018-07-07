@@ -11,8 +11,6 @@ Sidebar.Settings = function ( editor ) {
 	container.setBorderTop( '0' );
 	container.setPaddingTop( '20px' );
 
-	// class
-
 	container.add( new Sidebar.Settings.Shortcuts( editor ) );
 
 	return container;

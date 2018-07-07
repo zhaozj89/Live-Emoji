@@ -4,53 +4,102 @@
 
 var Editor = function () {
 
-	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -20, 20, -20, 20, -100, 100 );
-	this.DEFAULT_CAMERA.name = 'Camera';
-	this.DEFAULT_CAMERA.position.set( 0, 0, -50 );
-	this.DEFAULT_CAMERA.up.set( 0, -1, 0 );
-	this.DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
+	//
 
-	var Signal = signals.Signal;
+	this.facetracking_running = false;
+
+	// mutex
+
+	let that = this;
+
+	this.runningEmotionCMDState = {
+		running: false,
+		has_particle_node: false,
+		num_danmaku_node: 0
+	};
+
+	this.updateRunningEmotionCMDState = function (  ) {
+		if( that.runningEmotionCMDState.has_particle_node===false && that.runningEmotionCMDState.num_danmaku_node===0 ) {
+			that.runningEmotionCMDState.running = false;
+
+			if( editor.selected!==null ) {
+				editor.selected.updateEmotion( 'neutral' );
+				editor.signals.sceneGraphChanged.dispatch();
+			}
+		}
+	}
+
+	this.runAtLeastOneCMD = false;
+
+	this.facePositionMutex = false;
+
+	this.currentEditedKey = null;
+
+	// Mode
+	this.roleMode = 1; // 0: student, 1: teacher
+	this.usageMode = 1; // 0: live animation, 1: pre-edit
+	this.autoMode = 1; // 0: auto, 1: manual
+
+	this.studentLabel = null;
+	this.teacherLabel = null;
+
+	this.boyLabel = null;
+	this.girlLabel = null;
+
+	this.boyLoaded = false;
+	this.girlLoaded = false;
+
+	// components of editor
+	this.camera_viewport = null;
+	this.camera_view = null;    this.video_stream = null;   this.camera_view_which_side = 'live_animation';
+	this.student_view = null;
+
+	this.viewport = null;
+
+	this.node_editor = null;
+
+	this.background_animation = null;
+
+	this.danmaku_animation = null;
+
+	this.sidebar = null;
+
+	this.sidebar_right = null;
+
+	this.emotion_cmd_tablebody = null;
+
+	this.soundPlayer = null;
+
+	let Signal = signals.Signal;
 
 	this.signals = {
 
-		// animation
-		animateRender: new Signal(),
+		// update emotion panel values
+		updateEmotionPanelValues: new Signal(),
+
+		// to communication view
+		displayRecommendationInAudienceView: new Signal(),
+
+		add2Scene: new Signal(),
+
+		teacherSendInfo2Students: new Signal(),
+
+		updateRecommendation: new Signal(),
 
 		// trigger
+		keyboardTriggering: new Signal(),
 
-		trigger : new Signal(),
-
+		// face following
 		followFace: new Signal(),
-
-		followEmotion: new Signal(),
-
 		followLeftEye: new Signal(),
 		followRightEye: new Signal(),
-
 		followMouth: new Signal(),
 
-		turnOnOffFaceTracking: new Signal(),
-
-
-		// action signals
-
-		msgBackgroundTexturePattern: new Signal(),
-		runBackground: new Signal(),
-
-		// skinning
-
-		skinningChangeMode: new Signal(),
-
 		// node editor
-
 		editEmotionCMD: new Signal(),
-
 		saveEmotionCMD: new Signal(),
 
-		// actions
-
-		showModal: new Signal(),
+		// old existing signals
 
 		// notifications
 
@@ -87,6 +136,60 @@ var Editor = function () {
 
 	};
 
+	// objects
+
+	this.boy = null;
+	this.girl = null;
+
+	this.selected = null; // character
+
+	this.emotionCMDManager = new EmotionCMDManager( this );
+
+	this.autoArousalLevel = 70;
+	this.allArousals = [];
+
+	this.voiceMeter = 0;
+
+	this.currentEmitter = null;
+
+	this.allParticleNodes = [];
+
+	this.backgroundSprite = null;
+
+	this.top3Keys = {
+		key0: null,
+		key1: null,
+		key2: null
+	};
+
+	this.protonPixi4Renderer = {
+		width: 840,
+		height: 681,
+		app: null,
+		render: null,
+		proton: null
+	};
+
+	this.raphaelRenderer = {
+		paper: null,
+		width: 840,
+		height: 681,
+		left: 300,
+		top: 40
+	};
+
+	this.rtcid = null;
+
+	// not care now
+
+	// camera settings
+
+	this.DEFAULT_CAMERA = new THREE.OrthographicCamera( -20, 20, -20, 20, -100, 100 );
+	this.DEFAULT_CAMERA.name = 'Camera';
+	this.DEFAULT_CAMERA.position.set( 0, 0, -50 );
+	this.DEFAULT_CAMERA.up.set( 0, -1, 0 );
+	this.DEFAULT_CAMERA.lookAt( new THREE.Vector3() );
+
 	this.config = new Config( 'threejs-editor' );
 	this.history = new History( this );
 	this.storage = new Storage();
@@ -98,17 +201,12 @@ var Editor = function () {
 	this.scene.name = 'Scene';
 	this.scene.background = new THREE.Color( 0x464646 );
 
-	this.sceneHelpers = new THREE.Scene();
-
 	this.object = {};
 	this.geometries = {};
 	this.materials = {};
 	this.textures = {};
 
-	this.selected = null;
 	this.helpers = {};
-
-	this.emotionCMDManager = new EmotionCMDManager();
 };
 
 Editor.prototype = {

@@ -1,3 +1,13 @@
+var EMOTION_TYPE = {
+	HAPPY: 0,
+	SAD: 1,
+	ANGRY: 2,
+	FEARFUL: 3,
+	SURPRISED: 4,
+	DISGUSTED: 5,
+	NEUTRAL: 6
+};
+
 class BasicElement {
 	constructor ( name, mesh, emotion ) {
 		this.name = name;
@@ -6,47 +16,14 @@ class BasicElement {
 	}
 };
 
-function BackgroundStructure ( name ) {
-	THREE.Group.call( this );
-
-	this.name = name;
-
-	this.add2Scene = new signals.Signal();
-	this.isComplete = 0;
-
-	// this.all_mesh = new THREE.Group();
-	// this.all_mesh.name = 'all_mesh';
-	// this.add( this.all_mesh );
-
-	this.all = [];
-}
-
-BackgroundStructure.prototype = Object.create( THREE.Group.prototype );
-BackgroundStructure.prototype.constructor = BackgroundStructure;
-
-BackgroundStructure.prototype.check = function () {
-	if( this.isComplete === 1 ) {
-		this.add2Scene.dispatch( this );
-	}
-}
-
-BackgroundStructure.prototype.addElement = function ( basicElement ) {
-	this.all.push( basicElement );
-
-	basicElement.mesh.visible = false;
-	this.add( basicElement.mesh );
-
-	this.isComplete++;
-	this.check();
-}
-
-function CharacterStructure ( name ) {
+function CharacterStructure ( editor, name ) {
 	THREE.Group.call( this );
 
 	this.name = name;
 	this.emotion = 'neutral';
 
-	this.add2Scene = new signals.Signal();
+	this.editor = editor;
+
 	this.isCompleted = 0;
 
 	this.left_eye_mesh = new THREE.Group();
@@ -69,7 +46,7 @@ function CharacterStructure ( name ) {
 	this.add( this.nose_mesh );
 	this.add( this.mouth_mesh );
 
-	this.accessory = null;
+	this.hair = null;
 	this.face = null;
 	this.left_ear = null;
 
@@ -99,15 +76,23 @@ CharacterStructure.prototype.constructor = CharacterStructure;
 
 CharacterStructure.prototype.check = function () {
 	if ( this.isCompleted === 51 ) {
-		this.add2Scene.dispatch( this );
+		if ( this.name === 'boy' ) {
+			this.editor.boyLoaded = true;
+			this.editor.boyLabel.dom.click();
+		}
+		if ( this.name === 'girl' ) {
+			this.editor.girlLoaded = true;
+			this.editor.girlLabel.dom.click();
+		}
+		this.editor.signals.add2Scene.dispatch( this );
 	}
 };
 
 CharacterStructure.prototype.addElement = function ( basicElement ) {
 	switch ( basicElement.name ) {
-		case 'accessory': {
+		case 'hair': {
 			basicElement.mesh.position.z -= 0.2;
-			this.accessory = basicElement;
+			this.hair = basicElement;
 			this.add( basicElement.mesh );
 
 			this.isCompleted++;
@@ -123,6 +108,7 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 			break;
 		}
 		case 'left_ear': {
+			basicElement.mesh.position.z -= 0.3;
 			this.left_ear = basicElement;
 			this.add( basicElement.mesh );
 
@@ -133,10 +119,6 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 		case 'left_eye': {
 			basicElement.mesh.position.z -= 0.1;
 			if ( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
-
-			// // test
-			// if( basicElement.emotion === 'close' ) basicElement.mesh.visible = true;
-			// else basicElement.mesh.visible = false;
 
 			this.left_eye.push( basicElement );
 			this.left_eye_mesh.add( basicElement.mesh );
@@ -167,10 +149,6 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 		case 'mouth': {
 			basicElement.mesh.position.z -= 0.1;
 			if ( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
-			// if( basicElement.emotion === 'open' )
-			// 	basicElement.mesh.visible = true;
-			// else
-			// 	basicElement.mesh.visible = false;
 
 			this.mouth.push( basicElement );
 			this.mouth_mesh.add( basicElement.mesh );
@@ -190,7 +168,7 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 			break;
 		}
 		case 'right_ear': {
-			basicElement.mesh.position.z -= 0.1;
+			basicElement.mesh.position.z -= 0.3;
 			this.right_ear = basicElement;
 			this.add( basicElement.mesh );
 
@@ -201,10 +179,6 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 		case 'right_eye': {
 			basicElement.mesh.position.z -= 0.1;
 			if ( basicElement.emotion !== this.emotion ) basicElement.mesh.visible = false;
-
-			// // test
-			// if( basicElement.emotion === 'close' ) basicElement.mesh.visible = true;
-			// else basicElement.mesh.visible = false;
 
 			this.right_eye.push( basicElement );
 			this.right_eye_mesh.add( basicElement.mesh );
@@ -235,52 +209,67 @@ CharacterStructure.prototype.addElement = function ( basicElement ) {
 	}
 };
 
-
 CharacterStructure.prototype.updateEmotion = function ( emotion ) {
+
+	this.emotion = emotion;
+
 	for ( let i = 0; i < Object.keys( EMOTION_TYPE ).length; ++i ) {
 
-		this.left_eyebrow[ i ].mesh.visible = false;
-		if ( this.left_eyebrow[ i ].emotion === emotion ) this.left_eyebrow[ i ].mesh.visible = true;
+		if( this.left_eyebrow[ i ] ) {
+			this.left_eyebrow[ i ].mesh.visible = false;
+			if ( this.left_eyebrow[ i ].emotion === emotion ) this.left_eyebrow[ i ].mesh.visible = true;
+		}
 
-		this.right_eyebrow[ i ].mesh.visible = false;
-		if ( this.right_eyebrow[ i ].emotion === emotion ) this.right_eyebrow[ i ].mesh.visible = true;
+		if( this.right_eyebrow[ i ] ) {
+			this.right_eyebrow[ i ].mesh.visible = false;
+			if ( this.right_eyebrow[ i ].emotion === emotion ) this.right_eyebrow[ i ].mesh.visible = true;
+		}
 
-		this.nose[ i ].mesh.visible = false;
-		if ( this.nose[ i ].emotion === emotion ) this.nose[ i ].mesh.visible = true;
+		if( this.nose[ i ] ) {
+			this.nose[ i ].mesh.visible = false;
+			if ( this.nose[ i ].emotion === emotion ) this.nose[ i ].mesh.visible = true;
+		}
 	}
 
-	for ( let i = 0; i < Object.keys( EMOTION_TYPE ).length+1; ++i ) {
+	for ( let i = 0; i < Object.keys( EMOTION_TYPE ).length + 1; ++i ) {
 
-		if ( this.left_eye[ i ].emotion === emotion ) {
-			if( this.left_eye_close === false ) {
-				this.left_eye[ i ].mesh.visible = true;
+		if( this.left_eye[ i ] ) {
+			if ( this.left_eye[ i ].emotion === emotion ) {
+				if ( this.left_eye_close === false ) {
+					this.left_eye[ i ].mesh.visible = true;
+				}
 			}
-		}
-		else {
-			if( this.left_eye_close === false ) {
-				this.left_eye[ i ].mesh.visible = false;
-			}
-		}
-
-		if ( this.right_eye[ i ].emotion === emotion ) {
-			if( this.right_eye_close === false ) {
-				this.right_eye[ i ].mesh.visible = true;
-			}
-		}
-		else {
-			if( this.right_eye_close === false ) {
-				this.right_eye[ i ].mesh.visible = false;
+			else {
+				if ( this.left_eye_close === false ) {
+					this.left_eye[ i ].mesh.visible = false;
+				}
 			}
 		}
 
-		if ( this.mouth[ i ].emotion === emotion ) {
-			if( this.mouth_open === false ) {
-				this.mouth[ i ].mesh.visible = true;
+		if( this.right_eye[ i ] ) {
+			if ( this.right_eye[ i ].emotion === emotion ) {
+				if ( this.right_eye_close === false ) {
+					this.right_eye[ i ].mesh.visible = true;
+				}
+			}
+			else {
+				if ( this.right_eye_close === false ) {
+					this.right_eye[ i ].mesh.visible = false;
+				}
 			}
 		}
-		else {
-			if( this.mouth_open === false ) {
-				this.mouth[ i ].mesh.visible = false;
+
+		if( this.mouth[ i ] ) {
+
+			if ( this.mouth[ i ].emotion === emotion ) {
+				if ( this.mouth_open === false ) {
+					this.mouth[ i ].mesh.visible = true;
+				}
+			}
+			else {
+				if ( this.mouth_open === false ) {
+					this.mouth[ i ].mesh.visible = false;
+				}
 			}
 		}
 	}
@@ -340,7 +329,7 @@ CharacterStructure.prototype.updateRightEye = function ( state ) {
 
 CharacterStructure.prototype.updateMouth = function ( state ) {
 
-	if( state === 'open' ) {
+	if ( state === 'open' ) {
 		for ( let i = 0; i < Object.keys( EMOTION_TYPE ).length + 1; ++i ) {
 			if ( this.mouth[ i ].emotion === 'open' ) {
 				this.mouth[ i ].mesh.visible = true;

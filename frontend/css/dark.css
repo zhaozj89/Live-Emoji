@@ -2,7 +2,7 @@ button {
 	color: #aaa;
 	background-color: #222;
 	border: 0px;
-	padding: 5px 8px;
+	padding: 2px 5px;
 	text-transform: uppercase;
 	cursor: pointer;
 	outline: none;
@@ -20,15 +20,15 @@ button {
 
 input, textarea {
 	background-color: #222;
-	border: 1px solid transparent;
+	border: 0px solid transparent;
 	color: #888;
 }
 
 input.Number {
 	color: #08f!important;
-	font-size: 12px;
+	font-size: 10px;
 	border: 0px;
-	padding: 2px;
+	padding: 0px;
 	cursor: col-resize;
 }
 
@@ -46,38 +46,56 @@ select {
 		background-color: #444;
 	}
 
+#tabs {
+background-color: #1b1b1b;
+border-top: 1px solid #222;
+}
+
+#tabs span {
+color: #555;
+border-right: 1px solid #222;
+padding: 10px;
+}
+
+#tabs span.selected {
+color: #888;
+background-color: #111;
+}
+
 /* UI */
 
 #viewport {
 	position: absolute;
-	top: 32px;
-	left: 0;
-	right: 600px;
+	top: 40px;
+	left: 300px;
+	right: 200px;
 	bottom: 0px;
 }
 
-	#viewport #info {
-		text-shadow: 1px 1px 0 rgba(0,0,0,0.25);
-		pointer-events: none;
-	}
+#camera_viewport {
+	position: absolute;
+	top: 40px;
+	left: 300px;
+	right: 200px;
+	bottom: 0px;
+}
 
 #nEditor {
 	position: absolute;
-	top: 32px;
-	left: 0;
-	right: 600px;
+	top: 40px;
+	left: 300px;
+	right: 200px;
 	bottom: 0px;
-	opacity: 0.9;
 }
 
 #menubar {
 	position: absolute;
 	width: 100%;
-	height: 32px;
+	height: 40px;
 	background: #111;
 	padding: 0;
 	margin: 0;
-	right: 0;
+	left: 0;
 	top: 0;
 }
 
@@ -144,8 +162,8 @@ select {
 
 #sidebar {
 	position: absolute;
-	right: 0;
-	top: 32px;
+	left: 0;
+	top: 40px;
 	bottom: 0;
 	width: 300px;
 	background-color: #111;
@@ -158,7 +176,7 @@ select {
 
 	#sidebar .Panel {
 		color: #888;
-		padding: 10px;
+		padding: 0px;
 		border-top: 1px solid #222;
 	}
 
@@ -175,87 +193,67 @@ select {
 		margin-bottom: 10px;
 	}
 
-#sidebar2 {
+#sidebar_right {
 	position: absolute;
-	right: 300px;
-	top: 32px;
+	right: 0;
+	top: 40px;
 	bottom: 0;
-	width: 300px;
+	width: 200px;
 	background-color: #111;
 	overflow: auto;
 }
 
-	#sidebar2 * {
+	#sidebar_right * {
 		vertical-align: middle;
 	}
 
-	#sidebar2 .Panel {
+	#sidebar_right .Panel {
 		color: #888;
-		padding: 10px;
+		padding: 0px;
 		border-top: 1px solid #222;
 	}
 
-	#sidebar2 .Panel.collapsed {
+	#sidebar_right .Panel.collapsed {
 		margin-bottom: 0;
 	}
 
-	#sidebar2 .Panel.Material canvas {
+	#sidebar_right .Panel.Material canvas {
 		border: solid 1px #5A5A5A;
 	}
 
-	#sidebar2 .Row {
+	#sidebar_right .Row {
 		min-height: 20px;
 		margin-bottom: 10px;
 	}
 
-	#sidebar2 .heartView {
-		width: 300px;
-		height: 300px;
+	#sidebar_right .heartView {
+		width: 180px;
+		height: 180px;
 	}
 
-	#sidebar2 .valenceView {
-		width: 300px;
-		height: 300px;
+	#sidebar_right .valenceView {
+		width: 200px;
+		height: 200px;
 	}
 
-#tabs {
-	background-color: #1b1b1b;
-	border-top: 1px solid #222;
-}
-
-	#tabs span {
-		color: #555;
-		border-right: 1px solid #222;
-		padding: 10px;
-	}
-
-	#tabs span.selected {
-		color: #888;
-		background-color: #111;
-	}
-
-.Outliner {
-	color: #888;
-	background: #222;
-	padding: 0;
-	width: 100%;
-	height: 593px;
-	font-size: 12px;
-	cursor: default;
+#sidebar_overlay {
+	position: absolute;
+	left: 0;
+	top: 40px;
+	bottom: 0;
+	width: 300px;
+	background-color: #464646;
 	overflow: auto;
-	outline: none;
+	z-index: 0;
 }
 
-	.Outliner .option {
-		padding: 4px;
-		white-space: nowrap;
-	}
-
-	.Outliner .option:hover {
-		background-color: rgba(21,60,94,0.5);
-	}
-
-
-	.Outliner .option.active {
-		background-color: rgba(21,60,94,1);
-	}
+#sidebar_right_overlay {
+	position: absolute;
+	right: 0;
+	top: 40px;
+	bottom: 0;
+	width: 200px;
+	background-color: #464646;
+	overflow: auto;
+	z-index: 0;
+}

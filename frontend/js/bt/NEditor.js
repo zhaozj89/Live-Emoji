@@ -1,5 +1,34 @@
 "use strict";
 
+var LoadEmotionCMDJSONFile = function ( editor, filename ) {
+
+	let xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function () {
+		if ( this.readyState == 4 && this.status == 200 ) {
+			let jsonFile = JSON.parse( this.responseText );
+
+			editor.emotionCMDManager.fromJSON( jsonFile );
+
+			editor.emotionCMDManager.cleanSVG();
+
+			for ( let prop in editor.emotionCMDManager.allSerializedCMDs ) {
+
+				let info = editor.emotionCMDManager.allCMDs[ prop ].getInfo();
+
+				let msg = {
+					'info': info,
+					'nodeString': editor.emotionCMDManager.allSerializedCMDs[ prop ]
+				};
+
+				editor.signals.saveEmotionCMD.dispatch( msg );
+			}
+		}
+	};
+
+	xhr.open( 'GET', './asset/' + filename, true );
+	xhr.send();
+}
+
 var NEditor = function ( editor ) {
 
 	let signals = editor.signals;
@@ -7,10 +36,12 @@ var NEditor = function ( editor ) {
 	let container = new UI.Panel();
 	container.setId( 'nEditor' );
 	container.setPosition( 'absolute' );
-	container.setBackgroundColor( '#272822' );
+	container.setBackgroundColor( 'rgba(20,20,20,0.5)' );
 	container.setDisplay( 'none' );
 
 	container.dom.style.zIndex = "5";
+
+	editor.node_editor = container;
 
 	var header = new UI.Panel();
 	header.setPadding( '10px' );
@@ -37,6 +68,20 @@ var NEditor = function ( editor ) {
 	close.setCursor( 'pointer' );
 	close.onClick( function () {
 
+		if( editor.emotionCMDManager.currentNodeSession!==null && editor.emotionCMDManager.currentNodeSession.triggerNode!==null ) {
+			if( editor.currentEditedKey===editor.emotionCMDManager.currentNodeSession.triggerNode.key.getArg() ) {
+				editor.emotionCMDManager.save();
+				container.setDisplay( 'none' );
+				return;
+			}
+		}
+
+		if (confirm('Save the emotion command?')) {
+			editor.emotionCMDManager.save();
+		} else {
+			// Do nothing!
+		}
+
 		container.setDisplay( 'none' );
 
 	} );
@@ -60,9 +105,13 @@ var NEditor = function ( editor ) {
 		if ( NEDITOR_MOUSE_INFO.currentInput ) {
 			let path = NEDITOR_MOUSE_INFO.currentInput.path;
 			let inputPt = NEDITOR_MOUSE_INFO.currentInput.getAttachedPoint();
-			let outputPt = { x: event.pageX, y: event.pageY - 68 };
+
+			///////////////////////////////////////////////////////////
+			let outputPt = { x: event.pageX - 300, y: event.pageY - 84 };
 			let val = NEditorCreatePath( inputPt, outputPt );
 			path.setAttributeNS( null, 'd', val ); // namespace, name, value
+			path.setAttribute( 'stroke-width', '5' );
+			path.setAttribute( 'stroke', 'coral' );
 		}
 	};
 
@@ -78,124 +127,246 @@ var NEditor = function ( editor ) {
 	};
 
 
-
-
-
 	// menu
+
 	let menu = new UI.UList();
+	menu.setBackgroundColor( 'rgba(100, 100, 100, 0.8)' );
+	menu.dom.style.borderRadius = '10px';
+	menu.setWidth( '500px' );
 	menu.setId( 'menu' );
-	menu.addLi( 'Modules', 'ui-state-disabled' );
+	menu.addClass( 'nav' );
+	menu.addClass( 'nav-pills' );
 
-	let Trigger = menu.addLi( 'Trigger' );
-	let Objects = menu.addLi( 'Object' );
-	let Composite = menu.addLi( 'Composite' );
-	let Actions = menu.addLi( 'Action' );
-	let Runner = menu.addLi( 'Start' );
+	menu.setPosition( 'absolute' );
+	menu.setTop( '0px' );
+	menu.setLeft( '200px' );
+	container.add( menu );
 
-	let menuObjects = new UI.UList();
-	let characterObject = menuObjects.addLi( 'Character' );
-	let textureObject = menuObjects.addLi( 'Texture' );
-	let textObject = menuObjects.addLi( 'Text' );
-	Objects.appendChild( menuObjects.dom );
+	let Trigger = menu.addLi( 'Root+' );
+	Trigger.classList.add( 'nav-item' );
+	Trigger.style.margin = '20px';
+	Trigger.style.fontSize = '20px';
+
+	let Composite = menu.addLi( 'Sequence+' );
+	Composite.classList.add( 'nav-item' );
+	Composite.style.margin = '20px';
+	Composite.style.fontSize = '20px';
+
+	let Actions = menu.addLi( 'Action', 'nav-item dropdown', 'nav-link dropdown-toggle' );
+	Actions.firstChild.setAttribute( 'data-toggle', 'dropdown' );
+	Actions.style.margin = '12px';
+	Actions.style.fontSize = '20px';
+
+	let Tools = menu.addLi( 'Edit', 'nav-item dropdown', 'nav-link dropdown-toggle active' );
+	Tools.firstChild.setAttribute( 'data-toggle', 'dropdown' );
+	Tools.style.margin = '12px';
+	Tools.style.fontSize = '20px';
 
 	let menuActions = new UI.UList();
-	let buttonSwap = menuActions.addLi( 'Swap' );
-	let buttonParticle = menuActions.addLi( 'Texture Motion' );
+	menuActions.addClass( 'dropdown-menu' );
+	let buttonVibration = menuActions.addLi( 'Vibration' );
+	buttonVibration.classList.add( 'dropdown-item' );
+
+	let buttonSound = menuActions.addLi( 'Sound' );
+	buttonSound.classList.add( 'dropdown-item' );
+
+	let buttonDanmaku = menuActions.addLi( 'Danmaku [Text]' );
+	buttonDanmaku.classList.add( 'dropdown-item' );
+	let buttonSwap = menuActions.addLi( 'Swap [Puppet]' );
+	buttonSwap.classList.add( 'dropdown-item' );
+	let buttonExplode = menuActions.addLi( 'Particle [Background]' );
+	buttonExplode.classList.add( 'dropdown-item' );
 	Actions.appendChild( menuActions.dom );
 
-	menu.dom.style.position = 'absolute';
-	menu.dom.style.left = '80px';
-	menu.dom.style.top = '300px';
-	container.add( menu );
+	let menuTools = new UI.UList();
+	menuTools.addClass( 'dropdown-menu' );
+	let cmdNew = menuTools.addLi( 'New' );
+	cmdNew.classList.add( 'dropdown-item' );
+	let cmdSave = menuTools.addLi( 'Save' );
+	cmdSave.classList.add( 'dropdown-item' );
+	let cmdClean = menuTools.addLi( 'Clean' );
+	cmdClean.classList.add( 'dropdown-item' );
+	let cmdImport = menuTools.addLi( 'Import' );
+	cmdImport.classList.add( 'dropdown-item' );
+	let cmdExport = menuTools.addLi( 'Export' );
+	cmdExport.classList.add( 'dropdown-item' );
+	Tools.appendChild( menuTools.dom );
 
 	Global_Graph_SVG = graphSVG;
 	Global_NEditor_Container = container.dom;
 
 	let emotionCMDManager = editor.emotionCMDManager;
 
-	signals.editEmotionCMD.add(function (  ) {
-		if( editor.emotionCMDManager.currentNodeSession===null ) emotionCMDManager.newCMD();
-	});
+	signals.editEmotionCMD.add( function () {
+		if ( editor.emotionCMDManager.currentNodeSession === null ) emotionCMDManager.newCMD();
+	} );
 
-	let startBehaviorTree = false;
+	let startBehaviorTree = true;
 
 	$( function () {
-
-		$( menu.dom ).draggable();
-		$( "#menu" ).menu();
-
 		$( Trigger ).click( function () {
-			if(emotionCMDManager.currentNodeSession.triggerNode!==null) {
-				alert('Currently ONLY one trigger node is allowed!');
+			if ( emotionCMDManager.currentNodeSession.triggerNode !== null ) {
+				alert( 'Currently ONLY one trigger node is allowed!' );
 				return;
 			}
 			emotionCMDManager.addNode( 'trigger' );
 		} );
 
-		$( characterObject ).click( function () {
-			emotionCMDManager.addNode( 'character' );
-		} );
-
-		$( textureObject ).click( function () {
-			emotionCMDManager.addNode( 'texture' );
-		} );
-
-		$( textObject ).click( function () {
-			emotionCMDManager.addNode( 'text' );
-		} );
-		
-		
 		$( Composite ).click( function () {
 			emotionCMDManager.addNode( 'sequence' );
 		} );
-		
+
 
 		$( buttonSwap ).click( function () {
 			emotionCMDManager.addNode( 'swap' );
 		} );
 
-		$( buttonParticle ).click( function (  ) {
+		$( buttonExplode ).click( function () {
 			emotionCMDManager.addNode( 'particle' );
 		} );
-		
-		$( Runner ).click( function () {
-			if ( startBehaviorTree )
-				Runner.children[ 0 ].textContent = 'Start';
-			else
-				Runner.children[ 0 ].textContent = ' Stop';
 
-			startBehaviorTree = !startBehaviorTree;
+		$( buttonDanmaku ).click( function () {
+			emotionCMDManager.addNode( 'danmaku' );
+		} );
 
-			signals.runBackground.dispatch( startBehaviorTree );
+		$( buttonVibration ).click( function () {
+			emotionCMDManager.addNode( 'viberation' );
+		} );
 
+		$( buttonSound ).click( function (  ) {
+			emotionCMDManager.addNode( 'sound' );
+		} );
+
+		$( cmdNew ).click( function () {
+			editor.emotionCMDManager.newCMD();
+		} );
+
+		$( cmdSave ).click( function () {
+			editor.emotionCMDManager.save();
+		} );
+
+		$( cmdClean ).click( function () {
+			editor.emotionCMDManager.cleanSVG();
+			editor.emotionCMDManager.newCMD();
+		} );
+
+		let form = document.createElement( 'form' );
+		form.style.display = 'none';
+		document.body.appendChild( form );
+
+		//
+
+		let fileInput = document.createElement( 'input' );
+		fileInput.type = 'file';
+		fileInput.addEventListener( 'change', function ( event ) {
+
+			let file = fileInput.files[ 0 ];
+
+			let reader = new FileReader();
+
+			reader.addEventListener( 'load', function ( event ) {
+				let contents = event.target.result;
+
+				let jsonFile = JSON.parse( contents );
+
+				editor.emotionCMDManager.fromJSON( jsonFile );
+
+				editor.emotionCMDManager.cleanSVG();
+
+				for ( let prop in editor.emotionCMDManager.allSerializedCMDs ) {
+
+					let info = editor.emotionCMDManager.allCMDs[ prop ].getInfo();
+
+					let msg = {
+						'info': info,
+						'nodeString': editor.emotionCMDManager.allSerializedCMDs[ prop ]
+					};
+
+					editor.signals.saveEmotionCMD.dispatch( msg );
+				}
+			});
+			reader.readAsText( file );
+			form.reset();
 
 		} );
+		form.appendChild( fileInput );
+
+		//
+
+		$( cmdImport ).click( function () {
+
+			fileInput.click();
+		} );
+
+		$( cmdExport ).click( function () {
+			let text_file = JSON.stringify( editor.emotionCMDManager );
+
+			function download ( text, name, type ) {
+				let a = document.createElement( "a" );
+				let file = new Blob( [ text ], { type: type } );
+				a.href = URL.createObjectURL( file );
+				a.download = name;
+				a.click();
+			}
+
+			download( text_file, 'test.json', 'text/plain' );
+		} );
+
 	} );
 
 	signals.editorCleared.add( function () {
 		container.setDisplay( 'none' );
 	} );
 
-	signals.editEmotionCMD.add( function ( character ) {
+	signals.editEmotionCMD.add( function () {
 		container.setDisplay( '' );
 	} );
 
 	// Keyboard trigger
 
-	signals.trigger.add( function ( event ) {
+	signals.keyboardTriggering.add( function ( event ) {
 
 		if ( startBehaviorTree === false ) return;
 
 		if ( event[ 'type' ] === 'keyboard' ) {
-			if( editor.emotionCMDManager.currentNodeSession!==null ) {
-				for( let prop in editor.emotionCMDManager.allCMDs ) {
-					if ( event[ 'keycode' ]===prop ) {
-						editor.emotionCMDManager.allCMDs[prop].run( prop );
+			let already_run = false;
+			if ( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
+				if ( editor.emotionCMDManager.currentNodeSession.getInfo().key === event[ 'keycode' ] )
+					already_run = true;
+				editor.emotionCMDManager.currentNodeSession.run( event[ 'keycode' ] );
+
+				//
+
+				let info = {
+					type: 'emotionCMD',
+					cmd: JSON.stringify( editor.emotionCMDManager.currentNodeSession ),
+					key: event[ 'keycode' ]
+				};
+
+				editor.signals.teacherSendInfo2Students.dispatch( info );
+
+				//
+
+			}
+
+			if ( already_run === false ) {
+				for ( let prop in editor.emotionCMDManager.allCMDs ) {
+					if ( event[ 'keycode' ] === prop ) {
+						editor.emotionCMDManager.allCMDs[ prop ].run( prop );
+
+						//
+
+						let info = {
+							type: 'emotionCMD',
+							cmd: JSON.stringify( editor.emotionCMDManager.allCMDs[ prop ] ),
+							key: prop
+						};
+
+						editor.signals.teacherSendInfo2Students.dispatch( info );
+
+						//
 					}
 				}
-			}
-			else {
-				editor.emotionCMDManager.currentNodeSession.run( event[ 'keycode' ] );
 			}
 		}
 	} );
@@ -207,46 +378,21 @@ var NEditor = function ( editor ) {
 		let puppet = editor.selected;
 
 		if ( puppet !== null ) {
-			puppet.position.x = event.x;
-			puppet.position.y = event.y;
+			if ( editor.facePositionMutex === false ) {
+				puppet.position.x = event.x;
+				puppet.position.y = event.y;
 
-			editor.signals.sceneGraphChanged.dispatch();
-		}
+				editor.signals.sceneGraphChanged.dispatch();
 
-	} );
+				let info = {
+					type: 'followFace',
+					x: event.x,
+					y: event.y
+				};
 
-	signals.followEmotion.add( function ( emotion ) {
-		let puppet = editor.selected;
-
-		if ( puppet !== null ) {
-			switch ( emotion ) {
-				case EMOTION_TYPE.HAPPY:
-					emotion = 'happy';
-					break;
-				case EMOTION_TYPE.SAD:
-					emotion = 'sad';
-					break;
-				case EMOTION_TYPE.ANGRY:
-					emotion = 'angry';
-					break;
-				case EMOTION_TYPE.FEARFUL:
-					emotion = 'fearful';
-					break;
-				case EMOTION_TYPE.SURPRISED:
-					emotion = 'surprised';
-					break;
-				case EMOTION_TYPE.DISGUSTED:
-					emotion = 'disgusted';
-					break;
-				case EMOTION_TYPE.NEUTRAL:
-					emotion = 'neutral';
-					break;
+				editor.signals.teacherSendInfo2Students.dispatch( info );
 			}
-
-			puppet.updateEmotion( emotion );
-			editor.signals.sceneGraphChanged.dispatch();
 		}
-
 	} );
 
 	signals.followLeftEye.add( function ( state ) {
@@ -256,6 +402,13 @@ var NEditor = function ( editor ) {
 
 			puppet.updateLeftEye( state );
 			editor.signals.sceneGraphChanged.dispatch();
+
+			let info = {
+				type: 'followLeftEye',
+				state: state
+			};
+
+			editor.signals.teacherSendInfo2Students.dispatch( info );
 		}
 	} );
 
@@ -266,6 +419,13 @@ var NEditor = function ( editor ) {
 
 			puppet.updateRightEye( state );
 			editor.signals.sceneGraphChanged.dispatch();
+
+			let info = {
+				type: 'followRightEye',
+				state: state
+			};
+
+			editor.signals.teacherSendInfo2Students.dispatch( info );
 		}
 	} );
 
@@ -276,6 +436,13 @@ var NEditor = function ( editor ) {
 
 			puppet.updateMouth( state );
 			editor.signals.sceneGraphChanged.dispatch();
+
+			let info = {
+				type: 'followMouth',
+				state: state
+			};
+
+			editor.signals.teacherSendInfo2Students.dispatch( info );
 		}
 	} );
 

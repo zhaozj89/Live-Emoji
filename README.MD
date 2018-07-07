@@ -1,23 +1,7 @@
-Forked from https://github.com/mrdoob/three.js/tree/master/editor
+Emotion Command
+========
 
-#### App
-
-Pre-authoring for 2D live animation
-
-#### Implemented
-
-* Import OBJ
-* Node Editor UI
-* Image Triangulation
-* Face tracking
-* Asset
-
-#### TODO
-
-* Animation
-* Node Graph Logic
-
-#### How to use
+## How to use? ##
 
 * `npm install`
 * `git clone https://github.com/priologic/easyrtc.git`
@@ -25,12 +9,13 @@ Pre-authoring for 2D live animation
 * `npm install`
 * `cd ..`
 * `node server.js`
-* `https://localhost:8080/`, `https://localhost:8080/robot.html`
+* `https://localhost:8080/` or
 
-# How to monitor heart beat?
+## Use pulse sensor for sensing heart rate ##
 
-https://github.com/neiltron/node-pulsesensor
+* refer to `https://github.com/neiltron/node-pulsesensor`
+* use python2.x
+* use node8.x
 
-#### Dependencies
-
-* three.js r89
+-----------------
+GNU LESSER GENERAL PUBLIC LICENSE

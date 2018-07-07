@@ -1,320 +1,507 @@
-
-
 class SwapNode extends Node {
-	constructor ( type ) {
+	constructor ( type, editor ) {
 		super( 'Action: ' + type );
+		this.type = type;
+
+		this.editor = editor;
+
 		this.addOutput();
+
+		this.emotion = new LeafInput( '' );
+		this.emotion.addSelectionInput( {
+			'happy': 'happy',
+			'sad': 'sad',
+			'surprised': 'surprised',
+			'disgusted': 'disgusted',
+			'angry': 'angry',
+			'fearful': 'fearful',
+			'neutral': 'neutral'
+		} );
+		this.addInput( this.emotion );
+		this.emotion.setArg( 'neutral' );
+
+		this.moveTo( { x: 300, y: 80 } );
 	}
 
-	run( obj, info ) {
-		obj.updateEmotion( info );
-		editor.signals.sceneGraphChanged.dispatch();
-	}
-
-	toJSON() {
-		return {
-			type: 'swap'
-		};
-	}
-
-	fromJSON( state ) {
-
-	}
-}
-
-var CreateRemoveButton2 = function ( that ) {
-	let dom = document.createElement( 'button' );
-	dom.classList.add( 'delete' );
-	dom.textContent = 'X';
-
-	$( dom ).on( 'click', function () {
-
-		for ( let i = 0; i < that.inputs.length; ++i ) {
-			if ( that.inputs[ i ].node !== null )
-				that.inputs[ i ].node.detachInput( that.inputs[ i ] );
+	run ( component ) {
+		if ( component !== 'puppet' ) {
+			alert( 'Explode action ONLY allows puppet component input!' );
+			return;
 		}
 
-		if( that.parentInput!==null ) {
-			that.parentInput.domElement.classList.remove( 'filled' );
-			that.parentInput.domElement.classList.add( 'empty' );
-			that.parentInput.currentNode.inputs = [];
-
-			that.detachInput( that.parentInput );
-
+		let that = this;
+		let puppet = that.editor.selected;
+		if ( puppet !== null ) {
+			puppet.updateEmotion( that.emotion.getArg() );
+			that.editor.signals.sceneGraphChanged.dispatch();
 		}
-
-		that.domElement.remove();
-		that.brushCanvas.dom.remove();
-	} );
-	return dom;
-};
-
-class ParticleNode extends Node {
-
-	getStrokeInput() {
-		return this.strokeInput.selectMenu.getValue();
-	}
-
-	setStrokeInput( whichStroke ) {
-		this.strokeInput.selectMenu.setValue( whichStroke );
-	}
-
-	getSourceStrokeColor () {
-		return this.sourceStrokeColor.inp.getValue();
-	}
-
-	setSourceStrokeColor(color) {
-		this.sourceStrokeColor.inp.setValue( color );
-	}
-
-	getTravelStrokeColor () {
-		return this.travelStrokeColor.inp.getValue();
-	}
-
-	setTravelStrokeColor(color) {
-		this.travelStrokeColor.inp.setValue( color );
-	}
-
-	getSourceStrokes () {
-		return this.sourceStrokes;
-	}
-
-	setSourceStrokes(strokes) {
-		this.sourceStrokes = strokes;
-	}
-
-	getTravelStrokes () {
-		return this.travelStrokes;
-	}
-
-	setTravelStrokes(strokes) {
-		this.travelStrokes = strokes;
 	}
 
 	toJSON () {
 		return {
-			type: 'particle',
-			strokeInput: this.getStrokeInput(),
-			sourceStrokeColor: this.getSourceStrokeColor(),
-			travelStrokeColor: this.getTravelStrokeColor(),
-			sourceStrokes: this.getSourceStrokes(),
-			travelStrokes: this.getTravelStrokes()
+			type: this.type,
+			offset: this.getOffset(),
+			emotion: this.emotion.getArg()
 		};
 	}
 
-	fromJSON( state ) {
-		this.setStrokeInput(state.strokeInput);
-		this.setSourceStrokeColor(state.sourceStrokeColor);
-		this.setTravelStrokeColor(state.travelStrokeColor);
-		this.setSourceStrokes(state.sourceStrokes);
-		this.setTravelStrokes(state.travelStrokes);
-
-		this.updateCanvas();
+	fromJSON ( state ) {
+		this.type = state.type;
+		this.setOffset( state.offset );
+		this.emotion.setArg( state.emotion );
 	}
+}
 
-	updateCanvas(sourceStrokeColor, travelStrokeColor, sourceStrokes, travelStrokes) {
+class ParticleNode extends Node {
+	constructor ( type, editor ) {
+		super( 'Action: ' + type );
 
-		let ctx = this.brushCanvas.dom.firstChild.getContext( '2d' );
-		for(prop in sourceStrokes) {
-			let stroke = sourceStrokes[prop];
-			ctx.beginPath();
-			ctx.strokeStyle = sourceStrokeColor;
-			for(let k=0; k<stroke.length; ++k) {
-				let point = stroke[i];
-				ctx.moveTo( point.x, point.y );
-				ctx.lineTo( point.x, point.y );
-				ctx.stroke();
-			}
-			ctx.closePath();
-		}
+		this.type = type;
+		this.editor = editor;
 
-		for(prop in travelStrokes) {
-			let stroke = travelStrokes[prop];
-			ctx.beginPath();
-			ctx.strokeStyle = travelStrokeColor;
-			for(let k=0; k<stroke.length; ++k) {
-				let point = stroke[i];
-				ctx.moveTo( point.x, point.y );
-				ctx.lineTo( point.x, point.y );
-				ctx.stroke();
-			}
-			ctx.closePath();
-		}
-	}
-
-	constructor ( type ) {
-		super( null );
-
-		this.type = 'Action: ' + type;
-
-		this.output = null;
-		this.inputs = [];
-
-		this.parentInput = null;
-
-		this.attachedPaths = [];
-		this.connected = false;
-
-		this.domElement = CreateTitle( this.type );
-
-		let removeButton = CreateRemoveButton2( this );
-		this.domElement.appendChild( removeButton );
-
-
-
-
-
-		// add select menu
-		this.strokeInput = new LeafInput( 'Select stroke: ' );
-		this.strokeInput.addSelectionInput( {
-			'SourceStroke': 'source_stroke',
-			'TravelStroke': 'travel_stroke',
+		this.image = new LeafInput( 'Image: ' );
+		this.image.addSelectionInput( {
+			'fire': 'fire',
+			'heart': 'heart',
+			'poop': 'poop',
+			'raindrop': 'raindrop',
+			'splatter1': 'splatter1',
+			'splatter2': 'splatter2',
+			'surprised': 'surprised',
+			'yellowbubble': 'yellowbubble'
 		} );
-		this.addInput( this.strokeInput );
+		this.addInput( this.image );
+		this.image.setArg( 'yellowbubble' );
 
-		this.sourceStrokeColor = new LeafInput( 'Source stroke: ' );
-		let sourceColor = this.sourceStrokeColor.addColorInput();
-		this.addInput( this.sourceStrokeColor );
+		// initialization configuration
+		this.mass = new LeafInput( 'Speed: ' );
+		this.mass.addSelectionInput( {
+			1: 1,
+			2: 2,
+			5: 5,
+			10: 10
+		} );
+		this.addInput( this.mass );
+		this.mass.setArg( '1' );
 
-		this.travelStrokeColor = new LeafInput( 'Travel stroke: ' );
-		let travelColor = this.travelStrokeColor.addColorInput();
-		this.addInput( this.travelStrokeColor );
+		this.emitterX = new LeafInput( 'Emitter X: ' );
+		this.emitterX.addTextLabel( editor.protonPixi4Renderer.width / 2 );
+		this.addInput( this.emitterX );
+
+		this.emitterY = new LeafInput( 'Emitter Y: ' );
+		this.emitterY.addTextLabel( editor.protonPixi4Renderer.height / 2 );
+		this.addInput( this.emitterY );
+
+		this.manner = new LeafInput( 'Manner: ' );
+		this.manner.addSelectionInput( {
+			'rain': 'rain',
+			'explode': 'explode',
+			'jet': 'jet'
+		} );
+		this.addInput( this.manner );
+		this.manner.setArg( 'explode' );
 
 		this.addOutput();
 
-		this.sourceStrokes = {};
-		this.travelStrokes = {};
-
-		// this.canvasWidth = 0;
-		// this.canvasHeight = 0;
-
-		// add a canvas here
-		this.brushCanvas = new BrushCanvas( this.sourceStrokes, this.travelStrokes, this, sourceColor, travelColor );
-		document.body.appendChild( this.brushCanvas.dom );
-
-		this.sourceStrokeCounter = 0;
-		this.travelStrokeCounter = 0;
+		this.particleController = new BackgroundAnimationController( editor, this.emitterX, this.emitterY );
 
 		let that = this;
-		// $( function (  ) {
-		// 	let canvas = that.brushCanvas.dom.firstChild;
-		// 	that.canvasWidth = canvas.width;
-		// 	that.canvasHeight = canvas.height;
-		// } );
+		this.domElement.onclick = function () {
+			that.editor.currentEmitter = that.particleController.emitter;
 
-		editor.signals.runBackground.add( function ( boo ) {
-			if(boo===true)
-				that.brushCanvas.dom.style.display = 'none';
-			else
-				that.brushCanvas.dom.style.display = '';
-		} );
+			let len = that.editor.allParticleNodes.length;
+			for ( let i = 0; i < len; ++i ) {
+				that.editor.allParticleNodes[ i ].domElement.style.backgroundColor = 'rgba(100,100,100,0.8)';
+			}
+			that.domElement.style.backgroundColor = 'rgba(200,100,100,0.8)';
+		}
+
+		this.moveTo( { x: 300, y: 80 } );
 	}
 
-	run ( obj, info ) {
-		let sourceStrokes = this.sourceStrokes;
-		let travelStrokes = this.travelStrokes;
+	run ( component ) {
 
-		let msg = {
-			sourceStrokes: sourceStrokes,
-			travelStrokes: travelStrokes,
-			textureName: info
+		if ( component !== 'background' ) {
+			alert( 'Explode action ONLY allows background component input!' );
+			return;
+		}
+
+		this.particleController.updateEmitter(
+			this.image.getArg(),
+			this.mass.getArg(),
+			this.manner.getArg(),
+			this.emitterX.getArg(),
+			this.emitterY.getArg() );
+		this.particleController.display();
+	}
+
+	toJSON () {
+		return {
+			type: this.type,
+			offset: this.getOffset(),
+			image: this.image.getArg(),
+			mass: this.mass.getArg(),
+			manner: this.manner.getArg(),
+			emitterX: this.emitterX.getArg(),
+			emitterY: this.emitterY.getArg()
 		};
+	}
 
-		editor.signals.msgBackgroundTexturePattern.dispatch( msg );
+	fromJSON ( state ) {
+		this.type = state.type;
+		this.setOffset( state.offset );
+		this.image.setArg( state.image );
+		this.mass.setArg( state.mass );
+		this.manner.setArg( state.manner );
+		this.emitterX.setArg( state.emitterX );
+		this.emitterY.setArg( state.emitterY );
 	}
 }
 
 
-var BrushCanvas = function ( sourceStrokes, travelStrokes, that, source, travel ) {
-	let container = new UI.Panel();
-	container.setId( 'brushCanvas' );
-	container.setPosition( 'absolute' );
-	container.setTop( '32px' );
-	container.setRight( '600px' );
-	container.setBottom( '32px' );
-	container.setLeft( '0px' );
-	container.setOpacity( 0.9 );
-	container.dom.style.zIndex = "1";
+class DanmakuNode extends Node {
+	constructor ( type, editor ) {
+		super( 'Action: ' + type );
 
-	let canvas = new UI.Canvas();
-	canvas.setId( 'mainCanvas' );
-	canvas.setPosition( 'absolute' );
-	canvas.dom.style.width = '100%';
-	canvas.dom.style.height = '100%';
+		this.type = type;
+		this.editor = editor;
 
-	container.add( canvas );
+		this.text = new LeafInput( 'Text: ' );
+		this.text.addTextInput();
+		this.addInput( this.text );
 
+		this.color = new LeafInput( 'Color: ' );
+		this.color.addColorInput();
+		this.addInput( this.color );
 
-	$( function () {
-		let ctx = canvas.dom.getContext( '2d' );
-
-		let isDrawing = false;
-
-		resizeCanvasToDisplaySize( canvas.dom );
-
-		$( canvas.dom ).mousedown( function ( event ) {
-			isDrawing = true;
-
-			if ( that.strokeInput.selectMenu.getValue()==='SourceStroke' ) {
-				let newStroke = [];
-				let name = 'SourceStroke' + that.sourceStrokeCounter;
-				sourceStrokes[name] = newStroke;
-				ctx.strokeStyle = source.getValue();
-				that.sourceStrokeCounter++;
-			}
-			else if ( that.strokeInput.selectMenu.getValue()==='TravelStroke' ) {
-				let newStroke = [];
-				let name = 'TravelStroke' + that.travelStrokeCounter;
-				travelStrokes[name] = newStroke;
-				ctx.strokeStyle = travel.getValue();
-				that.travelStrokeCounter++;
-			}
-			else {
-				isDrawing = false;
-				return;
-			}
-
-			ctx.beginPath();
-			ctx.moveTo( event.clientX, event.clientY - 32 );
+		this.size = new LeafInput( 'Size: ' );
+		this.size.addSelectionInput( {
+			'20': 'small',
+			'50': 'middle',
+			'100': 'big'
 		} );
+		this.addInput( this.size );
+		this.size.setArg( '100' );
 
-		$( canvas.dom ).mousemove( function ( event ) {
-			if ( isDrawing ) {
-				if ( that.strokeInput.selectMenu.getValue()==='SourceStroke' ) {
-					let tmp = new Vector2(event.clientX, event.clientY - 32);
-					let name = 'SourceStroke' + (that.sourceStrokeCounter-1);
-					sourceStrokes[name].push( tmp );
-				}
-				else if ( that.strokeInput.selectMenu.getValue()==='TravelStroke' ) {
-					let tmp = new Vector2(event.clientX, event.clientY - 32);
-					let name = 'TravelStroke' + (that.travelStrokeCounter-1);
-					travelStrokes[name].push( tmp );
-				}
-
-				ctx.lineTo( event.clientX, event.clientY - 32 );
-				ctx.stroke();
-			}
+		this.font = new LeafInput( 'Font: ' );
+		this.font.addSelectionInput( {
+			'cursive': 'cursive',
+			'fantasy': 'fantasy',
+			'monospace': 'monospace',
+			'unset': 'unset'
 		} );
+		this.addInput( this.font );
+		this.font.setArg( 'cursive' );
 
-		$( canvas.dom ).mouseup( function () {
-			isDrawing = false;
-			ctx.closePath();
+		this.elasp = new LeafInput( 'Moving Time: ' );
+		this.elasp.addSelectionInput( {
+			'100': '100',
+			'500': '500',
+			'1000': '1000',
+			'5000': '5000',
+			'10000': '10000',
+			'20000': '20000'
 		} );
+		this.addInput( this.elasp );
+		this.elasp.setArg( '1000' );
 
-		function resizeCanvasToDisplaySize ( canv ) {
-			const width = canv.clientWidth;
-			const height = canv.clientHeight;
+		this.shift = new LeafInput( 'Shift:' );
+		this.shift.addSelectionInput( {
+			'no': 'no',
+			'small': 'small',
+			'middle': 'middle',
+			'big': 'big'
+		} );
+		this.addInput( this.shift );
+		this.shift.setArg( 'no' );
 
-			if ( canv.width !== width || canv.height !== height ) {
-				canv.width = width;
-				canv.height = height;
-				return true;
-			}
-			return false;
+		this.manner = new LeafInput( 'Manner: ' );
+		this.manner.addSelectionInput( {
+			'l2r_top': 'Left to right [TOP]',
+			'r2l_top': 'Right to left [TOP]',
+			'l2r_bottom': 'Left to right [BOTTOM]',
+			'r2l_bottom': 'Right to left [BOTTOM]'
+		} );
+		this.addInput( this.manner );
+		this.manner.setArg( 'r2l_top' );
+
+		this.addOutput();
+
+		this.danmakuController = new DanmakuController( editor );
+
+		this.moveTo( { x: 300, y: 80 } );
+	}
+
+	getManner ( val, _shift ) {
+		let shift = 0;
+		switch ( _shift ) {
+			case 'no':
+				shift=0;
+				break;
+			case 'small':
+				shift = 50;
+				break;
+			case 'middle':
+				shift = 100;
+				break;
+			case 'big':
+				shift = 200;
+				break;
 		}
-	} );
 
+		switch ( val ) {
+			case 'l2r_top':
+				return { sx: 0, sy: 100+shift, ex: 800, ey: 100+shift };
+			case 'r2l_top':
+				return { sx: 800, sy: 100+shift, ex: 0, ey: 100+shift };
+			case 'l2r_bottom':
+				return { sx: 0, sy: 500+shift, ex: 800, ey: 500+shift };
+			case 'r2l_bottom':
+				return { sx: 800, sy: 500+shift, ex: 0, ey: 500+shift };
+		}
+	}
 
-	return container;
+	run ( component ) {
 
-};
+		if ( component !== 'text' ) {
+			alert( 'Danmaku action ONLY allows text component input!' );
+			return;
+		}
+
+		let text = this.text.getArg();
+		let color = this.color.getArg();
+		let size = Number( this.size.getArg() );
+		let font = this.font.getArg();
+		let elapse = Number( this.elasp.getArg() );
+		let manner = this.getManner( this.manner.getArg(), this.shift.getArg() );
+
+		this.danmakuController.display( text, color, size, font, elapse, manner );
+	}
+
+	toJSON () {
+		return {
+			type: this.type,
+			offset: this.getOffset(),
+			text: this.text.getArg(),
+			color: this.color.getArg(),
+			size: this.size.getArg(),
+			font: this.font.getArg(),
+			elapse: this.elasp.getArg(),
+			manner: this.manner.getArg(),
+			shift: this.shift.getArg()
+		};
+	}
+
+	fromJSON ( state ) {
+		this.type = state.type;
+		this.setOffset( state.offset );
+		this.text.setArg( state.text );
+		this.color.setArg( state.color );
+		this.size.setArg( state.size );
+		this.font.setArg( state.font );
+		this.elasp.setArg( state.elapse );
+		this.manner.setArg( state.manner );
+		this.shift.setArg( state.shift );
+	}
+}
+
+class ViberationNode extends Node {
+	constructor ( type, editor ) {
+		super( 'Action: ' + type );
+
+		this.type = type;
+		this.editor = editor;
+
+		this.frequency = new LeafInput( 'Frequency: ' );
+		this.frequency.addSelectionInput( {
+			'low': 'low',
+			'middle': 'middle',
+			'high': 'high'
+		} );
+		this.addInput( this.frequency );
+		this.frequency.setArg( 'middle' );
+
+		this.amplitude = new LeafInput( 'Amplitude: ' );
+		this.amplitude.addSelectionInput( {
+			'low': 'low',
+			'middle': 'middle',
+			'high': 'high'
+		} );
+		this.addInput( this.amplitude );
+		this.amplitude.setArg( 'middle' );
+
+		this.addOutput();
+
+		this.moveTo( { x: 300, y: 80 } );
+
+	}
+
+	toJSON () {
+		return {
+			type: this.type,
+			offset: this.getOffset(),
+			frequency: this.frequency.getArg(),
+			amplitude: this.amplitude.getArg()
+		};
+	}
+
+	fromJSON ( state ) {
+		this.type = state.type;
+		this.setOffset( state.offset );
+		this.frequency.setArg( state.frequency );
+		this.amplitude.setArg( state.amplitude );
+	}
+
+	run ( component ) {
+		if ( component === 'puppet' || component === 'background' ) {
+			let puppet = this.editor.selected;
+
+			let timestep = null;
+			let diststep = null;
+			switch ( this.frequency.getArg() ) {
+				case 'low': {
+					timestep = 200;
+					break;
+				}
+				case 'middle': {
+					timestep = 100;
+					break;
+				}
+				case 'high': {
+					timestep = 50;
+					break;
+				}
+			}
+
+			switch ( this.amplitude.getArg() ) {
+				case 'low': {
+					diststep = 0.5;
+					break;
+				}
+				case 'middle': {
+					diststep = 1;
+					break;
+				}
+				case 'high': {
+					diststep = 2;
+					break;
+				}
+			}
+
+			let target = null;
+			if ( component === 'puppet' )
+				target = this.editor.selected;
+			else
+				target = this.editor.backgroundSprite;
+
+			let state0 = {
+				x: target.position.x,
+				y: target.position.y
+			}
+
+			let state1 = {
+				x: state0.x + diststep,
+				y: state0.y + diststep / 2
+			}
+
+			let state2 = {
+				x: state1.x - diststep,
+				y: state1.y - diststep / 2
+			}
+
+			let stage3 = {
+				x: target.position.x,
+				y: target.position.y
+			};
+
+			let tween0 = new TWEEN.Tween( state0 ).to( state1, timestep ).onUpdate( function ( obj ) {
+				target.position.x = obj.x;
+				target.position.y = obj.y
+			} );
+
+			let tween1 = new TWEEN.Tween( state1 ).to( state2, timestep ).onUpdate( function ( obj ) {
+				target.position.x = obj.x;
+				target.position.y = obj.y
+			} );
+
+			let tween2 = new TWEEN.Tween( state2 ).to( stage3, timestep ).onUpdate( function ( obj ) {
+				target.position.x = obj.x;
+				target.position.y = obj.y
+			} );
+
+			tween0.chain( tween1 );
+			tween0.chain( tween2 );
+			tween0.repeat( 100 );
+
+			if ( component === 'puppet' ) {
+				let that = this;
+				that.editor.facePositionMutex = true;
+				setTimeout( function () {
+					that.editor.facePositionMutex = false;
+				}, 5000 );
+			}
+
+			tween0.start();
+		}
+	}
+}
+
+class SoundNode extends Node {
+	constructor ( type, editor ) {
+		super( 'Actioin: ' + type );
+
+		this.type = type;
+		this.editor = editor;
+
+		this.sound = new LeafInput( 'Sound: ' );
+		this.sound.addSelectionInput( {
+			'bill': 'bill',
+			'burp': 'burp',
+			'cry': 'cry',
+			'laugh': 'laugh',
+			'scream': 'scream',
+			'slurp': 'slurp'
+		} );
+		this.addInput( this.sound );
+		this.sound.setArg( 'laugh' );
+
+		this.addOutput();
+
+		this.moveTo( { x: 300, y: 80 } );
+	}
+
+	toJSON () {
+		return {
+			type: this.type,
+			offset: this.getOffset(),
+			sound: this.sound.getArg()
+		}
+	}
+
+	fromJSON ( state ) {
+		this.type = state.type;
+		this.setOffset( state.offset );
+		this.sound.setArg( state.sound );
+	}
+
+	getIdx ( name ) {
+		switch ( name ) {
+			case 'bill':
+				return 0;
+			case 'burp':
+				return 1;
+			case 'cry':
+				return 2;
+			case 'laugh':
+				return 3;
+			case 'scream':
+				return 4;
+			case 'slurp':
+				return 5;
+		}
+	}
+
+	run ( component ) {
+		this.editor.soundPlayer.play( this.getIdx( this.sound.getArg() ) );
+	}
+}

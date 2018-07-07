@@ -24,7 +24,7 @@ Sidebar.Scene = function ( editor ) {
 
 	// outliner
 
-	function buildOption( object, draggable ) {
+	function buildOption ( object, draggable ) {
 
 		var option = document.createElement( 'div' );
 		option.draggable = draggable;
@@ -35,13 +35,13 @@ Sidebar.Scene = function ( editor ) {
 
 	}
 
-	function getMaterialName( material ) {
+	function getMaterialName ( material ) {
 
 		if ( Array.isArray( material ) ) {
 
 			var array = [];
 
-			for ( var i = 0; i < material.length; i ++ ) {
+			for ( var i = 0; i < material.length; i++ ) {
 
 				array.push( material[ i ].name );
 
@@ -55,7 +55,7 @@ Sidebar.Scene = function ( editor ) {
 
 	}
 
-	function buildHTML( object ) {
+	function buildHTML ( object ) {
 
 		var html = '<span class="type ' + object.type + '"></span> ' + object.name;
 
@@ -93,7 +93,7 @@ Sidebar.Scene = function ( editor ) {
 
 	// background
 
-	function onBackgroundChanged() {
+	function onBackgroundChanged () {
 
 		signals.sceneBackgroundChanged.dispatch( backgroundColor.getHexValue() );
 
@@ -110,7 +110,7 @@ Sidebar.Scene = function ( editor ) {
 
 	// fog
 
-	function onFogChanged() {
+	function onFogChanged () {
 
 		signals.sceneFogChanged.dispatch(
 			fogType.getValue(),
@@ -168,7 +168,6 @@ Sidebar.Scene = function ( editor ) {
 	var fogDensity = new UI.Number( 0.05 ).setWidth( '40px' ).setRange( 0, 0.1 ).setPrecision( 3 ).onChange( onFogChanged );
 	fogPropertiesRow.add( fogDensity );
 
-	//
 	// Renderer
 
 	var options = {};
@@ -251,13 +250,13 @@ Sidebar.Scene = function ( editor ) {
 
 	//
 
-	function updateRenderer() {
+	function updateRenderer () {
 
 		createRenderer( rendererType.getValue(), rendererAntialias.getValue(), rendererShadows.getValue(), rendererGammaInput.getValue(), rendererGammaOutput.getValue() );
 
 	}
 
-	function createRenderer( type, antialias, shadows, gammaIn, gammaOut ) {
+	function createRenderer ( type, antialias, shadows, gammaIn, gammaOut ) {
 
 		if ( type === 'WebGLRenderer' && System.support.webgl === false ) {
 
@@ -267,9 +266,12 @@ Sidebar.Scene = function ( editor ) {
 
 		rendererPropertiesRow.setDisplay( type === 'WebGLRenderer' ? '' : 'none' );
 
-		var renderer = new rendererTypes[ type ]( { antialias: antialias} );
+		var renderer = new rendererTypes[ type ]( { antialias: antialias, alpha: true } );
 		renderer.gammaInput = gammaIn;
 		renderer.gammaOutput = gammaOut;
+
+		renderer.setClearColor( 0x000000, 0 ); // the default
+
 		if ( shadows && renderer.shadowMap ) {
 
 			renderer.shadowMap.enabled = true;
@@ -283,12 +285,7 @@ Sidebar.Scene = function ( editor ) {
 
 	createRenderer( config.getKey( 'project/renderer' ), config.getKey( 'project/renderer/antialias' ), config.getKey( 'project/renderer/shadows' ), config.getKey( 'project/renderer/gammaInput' ), config.getKey( 'project/renderer/gammaOutput' ) );
 
-
-
-
-
-
-	function refreshUI() {
+	function refreshUI () {
 
 		var camera = editor.camera;
 		var scene = editor.scene;
@@ -298,9 +295,9 @@ Sidebar.Scene = function ( editor ) {
 		options.push( buildOption( camera, false ) );
 		options.push( buildOption( scene, false ) );
 
-		( function addObjects( objects, pad ) {
+		( function addObjects ( objects, pad ) {
 
-			for ( var i = 0, l = objects.length; i < l; i ++ ) {
+			for ( var i = 0, l = objects.length; i < l; i++ ) {
 
 				var object = objects[ i ];
 
@@ -355,7 +352,7 @@ Sidebar.Scene = function ( editor ) {
 
 	}
 
-	function refreshFogUI() {
+	function refreshFogUI () {
 
 		var type = fogType.getValue();
 
@@ -378,7 +375,7 @@ Sidebar.Scene = function ( editor ) {
 
 		var options = outliner.options;
 
-		for ( var i = 0; i < options.length; i ++ ) {
+		for ( var i = 0; i < options.length; i++ ) {
 
 			var option = options[ i ];
 

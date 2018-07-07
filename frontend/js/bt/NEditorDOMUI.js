@@ -17,10 +17,15 @@ var CreateRemoveButton = function ( that ) {
 				that.inputs[ i ].node.detachInput( that.inputs[ i ] );
 		}
 
-		if( that.parentInput!==null ) {
+		if ( that.parentInput !== null ) {
 			that.parentInput.domElement.classList.remove( 'filled' );
 			that.parentInput.domElement.classList.add( 'empty' );
-			that.parentInput.currentNode.inputs = [];
+
+			for ( let i = 0; i < that.parentInput.currentNode.inputs.length; ++i ) {
+				if( that.parentInput.currentNode.inputs[ i ].node === that ) {
+					that.parentInput.currentNode.inputs.splice( i, 1 );
+				}
+			}
 
 			that.detachInput( that.parentInput );
 
