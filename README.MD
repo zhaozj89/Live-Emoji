@@ -9,7 +9,7 @@ Emotion Command
 * `npm install`
 * `cd ..`
 * `node server.js`
-* `https://localhost:8080/` or
+* `https://localhost:8080/`
 
 ## Use pulse sensor for sensing heart rate ##
 
