@@ -3,8 +3,8 @@
 
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>LiveEmoji: Representing Emotion Distribution in Virtual Reality</title>
-  <link rel="stylesheet" type="text/css" href="blogs_files/style.css">
+  <title>LiveEmoji: Representing Emotion in Virtual Reality</title>
+  <link rel="stylesheet" type="text/css" href="asset/style.css">
 
   <style>
     .center {
@@ -16,6 +16,20 @@
     .video_center{
       display: block;
       margin: 0 auto;
+    }
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
     }
   </style>
 </head>
@@ -39,106 +53,115 @@
         <div class="cf container">
 
           <p class="white h2" style="text-align:center">
-            <font size="12">Live Emoji: Representing Emotion Distribution in Virtual
-              Reality</font>
+            <font size="12">Live Emoji: Representing Emotion in Virtual Reality</font>
           </p>
 
 
         </div>
       </header>
 
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-
       <table border="0" cellpadding="0" cellspacing="0" width="1200" align="center" bgcolor="#FFFFFF">
-        <tr>
-          <td colspan=7>
-            <p style="text-align:center">
-              <font size="6" color="red"><b>Background</b></font>
-            </p>
-            <p>
-              <font size="5">With the pervasive use of communication tools,
-                such as virtual reality, augmented reality, etc., communicating in virtual space becomes common in
-                everday life. As an extension of face-to-face communication, how to develop tools to support
-                emotional communication in virtual space is important. The dimensional emotion model suggests that
-                emotion is not a discrete state, which makes representing emotion more complicated. Following the
-                recent proposed emotion distribution representation, in this line of works, we develop support tools
-                for representing complicated emotions in virtual space.</font>
-            </p>
+        <tbody>
+          <tr>
+            <td colspan=7>
+              <p style="text-align:center">
+                <font size="6" color="red"><b>Background</b></font>
+              </p>
+              <p>
+                <font size="5">With the pervasive use of communication tools,
+                  such as virtual reality, augmented reality, etc., communicating in virtual space becomes common in
+                  everday life. As an extension of face-to-face communication, how to develop tools to support
+                  emotional communication in virtual space is important. The dimensional emotion model suggests that
+                  emotion is not a discrete state, which makes representing emotion more complicated. Following the
+                  recent proposed emotion distribution representation, in this line of works, we develop support tools
+                  for representing complicated emotions in virtual space.</font>
+              </p>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <p style="text-align:center">
+                <font size="6" color="red"><b>Related Works</b></font>
+              </p>
+              <p>
+                <font size="5">
+                  Emotional experience is important for better social communication, and plays an important role in
+                  human-human
+                  interaction, human-robot interaction, and human-computer
+                  interaction. Allowing an agent to express diverse emotional
+                  states could engages its users better, and has attracted many
+                  research efforts recently.
+                  For emotional representation, one crucial question is how
+                  to define emotion itself. In general, there are three different
+                  points of view, i.e., discrete categories, e.g., Ekman’s six basic
+                  emotions, the dimensional model, e.g., the circumplex
+                  model, and the appraisal-based model, e.g., the Geneva
+                  emotion model, which can be seen as an extension of
+                  dimensional models. Discrete categories are shown to be
+                  cross-cultural, and easy for humans to recognize, but suffer
+                  from describing secondary emotions. Therefore, to represent
+                  diverse emotional states, dimensional models are expected.
+                  Another problem is which communication channel should
+                  be used to convey emotions. Works on displaying emotions
+                  include different sensory channels, for instance, temperature, color, embodied emotional feedback,
+                  vibration,
+                  visualization and animation, and the fusion of
+                  multiple signals, and so on.
+                </font>
+              </p>
+          </tr>
           </td>
-        </tr>
 
-        <tr>
-          <td>
-            <p style="text-align:center">
-              <font size="6" color="red"><b>Related Works</b></font>
-            </p>
-            <p>
-              <font size="5">
-                Emotional experience is important for better social communication, and plays an important role in
-                human-human
-                interaction, human-robot interaction, and human-computer
-                interaction. Allowing an agent to express diverse emotional
-                states could engages its users better, and has attracted many
-                research efforts recently.
-                For emotional representation, one crucial question is how
-                to define emotion itself. In general, there are three different
-                points of view, i.e., discrete categories, e.g., Ekman’s six basic
-                emotions, the dimensional model, e.g., the circumplex
-                model, and the appraisal-based model, e.g., the Geneva
-                emotion model, which can be seen as an extension of
-                dimensional models. Discrete categories are shown to be
-                cross-cultural, and easy for humans to recognize, but suffer
-                from describing secondary emotions. Therefore, to represent
-                diverse emotional states, dimensional models are expected.
-                Another problem is which communication channel should
-                be used to convey emotions. Works on displaying emotions
-                include different sensory channels, for instance, temperature, color, embodied emotional feedback,
-                vibration,
-                visualization and animation, and the fusion of
-                multiple signals, and so on.
-              </font>
-            </p>
-        </tr>
-        </td>
+          <tr>
+            <td>
+              <p style="text-align:center">
+                <font size="6" color="red"><b>Current Work</b></font>
+              </p>
+              <p>
+                <font size="5">Live animation of 2D characters has recently become a popular way
+                  for storytelling, and has potential application scenarios like tele-present agents or robots. As an
+                  extension of human-human communication, there is a need for aug-menting the emotional communication
+                  experience of live animation. In the current work, we propose a descriptive emotion command model to
+                  bind a triggeringaction, the
+                  semantic meaning, psychology measurements,and behaviors of an emotional expression. Based on
+                  themodel,
+                  we
+                  designed and implemented a proof-of-concept 2D live animation system, where a novel visual
+                  programming
+                  tool for editing the behaviors of 2D digital characters, andan emotion command recommendation
+                  algorithm
+                  are proposed. Through a user evaluation, we showcase the usabilityof our system and its potential for
+                  boosting creativity andenhancing the emotional communication experience.</font>
+              </p>
+            </td>
+          </tr>
 
-        <tr>
-          <td>
-            <p style="text-align:center">
-              <font size="6" color="red"><b>Current Work</b></font>
-            </p>
-            <p>
-              <font size="5">Live animation of 2D characters has recently become a popular way
-                for storytelling, and has potential application scenarios like tele-present agents or robots. As an
-                extension of human-human communication, there is a need for aug-menting the emotional communication
-                experience of live animation. In this paper, we explore the emotional expressiveness issue of 2D live
-                animation. In particular, we proposea descriptive emotion command model to bind a triggeringaction, the
-                semantic meaning, psychology measurements,and behaviors of an emotional expression. Based on themodel,
-                we
-                designed and implemented a proof-of-concept 2D live animation system, where a novel visual programming
-                tool for editing the behaviors of 2D digital characters, andan emotion command recommendation algorithm
-                are proposed. Through a user evaluation, we showcase the usabilityof our system and its potential for
-                boosting creativity andenhancing the emotional communication experience.</font>
-            </p>
-          </td>
-        </tr>
+          <tr>
+            <td>
+              <p style="text-align:center">
+                <font size="6" color="red"><b>Video Demonstration</b></font>
+              </p>
+              <video width="1000" height="800" controls class="video_center">
+                <source src="asset/video_preview.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </td>
+          </tr>
 
-        <tr>
-          <td>
-            <p style="text-align:center">
-              <font size="6" color="red"><b>Video Demonstration</b></font>
-            </p>
-            <video width="1000" height="800" controls class="video_center">
-              <source src="asset/video_preview.mp4" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-        </tr>
-        </td>
-
+          <tr>
+            <td>
+              <p style="text-align:center">
+                <font size="6" color="red"><b>Displaying in VR</b></font>
+              </p>
+              <video width="1000" height="800" controls class="video_center">
+                <source src="asset/vr_preview.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 </body>
 
 </html>
