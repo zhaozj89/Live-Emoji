@@ -68,21 +68,21 @@ var rtc = easyrtc.listen( app, socketServer, null, function ( err, rtcRef ) {
 // });
 
 // heart rate
-var five = require( "johnny-five" );
+// var five = require( "johnny-five" );
 
-var board = new five.Board();
+// var board = new five.Board();
 
-board.on( "ready", function () {
+// board.on( "ready", function () {
 
-	board.info( 'Board', 'ready' );
+// 	board.info( 'Board', 'ready' );
 
-	var sensor = new five.Sensor( {
-		pin: "A0",
-		freq: 10
-	} );
+// 	var sensor = new five.Sensor( {
+// 		pin: "A0",
+// 		freq: 10
+// 	} );
 
-	sensor.scale( [ 0, 100 ] ).on( "change", function () {
-		socketServer.sockets.emit( 'pulse', this.scaled )
-	} );
+// 	sensor.scale( [ 0, 100 ] ).on( "change", function () {
+// 		socketServer.sockets.emit( 'pulse', this.scaled )
+// 	} );
 
-} );
+// } );
