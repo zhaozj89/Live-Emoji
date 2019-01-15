@@ -22,7 +22,7 @@ app.use( serveStatic( 'frontend' ) );
 app.use( serveStatic( 'frontend', { 'index': [ '/index.html' ] } ) );
 
 // Start Express http server on port 8080
-const hostname = '35.174.3.111'
+const hostname = 'https://35.174.3.111'
 var webServer = https.createServer( credentials, app ).listen( 8080, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
