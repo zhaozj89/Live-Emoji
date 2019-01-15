@@ -25,6 +25,7 @@ app.use( serveStatic( 'frontend', { 'index': [ '/index.html' ] } ) );
 const hostname = '35.174.3.111'
 var webServer = https.createServer( credentials, app ).listen( 8080, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
+});
 
 // Start Socket.io so it attaches itself to Express server
 var socketServer = socketIo.listen( webServer, { "log level": 1 } );
