@@ -22,12 +22,14 @@ app.use( serveStatic( 'frontend' ) );
 app.use( serveStatic( 'frontend', { 'index': [ '/index.html' ] } ) );
 
 // Start Express http server on port 8080
-var webServer = https.createServer( credentials, app ).listen( 8080 );
+const hostname = '35.174.3.111'
+var webServer = https.createServer( credentials, app ).listen( 8080, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
 
 // Start Socket.io so it attaches itself to Express server
 var socketServer = socketIo.listen( webServer, { "log level": 1 } );
 
-easyrtc.setOption( "logLevel", "debug" );
+// easyrtc.setOption( "logLevel", "debug" );
 
 // Overriding the default easyrtcAuth listener, only so we can directly access its callback
 easyrtc.events.on( "easyrtcAuth", function ( socket, easyrtcid, msg, socketCallback, callback ) {
