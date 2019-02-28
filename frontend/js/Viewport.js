@@ -1,255 +1,214 @@
-/**
- * @author mrdoob / http://mrdoob.com/
- */
+var Viewport = function (editor) {
 
-var Viewport = function ( editor ) {
+    var signals = editor.signals;
 
-	var signals = editor.signals;
+    var container = new UI.Panel();
+    container.setId('viewport');
+    container.setPosition('absolute');
+    container.dom.style.zIndex = '1';
+    editor.viewport = container;
 
-	var container = new UI.Panel();
-	container.setId( 'viewport' );
-	container.setPosition( 'absolute' );
-	container.dom.style.zIndex = '1';
+    // var camera = editor.camera;
+    var scene = editor.scene;
 
-	editor.viewport = container;
+    var renderer = new THREE.WebGLRenderer({antialias: true});
+    // renderer.vr.enabled = true;
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(container.dom.offsetWidth, container.dom.offsetHeight);
+    // document.body.appendChild( WEBVR.createButton( renderer ) );
+    container.dom.appendChild(renderer.domElement);
 
-	//
+    editor.renderer = renderer;
 
-	var renderer = null;
+    var objects = [];
 
-	var camera = editor.camera;
-	var scene = editor.scene;
+    // add background
 
-	var objects = [];
+    // var spriteMap = new THREE.TextureLoader().load( "./asset/stage/background.png" );
+    // var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+    // editor.backgroundSprite = new THREE.Sprite( spriteMaterial );
+    //
+    // $( function () {
+    // 	let left = editor.DEFAULT_CAMERA.left;
+    // 	let right = editor.DEFAULT_CAMERA.right;
+    // 	let top = editor.DEFAULT_CAMERA.top;
+    // 	let bottom = editor.DEFAULT_CAMERA.bottom;
+    //
+    // 	let ratio = ( right - left ) / ( bottom - top );
+    // 	editor.backgroundSprite.scale.set( 11 * ratio, 11, 1 );
+    //
+    // 	editor.backgroundSprite.position.z = 10;
+    // } );
+    //
+    // scene.add( editor.backgroundSprite );
 
-	// add background
+    // signals
 
-	var spriteMap = new THREE.TextureLoader().load( "./asset/stage/background.png" );
-	var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
-	editor.backgroundSprite = new THREE.Sprite( spriteMaterial );
+    signals.editorCleared.add(function () {
 
-	$( function () {
-		let left = editor.DEFAULT_CAMERA.left;
-		let right = editor.DEFAULT_CAMERA.right;
-		let top = editor.DEFAULT_CAMERA.top;
-		let bottom = editor.DEFAULT_CAMERA.bottom;
+        render();
 
-		let ratio = ( right - left ) / ( bottom - top );
-		editor.backgroundSprite.scale.set( 11 * ratio, 11, 1 );
+    });
 
-		editor.backgroundSprite.position.z = 10;
-	} );
 
-	scene.add( editor.backgroundSprite );
+    signals.sceneGraphChanged.add(function () {
 
-	// signals
+        render();
 
-	signals.editorCleared.add( function () {
+    });
 
-		render();
+    signals.cameraChanged.add(function () {
 
-	} );
+        render();
 
-	signals.rendererChanged.add( function ( newRenderer ) {
+    });
 
-		if ( renderer !== null ) {
+    signals.objectSelected.add(function (object) {
 
-			container.dom.removeChild( renderer.domElement );
+        render();
 
-		}
+    });
 
-		renderer = newRenderer;
 
-		renderer.autoClear = false;
-		renderer.autoUpdateScene = false;
-		renderer.setPixelRatio( window.devicePixelRatio );
-		renderer.setSize( container.dom.offsetWidth, container.dom.offsetHeight );
+    signals.geometryChanged.add(function (object) {
 
-		container.dom.appendChild( renderer.domElement );
+        render();
 
-		render();
+    });
 
-	} );
+    signals.objectAdded.add(function (object) {
 
-	signals.sceneGraphChanged.add( function () {
+        object.traverse(function (child) {
 
-		render();
+            objects.push(child);
 
-	} );
+        });
 
-	signals.cameraChanged.add( function () {
+    });
 
-		render();
+    signals.objectChanged.add(function (object) {
 
-	} );
+        if (object instanceof THREE.PerspectiveCamera) {
 
-	signals.objectSelected.add( function ( object ) {
+            object.updateProjectionMatrix();
 
-		render();
+        }
 
-	} );
+        if (editor.helpers[object.id] !== undefined) {
 
+            editor.helpers[object.id].update();
 
-	signals.geometryChanged.add( function ( object ) {
+        }
 
-		render();
+        render();
 
-	} );
+    });
 
-	signals.objectAdded.add( function ( object ) {
+    signals.objectRemoved.add(function (object) {
 
-		object.traverse( function ( child ) {
+        object.traverse(function (child) {
 
-			objects.push( child );
+            objects.splice(objects.indexOf(child), 1);
 
-		} );
+        });
 
-	} );
+    });
 
-	signals.objectChanged.add( function ( object ) {
+    signals.helperAdded.add(function (object) {
 
-		if ( object instanceof THREE.PerspectiveCamera ) {
+        objects.push(object.getObjectByName('picker'));
 
-			object.updateProjectionMatrix();
+    });
 
-		}
+    signals.helperRemoved.add(function (object) {
 
-		if ( editor.helpers[ object.id ] !== undefined ) {
+        objects.splice(objects.indexOf(object.getObjectByName('picker')), 1);
 
-			editor.helpers[ object.id ].update();
+    });
 
-		}
+    signals.materialChanged.add(function (material) {
 
-		render();
+        render();
 
-	} );
+    });
 
-	signals.objectRemoved.add( function ( object ) {
+    //
 
-		object.traverse( function ( child ) {
+    signals.windowResize.add(function () {
 
-			objects.splice( objects.indexOf( child ), 1 );
+        // // TODO: Move this out?
+        //
+        // var viewSize = container.dom.offsetHeight / 50;
+        // var aspectRatio = container.dom.offsetWidth / container.dom.offsetHeight;
+        //
+        // var left = -aspectRatio * viewSize / 2;
+        // var right = aspectRatio * viewSize / 2;
+        // var top = viewSize / 2;
+        // var bottom = -viewSize / 2;
+        //
+        // editor.DEFAULT_CAMERA.left = left;
+        // editor.DEFAULT_CAMERA.right = right;
+        // editor.DEFAULT_CAMERA.top = top;
+        // editor.DEFAULT_CAMERA.bottom = bottom;
+        // editor.DEFAULT_CAMERA.updateProjectionMatrix();
 
-		} );
+        // console.log( 'camera left: ' + left );
+        // console.log( 'camera right: ' + right );
+        // console.log( 'camera top: ' + top );
+        // console.log( 'camera bottom: ' + bottom );
 
-	} );
+        // camera.left = left;
+        // camera.right = right;
+        // camera.top = top;
+        // camera.bottom = bottom;
+        // camera.updateProjectionMatrix();
 
-	signals.helperAdded.add( function ( object ) {
+        editor.camera.fov = 70;
+        editor.camera.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
+        editor.camera.near = 1; //0.1;
+        editor.camera.far = 1000; //10;
+        editor.camera.position.z = 6;
+        editor.camera.updateProjectionMatrix();
 
-		objects.push( object.getObjectByName( 'picker' ) );
+        renderer.setSize(container.dom.offsetWidth, container.dom.offsetHeight);
 
-	} );
+        render();
 
-	signals.helperRemoved.add( function ( object ) {
+    });
 
-		objects.splice( objects.indexOf( object.getObjectByName( 'picker' ) ), 1 );
+    // test
+    var geometry = new THREE.BoxGeometry(1, 1, 1);
+    var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
+    var cube = new THREE.Mesh(geometry, material);
+    console.log(cube.position);
+    scene.add(cube);
 
-	} );
+    var controls = new THREE.OrbitControls(editor.camera, renderer.domElement);
+    controls.update();
 
-	signals.materialChanged.add( function ( material ) {
+    var current_selected = null;
+    editor.signals.add2Scene.add(function (obj) {
+        current_selected = obj;
+    });
 
-		render();
+    function render() {
 
-	} );
+        controls.update();
 
-	// fog
+        if (current_selected != null) {
+            current_selected.lookAt(editor.camera.position);
+        }
 
-	signals.sceneBackgroundChanged.add( function ( backgroundColor ) {
+        scene.updateMatrixWorld();
 
-		scene.background.setHex( backgroundColor );
+        renderer.render(scene, editor.camera);
 
-		render();
+    }
 
-	} );
+    this.scene = scene;
 
-	var currentFogType = null;
+    render();
 
-	signals.sceneFogChanged.add( function ( fogType, fogColor, fogNear, fogFar, fogDensity ) {
-
-		if ( currentFogType !== fogType ) {
-
-			switch ( fogType ) {
-
-				case 'None':
-					scene.fog = null;
-					break;
-				case 'Fog':
-					scene.fog = new THREE.Fog();
-					break;
-				case 'FogExp2':
-					scene.fog = new THREE.FogExp2();
-					break;
-
-			}
-
-			currentFogType = fogType;
-
-		}
-
-		if ( scene.fog instanceof THREE.Fog ) {
-
-			scene.fog.color.setHex( fogColor );
-			scene.fog.near = fogNear;
-			scene.fog.far = fogFar;
-
-		} else if ( scene.fog instanceof THREE.FogExp2 ) {
-
-			scene.fog.color.setHex( fogColor );
-			scene.fog.density = fogDensity;
-
-		}
-
-		render();
-
-	} );
-
-	//
-
-	signals.windowResize.add( function () {
-
-		// TODO: Move this out?
-
-		var viewSize = container.dom.offsetHeight / 50;
-		var aspectRatio = container.dom.offsetWidth / container.dom.offsetHeight;
-
-		var left = -aspectRatio * viewSize / 2;
-		var right = aspectRatio * viewSize / 2;
-		var top = viewSize / 2;
-		var bottom = -viewSize / 2;
-
-		editor.DEFAULT_CAMERA.left = left;
-		editor.DEFAULT_CAMERA.right = right;
-		editor.DEFAULT_CAMERA.top = top;
-		editor.DEFAULT_CAMERA.bottom = bottom;
-		editor.DEFAULT_CAMERA.updateProjectionMatrix();
-
-		// console.log( 'camera left: ' + left );
-		// console.log( 'camera right: ' + right );
-		// console.log( 'camera top: ' + top );
-		// console.log( 'camera bottom: ' + bottom );
-
-		camera.left = left;
-		camera.right = right;
-		camera.top = top;
-		camera.bottom = bottom;
-		camera.updateProjectionMatrix();
-
-		renderer.setSize( container.dom.offsetWidth, container.dom.offsetHeight );
-
-		render();
-
-	} );
-
-	//
-
-	function render () {
-
-		scene.updateMatrixWorld();
-
-		renderer.render( scene, camera );
-
-	}
-
-	return container;
+    return container;
 
 };

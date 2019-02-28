@@ -606,6 +606,8 @@ var LoadFileName = function ( characterStructure, name, emotion, path, filename 
 
 				// mesh.rotation.x = THREE.Math.degToRad( -90 );
 				// mesh.rotation.z = THREE.Math.degToRad( 180 );
+                mesh.rotation.y = THREE.Math.degToRad( 180 );
+                mesh.rotation.z = THREE.Math.degToRad( 180 );
 
 				if ( emotion === '' ) mesh.name = name;
 				else mesh.name = emotion;

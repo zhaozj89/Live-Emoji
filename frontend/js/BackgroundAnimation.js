@@ -109,8 +109,6 @@ var BackgroundAnimationCanvas = function ( editor ) {
 	container.setOpacity( 0.9 );
 	container.dom.style.zIndex = "3";
 
-	editor.background_animation = container;
-
 	editor.protonPixi4Renderer.proton = new Proton();
 
     $( function(){
