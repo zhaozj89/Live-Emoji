@@ -12,10 +12,10 @@ var Viewport = function (editor) {
     var scene = editor.scene;
 
     var renderer = new THREE.WebGLRenderer({antialias: true});
-    // renderer.vr.enabled = true;
+    renderer.vr.enabled = true;
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(container.dom.offsetWidth, container.dom.offsetHeight);
-    // document.body.appendChild( WEBVR.createButton( renderer ) );
+    document.body.appendChild( WEBVR.createButton( renderer ) );
     container.dom.appendChild(renderer.domElement);
 
     editor.renderer = renderer;
@@ -180,20 +180,22 @@ var Viewport = function (editor) {
     var geometry = new THREE.BoxGeometry(1, 1, 1);
     var material = new THREE.MeshBasicMaterial({color: 0x00ff00});
     var cube = new THREE.Mesh(geometry, material);
+    cube.position.z = -6;
     console.log(cube.position);
     scene.add(cube);
 
-    var controls = new THREE.OrbitControls(editor.camera, renderer.domElement);
-    controls.update();
+    // var controls = new THREE.OrbitControls(editor.camera, renderer.domElement);
+    // controls.update();
 
     var current_selected = null;
     editor.signals.add2Scene.add(function (obj) {
         current_selected = obj;
+        obj.position.z = -6;
     });
 
     function render() {
 
-        controls.update();
+        // controls.update();
 
         if (current_selected != null) {
             current_selected.lookAt(editor.camera.position);

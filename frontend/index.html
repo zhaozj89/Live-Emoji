@@ -248,8 +248,6 @@
     });
 
     function animate() {
-        // requestAnimationFrame( animate );
-
         editor.renderer.setAnimationLoop(animate);
 
         editor.updateRunningEmotionCMDState();
@@ -257,8 +255,6 @@
         TWEEN.update();
 
         editor.signals.sceneGraphChanged.dispatch();
-
-        // editor.renderer.render(editor.scene, editor.camera);
     }
 
     onWindowResize();
