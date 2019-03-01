@@ -4,10 +4,6 @@ Emotion Command
 ## How to use? ##
 
 * `npm install`
-* `git clone https://github.com/priologic/easyrtc.git`
-* `cd easyrtc`
-* `npm install`
-* `cd ..`
 * `node server.js`
 * `https://localhost:8080/` or
 

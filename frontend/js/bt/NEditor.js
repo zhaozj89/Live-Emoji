@@ -334,118 +334,17 @@ var NEditor = function ( editor ) {
 				if ( editor.emotionCMDManager.currentNodeSession.getInfo().key === event[ 'keycode' ] )
 					already_run = true;
 				editor.emotionCMDManager.currentNodeSession.run( event[ 'keycode' ] );
-
-				//
-
-				let info = {
-					type: 'emotionCMD',
-					cmd: JSON.stringify( editor.emotionCMDManager.currentNodeSession ),
-					key: event[ 'keycode' ]
-				};
-
-				editor.signals.teacherSendInfo2Students.dispatch( info );
-
-				//
-
 			}
 
 			if ( already_run === false ) {
 				for ( let prop in editor.emotionCMDManager.allCMDs ) {
 					if ( event[ 'keycode' ] === prop ) {
 						editor.emotionCMDManager.allCMDs[ prop ].run( prop );
-
-						//
-
-						let info = {
-							type: 'emotionCMD',
-							cmd: JSON.stringify( editor.emotionCMDManager.allCMDs[ prop ] ),
-							key: prop
-						};
-
-						editor.signals.teacherSendInfo2Students.dispatch( info );
-
-						//
 					}
 				}
 			}
 		}
 	} );
-
-
-	// Tracking
-
-	signals.followFace.add( function ( event ) {
-		let puppet = editor.selected;
-
-		if ( puppet !== null ) {
-			if ( editor.facePositionMutex === false ) {
-				puppet.position.x = event.x;
-				puppet.position.y = event.y;
-
-				editor.signals.sceneGraphChanged.dispatch();
-
-				let info = {
-					type: 'followFace',
-					x: event.x,
-					y: event.y
-				};
-
-				editor.signals.teacherSendInfo2Students.dispatch( info );
-			}
-		}
-	} );
-
-	signals.followLeftEye.add( function ( state ) {
-		let puppet = editor.selected;
-
-		if ( puppet !== null ) {
-
-			puppet.updateLeftEye( state );
-			editor.signals.sceneGraphChanged.dispatch();
-
-			let info = {
-				type: 'followLeftEye',
-				state: state
-			};
-
-			editor.signals.teacherSendInfo2Students.dispatch( info );
-		}
-	} );
-
-	signals.followRightEye.add( function ( state ) {
-		let puppet = editor.selected;
-
-		if ( puppet !== null ) {
-
-			puppet.updateRightEye( state );
-			editor.signals.sceneGraphChanged.dispatch();
-
-			let info = {
-				type: 'followRightEye',
-				state: state
-			};
-
-			editor.signals.teacherSendInfo2Students.dispatch( info );
-		}
-	} );
-
-	signals.followMouth.add( function ( state ) {
-		let puppet = editor.selected;
-
-		if ( puppet !== null ) {
-
-			puppet.updateMouth( state );
-			editor.signals.sceneGraphChanged.dispatch();
-
-			let info = {
-				type: 'followMouth',
-				state: state
-			};
-
-			editor.signals.teacherSendInfo2Students.dispatch( info );
-		}
-	} );
-
 	return container;
 
 };

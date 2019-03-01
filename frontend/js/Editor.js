@@ -1,31 +1,38 @@
 var Editor = function () {
+    this.main_view_renderer = null;
+    this.side_view_renderer = null;
+    this.main_view = null;
+    this.side_view = null;
+    this.main_camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 2100 );
+    this.main_camera.name = 'main_camera';
+    this.side_camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 2100 );
+    this.side_camera.name = 'side_camera';
+
+    this.main_scene = new THREE.Scene();
+    this.main_scene.name = 'main_scene';
+    this.main_scene.background = new THREE.Color(0x464646);
+    this.side_scene = new THREE.Scene();
+    this.side_scene.name = 'side_scene';
+    this.side_scene.background = new THREE.Color(0x464646);
+
+    this.face_view = null;
+    this.audience_view = null;
+
+    //config
+    this.config = new Config('threejs-editor');
+    this.history = new History(this);
+    this.loader = new Loader(this);
+
     // function
-    this.texture_loader = new THREE.TextureLoader();
-    this.renderer = null;
-    this.scene = null;
+    this.facetracking_running = false;
 
     // UI components
     this.sidebar = null;
     this.sidebar_right = null;
     this.node_editor = null;
-    this.viewport = null;
 
-    // Threejs components: renderer, camera, scene
-
-    // this.DEFAULT_CAMERA = new THREE.OrthographicCamera(-20, 20, -20, 20, -100, 100);
-    this.DEFAULT_CAMERA = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 2100 );
-    this.DEFAULT_CAMERA.name = 'Camera';
-    // this.DEFAULT_CAMERA.position.z = 1500;
-    // this.DEFAULT_CAMERA.position.set(0, 0, -50);
-    // this.DEFAULT_CAMERA.up.set(0, -1, 0);
-    // this.DEFAULT_CAMERA.lookAt(new THREE.Vector3());
-    this.camera = this.DEFAULT_CAMERA.clone();
-
-    this.scene = new THREE.Scene();
-    this.scene.name = 'Scene';
-    this.scene.background = new THREE.Color(0x464646);
-
-    this.facetracking_running = false;
+    this.video_stream = null;
+    this.camera_view_which_side = 'live_animation';
 
     // mutex
 
@@ -59,39 +66,26 @@ var Editor = function () {
     this.usageMode = 1; // 0: live animation, 1: pre-edit
     this.autoMode = 1; // 0: auto, 1: manual
 
-    this.studentLabel = null;
-    this.teacherLabel = null;
-
     this.boyLabel = null;
     this.girlLabel = null;
 
     this.boyLoaded = false;
     this.girlLoaded = false;
 
-    // components of editor
-    this.camera_viewport = null;
-    this.camera_view = null;
-    this.video_stream = null;
-    this.camera_view_which_side = 'live_animation';
-    this.student_view = null;
+
 
     this.emotion_cmd_tablebody = null;
 
     this.soundPlayer = null;
 
-    let Signal = signals.Signal;
+    var Signal = signals.Signal;
 
     this.signals = {
 
         // update emotion panel values
         updateEmotionPanelValues: new Signal(),
 
-        // to communication view
-        displayRecommendationInAudienceView: new Signal(),
-
         add2Scene: new Signal(),
-
-        teacherSendInfo2Students: new Signal(),
 
         updateRecommendation: new Signal(),
 
@@ -108,17 +102,10 @@ var Editor = function () {
         editEmotionCMD: new Signal(),
         saveEmotionCMD: new Signal(),
 
-        // old existing signals
-
         // notifications
-
         editorCleared: new Signal(),
-
         savingStarted: new Signal(),
         savingFinished: new Signal(),
-
-        // sceneBackgroundChanged: new Signal(),
-        // sceneFogChanged: new Signal(),
 
         sceneGraphChanged: new Signal(),
 
@@ -156,8 +143,6 @@ var Editor = function () {
     this.autoArousalLevel = 70;
     this.allArousals = [];
 
-    this.voiceMeter = 0;
-
     this.currentEmitter = null;
 
     this.allParticleNodes = [];
@@ -169,35 +154,6 @@ var Editor = function () {
         key1: null,
         key2: null
     };
-
-    this.protonPixi4Renderer = {
-        width: 840,
-        height: 681,
-        app: null,
-        render: null,
-        proton: null
-    };
-
-    this.raphaelRenderer = {
-        paper: null,
-        width: 840,
-        height: 681,
-        left: 300,
-        top: 40
-    };
-
-    this.rtcid = null;
-
-
-
-    this.config = new Config('threejs-editor');
-    this.history = new History(this);
-    this.storage = new Storage();
-    this.loader = new Loader(this);
-
-
-
-
 
     this.object = {};
     this.geometries = {};
@@ -249,7 +205,8 @@ Editor.prototype = {
 
         });
 
-        this.scene.add(object);
+        this.main_scene.add(object);
+        this.side_scene.add(object);
 
         this.signals.objectAdded.dispatch(object);
         this.signals.sceneGraphChanged.dispatch();

@@ -85,11 +85,11 @@ class ParticleNode extends Node {
 		this.mass.setArg( '1' );
 
 		this.emitterX = new LeafInput( 'Emitter X: ' );
-		this.emitterX.addTextLabel( editor.protonPixi4Renderer.width / 2 );
+		// this.emitterX.addTextLabel( editor.protonPixi4Renderer.width / 2 );
 		this.addInput( this.emitterX );
 
 		this.emitterY = new LeafInput( 'Emitter Y: ' );
-		this.emitterY.addTextLabel( editor.protonPixi4Renderer.height / 2 );
+		// this.emitterY.addTextLabel( editor.protonPixi4Renderer.height / 2 );
 		this.addInput( this.emitterY );
 
 		this.manner = new LeafInput( 'Manner: ' );
@@ -103,36 +103,13 @@ class ParticleNode extends Node {
 
 		this.addOutput();
 
-		this.particleController = new BackgroundAnimationController( editor, this.emitterX, this.emitterY );
-
 		let that = this;
 		this.domElement.onclick = function () {
-			that.editor.currentEmitter = that.particleController.emitter;
-
-			let len = that.editor.allParticleNodes.length;
-			for ( let i = 0; i < len; ++i ) {
-				that.editor.allParticleNodes[ i ].domElement.style.backgroundColor = 'rgba(100,100,100,0.8)';
-			}
-			that.domElement.style.backgroundColor = 'rgba(200,100,100,0.8)';
 		}
-
 		this.moveTo( { x: 300, y: 80 } );
 	}
 
 	run ( component ) {
-
-		if ( component !== 'background' ) {
-			alert( 'Explode action ONLY allows background component input!' );
-			return;
-		}
-
-		this.particleController.updateEmitter(
-			this.image.getArg(),
-			this.mass.getArg(),
-			this.manner.getArg(),
-			this.emitterX.getArg(),
-			this.emitterY.getArg() );
-		this.particleController.display();
 	}
 
 	toJSON () {
@@ -227,8 +204,6 @@ class DanmakuNode extends Node {
 
 		this.addOutput();
 
-		this.danmakuController = new DanmakuController( editor );
-
 		this.moveTo( { x: 300, y: 80 } );
 	}
 
@@ -274,8 +249,6 @@ class DanmakuNode extends Node {
 		let font = this.font.getArg();
 		let elapse = Number( this.elasp.getArg() );
 		let manner = this.getManner( this.manner.getArg(), this.shift.getArg() );
-
-		this.danmakuController.display( text, color, size, font, elapse, manner );
 	}
 
 	toJSON () {
@@ -389,10 +362,9 @@ class ViberationNode extends Node {
 			}
 
 			let target = null;
-			if ( component === 'puppet' )
-				target = this.editor.selected;
-			else
-				target = this.editor.backgroundSprite;
+
+			target = this.editor.selected;
+
 
 			let state0 = {
 				x: target.position.x,

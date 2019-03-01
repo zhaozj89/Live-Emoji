@@ -1,7 +1,3 @@
-/**
- * @author mrdoob / http://mrdoob.com/
- */
-
 var Sidebar = function ( editor ) {
 
 	let container = new UI.Panel();
@@ -25,7 +21,7 @@ var Sidebar = function ( editor ) {
 	// for debug
 	// container.add( scene );
 
-	let titleMode = new UI.Text( 'Mode' );
+	let titleMode = new UI.Text( 'Setting' );
 	titleMode.addClass( 'h4' );
 	titleMode.setTextAlign( 'center' );
 	titleMode.setColor( 'whitesmoke' );
@@ -41,75 +37,6 @@ var Sidebar = function ( editor ) {
 	roleSideButtons.addClass( 'btn-group-toggle' );
 	roleSideButtons.dom.setAttribute( 'data-toggle', 'buttons' );
 	container.add( roleSideButtons );
-
-	let studentLabel = new UI.Label();
-	studentLabel.addClass( 'btn' );
-	studentLabel.addClass( 'btn-secondary' );
-	studentLabel.setWidth( '140px' );
-	studentLabel.setFontSize( '10' );
-	roleSideButtons.add( studentLabel );
-	studentLabel.dom.innerHTML = 'Audience';
-
-	let studentInput = new UI.Input( '' );
-	studentInput.setPadding( '0px' );
-	studentInput.setMargin( '0px' );
-	studentInput.dom.setAttribute( 'type', 'radio' );
-	studentInput.dom.setAttribute( 'name', 'options' );
-	studentInput.dom.setAttribute( 'autocomplete', 'off' );
-	studentLabel.add( studentInput );
-
-	let teacherLabel = new UI.Label();
-	teacherLabel.addClass( 'btn' );
-	teacherLabel.addClass( 'btn-secondary' );
-	teacherLabel.setWidth( '150px' );
-	teacherLabel.addClass( 'active' );
-	roleSideButtons.add( teacherLabel );
-	teacherLabel.dom.innerHTML = 'Performer';
-
-	let teacherInput = new UI.Input( '' );
-	teacherInput.dom.setAttribute( 'type', 'radio' );
-	teacherInput.dom.setAttribute( 'name', 'options' );
-	teacherInput.dom.setAttribute( 'autocomplete', 'off' );
-	teacherLabel.add( teacherInput );
-
-	editor.studentLabel = studentLabel;
-	editor.teacherLabel = teacherLabel;
-
-	// usage radio buttons
-
-	let usageButtons = new UI.Div();
-	usageButtons.setMargin( '5px' );
-	usageButtons.addClass( 'btn-group' );
-	usageButtons.addClass( 'btn-group-toggle' );
-	usageButtons.dom.setAttribute( 'data-toggle', 'buttons' );
-	container.add( usageButtons );
-
-	let liveAnimationLabel = new UI.Label();
-	liveAnimationLabel.addClass( 'btn' );
-	liveAnimationLabel.addClass( 'btn-secondary' );
-	liveAnimationLabel.setWidth( '140px' );
-	usageButtons.add( liveAnimationLabel );
-	liveAnimationLabel.dom.innerHTML = 'Live Animation';
-
-	let liveAnimationInput = new UI.Input( '' );
-	liveAnimationInput.dom.setAttribute( 'type', 'radio' );
-	liveAnimationInput.dom.setAttribute( 'name', 'options' );
-	liveAnimationInput.dom.setAttribute( 'autocomplete', 'off' );
-	liveAnimationLabel.add( liveAnimationInput );
-
-	let preEditLabel = new UI.Label();
-	preEditLabel.addClass( 'btn' );
-	preEditLabel.addClass( 'btn-secondary' );
-	preEditLabel.setWidth( '150px' );
-	preEditLabel.addClass( 'active' );
-	usageButtons.add( preEditLabel );
-	preEditLabel.dom.innerHTML = 'Command Edit';
-
-	let preEditInput = new UI.Input( '' );
-	preEditInput.dom.setAttribute( 'type', 'radio' );
-	preEditInput.dom.setAttribute( 'name', 'options' );
-	preEditInput.dom.setAttribute( 'autocomplete', 'off' );
-	preEditLabel.add( preEditInput );
 
 	// choose boy or girl
 
@@ -148,38 +75,6 @@ var Sidebar = function ( editor ) {
 
 	editor.boyLabel = boyLabel;
 	editor.girlLabel = girlLabel;
-
-	studentLabel.dom.onclick = function () {
-		editor.roleMode = 0;
-		UpdateRoleMode( editor );
-
-		studentLabel.setOpacity( '1' );
-		teacherLabel.setOpacity( '0.2' );
-	}
-
-	teacherLabel.dom.onclick = function () {
-		editor.roleMode = 1;
-		UpdateRoleMode( editor );
-
-		studentLabel.setOpacity( '0.2' );
-		teacherLabel.setOpacity( '1' );
-	}
-
-	liveAnimationLabel.dom.onclick = function () {
-		editor.usageMode = 0;
-		UpdateUsageMode( editor );
-
-		liveAnimationLabel.setOpacity( '1' );
-		preEditLabel.setOpacity( '0.2' );
-	}
-
-	preEditLabel.dom.onclick = function () {
-		editor.usageMode = 1;
-		UpdateUsageMode( editor );
-
-		liveAnimationLabel.setOpacity( '0.2' );
-		preEditLabel.setOpacity( '1' );
-	}
 
 	boyLabel.dom.onclick = function () {
 
@@ -224,11 +119,6 @@ var Sidebar = function ( editor ) {
 		boyLabel.setOpacity( '0.2' );
 		girlLabel.setOpacity( '1' );
 	}
-
-	teacherLabel.setOpacity( '1' );
-	studentLabel.setOpacity( '0.2' );
-
-	preEditLabel.dom.click();
 
 	boyLabel.setOpacity( '0.2' );
 	girlLabel.setOpacity( '0.2' );

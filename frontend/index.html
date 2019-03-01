@@ -11,9 +11,6 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/dark.css"/>
 
-    <!--for hear rate-->
-    <script src="/socket.io/socket.io.js"></script>
-
     <script src="js/libs/howler.core.js"></script>
     <script src="js/libs/volume-meter.js"></script>
     <script src="js/libs/siriwave.js"></script>
@@ -39,6 +36,8 @@
     <!--threejs-->
     <script src="js/libs/three.js"></script>
     <script src="js/libs/OrbitControls.js"></script>
+    <!--webvr-->
+    <script src="js/webvr/WebVR.js"></script>
     <script src="js/libs/BoxLineGeometry.js"></script>
     <script src="js/libs/ui.three.js"></script>
     <script src="js/libs/Tween.js"></script>
@@ -51,33 +50,20 @@
     <script src="js/libs/examples/js/renderers/SoftwareRenderer.js"></script>
     <script src="js/libs/examples/js/renderers/SVGRenderer.js"></script>
     <script src="js/libs/examples/js/loaders/OBJLoader.js"></script>
-    <!--webvr-->
-    <script src="js/webvr/WebVR.js"></script>
 
-    <!--graphics-->
-    <script src="js/libs/pixi.js"></script>
-    <script src="js/libs/proton.js"></script>
-    <script src="js/libs/raphael.min.js"></script>
-
-    <!-- easyrtc -->
-    <script src="js/rtc/socket.io.js"></script>
-    <script src="js/rtc/easyrtc.js"></script>
-
-    <script src="js/Storage.js"></script>
     <script src="js/Editor.js"></script>
     <script src="js/Config.js"></script>
     <script src="js/History.js"></script>
     <script src="js/Loader.js"></script>
 
     <script src="js/Menubar.js"></script>
-    <script src="js/Menubar.Load.js"></script>
+    <script src="js/Menubar.File.js"></script>
     <script src="js/Menubar.Tool.js"></script>
     <script src="js/Menubar.View.js"></script>
-    <script src="js/Menubar.Layout.js"></script>
-
-    <script src="js/VideoChat.js"></script>
+    <script src="js/Menubar.About.js"></script>
 
     <script src="js/Sidebar.js"></script>
+    <script src="js/SidebarRight.js"></script>
     <script src="js/Sidebar.History.js"></script>
     <script src="js/Sidebar.Properties.js"></script>
     <script src="js/Sidebar.Settings.js"></script>
@@ -94,12 +80,6 @@
     <script src="js/Sidebar.Scene.Geometry.PlaneGeometry.js"></script>
     <script src="js/Sidebar.Scene.Geometry.SphereGeometry.js"></script>
     <script src="js/Sidebar.Scene.Material.js"></script>
-
-    <script src="js/BackgroundAnimation.js"></script>
-    <script src="js/DanmakuAnimation.js"></script>
-    <script src="js/Viewport.js"></script>
-    <script src="js/CameraViewPort.js"></script>
-    <script src="js/SidebarRight.js"></script>
 
     <script src="js/Command.js"></script>
     <script src="js/commands/AddObjectCommand.js"></script>
@@ -136,11 +116,11 @@
     <script src="js/bt/NEditorTrigger.js"></script>
     <script src="js/bt/NEditorComposite.js"></script>
     <script src="js/bt/NEditorAction.js"></script>
+    <script src="js/bt/NEditorSession.js"></script>
+    <script src="js/bt/NEditor.js"></script>
 
     <!--emotion cmd-->
     <script src="js/EmotionCMD.js"></script>
-    <script src="js/bt/NEditorSession.js"></script>
-    <script src="js/bt/NEditor.js"></script>
     <script src="js/Sidebar.EmotionCMD.js"></script>
 
     <!--face tracking library-->
@@ -149,13 +129,20 @@
     <script src="js/face/bundle.js"></script>
     <script src="js/face/image_process.js"></script>
 
-    <script src="js/UpdateMode.js"></script>
+    <script src="js/Scene.js"></script>
+
+    <script src="js/View.MainView.js"></script>
+    <script src="js/View.FaceView.js"></script>
+    <script src="js/View.AudienceView.js"></script>
+    <script src="js/View.SideViewAll.js"></script>
+
     <script src="js/SoundAnimation.js"></script>
     <script src="js/RecommendationUtil.js"></script>
 </head>
-<body onload="connect();">
+<body>
 <script>
 
+    // configs
     window.URL = window.URL || window.webkitURL;
     window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
 
@@ -163,24 +150,17 @@
         return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     };
 
-    //
-
+    // layout
     var editor = new Editor();
 
-    var viewport = new Viewport(editor);
-    document.body.appendChild(viewport.dom);
+    var main_view = new MainView(editor);
+    document.body.appendChild(main_view.dom);
 
-    var camera_viewport = new CameraViewport(editor);
-    document.body.appendChild(camera_viewport.dom);
+    var side_view_all = new SideViewAll(editor);
+    document.body.appendChild(side_view_all.dom);
 
     var nEditor = new NEditor(editor);
     document.body.appendChild(nEditor.dom);
-
-    // var backgroundAnimationCanvas = new BackgroundAnimationCanvas(editor);
-    // document.body.appendChild(backgroundAnimationCanvas.dom);
-    //
-    // var danmarkuAnimationCanvasDOM = DanmakuAnimationCanvas(editor);
-    // document.body.appendChild(danmarkuAnimationCanvasDOM);
 
     var sidebar = new Sidebar(editor);
     document.body.appendChild(sidebar.dom);
@@ -193,35 +173,132 @@
 
     var soundAnimation = new SoundAnimation(editor);
 
+    // load pre-defined
+    LoadEmotionCMDJSONFile(editor, 'test.json');
 
-    var sidebar_overlay = new UI.Div();
-    sidebar_overlay.setId('sidebar_overlay');
-    document.body.appendChild(sidebar_overlay.dom);
+    // resize
+    editor.signals.windowResize.add(function () {
+        editor.main_camera.fov = 90;
+        editor.main_camera.aspect = editor.main_view.dom.offsetWidth / editor.main_view.dom.offsetHeight;
+        editor.main_camera.near = 1; //0.1;
+        editor.main_camera.far = 1000; //10;
+        editor.main_camera.position.z = 0.01;
+        editor.main_camera.layers.enable(1);
+        editor.main_camera.updateProjectionMatrix();
+        editor.main_view_renderer.setSize( editor.main_view.dom.offsetWidth, editor.main_view.dom.offsetHeight);
 
-    var sidebar_right_overlay = new UI.Div();
-    sidebar_right_overlay.setId('sidebar_right_overlay');
-    document.body.appendChild(sidebar_right_overlay.dom);
+        editor.side_camera.fov = 90;
+        editor.side_camera.aspect = editor.side_view.dom.offsetWidth / editor.side_view.dom.offsetHeight;
+        editor.side_camera.near = 1; //0.1;
+        editor.side_camera.far = 1000; //10;
+        editor.side_camera.position.z = 0.01;
+        editor.side_camera.layers.enable(1);
+        editor.side_camera.updateProjectionMatrix();
+        editor.side_view_renderer.setSize( editor.side_view.dom.offsetWidth, editor.side_view.dom.offsetHeight);
 
-    //
-    document.addEventListener( 'dragover', function ( event ) {
-        event.preventDefault();
-        event.dataTransfer.dropEffect = 'copy';
-    }, false );
-    document.addEventListener( 'drop', function ( event ) {
-        event.preventDefault();
-        if ( event.dataTransfer.files.length > 0 ) {
-            editor.loader.loadFile( event.dataTransfer.files[ 0 ] );
+        render();
+    });
+
+    // Tracking
+
+    editor.signals.followFace.add(function (event) {
+        let puppet = editor.selected;
+
+        if (puppet !== null) {
+            if (editor.facePositionMutex === false) {
+                puppet.position.x = event.x;
+                puppet.position.y = event.y;
+
+                editor.signals.sceneGraphChanged.dispatch();
+            }
         }
-    }, false );
+    });
 
-    function onWindowResize(event) {
+    editor.signals.followLeftEye.add(function (state) {
+        let puppet = editor.selected;
 
+        if (puppet !== null) {
+            puppet.updateLeftEye(state);
+            editor.signals.sceneGraphChanged.dispatch();
+        }
+    });
+
+    editor.signals.followRightEye.add(function (state) {
+        let puppet = editor.selected;
+
+        if (puppet !== null) {
+
+            puppet.updateRightEye(state);
+            editor.signals.sceneGraphChanged.dispatch();
+        }
+    });
+
+    editor.signals.followMouth.add(function (state) {
+        let puppet = editor.selected;
+
+        if (puppet !== null) {
+
+            puppet.updateMouth(state);
+            editor.signals.sceneGraphChanged.dispatch();
+        }
+    });
+
+
+    // event processing
+    // document.addEventListener('dragover', function (event) {
+    //     event.preventDefault();
+    //     event.dataTransfer.dropEffect = 'copy';
+    // }, false);
+    //
+    // document.addEventListener('drop', function (event) {
+    //     event.preventDefault();
+    //     if (event.dataTransfer.files.length > 0) {
+    //         editor.loader.loadFile(event.dataTransfer.files[0]);
+    //     }
+    // }, false);
+
+    window.addEventListener('resize', function (env) {
         editor.signals.windowResize.dispatch();
+    }, false);
 
-    }
+    // rendering
+    editor.signals.editorCleared.add(function () {
+        render();
+    });
 
-    window.addEventListener('resize', onWindowResize, false);
+    editor.signals.sceneGraphChanged.add(function () {
+        render();
+    });
 
+    editor.signals.cameraChanged.add(function () {
+        render();
+    });
+
+    editor.signals.objectSelected.add(function (object) {
+        render();
+    });
+
+    editor.signals.geometryChanged.add(function (object) {
+
+        render();
+
+    });
+
+    editor.signals.objectChanged.add(function (object) {
+        if (object instanceof THREE.PerspectiveCamera) {
+            object.updateProjectionMatrix();
+        }
+        if (editor.helpers[object.id] !== undefined) {
+            editor.helpers[object.id].update();
+        }
+        render();
+    });
+
+    editor.signals.materialChanged.add(function (material) {
+        render();
+    });
+
+    // for recommendation
     $(function () {
         let KeyboardTriggerFunction = function (event) {
             let KEYBOARD_TRIGGER = {
@@ -247,9 +324,39 @@
         document.addEventListener('keydown', KeyboardTriggerFunction);
     });
 
-    function animate() {
-        editor.renderer.setAnimationLoop(animate);
+    var current_selected = null;
+    editor.signals.add2Scene.add(function (obj) {
+        current_selected = obj;
+        obj.position.z = -6;
+    });
 
+    // rendering
+    // var controls = new THREE.OrbitControls(editor.main_camera, editor.main_view_renderer.domElement);
+    // controls.enableZoom = false;
+    // controls.enablePan = false;
+    // controls.enableDamping = true;
+    // controls.rotateSpeed = - 0.25;
+    // controls.update();
+
+    function render() {
+        // controls.update();
+
+        if (current_selected != null) {
+            current_selected.lookAt(editor.side_camera.position);
+        }
+
+        editor.main_scene.updateMatrixWorld();
+        editor.side_scene.updateMatrixWorld();
+
+        editor.main_view_renderer.render(editor.main_scene, editor.main_camera);
+        editor.side_view_renderer.render(editor.side_scene, editor.side_camera);
+    }
+
+    // animation loop
+    function animate() {
+        // editor.side_view_renderer.setAnimationLoop(animate);
+        requestAnimationFrame(animate);
+        
         editor.updateRunningEmotionCMDState();
 
         TWEEN.update();
@@ -257,9 +364,8 @@
         editor.signals.sceneGraphChanged.dispatch();
     }
 
-    onWindowResize();
-
     animate();
+    editor.signals.windowResize.dispatch();
 </script>
 </body>
 </html>
