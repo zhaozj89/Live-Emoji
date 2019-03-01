@@ -15,7 +15,7 @@ var Viewport = function (editor) {
     renderer.vr.enabled = true;
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(container.dom.offsetWidth, container.dom.offsetHeight);
-    document.body.appendChild( WEBVR.createButton( renderer ) );
+    document.body.appendChild( WEBVR.createButton( renderer, { frameOfReferenceType: 'head-model' } ) );
     container.dom.appendChild(renderer.domElement);
 
     editor.renderer = renderer;
@@ -163,11 +163,12 @@ var Viewport = function (editor) {
         // camera.bottom = bottom;
         // camera.updateProjectionMatrix();
 
-        editor.camera.fov = 70;
+        editor.camera.fov = 90;
         editor.camera.aspect = container.dom.offsetWidth / container.dom.offsetHeight;
         editor.camera.near = 1; //0.1;
         editor.camera.far = 1000; //10;
-        editor.camera.position.z = 6;
+        // editor.camera.position.z = 6;
+        editor.camera.layers.enable( 1 );
         editor.camera.updateProjectionMatrix();
 
         renderer.setSize(container.dom.offsetWidth, container.dom.offsetHeight);
@@ -183,6 +184,48 @@ var Viewport = function (editor) {
     cube.position.z = -6;
     console.log(cube.position);
     scene.add(cube);
+
+    // skybox
+    function getTexturesFromAtlasFile( atlasImgUrl, tilesNum ) {
+        var textures = [];
+        for ( var i = 0; i < tilesNum; i ++ ) {
+            textures[ i ] = new THREE.Texture();
+        }
+        var loader = new THREE.ImageLoader();
+        loader.load( atlasImgUrl, function ( imageObj ) {
+            var canvas, context;
+            var tileWidth = imageObj.height;
+            for ( var i = 0; i < textures.length; i ++ ) {
+                canvas = document.createElement( 'canvas' );
+                context = canvas.getContext( '2d' );
+                canvas.height = tileWidth;
+                canvas.width = tileWidth;
+                context.drawImage( imageObj, tileWidth * i, 0, tileWidth, tileWidth, 0, 0, tileWidth, tileWidth );
+                textures[ i ].image = canvas;
+                textures[ i ].needsUpdate = true;
+            }
+        } );
+        return textures;
+    }
+
+    var geometry = new THREE.BoxBufferGeometry( 100, 100, 100 );
+    geometry.scale( 1, 1, - 1 );
+    var textures = getTexturesFromAtlasFile( "asset/sun_temple_stripe_stereo.jpg", 12 );
+    var materials = [];
+    for ( var i = 0; i < 6; i ++ ) {
+        materials.push( new THREE.MeshBasicMaterial( { map: textures[ i ] } ) );
+    }
+    var skyBox = new THREE.Mesh( geometry, materials );
+    skyBox.layers.set( 1 );
+    scene.add( skyBox );
+
+    var materialsR = [];
+    for ( var i = 6; i < 12; i ++ ) {
+        materialsR.push( new THREE.MeshBasicMaterial( { map: textures[ i ] } ) );
+    }
+    var skyBoxR = new THREE.Mesh( geometry, materialsR );
+    skyBoxR.layers.set( 2 );
+    scene.add( skyBoxR );
 
     // var controls = new THREE.OrbitControls(editor.camera, renderer.domElement);
     // controls.update();
