@@ -15,9 +15,6 @@ var Editor = function () {
     this.side_scene.name = 'side_scene';
     this.side_scene.background = new THREE.Color(0x464646);
 
-    this.face_view = null;
-    this.audience_view = null;
-
     //config
     this.config = new Config('threejs-editor');
     this.history = new History(this);

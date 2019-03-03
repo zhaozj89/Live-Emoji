@@ -11,10 +11,6 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/dark.css"/>
 
-    <script src="js/libs/howler.core.js"></script>
-    <script src="js/libs/volume-meter.js"></script>
-    <script src="js/libs/siriwave.js"></script>
-
     <!--jquery-->
     <script src="js/libs/jquery.min.js"></script>
     <script src="js/libs/jquery-ui.min.js"></script>
@@ -59,27 +55,10 @@
     <script src="js/Menubar.js"></script>
     <script src="js/Menubar.File.js"></script>
     <script src="js/Menubar.Tool.js"></script>
-    <script src="js/Menubar.View.js"></script>
     <script src="js/Menubar.About.js"></script>
 
-    <script src="js/Sidebar.js"></script>
-    <script src="js/SidebarRight.js"></script>
-    <script src="js/Sidebar.History.js"></script>
-    <script src="js/Sidebar.Properties.js"></script>
-    <script src="js/Sidebar.Settings.js"></script>
-    <script src="js/Sidebar.Settings.Shortcuts.js"></script>
-    <script src="js/Sidebar.Scene.js"></script>
-    <script src="js/Sidebar.Scene.Object.js"></script>
-    <script src="js/Sidebar.Scene.Geometry.js"></script>
-    <script src="js/Sidebar.Scene.Geometry.Geometry.js"></script>
-    <script src="js/Sidebar.Scene.Geometry.BufferGeometry.js"></script>
-    <script src="js/Sidebar.Scene.Geometry.Modifiers.js"></script>
-    <script src="js/Sidebar.Scene.Geometry.BoxGeometry.js"></script>
-    <script src="js/Sidebar.Scene.Geometry.CircleGeometry.js"></script>
-    <script src="js/Sidebar.Scene.Geometry.CylinderGeometry.js"></script>
-    <script src="js/Sidebar.Scene.Geometry.PlaneGeometry.js"></script>
-    <script src="js/Sidebar.Scene.Geometry.SphereGeometry.js"></script>
-    <script src="js/Sidebar.Scene.Material.js"></script>
+    <script src="js/Sidebar.Left.js"></script>
+    <script src="js/Sidebar.Right.js"></script>
 
     <script src="js/Command.js"></script>
     <script src="js/commands/AddObjectCommand.js"></script>
@@ -119,6 +98,10 @@
     <script src="js/bt/NEditorSession.js"></script>
     <script src="js/bt/NEditor.js"></script>
 
+    <link rel="stylesheet" href="css/litegraph.css"/>
+    <script src="js/libs/litegraph.min.js"></script>
+    <script src="js/bt/NodeEditor2.js"></script>
+
     <!--emotion cmd-->
     <script src="js/EmotionCMD.js"></script>
     <script src="js/Sidebar.EmotionCMD.js"></script>
@@ -134,14 +117,12 @@
     <script src="js/View.MainView.js"></script>
     <script src="js/View.FaceView.js"></script>
     <script src="js/View.AudienceView.js"></script>
-    <script src="js/View.SideViewAll.js"></script>
 
     <script src="js/SoundAnimation.js"></script>
     <script src="js/RecommendationUtil.js"></script>
 </head>
 <body>
 <script>
-
     // configs
     window.URL = window.URL || window.webkitURL;
     window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
@@ -156,17 +137,14 @@
     var main_view = new MainView(editor);
     document.body.appendChild(main_view.dom);
 
-    var side_view_all = new SideViewAll(editor);
-    document.body.appendChild(side_view_all.dom);
-
-    var nEditor = new NEditor(editor);
+    var nEditor = new NEditor2(editor);
     document.body.appendChild(nEditor.dom);
 
-    var sidebar = new Sidebar(editor);
-    document.body.appendChild(sidebar.dom);
+    var sidebar_left = new SidebarLeft(editor);
+    document.body.appendChild(sidebar_left.dom);
 
-    var sidebarRight = new SidebarRight(editor);
-    document.body.appendChild(sidebarRight.dom);
+    var sidebar_right = new SidebarRight(editor);
+    document.body.appendChild(sidebar_right.dom);
 
     var menubar = new Menubar(editor);
     document.body.appendChild(menubar.dom);
@@ -331,15 +309,15 @@
     });
 
     // rendering
-    // var controls = new THREE.OrbitControls(editor.main_camera, editor.main_view_renderer.domElement);
-    // controls.enableZoom = false;
-    // controls.enablePan = false;
-    // controls.enableDamping = true;
-    // controls.rotateSpeed = - 0.25;
-    // controls.update();
+    var controls = new THREE.OrbitControls(editor.main_camera, editor.main_view_renderer.domElement);
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.enableDamping = true;
+    controls.rotateSpeed = - 0.25;
+    controls.update();
 
     function render() {
-        // controls.update();
+        controls.update();
 
         if (current_selected != null) {
             current_selected.lookAt(editor.side_camera.position);

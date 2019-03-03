@@ -1,25 +1,31 @@
-var Sidebar = function ( editor ) {
+var SidebarLeft = function (editor ) {
 
 	let container = new UI.Panel();
 	container.setId( 'sidebar' );
 	container.dom.style.zIndex = '4';
 
-	editor.sidebar = container;
+	let titleView = new UI.Text( 'Audience View' );
+	titleView.addClass( 'h4' );
+	titleView.setTextAlign( 'center' );
+	titleView.setColor( 'whitesmoke' );
+	titleView.setWidth( '300px' );
+	titleView.setBackgroundColor( 'blueviolet' );
+	container.add( titleView );
+
+	var audience_view = new AudienceView(editor);
+	container.add(audience_view);
+
+	var renderer = new THREE.WebGLRenderer({antialias: true});
+	renderer.vr.enabled = true;
+	renderer.setPixelRatio(window.devicePixelRatio);
+	renderer.setSize(editor.side_view.dom.offsetWidth, editor.side_view.dom.offsetHeight);
+	editor.side_view.dom.appendChild( WEBVR.createButton( renderer, { frameOfReferenceType: 'head-model' } ) );
+	editor.side_view.dom.appendChild(renderer.domElement);
+
+	editor.side_view_renderer = renderer;
+	editor.side_scene = MakeScene();
 
 	//
-
-	let scene = new UI.Span().add(
-		new Sidebar.Scene( editor ),
-		new Sidebar.Properties( editor )
-	);
-
-	let history = new UI.Span().add(
-		new Sidebar.History( editor ),
-		new Sidebar.Settings( editor )
-	);
-
-	// for debug
-	// container.add( scene );
 
 	let titleMode = new UI.Text( 'Setting' );
 	titleMode.addClass( 'h4' );
@@ -125,7 +131,7 @@ var Sidebar = function ( editor ) {
 
 	//
 
-	let titleEmotionCommand = new UI.Text( 'Emotion Command' );
+	let titleEmotionCommand = new UI.Text( 'Emotion' );
 	titleEmotionCommand.addClass( 'h4' );
 	titleEmotionCommand.setTextAlign( 'center' );
 	titleEmotionCommand.setColor( 'whitesmoke' );
@@ -134,7 +140,7 @@ var Sidebar = function ( editor ) {
 	titleEmotionCommand.setBackgroundColor( 'blueviolet' );
 	container.add( titleEmotionCommand );
 
-	let emotionCommandView = new Sidebar.EmotionCMD( editor );
+	let emotionCommandView = new SidebarLeft.EmotionCMD( editor );
 	container.add( emotionCommandView );
 
 	return container;

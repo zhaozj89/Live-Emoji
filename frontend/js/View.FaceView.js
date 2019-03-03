@@ -1,47 +1,11 @@
-var Faceview = function (editor) {
+var FaceView = function (editor) {
     var signals = editor.signals;
 
     var cameraView = new UI.Panel();
-    cameraView.setTop('0px');
-    cameraView.setLeft('0px');
-    cameraView.setPosition('absolute');
-    cameraView.setDisplay('none');
-    editor.face_view = cameraView;
-
-    let cameraViewHeader = new UI.Text('Performer View');
-    cameraViewHeader.setWidth('100%');
-    cameraViewHeader.setPadding('10px');
-    cameraViewHeader.dom.style.borderRadius = '5px';
-    cameraViewHeader.setBackgroundColor('rgba(50, 50, 50, 0.5)');
-
-    cameraView.add(cameraViewHeader);
-
-    let buttonSVG = (function () {
-        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.setAttribute('width', 32);
-        svg.setAttribute('height', 32);
-        var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', 'M 12,12 L 22,22 M 22,12 12,22');
-        path.setAttribute('stroke', '#fff');
-        svg.appendChild(path);
-        return svg;
-    })();
-
-    let close = new UI.Element(buttonSVG);
-    close.setPosition('absolute');
-    close.setTop('3px');
-    close.setRight('1px');
-    close.setCursor('pointer');
-
-    close.onClick(function () {
-        cameraView.setDisplay('none');
-    });
-
-    cameraViewHeader.add(close);
 
     let overlayedPanel = new UI.Panel();
-    overlayedPanel.setWidth('250px');
-    overlayedPanel.setHeight('200px');
+    overlayedPanel.setWidth('200px');
+    overlayedPanel.setHeight('150px');
 
     cameraView.add(overlayedPanel);
 
@@ -50,8 +14,8 @@ var Faceview = function (editor) {
     let videoStream = new UI.Video();
     videoStream.setPosition('absolute');
     videoStream.setId('selfVideo');
-    videoStream.dom.width = 250;
-    videoStream.dom.height = 200;
+    videoStream.dom.width = 200;
+    videoStream.dom.height = 150;
     videoStream.setPreload('auto');
     videoStream.setLoop(true);
     videoStream.setPlaysinline(true);
@@ -66,8 +30,8 @@ var Faceview = function (editor) {
     let videoStreamOverlay = new UI.Canvas();
     videoStreamOverlay.setPosition('absolute');
     videoStreamOverlay.setId('videoStreamOverlay');
-    videoStreamOverlay.dom.width = 250;
-    videoStreamOverlay.dom.height = 200;
+    videoStreamOverlay.dom.width = 200;
+    videoStreamOverlay.dom.height = 150;
     overlayedPanel.add(videoStreamOverlay);
 
     let startButton = new UI.Button('Start');
@@ -92,8 +56,8 @@ var Faceview = function (editor) {
     // face recognition stuff
     //define canvas for image processing
     let captureCanvas = document.createElement('canvas');		// internal canvas for capturing full images from video stream
-    captureCanvas.width = 250;  //should be the same as videoStream.dom.width in Camera.js
-    captureCanvas.height = 200; //should be the same as videoStream.dom.height in Camera.js
+    captureCanvas.width = 200;  //should be the same as videoStream.dom.width in Camera.js
+    captureCanvas.height = 150; //should be the same as videoStream.dom.height in Camera.js
     let captureContext = captureCanvas.getContext('2d');
 
     let FaceCanvas = document.createElement('canvas');
@@ -174,28 +138,28 @@ var Faceview = function (editor) {
             startButton.dom.value = "Start";
             startButton.dom.disabled = null;
         }, false);
+        //
+        // // Provides requestAnimationFrame in a cross browser way
+        // window.requestAnimFrame = (function () {
+        //     return window.requestAnimationFrame ||
+        //         window.webkitRequestAnimationFrame ||
+        //         window.mozRequestAnimationFrame ||
+        //         window.oRequestAnimationFrame ||
+        //         window.msRequestAnimationFrame ||
+        //         function (/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
+        //             return window.setTimeout(callback, 1000 / 60);
+        //         };
+        // })();
 
-        // Provides requestAnimationFrame in a cross browser way
-        window.requestAnimFrame = (function () {
-            return window.requestAnimationFrame ||
-                window.webkitRequestAnimationFrame ||
-                window.mozRequestAnimationFrame ||
-                window.oRequestAnimationFrame ||
-                window.msRequestAnimationFrame ||
-                function (/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
-                    return window.setTimeout(callback, 1000 / 60);
-                };
-        })();
-
-        // Provides cancelRequestAnimationFrame in a cross browser way
-        window.cancelRequestAnimFrame = (function () {
-            return window.cancelAnimationFrame ||
-                window.webkitCancelRequestAnimationFrame ||
-                window.mozCancelRequestAnimationFrame ||
-                window.oCancelRequestAnimationFrame ||
-                window.msCancelRequestAnimationFrame ||
-                window.clearTimeout;
-        })();
+        // // Provides cancelRequestAnimationFrame in a cross browser way
+        // window.cancelRequestAnimFrame = (function () {
+        //     return window.cancelAnimationFrame ||
+        //         window.webkitCancelRequestAnimationFrame ||
+        //         window.mozCancelRequestAnimationFrame ||
+        //         window.oCancelRequestAnimationFrame ||
+        //         window.msCancelRequestAnimationFrame ||
+        //         window.clearTimeout;
+        // })();
     }
 
 

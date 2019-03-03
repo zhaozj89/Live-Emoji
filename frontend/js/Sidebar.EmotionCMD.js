@@ -126,7 +126,7 @@ function getIndexofRow(body, key) {
 }
 
 
-Sidebar.EmotionCMD = function (editor) {
+SidebarLeft.EmotionCMD = function (editor) {
 
     let signals = editor.signals;
 

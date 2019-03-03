@@ -4,9 +4,18 @@ var SidebarRight = function ( editor ) {
 	container.setId( 'sidebar_right' );
 	container.dom.style.zIndex = '4';
 
-	editor.sidebar_right = container;
+	var titleCamera = new UI.Text( 'Camera' );
+	titleCamera.addClass( 'h4' );
+	titleCamera.setTextAlign('center');
+	titleCamera.setColor( 'whitesmoke' );
+	titleCamera.setWidth( '200px' );
+	titleCamera.setBackgroundColor( 'blueviolet' );
+	container.add( titleCamera );
 
-	let titleValence = new UI.Text( 'Valence' );
+	var faceView = new FaceView(editor);
+	container.add(faceView);
+
+	var titleValence = new UI.Text( 'Valence' );
 	titleValence.addClass( 'h4' );
 	titleValence.setTextAlign('center');
 	titleValence.setColor( 'whitesmoke' );

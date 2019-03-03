@@ -18,6 +18,7 @@ Menubar.Tool = function (editor) {
     option.setClass('option');
     option.setTextContent('Emotion Editor');
     option.onClick(function () {
+        editor.node_editor.setDisplay('');
         editor.signals.editEmotionCMD.dispatch();
     });
     options.add(option);
