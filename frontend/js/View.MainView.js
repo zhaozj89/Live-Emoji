@@ -2,7 +2,7 @@ var MainView = function (editor) {
     var container = new UI.Panel();
     container.setId('mainview');
     container.setPosition('absolute');
-    container.dom.style.zIndex = '1';
+    // container.dom.style.zIndex = '0';
 
     var renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setPixelRatio(window.devicePixelRatio);

@@ -27,9 +27,7 @@ var Editor = function () {
     this.sidebar = null;
     this.sidebar_right = null;
     this.node_editor = null;
-
-    this.video_stream = null;
-    this.camera_view_which_side = 'live_animation';
+    this.node_editor_canvas = null;
 
     // mutex
 

@@ -25,8 +25,6 @@ var FaceView = function (editor) {
     let videoStreamHeight = videoStream.dom.height;
     overlayedPanel.add(videoStream);
 
-    editor.video_stream = videoStream.dom;
-
     let videoStreamOverlay = new UI.Canvas();
     videoStreamOverlay.setPosition('absolute');
     videoStreamOverlay.setId('videoStreamOverlay');

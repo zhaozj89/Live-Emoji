@@ -1,7 +1,7 @@
 var allUIThreeDOMInfo = {};
 
 class EmotionCMDThreeDOM {
-    constructor(info, nodeString) {
+    constructor(info) {
         this.cell0 = document.createElement('td');
         this.cell1 = document.createElement('td');
         this.cell2 = document.createElement('td');
@@ -24,77 +24,60 @@ class EmotionCMDThreeDOM {
         this.cell5.style.textAlign = 'center';
 
         this.keyDiv = new UI.Text(info.key);
-        this.semanticDiv = new UI.Text(info.semantic);
+        this.semanticsDiv = new UI.Text(info.semantics);
         this.valenceDiv = new UI.Text(info.valence);
         this.arousalDiv = new UI.Text(info.arousal);
         this.editButton = new UI.Button('Edit');
         this.deleteButton = new UI.Button('X');
 
         this.cell0.appendChild(this.keyDiv.dom);
-        this.cell1.appendChild(this.semanticDiv.dom);
+        this.cell1.appendChild(this.semanticsDiv.dom);
         this.cell2.appendChild(this.valenceDiv.dom);
         this.cell3.appendChild(this.arousalDiv.dom);
         this.cell4.appendChild(this.editButton.dom);
         this.cell5.appendChild(this.deleteButton.dom);
-
-        this.nodeString = nodeString;
     }
 
     updateInfo(info) {
         this.keyDiv.setValue(info.key);
-        this.semanticDiv.setValue(info.semantic);
+        this.semanticsDiv.setValue(info.semantics);
         this.valenceDiv.setValue(info.valence);
         this.arousalDiv.setValue(info.arousal);
-    }
-
-    updateNodeString(nodeString) {
-        this.nodeString = nodeString;
     }
 
     createEmotionCMDThreeDOM(editor) {
 
         let that = this;
-        let thatKey = this.keyDiv.getValue();
         this.editButton.onClick(function () {
+            let key = that.keyDiv.getValue();
 
-            if (editor.currentEditedKey === thatKey) {
-                editor.node_editor.setDisplay('');
-            }
-            else {
-                editor.currentEditedKey = thatKey;
+            $('#editor_canvas').remove();
+            CreateNECanvas(editor);
+            ResizeNECanvas(editor);
 
-                editor.runAtLeastOneCMD = false;
+            let emotion_cmd = editor.emotionCMDManager.all_emotion_cmds[key];
+            let emotion_canvas = new LGraphCanvas("#editor_canvas", emotion_cmd.getGraph());
 
-                for (let i = 0; i < Global_All_DOM_In_SVG.length; ++i) {
-                    Global_All_DOM_In_SVG[i].remove();
+            for(let i=0; i<emotion_cmd.getGraph().nodes.length; ++i){
+                let cur_node = emotion_cmd.getGraph()._nodes[i];
+                for(let prop in cur_node.properties){
+                    if(cur_node.widgets.length>0){
+                        for(let j=0; j<cur_node.widgets.length; ++j){
+                            if(cur_node.widgets[j].name==prop)
+                                cur_node.widgets[j].value=cur_node.properties[prop];
+                        }
+                    }
                 }
-                $(Global_Graph_SVG).empty();
-
-                var nodeSession = new NodeSession(editor);
-                nodeSession.fromJSON(JSON.parse(that.nodeString));
-                editor.emotionCMDManager.currentNodeSession = nodeSession;
-
-                editor.node_editor.setDisplay('');
-
-                for (let i = 0; i < Global_All_DOM_In_SVG.length; ++i) {
-                    Global_All_DOM_In_SVG[i].remove();
-                }
-                $(Global_Graph_SVG).empty();
-
-                var nodeSession = new NodeSession(editor);
-                nodeSession.fromJSON(JSON.parse(that.nodeString));
-                editor.emotionCMDManager.currentNodeSession = nodeSession;
-
-                editor.currentEmitter = null;
-
-                editor.node_editor.setDisplay('');
             }
+
+            emotion_canvas.drawFrontCanvas();
+            emotion_cmd.start();
+            editor.emotionCMDManager.current_emotion_cmd = emotion_cmd;
         });
 
         this.deleteButton.onClick(function () {
             let key = that.keyDiv.getValue();
-            delete editor.emotionCMDManager.allSerializedCMDs[key];
-            delete editor.emotionCMDManager.allCMDs[key];
+            delete editor.emotionCMDManager.all_emotion_cmds[key];
 
             that.row.remove();
 
@@ -159,12 +142,12 @@ SidebarLeft.EmotionCMD = function (editor) {
     headerRow.appendChild(headerCell3);
 
     let keyDiv = new UI.Text('Key');
-    let semanticDiv = new UI.Text('Semantic');
+    let semanticsDiv = new UI.Text('Semantic');
     let valenceDiv = new UI.Text('Valence');
     let arousalDiv = new UI.Text('Arousal');
 
     headerCell0.appendChild(keyDiv.dom);
-    headerCell1.appendChild(semanticDiv.dom);
+    headerCell1.appendChild(semanticsDiv.dom);
     headerCell2.appendChild(valenceDiv.dom);
     headerCell3.appendChild(arousalDiv.dom);
 
@@ -173,132 +156,130 @@ SidebarLeft.EmotionCMD = function (editor) {
     let body = table.createTBody();
     editor.emotion_cmd_tablebody = body;
 
-    signals.saveEmotionCMD.add(function (msg) {
-        if (allUIThreeDOMInfo[msg.info.key] === undefined) {
-            let threeDOM = new EmotionCMDThreeDOM(msg.info, msg.nodeString);
+    signals.saveEmotionCMD.add(function (info) {
+        if (allUIThreeDOMInfo[info.key] === undefined) {
+            let threeDOM = new EmotionCMDThreeDOM(info);
             body.appendChild(threeDOM.createEmotionCMDThreeDOM(editor));
-            allUIThreeDOMInfo[msg.info.key] = threeDOM;
+            allUIThreeDOMInfo[info.key] = threeDOM;
 
-            allUIThreeDOMInfo[msg.info.key].updateInfo(msg.info);
-            allUIThreeDOMInfo[msg.info.key].updateNodeString(msg.nodeString);
+            allUIThreeDOMInfo[info.key].updateInfo(info);
         }
         else {
-            allUIThreeDOMInfo[msg.info.key].updateInfo(msg.info);
-            allUIThreeDOMInfo[msg.info.key].updateNodeString(msg.nodeString);
+            allUIThreeDOMInfo[info.key].updateInfo(info);
         }
     });
 
-    let pre_key = null;
-
-    editor.signals.updateRecommendation.add(function (valence_level) { // 0 - 1
-
-        if (editor.usageMode === 0) {
-
-            let max_valence = MostPossibleEmotion(valence_level);
-
-            let valence = max_valence.val;
-            let arousal = editor.autoArousalLevel;
-
-            // console.log( 'arousal: '  + arousal);
-
-            if (arousal === 0) arousal = 70; // non-detected value
-
-            if (max_valence.pm === 'positive') {
-                valence = Math.floor(valence * 4) + 5;
-            }
-            // else if(max_valence.pm==='neutral') {
-            // 	valence = 5;
-            // }
-            else {
-                valence = Math.floor(valence * 4) + 1;
-            }
-
-            editor.signals.updateEmotionPanelValues.dispatch({
-                valence: valence,
-                arousal: arousal
-            });
-
-            let all_distprop = [];
-            for (let prop in editor.emotionCMDManager.allCMDs) {
-                let info = editor.emotionCMDManager.allCMDs[prop].getInfo();
-                let prop_arousal = Number(info.arousal);
-                let prop_valence = Number(info.valence);
-
-                let dist = 4 * (arousal - prop_arousal) * (arousal - prop_arousal) + 25 * (valence - prop_valence) * (valence - prop_valence) / 2;
-
-                all_distprop.push({val: dist, other: info});
-            }
-
-            let len = all_distprop.length;
-            for (let i = 1; i < len; ++i) {
-                let value = all_distprop[i].val;
-                for (let j = i - 1; j >= 0; --j) {
-                    if (all_distprop[j].val > value) {
-                        let tmp = all_distprop[j];
-                        all_distprop[j] = all_distprop[i];
-                        all_distprop[i] = tmp;
-                        i = j;
-                    }
-                    else
-                        break;
-                }
-            }
-
-            let positive_distprop = [];
-            let negative_distprop = [];
-            let dist_size = all_distprop.length;
-            for (let i = 0; i < dist_size; ++i) {
-                let res = GetPositiveOrNegative(all_distprop[i].other.semantic);
-                if (res === 'positive')
-                    positive_distprop.push(all_distprop[i]);
-                else
-                    negative_distprop.push(all_distprop[i]);
-            }
-
-            // re-order the command table
-
-            let parent = body;
-            let rows = body.rows;
-            if (rows.length >= 3) {
-                let idx = [];
-                if (max_valence.pm === 'positive') {
-                    for (let i = 0; i < positive_distprop.length; ++i)
-                        idx.push(getIndexofRow(body, positive_distprop[i].other.key));
-
-                    for (let i = 0; i < negative_distprop.length; ++i)
-                        idx.push(getIndexofRow(body, negative_distprop[i].other.key));
-                }
-                else {
-                    for (let i = 0; i < negative_distprop.length; ++i)
-                        idx.push(getIndexofRow(body, negative_distprop[i].other.key));
-
-                    for (let i = 0; i < positive_distprop.length; ++i)
-                        idx.push(getIndexofRow(body, positive_distprop[i].other.key));
-                }
-
-                // idx[0] = getIndexofRow( body, 'c' );
-                // idx[1] = getIndexofRow( body, 'a' );
-                // idx[2] = getIndexofRow( body, 'l' );
-
-                parent.insertBefore(rows[idx[0]], rows[0]);
-                parent.insertBefore(rows[idx[1]], rows[1]);
-                parent.insertBefore(rows[idx[2]], rows[2]);
-
-                let len = editor.emotion_cmd_tablebody.rows.length;
-                for (let i = 0; i < len; ++i) {
-                    editor.emotion_cmd_tablebody.rows[i].style.backgroundColor = 'black';
-                }
-
-                editor.emotion_cmd_tablebody.rows[0].style.backgroundColor = 'chartreuse';
-                editor.emotion_cmd_tablebody.rows[1].style.backgroundColor = 'crimson';
-                editor.emotion_cmd_tablebody.rows[2].style.backgroundColor = 'aliceblue';
-
-                editor.top3Keys.key0 = rows[0].cells[0].textContent;
-                editor.top3Keys.key1 = rows[1].cells[0].textContent;
-                editor.top3Keys.key2 = rows[2].cells[0].textContent;
-            }
-        }
-    });
+    // let pre_key = null;
+    //
+    // editor.signals.updateRecommendation.add(function (valence_level) { // 0 - 1
+    //
+    //     if (editor.usageMode === 0) {
+    //
+    //         let max_valence = MostPossibleEmotion(valence_level);
+    //
+    //         let valence = max_valence.val;
+    //         let arousal = editor.autoArousalLevel;
+    //
+    //         // console.log( 'arousal: '  + arousal);
+    //
+    //         if (arousal === 0) arousal = 70; // non-detected value
+    //
+    //         if (max_valence.pm === 'positive') {
+    //             valence = Math.floor(valence * 4) + 5;
+    //         }
+    //         // else if(max_valence.pm==='neutral') {
+    //         // 	valence = 5;
+    //         // }
+    //         else {
+    //             valence = Math.floor(valence * 4) + 1;
+    //         }
+    //
+    //         editor.signals.updateEmotionPanelValues.dispatch({
+    //             valence: valence,
+    //             arousal: arousal
+    //         });
+    //
+    //         let all_distprop = [];
+    //         for (let prop in editor.emotionCMDManager.allCMDs) {
+    //             let info = editor.emotionCMDManager.allCMDs[prop].getInfo();
+    //             let prop_arousal = Number(info.arousal);
+    //             let prop_valence = Number(info.valence);
+    //
+    //             let dist = 4 * (arousal - prop_arousal) * (arousal - prop_arousal) + 25 * (valence - prop_valence) * (valence - prop_valence) / 2;
+    //
+    //             all_distprop.push({val: dist, other: info});
+    //         }
+    //
+    //         let len = all_distprop.length;
+    //         for (let i = 1; i < len; ++i) {
+    //             let value = all_distprop[i].val;
+    //             for (let j = i - 1; j >= 0; --j) {
+    //                 if (all_distprop[j].val > value) {
+    //                     let tmp = all_distprop[j];
+    //                     all_distprop[j] = all_distprop[i];
+    //                     all_distprop[i] = tmp;
+    //                     i = j;
+    //                 }
+    //                 else
+    //                     break;
+    //             }
+    //         }
+    //
+    //         let positive_distprop = [];
+    //         let negative_distprop = [];
+    //         let dist_size = all_distprop.length;
+    //         for (let i = 0; i < dist_size; ++i) {
+    //             let res = GetPositiveOrNegative(all_distprop[i].other.semantics);
+    //             if (res === 'positive')
+    //                 positive_distprop.push(all_distprop[i]);
+    //             else
+    //                 negative_distprop.push(all_distprop[i]);
+    //         }
+    //
+    //         // re-order the command table
+    //
+    //         let parent = body;
+    //         let rows = body.rows;
+    //         if (rows.length >= 3) {
+    //             let idx = [];
+    //             if (max_valence.pm === 'positive') {
+    //                 for (let i = 0; i < positive_distprop.length; ++i)
+    //                     idx.push(getIndexofRow(body, positive_distprop[i].other.key));
+    //
+    //                 for (let i = 0; i < negative_distprop.length; ++i)
+    //                     idx.push(getIndexofRow(body, negative_distprop[i].other.key));
+    //             }
+    //             else {
+    //                 for (let i = 0; i < negative_distprop.length; ++i)
+    //                     idx.push(getIndexofRow(body, negative_distprop[i].other.key));
+    //
+    //                 for (let i = 0; i < positive_distprop.length; ++i)
+    //                     idx.push(getIndexofRow(body, positive_distprop[i].other.key));
+    //             }
+    //
+    //             // idx[0] = getIndexofRow( body, 'c' );
+    //             // idx[1] = getIndexofRow( body, 'a' );
+    //             // idx[2] = getIndexofRow( body, 'l' );
+    //
+    //             parent.insertBefore(rows[idx[0]], rows[0]);
+    //             parent.insertBefore(rows[idx[1]], rows[1]);
+    //             parent.insertBefore(rows[idx[2]], rows[2]);
+    //
+    //             let len = editor.emotion_cmd_tablebody.rows.length;
+    //             for (let i = 0; i < len; ++i) {
+    //                 editor.emotion_cmd_tablebody.rows[i].style.backgroundColor = 'black';
+    //             }
+    //
+    //             editor.emotion_cmd_tablebody.rows[0].style.backgroundColor = 'chartreuse';
+    //             editor.emotion_cmd_tablebody.rows[1].style.backgroundColor = 'crimson';
+    //             editor.emotion_cmd_tablebody.rows[2].style.backgroundColor = 'aliceblue';
+    //
+    //             editor.top3Keys.key0 = rows[0].cells[0].textContent;
+    //             editor.top3Keys.key1 = rows[1].cells[0].textContent;
+    //             editor.top3Keys.key2 = rows[2].cells[0].textContent;
+    //         }
+    //     }
+    // });
 
     return container;
 

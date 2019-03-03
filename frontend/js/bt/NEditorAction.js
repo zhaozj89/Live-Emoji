@@ -477,3 +477,4 @@ class SoundNode extends Node {
 		this.editor.soundPlayer.play( this.getIdx( this.sound.getArg() ) );
 	}
 }
+

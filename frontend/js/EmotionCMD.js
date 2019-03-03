@@ -1,80 +1,84 @@
 "use strict";
 
-var Global_Graph_SVG = null;
-var Global_NEditor_Container = null;
-
-var Global_All_DOM_In_SVG = [];
+class EmotionCMD {
+	constructor(config){
+		config = config || null;
+		this.graph = new LGraph(config);
+	}
+	start(){
+		this.graph.start();
+	}
+	stop(){
+		this.graph.stop();
+	}
+	add(node){
+		this.graph.add(node);
+	}
+	getGraph(){
+		return this.graph;
+	}
+	getKey(){
+		let trigger_nodes = this.graph.findNodesByTitle('Trigger Node');
+		if(trigger_nodes.length!=1)
+			alert('Graph error!');
+		return trigger_nodes[0].properties['key'];
+	}
+	getInfo(){
+		let trigger_nodes = this.graph.findNodesByTitle('Trigger Node');
+		if(trigger_nodes.length!=1)
+			alert('Graph error!');
+		return trigger_nodes[0].properties;
+	}
+	setEditor(editor){
+		let trigger_nodes = this.graph.findNodesByTitle('Trigger Node');
+		if(trigger_nodes.length!=1)
+			alert('Graph error!');
+		trigger_nodes[0].setEditor(editor)
+	}
+}
 
 class EmotionCMDManager {
-	constructor ( editor ) {
-		this.currentNodeSession = null;
-		this.allSerializedCMDs = {};
-		this.allCMDs = {};
+	constructor (editor) {
+		this.current_key = null;
+
+		this.current_emotion_cmd = null;
+		this.current_emotion_canvas = null;
+
+		this.all_emotion_cmds = {};
 
 		this.editor = editor;
 	}
 
-	newCMD () {
-		this.cleanSVG();
-
-		let nodeSession = new NodeSession( this.editor );
-		this.currentNodeSession = nodeSession;
-
-		this.editor.currentEmitter = null;
-	}
-
-	cleanSVG () {
-		for ( let i = 0; i < Global_All_DOM_In_SVG.length; ++i ) {
-			Global_All_DOM_In_SVG[ i ].remove();
-		}
-		$( Global_Graph_SVG ).empty();
-
-		this.currentNodeSession = null;
-	}
-
-	deleteCMD ( key ) {
-		if ( this.currentNodeSession !== null && key === this.currentNodeSession.getInfo().key )
-			this.cleanSVG();
-
-		delete this.allSerializedCMDs[ key ];
-		delete this.allCMDs[ key ];
-	}
-
-	addNode ( type ) {
-		this.currentNodeSession.addNode( type );
-	}
-
-	save () {
-		if ( this.currentNodeSession === null || this.currentNodeSession.triggerNode===null ) {
-			return;
-		}
-		else {
-			let info = this.currentNodeSession.getInfo();
-			let nodeString = JSON.stringify( this.currentNodeSession );
-
-			let msg = {
-				'info': info,
-				'nodeString': nodeString
-			};
-
-			this.editor.signals.saveEmotionCMD.dispatch( msg );
-
-			this.allSerializedCMDs[ info.key ] = nodeString;
-			this.allCMDs[ info.key ] = this.currentNodeSession;
+	save (cmd) {
+		let trigger_nodes = cmd.getGraph().findNodesByTitle('Trigger Node');
+		if(trigger_nodes.length!=1)
+			alert('Emotion editing error! Only one trigger node is allowed!');
+		else{
+			let key_val = trigger_nodes[0].properties['key'];
+			this.all_emotion_cmds[key_val] = cmd;
 		}
 	}
 
 	toJSON () {
-		return this.allSerializedCMDs;
+		let cmd_objs = {};
+		for (let prop in this.all_emotion_cmds){
+			let cmd = this.all_emotion_cmds[prop];
+			let text_graph = cmd.getGraph().serialize();
+			let keyboard_val = cmd.getKey();
+			if(keyboard_val>='a'&&keyboard_val<='z' || keyboard_val>='a'&&keyboard_val<='z')
+			cmd_objs[keyboard_val] = text_graph;
+		}
+		return cmd_objs;
 	}
 
-	fromJSON ( state ) {
-		this.allSerializedCMDs = state;
-		for ( let prop in this.allSerializedCMDs ) {
-			let currentState = JSON.parse( this.allSerializedCMDs[ prop ] );
-			let nodeSession = new NodeSession( this.editor );
-			nodeSession.fromJSON( currentState );
-			this.allCMDs[ currentState.key ] = nodeSession;
+	fromJSON ( currentState ) {
+		this.all_emotion_cmds = {};
+		for ( let prop in currentState ) {
+			let graph = currentState[prop];
+			let emotion_cmd = new EmotionCMD(graph);
+			emotion_cmd.setEditor(this.editor);
+			this.all_emotion_cmds[prop] = emotion_cmd;
+			emotion_cmd.start();
 		}
 	}
 }
