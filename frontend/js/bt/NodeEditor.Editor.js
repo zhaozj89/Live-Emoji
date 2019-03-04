@@ -36,7 +36,9 @@ var NodeEditor = function (editor) {
     close.setCursor('pointer');
     close.onClick(function () {
         if (confirm('Save the emotion command?')) {
-            editor.emotionCMDManager.save();
+            editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);
+            let info = editor.emotionCMDManager.current_emotion_cmd.getInfo();
+            editor.signals.saveEmotionCMD.dispatch( info );
         } else {
             // Do nothing!
         }
@@ -131,12 +133,6 @@ var NodeEditor = function (editor) {
     cmdExport.classList.add('dropdown-item');
     Tool.appendChild(menuTool.dom);
 
-    // editor.signals.editEmotionCMD.add( function () {
-    //     if ( editor.emotionCMDManager.currentNodeSession === null ) emotionCMDManager.newCMD();
-    // } );
-
-    // let startBehaviorTree = true;
-
     $(function () {
         ResizeNECanvas(editor);
 
@@ -205,6 +201,8 @@ var NodeEditor = function (editor) {
 
         $(cmdSave).click(function () {
             editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);
+            let info = editor.emotionCMDManager.current_emotion_cmd.getInfo();
+            editor.signals.saveEmotionCMD.dispatch( info );
         });
 
         $(cmdClean).click(function () {
@@ -282,29 +280,6 @@ var NodeEditor = function (editor) {
     // editor.signals.editEmotionCMD.add(function () {
     //     container.setDisplay('');
     // });
-
-    editor.signals.keyboardTriggering.add(function (event) {
-
-        // if (startBehaviorTree === false) return;
-
-        if (event['type'] === 'keyboard') {
-            editor.emotionCMDManager.current_key = event['keycode'];
-            // let already_run = false;
-            // if ( editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null ) {
-            //     if ( editor.emotionCMDManager.currentNodeSession.getInfo().key === event[ 'keycode' ] )
-            //         already_run = true;
-            //     editor.emotionCMDManager.currentNodeSession.run( event[ 'keycode' ] );
-            // }
-            //
-            // if ( already_run === false ) {
-            //     for ( let prop in editor.emotionCMDManager.allCMDs ) {
-            //         if ( event[ 'keycode' ] === prop ) {
-            //             editor.emotionCMDManager.allCMDs[ prop ].run( prop );
-            //         }
-            //     }
-            // }
-        }
-    });
 
     return container;
 };

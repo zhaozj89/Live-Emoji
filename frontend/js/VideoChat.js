@@ -1,7 +1,0 @@
-var VideoChat = function ( editor ) {
-
-
-
-
-
-};

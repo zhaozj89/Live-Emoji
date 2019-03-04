@@ -29,11 +29,15 @@ class EmotionCMD {
 			alert('Graph error!');
 		return trigger_nodes[0].properties;
 	}
-	setEditor(editor){
+	setEditor(editor){ // set all nodes that need editor
 		let trigger_nodes = this.graph.findNodesByTitle('Trigger Node');
 		if(trigger_nodes.length!=1)
 			alert('Graph error!');
-		trigger_nodes[0].setEditor(editor)
+		trigger_nodes[0].setEditor(editor);
+
+		let face_nodes = this.graph.findNodesByTitle('Face Node');
+		for(let k=0; k<face_nodes.length; ++k)
+			face_nodes[k].setEditor(editor);
 	}
 }
 
@@ -47,6 +51,12 @@ class EmotionCMDManager {
 		this.all_emotion_cmds = {};
 
 		this.editor = editor;
+	}
+
+	stop(){
+		for(let prop in this.all_emotion_cmds){
+			this.all_emotion_cmds[prop].stop();
+		}
 	}
 
 	save (cmd) {
