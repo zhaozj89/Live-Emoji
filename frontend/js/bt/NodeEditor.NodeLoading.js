@@ -13,6 +13,7 @@ var LoadEmotionCMDJSONFile = function ( editor, filename ) {
                 let info = editor.emotionCMDManager.all_emotion_cmds[ prop ].getInfo();
                 editor.signals.saveEmotionCMD.dispatch( info );
             }
+            editor.emotionCMDManager.stop();
         }
     };
 

@@ -30,7 +30,7 @@ var MakeScene = function () {
     cube.position.z = -6;
     scene.add(cube);
 
-    var geometry = new THREE.BoxBufferGeometry( 100, 100, 100 );
+    var geometry = new THREE.BoxBufferGeometry( 2000, 2000, 2000 );
     geometry.scale( 1, 1, - 1 );
     var textures = _GetTexturesFromAtlasFile( "./asset/sun_temple_stripe_stereo.jpg", 12 );
     var materials = [];
@@ -40,6 +40,19 @@ var MakeScene = function () {
     var skyBox = new THREE.Mesh( geometry, materials );
     skyBox.layers.set( 1 );
     scene.add( skyBox );
+
+    // light
+    var ambientLight = new THREE.AmbientLight(0x101010);
+    scene.add(ambientLight);
+
+    var pointLight = new THREE.PointLight(0xffffff, 2, 1000, 1);
+    pointLight.position.set(0, 200, 200);
+    scene.add(pointLight);
+
+    var spotLight = new THREE.SpotLight(0xffffff, .5);
+    spotLight.position.set(0, 500, 100);
+    scene.add(spotLight);
+    spotLight.lookAt(scene);
 
     return scene;
 }

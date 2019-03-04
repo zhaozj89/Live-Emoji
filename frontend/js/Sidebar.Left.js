@@ -131,7 +131,7 @@ var SidebarLeft = function (editor ) {
 
 	//
 
-	let titleEmotionCommand = new UI.Text( 'Emotion' );
+	let titleEmotionCommand = new UI.Text( 'Emotions' );
 	titleEmotionCommand.addClass( 'h4' );
 	titleEmotionCommand.setTextAlign( 'center' );
 	titleEmotionCommand.setColor( 'whitesmoke' );

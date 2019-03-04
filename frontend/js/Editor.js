@@ -1,4 +1,7 @@
 var Editor = function () {
+    this.particle_engine_proton = null;
+    this.particle_engine_emitter_fountain = null;
+
     this.main_view_renderer = null;
     this.side_view_renderer = null;
     this.main_view = null;
@@ -54,22 +57,14 @@ var Editor = function () {
 
     this.facePositionMutex = false;
 
-    this.currentEditedKey = null;
-
     // Mode
-    this.roleMode = 1; // 0: student, 1: teacher
     this.usageMode = 1; // 0: live animation, 1: pre-edit
-    this.autoMode = 1; // 0: auto, 1: manual
 
     this.boyLabel = null;
     this.girlLabel = null;
 
     this.boyLoaded = false;
     this.girlLoaded = false;
-
-
-
-    this.emotion_cmd_tablebody = null;
 
     this.soundPlayer = null;
 
@@ -98,13 +93,10 @@ var Editor = function () {
         saveEmotionCMD: new Signal(),
 
         // notifications
-        editorCleared: new Signal(),
         savingStarted: new Signal(),
         savingFinished: new Signal(),
 
         sceneGraphChanged: new Signal(),
-
-        cameraChanged: new Signal(),
 
         geometryChanged: new Signal(),
 
@@ -470,9 +462,6 @@ Editor.prototype = {
         this.scripts = {};
 
         this.deselect();
-
-        this.signals.editorCleared.dispatch();
-
     },
 
     //

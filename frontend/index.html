@@ -12,10 +12,15 @@
     <link rel="stylesheet" href="css/dark.css"/>
     <link rel="stylesheet" type="text/css" href="css/litegraph.css"/>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jsgrid.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jsgrid-theme.css"/>
+
+    <script src="http://wzrd.in/standalone/uuid%2Fv5@latest"></script>
 
     <!--jquery-->
     <script src="js/libs/jquery.min.js"></script>
     <script src="js/libs/jquery-ui.min.js"></script>
+    <script src="js/libs/jsgrid.js"></script>
     <script src="js/libs/popper.js"></script>
     <script src="js/libs/bootstrap.js"></script>
 
@@ -26,7 +31,7 @@
     <script src="asset/character_preload.js"></script>
 
     <!--ui-->
-    <script src="js/libs/ui.js"></script>
+    <script src="js/ui.js"></script>
 
     <!--signals-->
     <script src="js/libs/signals.min.js"></script>
@@ -35,7 +40,7 @@
     <script src="js/libs/three.js"></script>
     <script src="js/libs/OrbitControls.js"></script>
     <!--webvr-->
-    <script src="js/webvr/WebVR.js"></script>
+    <script src="js/libs/webvr/WebVR.js"></script>
     <script src="js/libs/BoxLineGeometry.js"></script>
     <script src="js/libs/ui.three.js"></script>
     <script src="js/libs/Tween.js"></script>
@@ -89,12 +94,11 @@
     <script src="js/animation/Contour.js"></script>
 
     <!-- my behavior tree library -->
-    <script src="js/bt/NEditorBaseClass.js"></script>
-    <script src="js/bt/NEditorComposite.js"></script>
-    <script src="js/bt/NEditorAction.js"></script>
+    <!--<script src="js/bt/NEditorBaseClass.js"></script>-->
+    <!--<script src="js/bt/NEditorComposite.js"></script>-->
+    <!--<script src="js/bt/NEditorAction.js"></script>-->
 
     <script src="js/libs/litegraph.js"></script>
-    <!--<script src="js/libs/litegraph-editor.js"></script>-->
     <script src="js/libs/nodes/base.js"></script>
     <script src="js/libs/nodes/logic.js"></script>
     <script src="js/libs/nodes/events.js"></script>
@@ -105,9 +109,15 @@
     <script src="js/libs/nodes/midi.js"></script>
     <script src="js/libs/nodes/audio.js"></script>
     <script src="js/libs/nodes/network.js"></script>
+
+    <script src="js/libs/particle/three.proton.js"></script>
+
+    <script src="js/bt/NodeEditor.ParticleSystem.js"></script>
     <script src="js/bt/NodeEditor.Util.js"></script>
-    <script src="js/bt/NodeEditor.TriggerNode.js"></script>
+    <script src="js/bt/NodeEditor.LogicNode.js"></script>
+    <script src="js/bt/NodeEditor.EventNode.js"></script>
     <script src="js/bt/NodeEditor.FaceNode.js"></script>
+    <script src="js/bt/NodeEditor.ParticleNode.js"></script>
     <script src="js/bt/NodeEditor.NodeLoading.js"></script>
     <script src="js/bt/NodeEditor.Editor.js"></script>
 
@@ -144,7 +154,7 @@
 
     // load pre-defined cmds
     editor.emotionCMDManager = new EmotionCMDManager(editor);
-    LoadEmotionCMDJSONFile(editor, 'test.json');
+    // LoadEmotionCMDJSONFile(editor, 'test.json');
 
     // layout
     var main_view = new MainView(editor);
@@ -169,8 +179,8 @@
         editor.main_camera.fov = 90;
         editor.main_camera.aspect = editor.main_view.dom.offsetWidth / editor.main_view.dom.offsetHeight;
         editor.main_camera.near = 1; //0.1;
-        editor.main_camera.far = 1000; //10;
-        editor.main_camera.position.z = 0.01;
+        editor.main_camera.far = 10000; //10;
+        editor.main_camera.position.z = 500;
         editor.main_camera.layers.enable(1);
         editor.main_camera.updateProjectionMatrix();
         editor.main_view_renderer.setSize( editor.main_view.dom.offsetWidth, editor.main_view.dom.offsetHeight);
@@ -178,8 +188,8 @@
         editor.side_camera.fov = 90;
         editor.side_camera.aspect = editor.side_view.dom.offsetWidth / editor.side_view.dom.offsetHeight;
         editor.side_camera.near = 1; //0.1;
-        editor.side_camera.far = 1000; //10;
-        editor.side_camera.position.z = 0.01;
+        editor.side_camera.far = 10000; //10;
+        editor.side_camera.position.z = 500;
         editor.side_camera.layers.enable(1);
         editor.side_camera.updateProjectionMatrix();
         editor.side_view_renderer.setSize( editor.side_view.dom.offsetWidth, editor.side_view.dom.offsetHeight);
@@ -193,7 +203,6 @@
     });
 
     // Tracking
-
     editor.signals.followFace.add(function (event) {
         let puppet = editor.selected;
 
@@ -255,15 +264,7 @@
     }, false);
 
     // rendering
-    editor.signals.editorCleared.add(function () {
-        render();
-    });
-
     editor.signals.sceneGraphChanged.add(function () {
-        render();
-    });
-
-    editor.signals.cameraChanged.add(function () {
         render();
     });
 
@@ -301,15 +302,15 @@
 
             KEYBOARD_TRIGGER.keycode = String.fromCharCode(event.keyCode).toLowerCase();
 
-            if (event.keyCode === 37) {
-                KEYBOARD_TRIGGER.keycode = editor.top3Keys.key0;
-            }
-            if (event.keyCode === 40) {
-                KEYBOARD_TRIGGER.keycode = editor.top3Keys.key1;
-            }
-            if (event.keyCode === 39) {
-                KEYBOARD_TRIGGER.keycode = editor.top3Keys.key2;
-            }
+            // if (event.keyCode === 37) {
+            //     KEYBOARD_TRIGGER.keycode = editor.top3Keys.key0;
+            // }
+            // if (event.keyCode === 40) {
+            //     KEYBOARD_TRIGGER.keycode = editor.top3Keys.key1;
+            // }
+            // if (event.keyCode === 39) {
+            //     KEYBOARD_TRIGGER.keycode = editor.top3Keys.key2;
+            // }
 
             editor.signals.keyboardTriggering.dispatch(KEYBOARD_TRIGGER);
         };
@@ -331,11 +332,12 @@
     });
 
     // rendering
-    var controls = new THREE.OrbitControls(editor.main_camera, editor.main_view_renderer.domElement);
+    let controls = new THREE.OrbitControls(editor.main_camera, editor.main_view_renderer.domElement);
     controls.enableZoom = false;
     controls.enablePan = false;
     controls.enableDamping = true;
-    controls.rotateSpeed = - 0.25;
+    controls.dampingFactor = 1;
+    controls.rotateSpeed = 0.01;
     controls.update();
 
     function render() {
@@ -352,16 +354,27 @@
         editor.side_view_renderer.render(editor.side_scene, editor.side_camera);
     }
 
+    // particle system stuff
+    editor.particle_engine_proton = new Proton();
+
+    editor.particle_engine_proton.addRender(new Proton.MeshRender(editor.main_scene));
+    editor.particle_engine_proton.addRender(new Proton.MeshRender(editor.side_scene));
+
     // animation loop
     function animate() {
-        // editor.side_view_renderer.setAnimationLoop(animate);
-        requestAnimationFrame(animate);
+        editor.side_view_renderer.setAnimationLoop(animate);
+        // requestAnimationFrame(animate);
         
         editor.updateRunningEmotionCMDState();
 
         TWEEN.update();
 
+        editor.side_camera.copy(editor.main_camera);
+
+        editor.particle_engine_proton.update();
+
         editor.signals.sceneGraphChanged.dispatch();
+
     }
 
     animate();

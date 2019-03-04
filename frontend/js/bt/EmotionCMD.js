@@ -1,5 +1,14 @@
 "use strict";
 
+function _GenerateUUID()
+{
+	return uuidv5('http://example.com/hello', uuidv5.URL); // -> v5 UUID
+}
+
+function _ComputeMatchScore() {
+	return 0;
+}
+
 class EmotionCMD {
 	constructor(config){
 		config = config || null;
@@ -16,28 +25,6 @@ class EmotionCMD {
 	}
 	getGraph(){
 		return this.graph;
-	}
-	getKey(){
-		let trigger_nodes = this.graph.findNodesByTitle('Trigger Node');
-		if(trigger_nodes.length!=1)
-			alert('Graph error!');
-		return trigger_nodes[0].properties['key'];
-	}
-	getInfo(){
-		let trigger_nodes = this.graph.findNodesByTitle('Trigger Node');
-		if(trigger_nodes.length!=1)
-			alert('Graph error!');
-		return trigger_nodes[0].properties;
-	}
-	setEditor(editor){ // set all nodes that need editor
-		let trigger_nodes = this.graph.findNodesByTitle('Trigger Node');
-		if(trigger_nodes.length!=1)
-			alert('Graph error!');
-		trigger_nodes[0].setEditor(editor);
-
-		let face_nodes = this.graph.findNodesByTitle('Face Node');
-		for(let k=0; k<face_nodes.length; ++k)
-			face_nodes[k].setEditor(editor);
 	}
 }
 
@@ -60,13 +47,10 @@ class EmotionCMDManager {
 	}
 
 	save (cmd) {
-		let trigger_nodes = cmd.getGraph().findNodesByTitle('Trigger Node');
-		if(trigger_nodes.length!=1)
-			alert('Emotion editing error! Only one trigger node is allowed!');
-		else{
-			let key_val = trigger_nodes[0].properties['key'];
-			this.all_emotion_cmds[key_val] = cmd;
-		}
+		// _ComputeMatchScore();
+		let uuid = _GenerateUUID();
+		this.all_emotion_cmds[uuid] = cmd;
+		return {match_score: 0, uuid: uuid};
 	}
 
 	toJSON () {
@@ -86,9 +70,7 @@ class EmotionCMDManager {
 		for ( let prop in currentState ) {
 			let graph = currentState[prop];
 			let emotion_cmd = new EmotionCMD(graph);
-			emotion_cmd.setEditor(this.editor);
 			this.all_emotion_cmds[prop] = emotion_cmd;
-			emotion_cmd.start();
 		}
 	}
 }

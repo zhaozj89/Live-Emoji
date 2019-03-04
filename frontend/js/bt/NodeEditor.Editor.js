@@ -36,8 +36,7 @@ var NodeEditor = function (editor) {
     close.setCursor('pointer');
     close.onClick(function () {
         if (confirm('Save the emotion command?')) {
-            editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);
-            let info = editor.emotionCMDManager.current_emotion_cmd.getInfo();
+            let info = editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);
             editor.signals.saveEmotionCMD.dispatch( info );
         } else {
             // Do nothing!
@@ -52,9 +51,9 @@ var NodeEditor = function (editor) {
     // menu
 
     let menu = new UI.UList();
-    menu.setBackgroundColor('rgba(100, 100, 100, 0.8)');
+    menu.setBackgroundColor('rgba(50, 50, 50, 0.8)');
     menu.dom.style.borderRadius = '10px';
-    menu.setWidth('600px');
+    menu.setWidth('700px');
     menu.setId('menu');
     menu.addClass('nav');
     menu.addClass('nav-pills');
@@ -64,60 +63,63 @@ var NodeEditor = function (editor) {
     menu.setLeft('200px');
     container.add(menu);
 
-    let buttonTrigger = menu.addLi('Trigger');
-    buttonTrigger.classList.add('nav-item');
-    buttonTrigger.style.margin = '20px';
-    buttonTrigger.style.fontSize = '20px';
-
     let Event = menu.addLi('Event', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Event.firstChild.setAttribute('data-toggle', 'dropdown');
+    Event.style.backgroundColor = '#ff0300';
     Event.style.margin = '12px';
     Event.style.fontSize = '20px';
 
     let Logic = menu.addLi('Logic', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Logic.firstChild.setAttribute('data-toggle', 'dropdown');
+    Logic.style.backgroundColor = '#31baff';
     Logic.style.margin = '12px';
     Logic.style.fontSize = '20px';
 
-    let Action = menu.addLi('Action', 'nav-item dropdown', 'nav-link dropdown-toggle');
-    Action.firstChild.setAttribute('data-toggle', 'dropdown');
-    Action.style.margin = '12px';
-    Action.style.fontSize = '20px';
+    let Face = menu.addLi('Face', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    Face.firstChild.setAttribute('data-toggle', 'dropdown');
+    Face.style.backgroundColor = '#ffb032';
+    Face.style.margin = '12px';
+    Face.style.fontSize = '20px';
 
-    let Tool = menu.addLi('Tool', 'nav-item dropdown', 'nav-link dropdown-toggle active');
+    let Particle = menu.addLi('Particle', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    Particle.firstChild.setAttribute('data-toggle', 'dropdown');
+    Particle.style.backgroundColor = '#ae0cff';
+    Particle.style.margin = '12px';
+    Particle.style.fontSize = '20px';
+
+    let Tool = menu.addLi('Tool', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Tool.firstChild.setAttribute('data-toggle', 'dropdown');
+    Tool.style.backgroundColor = '#0065ff';
     Tool.style.margin = '12px';
     Tool.style.fontSize = '20px';
 
     let menuEvent = new UI.UList();
     menuEvent.addClass('dropdown-menu');
-    let buttonTimer = menuEvent.addLi('Timer');
-    buttonTimer.classList.add('dropdown-item');
-    // let buttonSelect = menuEvent.addLi( 'Select' );
-    // buttonSelect.classList.add( 'dropdown-item' );
+    let buttonKeyboard = menuEvent.addLi('Keyboard');
+    buttonKeyboard.classList.add('dropdown-item');
+    // let buttonTimer = menuEvent.addLi('Timer');
+    // buttonTimer.classList.add('dropdown-item');
     Event.appendChild(menuEvent.dom);
 
     let menuLogic = new UI.UList();
     menuLogic.addClass('dropdown-menu');
-    let buttonSequence = menuLogic.addLi('Sequence');
-    buttonSequence.classList.add('dropdown-item');
-    let buttonSelect = menuLogic.addLi('Select');
-    buttonSelect.classList.add('dropdown-item');
+    let buttonAnd = menuLogic.addLi('And');
+    buttonAnd.classList.add('dropdown-item');
+    let buttonOr = menuLogic.addLi('Or');
+    buttonOr.classList.add('dropdown-item');
     Logic.appendChild(menuLogic.dom);
 
-    let menuAction = new UI.UList();
-    menuAction.addClass('dropdown-menu');
-    let buttonFace = menuAction.addLi('Face');
-    buttonFace.classList.add('dropdown-item');
-    // let buttonVibration = menuAction.addLi( 'Vibration' );
-    // buttonVibration.classList.add( 'dropdown-item' );
-    // let buttonSound = menuAction.addLi( 'Sound' );
-    // buttonSound.classList.add( 'dropdown-item' );
-    // let buttonDanmaku = menuAction.addLi( 'Danmaku [Text]' );
-    // buttonDanmaku.classList.add( 'dropdown-item' );
-    // let buttonExplode = menuAction.addLi( 'Particle [Background]' );
-    // buttonExplode.classList.add( 'dropdown-item' );
-    Action.appendChild(menuAction.dom);
+    let menuFace = new UI.UList();
+    menuFace.addClass('dropdown-menu');
+    let buttonFaceEmotion = menuFace.addLi('Emotion');
+    buttonFaceEmotion.classList.add('dropdown-item');
+    Face.appendChild(menuFace.dom);
+
+    let menuParticle = new UI.UList();
+    menuParticle.addClass('dropdown-menu');
+    let buttonFountain = menuParticle.addLi( 'Fountain' );
+    buttonFountain.classList.add( 'dropdown-item' );
+    Particle.appendChild(menuParticle.dom);
 
     let menuTool = new UI.UList();
     menuTool.addClass('dropdown-menu');
@@ -140,42 +142,40 @@ var NodeEditor = function (editor) {
         editor.emotionCMDManager.emotion_canvas = new LGraphCanvas("#editor_canvas", editor.emotionCMDManager.current_emotion_cmd.getGraph());
         editor.emotionCMDManager.current_emotion_cmd.start();
 
-        $(buttonTrigger).click(function () {
-            let node = LiteGraph.createNode("node_editor/trigger");
-            node.setEditor(editor);
+        //event
+        $(buttonKeyboard).click(function () {
+            let node = LiteGraph.createNode("node_editor/keyboard");
             node.pos = [200, 200];
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         });
 
-        // event
+        // logic
 
-        $( buttonSequence ).click( function () {
-            let node = LiteGraph.createNode("logic/sequence");
-            node.color = "#800080";
-            node.shape = LiteGraph.ROUND_SHAPE;
+        $( buttonAnd ).click( function () {
+            let node = LiteGraph.createNode("node_editor/and");
             node.pos = [200, 200];
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );
-        $( buttonSelect ).click( function () {
-            let node = LiteGraph.createNode("logic/selector");
-            node.color = "#800080";
-            node.shape = LiteGraph.ROUND_SHAPE;
+        $( buttonOr ).click( function () {
+            let node = LiteGraph.createNode("node_editor/or");
             node.pos = [200, 200];
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );
 
-        //
+        // Face
 
-        $(buttonFace).click(function () {
-            let node = LiteGraph.createNode("node_editor/face");
+        $(buttonFaceEmotion).click(function () {
+            let node = LiteGraph.createNode("node_editor/face_emotion");
             node.pos = [200, 200];
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         });
-        //
-        // $( buttonExplode ).click( function () {
-        //     emotionCMDManager.addNode( 'particle' );
-        // } );
-        //
+
+        $( buttonFountain ).click( function () {
+            let node = LiteGraph.createNode("node_editor/fountain");
+            node.pos = [200, 200];
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        } );
+
         // $( buttonDanmaku ).click( function () {
         //     emotionCMDManager.addNode( 'danmaku' );
         // } );
@@ -200,8 +200,7 @@ var NodeEditor = function (editor) {
         });
 
         $(cmdSave).click(function () {
-            editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);
-            let info = editor.emotionCMDManager.current_emotion_cmd.getInfo();
+            let info = editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);
             editor.signals.saveEmotionCMD.dispatch( info );
         });
 
@@ -269,17 +268,6 @@ var NodeEditor = function (editor) {
             download(text_file, 'test.json', 'text/plain');
         });
     });
-
-
-    // Keyboard trigger
-
-    // editor.signals.editorCleared.add(function () {
-    //     container.setDisplay('none');
-    // });
-    //
-    // editor.signals.editEmotionCMD.add(function () {
-    //     container.setDisplay('');
-    // });
 
     return container;
 };
