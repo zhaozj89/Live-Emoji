@@ -9,8 +9,8 @@ var LoadEmotionCMDJSONFile = function ( editor, filename ) {
             editor.emotionCMDManager.fromJSON( jsonFile );
 
             for ( let prop in editor.emotionCMDManager.all_emotion_cmds) {
-
-                let info = editor.emotionCMDManager.all_emotion_cmds[ prop ].getInfo();
+                let cmd = editor.emotionCMDManager.all_emotion_cmds[prop];
+                let info = {match_score: cmd.getMatchScore(), uuid: prop, name: cmd.getName()};
                 editor.signals.saveEmotionCMD.dispatch( info );
             }
             editor.emotionCMDManager.stop();

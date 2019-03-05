@@ -12,7 +12,7 @@ function FaceEmotionNode()
 FaceEmotionNode.prototype.onExecute = function()
 {
 	let that = this;
-	if(that.getInputData(0, false)=="trigger" && that.properties.emotion!=null&&editor.selected!=null){
+	if(that.getInputData(0, false)==LiteGraph.EVENT && that.properties.emotion!=null&&editor.selected!=null){
 		that.editor.selected.updateEmotion( this.properties.emotion );
 		that.editor.signals.sceneGraphChanged.dispatch();
 	}

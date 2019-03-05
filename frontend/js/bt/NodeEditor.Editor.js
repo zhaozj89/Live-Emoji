@@ -129,8 +129,8 @@ var NodeEditor = function (editor) {
     cmdSave.classList.add('dropdown-item');
     let cmdClean = menuTool.addLi('Clean');
     cmdClean.classList.add('dropdown-item');
-    let cmdImport = menuTool.addLi('Import');
-    cmdImport.classList.add('dropdown-item');
+    // let cmdImport = menuTool.addLi('Import');
+    // cmdImport.classList.add('dropdown-item');
     let cmdExport = menuTool.addLi('Export');
     cmdExport.classList.add('dropdown-item');
     Tool.appendChild(menuTool.dom);
@@ -140,7 +140,6 @@ var NodeEditor = function (editor) {
 
         editor.emotionCMDManager.current_emotion_cmd = new EmotionCMD();
         editor.emotionCMDManager.emotion_canvas = new LGraphCanvas("#editor_canvas", editor.emotionCMDManager.current_emotion_cmd.getGraph());
-        editor.emotionCMDManager.current_emotion_cmd.start();
 
         //event
         $(buttonKeyboard).click(function () {
@@ -196,7 +195,6 @@ var NodeEditor = function (editor) {
 
             editor.emotionCMDManager.current_emotion_cmd = new EmotionCMD();
             editor.emotionCMDManager.emotion_canvas = new LGraphCanvas("#editor_canvas", editor.emotionCMDManager.current_emotion_cmd.getGraph());
-            editor.emotionCMDManager.current_emotion_cmd.start();
         });
 
         $(cmdSave).click(function () {
@@ -211,47 +209,46 @@ var NodeEditor = function (editor) {
 
             editor.emotionCMDManager.current_emotion_cmd = new EmotionCMD();
             editor.emotionCMDManager.emotion_canvas = new LGraphCanvas("#editor_canvas", editor.emotionCMDManager.current_emotion_cmd.getGraph());
-            editor.emotionCMDManager.current_emotion_cmd.start();
         });
 
         let form = document.createElement('form');
         form.style.display = 'none';
         document.body.appendChild(form);
 
+        // //
         //
-
-        let fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.addEventListener('change', function (event) {
-
-            let file = fileInput.files[0];
-
-            let reader = new FileReader();
-
-            reader.addEventListener('load', function (event) {
-                let contents = event.target.result;
-
-                let jsonFile = JSON.parse(contents);
-
-                editor.emotionCMDManager.fromJSON( jsonFile );
-
-                for ( let prop in editor.emotionCMDManager.all_emotion_cmds) {
-
-                    let info = editor.emotionCMDManager.all_emotion_cmds[ prop ].getInfo();
-                    editor.signals.saveEmotionCMD.dispatch( info );
-                }
-            });
-            reader.readAsText(file);
-            form.reset();
-
-        });
-        form.appendChild(fileInput);
-
+        // let fileInput = document.createElement('input');
+        // fileInput.type = 'file';
+        // fileInput.addEventListener('change', function (event) {
         //
-
-        $(cmdImport).click(function () {
-            fileInput.click();
-        });
+        //     let file = fileInput.files[0];
+        //
+        //     let reader = new FileReader();
+        //
+        //     reader.addEventListener('load', function (event) {
+        //         let contents = event.target.result;
+        //
+        //         let jsonFile = JSON.parse(contents);
+        //
+        //         editor.emotionCMDManager.fromJSON( jsonFile );
+        //
+        //         for ( let prop in editor.emotionCMDManager.all_emotion_cmds) {
+        //
+        //             let info = editor.emotionCMDManager.all_emotion_cmds[ prop ].getInfo();
+        //             editor.signals.saveEmotionCMD.dispatch( info );
+        //         }
+        //     });
+        //     reader.readAsText(file);
+        //     form.reset();
+        //
+        // });
+        // form.appendChild(fileInput);
+        //
+        // //
+        //
+        // $(cmdImport).click(function () {
+        //     fileInput.click();
+        // });
 
         $(cmdExport).click(function () {
             editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);

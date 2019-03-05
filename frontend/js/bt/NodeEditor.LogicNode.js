@@ -8,8 +8,8 @@ function AndNode()
 
 AndNode.prototype.onExecute = function()
 {
-	if(this.getInputData(0, false)=='trigger' && this.getInputData(1, false)=='trigger'){
-		this.setOutputData(0, "trigger");
+	if(this.getInputData(0, false)==LiteGraph.EVENT && this.getInputData(1, false)==LiteGraph.EVENT){
+		this.setOutputData(0, LiteGraph.EVENT);
 	}
 	else{
 		this.setOutputData(0, "");
@@ -32,8 +32,8 @@ function OrNode()
 
 OrNode.prototype.onExecute = function()
 {
-	if(this.getInputData(0, false)=='trigger' || this.getInputData(1, false)=='trigger'){
-		this.setOutputData(0, "trigger");
+	if(this.getInputData(0, false)==LiteGraph.EVENT || this.getInputData(1, false)==LiteGraph.EVENT){
+		this.setOutputData(0, LiteGraph.EVENT);
 	}
 	else{
 		this.setOutputData(0, "");

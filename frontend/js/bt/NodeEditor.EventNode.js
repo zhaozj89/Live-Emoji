@@ -12,11 +12,11 @@ KeyboardNode.prototype.onExecute = function()
 {
 	let that = this;
 	if(this.properties.key!=null && editor.emotionCMDManager.current_key==this.properties.key){
-		this.setOutputData(0, "trigger");
+		this.setOutputData(0, LiteGraph.EVENT);
 		setTimeout( function () {
-			that.setOutputData(0, "");
+			that.setOutputData(0, null);
 			editor.emotionCMDManager.current_key = null;
-		}, 1000 );
+		}, 20 );
 	}
 }
 

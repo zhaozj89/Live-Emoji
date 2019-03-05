@@ -11,6 +11,8 @@ function _ComputeMatchScore() {
 
 class EmotionCMD {
 	constructor(config){
+		this.name = null;
+		this.match_score = 0;
 		config = config || null;
 		this.graph = new LGraph(config);
 	}
@@ -25,6 +27,34 @@ class EmotionCMD {
 	}
 	getGraph(){
 		return this.graph;
+	}
+
+	setName(name){
+		this.name = name;
+	}
+	getName(){
+		return this.name;
+	}
+
+	setMatchScore(score){
+		this.match_score = score;
+	}
+	getMatchScore(){
+		return this.match_score;
+	}
+
+	toJSON(){
+		return {
+			name: this.name,
+			match_score: this.match_score,
+			graph: this.graph.serialize()
+		}
+	}
+
+	fromJSON(state){
+		this.name = state.name;
+		this.match_score = state.match_score;
+		this.graph.configure(state.graph);
 	}
 }
 
@@ -50,17 +80,14 @@ class EmotionCMDManager {
 		// _ComputeMatchScore();
 		let uuid = _GenerateUUID();
 		this.all_emotion_cmds[uuid] = cmd;
-		return {match_score: 0, uuid: uuid};
+		return {match_score: 0, uuid: uuid, name: ""};
 	}
 
 	toJSON () {
 		let cmd_objs = {};
 		for (let prop in this.all_emotion_cmds){
 			let cmd = this.all_emotion_cmds[prop];
-			let text_graph = cmd.getGraph().serialize();
-			let keyboard_val = cmd.getKey();
-			if(keyboard_val>='a'&&keyboard_val<='z' || keyboard_val>='a'&&keyboard_val<='z')
-			cmd_objs[keyboard_val] = text_graph;
+			cmd_objs[prop] = cmd.toJSON();
 		}
 		return cmd_objs;
 	}
@@ -68,8 +95,8 @@ class EmotionCMDManager {
 	fromJSON ( currentState ) {
 		this.all_emotion_cmds = {};
 		for ( let prop in currentState ) {
-			let graph = currentState[prop];
-			let emotion_cmd = new EmotionCMD(graph);
+			let emotion_cmd = new EmotionCMD();
+			emotion_cmd.fromJSON(currentState[prop])
 			this.all_emotion_cmds[prop] = emotion_cmd;
 		}
 	}

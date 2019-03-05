@@ -11,7 +11,7 @@ function FountainNode()
 
 FountainNode.prototype.onExecute = function()
 {
-	if(this.getInputData(0, false)=="trigger"){
+	if(this.getInputData(0, false)==LiteGraph.EVENT){
 		let emitter = CreateEmitter({p:{x: 0,y: 0}, Body: CreateMesh("sphere")});
 		editor.particle_engine_proton.addEmitter(emitter);
 		emitter.emit('once');

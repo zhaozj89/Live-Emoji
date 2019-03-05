@@ -25,7 +25,7 @@ var SidebarLeft = function (editor ) {
 	editor.side_view_renderer = renderer;
 	editor.side_scene = MakeScene();
 
-	//
+	// title
 
 	let titleMode = new UI.Text( 'Setting' );
 	titleMode.addClass( 'h4' );
@@ -35,14 +35,64 @@ var SidebarLeft = function (editor ) {
 	titleMode.setBackgroundColor( 'blueviolet' );
 	container.add( titleMode );
 
-	// role radio buttons
+	// choose mode
+	let modeButtons = new UI.Div();
+	modeButtons.setMargin( '5px' );
+	modeButtons.addClass( 'btn-group' );
+	modeButtons.addClass( 'btn-group-toggle' );
+	modeButtons.dom.setAttribute( 'data-toggle', 'buttons' );
+	container.add( modeButtons );
 
-	let roleSideButtons = new UI.Div();
-	roleSideButtons.setMargin( '5px' );
-	roleSideButtons.addClass( 'btn-group' );
-	roleSideButtons.addClass( 'btn-group-toggle' );
-	roleSideButtons.dom.setAttribute( 'data-toggle', 'buttons' );
-	container.add( roleSideButtons );
+	let liveLabel = new UI.Label();
+	liveLabel.addClass( 'btn' );
+	liveLabel.addClass( 'btn-secondary' );
+	liveLabel.setWidth( '140px' );
+	modeButtons.add( liveLabel );
+	liveLabel.dom.innerHTML = 'Live';
+
+	let liveInput = new UI.Input( '' );
+	liveInput.dom.setAttribute( 'type', 'radio' );
+	liveInput.dom.setAttribute( 'name', 'options' );
+	liveInput.dom.setAttribute( 'autocomplete', 'off' );
+	liveLabel.add( liveInput );
+
+	let editLabel = new UI.Label();
+	editLabel.addClass( 'btn' );
+	editLabel.addClass( 'btn-secondary' );
+	editLabel.setWidth( '150px' );
+	modeButtons.add( editLabel );
+	editLabel.dom.innerHTML = 'Edit';
+
+	let editInput = new UI.Input( '' );
+	editInput.dom.setAttribute( 'type', 'radio' );
+	editInput.dom.setAttribute( 'name', 'options' );
+	editInput.dom.setAttribute( 'autocomplete', 'off' );
+	editLabel.add( editInput );
+
+	liveLabel.dom.onclick = function () {
+		liveLabel.addClass( 'active' );
+		editLabel.removeClass( 'active' );
+
+		liveLabel.setOpacity( '1' );
+		editLabel.setOpacity( '0.2' );
+
+		editor.emotionCMDManager.start();
+	}
+
+	editLabel.dom.onclick = function () {
+		liveLabel.removeClass( 'active' );
+		editLabel.addClass( 'active' );
+
+		liveLabel.setOpacity( '0.2' );
+		editLabel.setOpacity( '1' );
+
+		editor.emotionCMDManager.stop();
+	}
+
+	liveLabel.setOpacity( '0.2' );
+	editLabel.setOpacity( '0.2' );
+
+	$(editLabel.dom).click();
 
 	// choose boy or girl
 

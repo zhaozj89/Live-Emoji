@@ -154,7 +154,7 @@
 
     // load pre-defined cmds
     editor.emotionCMDManager = new EmotionCMDManager(editor);
-    // LoadEmotionCMDJSONFile(editor, 'test.json');
+    LoadEmotionCMDJSONFile(editor, 'test.json');
 
     // layout
     var main_view = new MainView(editor);
@@ -362,9 +362,11 @@
 
     // animation loop
     function animate() {
-        editor.side_view_renderer.setAnimationLoop(animate);
-        // requestAnimationFrame(animate);
-        
+        setTimeout( function() {
+            editor.side_view_renderer.setAnimationLoop(animate);
+            // requestAnimationFrame(animate);
+        }, 1000 / 50 );
+
         editor.updateRunningEmotionCMDState();
 
         TWEEN.update();
@@ -375,6 +377,8 @@
 
         editor.signals.sceneGraphChanged.dispatch();
 
+        if(editor.emotionCMDManager.current_emotion_cmd!=null)
+            editor.emotionCMDManager.current_emotion_cmd.start();
     }
 
     animate();
