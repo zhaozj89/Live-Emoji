@@ -87,6 +87,8 @@ var SidebarLeft = function (editor ) {
 		editLabel.setOpacity( '1' );
 
 		editor.emotionCMDManager.stop();
+		if(editor.emotionCMDManager.current_emotion_cmd!=null)
+			editor.emotionCMDManager.current_emotion_cmd.start();
 	}
 
 	liveLabel.setOpacity( '0.2' );

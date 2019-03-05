@@ -76,6 +76,12 @@ class EmotionCMDManager {
 		}
 	}
 
+	start(){
+		for(let prop in this.all_emotion_cmds){
+			this.all_emotion_cmds[prop].start();
+		}
+	}
+
 	save (cmd) {
 		// _ComputeMatchScore();
 		let uuid = _GenerateUUID();
