@@ -102,6 +102,7 @@
     <!--editor-->
     <script src="js/authoring/NodeEditor.ParticleSystem.js"></script>
     <script src="js/authoring/NodeEditor.Util.js"></script>
+    <script src="js/authoring/NodeEditor.SceneNode.js"></script>
     <script src="js/authoring/NodeEditor.LogicNode.js"></script>
     <script src="js/authoring/NodeEditor.EventNode.js"></script>
     <script src="js/authoring/NodeEditor.FaceNode.js"></script>
@@ -175,7 +176,7 @@
         editor.main_camera.fov = 90;
         editor.main_camera.aspect = editor.main_view.dom.offsetWidth / editor.main_view.dom.offsetHeight;
         editor.main_camera.near = 1; //0.1;
-        editor.main_camera.far = 100; //10;
+        editor.main_camera.far = 1000; //10;
         editor.main_camera.position.z = 10;
         editor.main_camera.layers.enable(1);
         editor.main_camera.updateProjectionMatrix();
@@ -198,7 +199,7 @@
     
     // keyboard
     document.addEventListener('keydown', function (event) {
-        editor.emotionCMDManager.current_key = String.fromCharCode(event.keyCode).toLowerCase();
+        editor.emotionCMDManager.current_key = event.key;
     });
     
     // track face
@@ -255,12 +256,13 @@
     }, false);
 
     // rendering
+    // we must have those constraints to make everything work
     let controls = new THREE.OrbitControls(editor.main_camera, editor.main_view_renderer.domElement);
-    // controls.enableZoom = false;
-    // controls.enablePan = false;
-    // controls.enableDamping = true;
-    // controls.dampingFactor = 1;
-    // controls.rotateSpeed = 0.01;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.enableDamping = true;
+    controls.dampingFactor = 1;
+    controls.rotateSpeed = 0.01;
 
     function _Rendering() {
         controls.update();
@@ -291,9 +293,6 @@
         editor.side_camera.copy(editor.main_camera);
 
         editor.signals.sceneGraphChanged.dispatch(); // re-rendering
-
-        if(editor.emotionCMDManager.current_emotion_cmd!=null)
-            editor.emotionCMDManager.current_emotion_cmd.start();
     }
 
     _Animate();

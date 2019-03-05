@@ -1,5 +1,17 @@
 "use strict";
 
+function _RenewAGraph(){
+    $('#editor_canvas').remove();
+    CreateNECanvas(editor);
+    ResizeNECanvas(editor);
+
+    if(editor.emotionCMDManager.current_emotion_cmd!=null)
+        editor.emotionCMDManager.current_emotion_cmd.stop();
+    editor.emotionCMDManager.current_emotion_cmd = new EmotionCMD();
+    editor.emotionCMDManager.emotion_canvas = new LGraphCanvas("#editor_canvas", editor.emotionCMDManager.current_emotion_cmd.getGraph());
+    editor.emotionCMDManager.current_emotion_cmd.start();
+}
+
 var NodeEditor = function (editor) {
     let container = new UI.Panel();
     container.setId('nodeEditor');
@@ -38,8 +50,6 @@ var NodeEditor = function (editor) {
         if (confirm('Save the emotion command?')) {
             let info = editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);
             editor.signals.saveEmotionCMD.dispatch( info );
-        } else {
-            // Do nothing!
         }
         container.setDisplay('none');
     });
@@ -53,50 +63,76 @@ var NodeEditor = function (editor) {
     let menu = new UI.UList();
     menu.setBackgroundColor('rgba(50, 50, 50, 0.8)');
     menu.dom.style.borderRadius = '10px';
-    menu.setWidth('700px');
+    menu.setWidth('965px');
     menu.setId('menu');
     menu.addClass('nav');
     menu.addClass('nav-pills');
 
     menu.setPosition('absolute');
     menu.setTop('0px');
-    menu.setLeft('200px');
+    menu.setLeft('5px');
     container.add(menu);
 
-    let Event = menu.addLi('Event', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    let Event = menu.addLi('Trigger', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Event.firstChild.setAttribute('data-toggle', 'dropdown');
     Event.style.backgroundColor = '#ff0300';
     Event.style.margin = '12px';
-    Event.style.fontSize = '20px';
+    Event.style.fontSize = '14px';
 
     let Logic = menu.addLi('Logic', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Logic.firstChild.setAttribute('data-toggle', 'dropdown');
     Logic.style.backgroundColor = '#31baff';
     Logic.style.margin = '12px';
-    Logic.style.fontSize = '20px';
+    Logic.style.fontSize = '14px';
+
+    let Property = menu.addLi('Property', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    Property.firstChild.setAttribute('data-toggle', 'dropdown');
+    Property.style.backgroundColor = '#6770a9';
+    Property.style.margin = '12px';
+    Property.style.fontSize = '14px';
 
     let Face = menu.addLi('Face', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Face.firstChild.setAttribute('data-toggle', 'dropdown');
     Face.style.backgroundColor = '#ffb032';
     Face.style.margin = '12px';
-    Face.style.fontSize = '20px';
+    Face.style.fontSize = '14px';
 
     let Particle = menu.addLi('Particle', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Particle.firstChild.setAttribute('data-toggle', 'dropdown');
     Particle.style.backgroundColor = '#ae0cff';
     Particle.style.margin = '12px';
-    Particle.style.fontSize = '20px';
+    Particle.style.fontSize = '14px';
+
+    let Danmaku = menu.addLi('Danmaku', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    Danmaku.firstChild.setAttribute('data-toggle', 'dropdown');
+    Danmaku.style.backgroundColor = '#39a971';
+    Danmaku.style.margin = '12px';
+    Danmaku.style.fontSize = '14px';
+
+    let Music = menu.addLi('Music', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    Music.firstChild.setAttribute('data-toggle', 'dropdown');
+    Music.style.backgroundColor = '#a95166';
+    Music.style.margin = '12px';
+    Music.style.fontSize = '14px';
+
+    let Scene = menu.addLi('Scene', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    Scene.firstChild.setAttribute('data-toggle', 'dropdown');
+    Scene.style.backgroundColor = '#ff13a3';
+    Scene.style.margin = '12px';
+    Scene.style.fontSize = '14px';
 
     let File = menu.addLi('File', 'nav-item dropdown', 'nav-link dropdown-toggle');
     File.firstChild.setAttribute('data-toggle', 'dropdown');
     File.style.backgroundColor = '#0065ff';
     File.style.margin = '12px';
-    File.style.fontSize = '20px';
+    File.style.fontSize = '14px';
 
     let menuEvent = new UI.UList();
     menuEvent.addClass('dropdown-menu');
-    let buttonKeyboard = menuEvent.addLi('Keyboard');
-    buttonKeyboard.classList.add('dropdown-item');
+    let buttonKeyboard1 = menuEvent.addLi('a-z');
+    buttonKeyboard1.classList.add('dropdown-item');
+    let buttonKeyboard2 = menuEvent.addLi('A-Z');
+    buttonKeyboard2.classList.add('dropdown-item');
     Event.appendChild(menuEvent.dom);
 
     let menuLogic = new UI.UList();
@@ -119,6 +155,12 @@ var NodeEditor = function (editor) {
     buttonFountain.classList.add( 'dropdown-item' );
     Particle.appendChild(menuParticle.dom);
 
+    let menuScene = new UI.UList();
+    menuScene.addClass('dropdown-menu');
+    let buttonBackground = menuScene.addLi( 'Background' );
+    buttonBackground.classList.add( 'dropdown-item' );
+    Scene.appendChild(menuScene.dom);
+
     let menuFile = new UI.UList();
     menuFile.addClass('dropdown-menu');
     let cmdNew = menuFile.addLi('New');
@@ -138,10 +180,17 @@ var NodeEditor = function (editor) {
 
         editor.emotionCMDManager.current_emotion_cmd = new EmotionCMD();
         editor.emotionCMDManager.emotion_canvas = new LGraphCanvas("#editor_canvas", editor.emotionCMDManager.current_emotion_cmd.getGraph());
+        editor.emotionCMDManager.current_emotion_cmd.start();
 
         //event
-        $(buttonKeyboard).click(function () {
-            let node = LiteGraph.createNode("node_editor/keyboard");
+        $(buttonKeyboard1).click(function () {
+            let node = LiteGraph.createNode("node_editor/keyboard1");
+            node.pos = [200, 200];
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        });
+
+        $(buttonKeyboard2).click(function () {
+            let node = LiteGraph.createNode("node_editor/keyboard2");
             node.pos = [200, 200];
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         });
@@ -173,26 +222,16 @@ var NodeEditor = function (editor) {
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );
 
-        // $( buttonDanmaku ).click( function () {
-        //     emotionCMDManager.addNode( 'danmaku' );
-        // } );
-        //
-        // $( buttonVibration ).click( function () {
-        //     emotionCMDManager.addNode( 'viberation' );
-        // } );
-        //
-        // $( buttonSound ).click( function (  ) {
-        //     emotionCMDManager.addNode( 'sound' );
-        // } );
+        // scene
+        $(buttonBackground).click(function () {
+            let node = LiteGraph.createNode("node_editor/background");
+            node.pos = [200, 200];
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        });
 
         //
         $(cmdNew).click(function () {
-            $('#editor_canvas').remove();
-            CreateNECanvas(editor);
-            ResizeNECanvas(editor);
-
-            editor.emotionCMDManager.current_emotion_cmd = new EmotionCMD();
-            editor.emotionCMDManager.emotion_canvas = new LGraphCanvas("#editor_canvas", editor.emotionCMDManager.current_emotion_cmd.getGraph());
+            _RenewAGraph();
         });
 
         $(cmdSave).click(function () {
@@ -201,12 +240,7 @@ var NodeEditor = function (editor) {
         });
 
         $(cmdClean).click(function () {
-            $('#editor_canvas').remove();
-            CreateNECanvas(editor);
-            ResizeNECanvas(editor);
-
-            editor.emotionCMDManager.current_emotion_cmd = new EmotionCMD();
-            editor.emotionCMDManager.emotion_canvas = new LGraphCanvas("#editor_canvas", editor.emotionCMDManager.current_emotion_cmd.getGraph());
+            _RenewAGraph();
         });
 
         let form = document.createElement('form');
@@ -224,9 +258,7 @@ var NodeEditor = function (editor) {
             let reader = new FileReader();
 
             reader.addEventListener('load', function (event) {
-                let contents = event.target.result;
-
-                let jsonFile = JSON.parse( this.responseText );
+                let jsonFile = JSON.parse( event.target.result );
 
                 editor.emotionCMDManager.fromJSON( jsonFile );
 

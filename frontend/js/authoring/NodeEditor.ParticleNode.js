@@ -6,7 +6,7 @@ function FountainNode()
 	// 	that.properties.emotion = val;
 	// 	},
 	// 	{values: ['happy', 'sad', 'surprised', 'disgusted', 'angry', 'fearful', 'neutral']});
-	that.addInput("","trigger");
+	that.addInput("", LiteGraph.EVENT);
 }
 
 FountainNode.prototype.onExecute = function()

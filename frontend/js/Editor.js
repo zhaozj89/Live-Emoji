@@ -1,4 +1,6 @@
 var Editor = function () {
+    // node editing related
+    this.staic_background_material = null;
     this.particle_engine_proton = null;
 
     this.main_view_renderer = null;
@@ -80,7 +82,6 @@ var Editor = function () {
         followMouth: new Signal(),
 
         // node editor
-        editEmotionCMD: new Signal(),
         saveEmotionCMD: new Signal(),
 
         // notifications

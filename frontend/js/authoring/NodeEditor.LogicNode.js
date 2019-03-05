@@ -1,9 +1,9 @@
 function AndNode()
 {
 	let that = this;
-	that.addInput('', 'trigger');
-	that.addInput('', 'trigger');
-	that.addOutput('',"trigger");
+	that.addInput('', LiteGraph.EVENT);
+	that.addInput('', LiteGraph.EVENT);
+	that.addOutput('',LiteGraph.EVENT);
 }
 
 AndNode.prototype.onExecute = function()
@@ -25,9 +25,9 @@ LiteGraph.registerNodeType("node_editor/and", AndNode );
 function OrNode()
 {
 	let that = this;
-	that.addInput('', 'trigger');
-	that.addInput('', 'trigger');
-	that.addOutput('',"trigger");
+	that.addInput('', LiteGraph.EVENT);
+	that.addInput('', LiteGraph.EVENT);
+	that.addOutput('',LiteGraph.EVENT);
 }
 
 OrNode.prototype.onExecute = function()

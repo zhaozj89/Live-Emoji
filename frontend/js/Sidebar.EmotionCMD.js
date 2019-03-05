@@ -10,7 +10,7 @@ SidebarLeft.EmotionCMD = function (editor) {
 
     $(container.dom).jsGrid({
         width: "100%",
-        height: "400px",
+        height: "300px",
 
         inserting: true,
         editing: true,
@@ -42,6 +42,7 @@ SidebarLeft.EmotionCMD = function (editor) {
                 emotion_canvas.drawFrontCanvas();
                 editor.emotionCMDManager.stop();
                 editor.emotionCMDManager.current_emotion_cmd = emotion_cmd;
+                emotion_cmd.start();
             }
         },
 
@@ -66,8 +67,8 @@ SidebarLeft.EmotionCMD = function (editor) {
         data: clients,
 
         fields: [
-            {name: "Name", type: "text", width: 150, validate: "required"},
-            {name: "Match", type: "number", width: 50},
+            {name: "Name", type: "text", width: 120},
+            {name: "Match", type: "number", width: 80},
             {name: "uuid", type: "text", visible: false},
             {type: "control"}
         ]
