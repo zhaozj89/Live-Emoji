@@ -1,30 +1,21 @@
 var Editor = function () {
     this.particle_engine_proton = null;
-    this.particle_engine_emitter_fountain = null;
 
     this.main_view_renderer = null;
     this.side_view_renderer = null;
     this.main_view = null;
     this.side_view = null;
-    this.main_camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 2100 );
+    this.main_camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 100);
     this.main_camera.name = 'main_camera';
-    this.side_camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 2100 );
+    this.side_camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 100);
     this.side_camera.name = 'side_camera';
 
-    this.main_scene = new THREE.Scene();
-    this.main_scene.name = 'main_scene';
-    this.main_scene.background = new THREE.Color(0x464646);
-    this.side_scene = new THREE.Scene();
-    this.side_scene.name = 'side_scene';
-    this.side_scene.background = new THREE.Color(0x464646);
+    this.scene = new THREE.Scene();
 
     //config
     this.config = new Config('threejs-editor');
     this.history = new History(this);
     this.loader = new Loader(this);
-
-    // function
-    this.facetracking_running = false;
 
     // UI components
     this.sidebar = null;
@@ -192,8 +183,7 @@ Editor.prototype = {
 
         });
 
-        this.main_scene.add(object);
-        this.side_scene.add(object);
+        this.scene.add(object);
 
         this.signals.objectAdded.dispatch(object);
         this.signals.sceneGraphChanged.dispatch();

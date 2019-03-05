@@ -87,18 +87,16 @@ var NodeEditor = function (editor) {
     Particle.style.margin = '12px';
     Particle.style.fontSize = '20px';
 
-    let Tool = menu.addLi('Tool', 'nav-item dropdown', 'nav-link dropdown-toggle');
-    Tool.firstChild.setAttribute('data-toggle', 'dropdown');
-    Tool.style.backgroundColor = '#0065ff';
-    Tool.style.margin = '12px';
-    Tool.style.fontSize = '20px';
+    let File = menu.addLi('File', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    File.firstChild.setAttribute('data-toggle', 'dropdown');
+    File.style.backgroundColor = '#0065ff';
+    File.style.margin = '12px';
+    File.style.fontSize = '20px';
 
     let menuEvent = new UI.UList();
     menuEvent.addClass('dropdown-menu');
     let buttonKeyboard = menuEvent.addLi('Keyboard');
     buttonKeyboard.classList.add('dropdown-item');
-    // let buttonTimer = menuEvent.addLi('Timer');
-    // buttonTimer.classList.add('dropdown-item');
     Event.appendChild(menuEvent.dom);
 
     let menuLogic = new UI.UList();
@@ -121,19 +119,19 @@ var NodeEditor = function (editor) {
     buttonFountain.classList.add( 'dropdown-item' );
     Particle.appendChild(menuParticle.dom);
 
-    let menuTool = new UI.UList();
-    menuTool.addClass('dropdown-menu');
-    let cmdNew = menuTool.addLi('New');
+    let menuFile = new UI.UList();
+    menuFile.addClass('dropdown-menu');
+    let cmdNew = menuFile.addLi('New');
     cmdNew.classList.add('dropdown-item');
-    let cmdSave = menuTool.addLi('Save');
+    let cmdSave = menuFile.addLi('Save');
     cmdSave.classList.add('dropdown-item');
-    let cmdClean = menuTool.addLi('Clean');
+    let cmdClean = menuFile.addLi('Clean');
     cmdClean.classList.add('dropdown-item');
-    // let cmdImport = menuTool.addLi('Import');
-    // cmdImport.classList.add('dropdown-item');
-    let cmdExport = menuTool.addLi('Export');
+    let cmdImport = menuFile.addLi('Import');
+    cmdImport.classList.add('dropdown-item');
+    let cmdExport = menuFile.addLi('Export');
     cmdExport.classList.add('dropdown-item');
-    Tool.appendChild(menuTool.dom);
+    File.appendChild(menuFile.dom);
 
     $(function () {
         ResizeNECanvas(editor);
@@ -215,40 +213,41 @@ var NodeEditor = function (editor) {
         form.style.display = 'none';
         document.body.appendChild(form);
 
-        // //
         //
-        // let fileInput = document.createElement('input');
-        // fileInput.type = 'file';
-        // fileInput.addEventListener('change', function (event) {
+
+        let fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.addEventListener('change', function (event) {
+
+            let file = fileInput.files[0];
+
+            let reader = new FileReader();
+
+            reader.addEventListener('load', function (event) {
+                let contents = event.target.result;
+
+                let jsonFile = JSON.parse( this.responseText );
+
+                editor.emotionCMDManager.fromJSON( jsonFile );
+
+                for ( let prop in editor.emotionCMDManager.all_emotion_cmds) {
+                    let cmd = editor.emotionCMDManager.all_emotion_cmds[prop];
+                    let info = {match_score: cmd.getMatchScore(), uuid: prop, name: cmd.getName()};
+                    editor.signals.saveEmotionCMD.dispatch( info );
+                }
+                editor.emotionCMDManager.stop();
+            });
+            reader.readAsText(file);
+            form.reset();
+
+        });
+        form.appendChild(fileInput);
+
         //
-        //     let file = fileInput.files[0];
-        //
-        //     let reader = new FileReader();
-        //
-        //     reader.addEventListener('load', function (event) {
-        //         let contents = event.target.result;
-        //
-        //         let jsonFile = JSON.parse(contents);
-        //
-        //         editor.emotionCMDManager.fromJSON( jsonFile );
-        //
-        //         for ( let prop in editor.emotionCMDManager.all_emotion_cmds) {
-        //
-        //             let info = editor.emotionCMDManager.all_emotion_cmds[ prop ].getInfo();
-        //             editor.signals.saveEmotionCMD.dispatch( info );
-        //         }
-        //     });
-        //     reader.readAsText(file);
-        //     form.reset();
-        //
-        // });
-        // form.appendChild(fileInput);
-        //
-        // //
-        //
-        // $(cmdImport).click(function () {
-        //     fileInput.click();
-        // });
+
+        $(cmdImport).click(function () {
+            fileInput.click();
+        });
 
         $(cmdExport).click(function () {
             editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);

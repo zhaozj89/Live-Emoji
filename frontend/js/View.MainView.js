@@ -10,7 +10,6 @@ var MainView = function (editor) {
     container.dom.appendChild(renderer.domElement);
 
     editor.main_view_renderer = renderer;
-    editor.main_scene = MakeScene();
     editor.main_view = container;
 
     return container;

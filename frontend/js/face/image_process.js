@@ -32,7 +32,7 @@ function grayscale(pixels, brightness) {
         v /= a;
         v += brightness;
         v *= a;
-		v = Math.min( 255, v );
+        v = Math.min(255, v);
         d[i + 0] = d[i + 1] = d[i + 2] = v;
     }
     return pixels;

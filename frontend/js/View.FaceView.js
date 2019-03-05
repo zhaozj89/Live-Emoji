@@ -88,8 +88,7 @@ var FaceView = function (editor) {
         function GetUserMediaSuccess(stream) {
             if ("srcObject" in videoStream.dom) {
                 videoStream.dom.srcObject = stream;
-            }
-            else {
+            } else {
                 videoStream.dom.src = (window.URL && window.URL.createObjectURL(stream));
             }
 
@@ -124,11 +123,9 @@ var FaceView = function (editor) {
 
         if (navigator.mediaDevices) {
             navigator.mediaDevices.getUserMedia({video: true}).then(GetUserMediaSuccess).catch(GetUserMediaFail);
-        }
-        else if (navigator.getUserMedia) {
+        } else if (navigator.getUserMedia) {
             navigator.getUserMedia({video: true}, GetUserMediaSuccess, GetUserMediaFail);
-        }
-        else {
+        } else {
             alert("Your browser does not seem to support getUserMedia, using a fallback video instead.");
         }
 
@@ -172,8 +169,7 @@ var FaceView = function (editor) {
         if (resVals.length < bufSize) {
             resVals.push(nextValue);
             return null;
-        }
-        else {
+        } else {
             let initial = resVals.shift();
             resVals.push(nextValue);
 
@@ -210,8 +206,7 @@ var FaceView = function (editor) {
         // correct
         if (measurement === null) {
             corr = pred;
-        }
-        else {
+        } else {
             corr = FaceTracker.correct(measurement.x, measurement.y);
         }
 
@@ -267,8 +262,7 @@ var FaceView = function (editor) {
             then = Date.now();
 
             StartMainLoop();
-        }
-        else {
+        } else {
             startButton.dom.textContent = 'Start';
 
             ctrack.stop(videoStream.dom);
@@ -278,8 +272,6 @@ var FaceView = function (editor) {
 
             StopMainLoop();
         }
-
-        editor.facetracking_running = faceTrackingStarted;
     }
 
     //load models
@@ -361,54 +353,52 @@ var FaceView = function (editor) {
                 let preprocessedData = dataProcessedTensor.data;
                 let inputData = {"input": preprocessedData}
                 return blinkmodelLeft.predict(inputData)
-            } ).then(outputData => {
-                if(outputData.output < 0.2){
-                signals.followLeftEye.dispatch('close');
-            }
-            else{
-                signals.followLeftEye.dispatch('open');
-            }} ).catch(err => {
+            }).then(outputData => {
+                if (outputData.output < 0.2) {
+                    signals.followLeftEye.dispatch('close');
+                } else {
+                    signals.followLeftEye.dispatch('open');
+                }
+            }).catch(err => {
                 console.log(err)
-            } )
+            })
 
             blinkmodelRight.ready()
                 .then(() => {
-                let dataTensor = ndarray(new Float32Array(RightEyedata), [width, height, 4])
-                let dataProcessedTensor = ndarray(new Float32Array(width * height * 3), [width, height, 3])
-                ops.divseq(dataTensor, 255)
-            ops.subseq(dataTensor, 0.5)
-            ops.mulseq(dataTensor, 2)
-            ops.assign(dataProcessedTensor.pick(null, null, 0), dataTensor.pick(null, null, 0))
-            ops.assign(dataProcessedTensor.pick(null, null, 1), dataTensor.pick(null, null, 1))
-            ops.assign(dataProcessedTensor.pick(null, null, 2), dataTensor.pick(null, null, 2))
-            let preprocessedData = dataProcessedTensor.data;
-            let inputData = {"input": preprocessedData}
-            return blinkmodelRight.predict(inputData)
-        } ).then(outputData => {
-                if(outputData.output < 0.2
-        ){
-                signals.followRightEye.dispatch('close');
-            }
-        else
-            {
-                signals.followRightEye.dispatch('open');
-            }
-        } ).catch(err => {
+                    let dataTensor = ndarray(new Float32Array(RightEyedata), [width, height, 4])
+                    let dataProcessedTensor = ndarray(new Float32Array(width * height * 3), [width, height, 3])
+                    ops.divseq(dataTensor, 255)
+                    ops.subseq(dataTensor, 0.5)
+                    ops.mulseq(dataTensor, 2)
+                    ops.assign(dataProcessedTensor.pick(null, null, 0), dataTensor.pick(null, null, 0))
+                    ops.assign(dataProcessedTensor.pick(null, null, 1), dataTensor.pick(null, null, 1))
+                    ops.assign(dataProcessedTensor.pick(null, null, 2), dataTensor.pick(null, null, 2))
+                    let preprocessedData = dataProcessedTensor.data;
+                    let inputData = {"input": preprocessedData}
+                    return blinkmodelRight.predict(inputData)
+                }).then(outputData => {
+                if (outputData.output < 0.2
+                ) {
+                    signals.followRightEye.dispatch('close');
+                } else {
+                    signals.followRightEye.dispatch('open');
+                }
+            }).catch(err => {
                 console.log(err)
-        } )
+            })
 
             emotionmodel.ready().then(() => {
                 let dataTensor = ndarray(new Float32Array(Facedata), [FaceCanvas.width, FaceCanvas.height, 4]);
-            let dataProcessedTensor = ndarray(new Float32Array(FaceCanvas.width * FaceCanvas.height * 1), [FaceCanvas.width, FaceCanvas.height, 1]);
+                let dataProcessedTensor = ndarray(new Float32Array(FaceCanvas.width * FaceCanvas.height * 1), [FaceCanvas.width, FaceCanvas.height, 1]);
 
-            ops.divseq(dataTensor, 255)
-            ops.subseq(dataTensor, 0.5)
-            ops.mulseq(dataTensor, 2)
-            ops.assign(dataProcessedTensor.pick(null, null, 0), dataTensor.pick(null, null, 0))
-            let preprocessedData = dataProcessedTensor.data
-            let inputData = {"input": preprocessedData}
-            return emotionmodel.predict(inputData)
-        } ).then(outputData => {
+                ops.divseq(dataTensor, 255)
+                ops.subseq(dataTensor, 0.5)
+                ops.mulseq(dataTensor, 2)
+                ops.assign(dataProcessedTensor.pick(null, null, 0), dataTensor.pick(null, null, 0))
+                let preprocessedData = dataProcessedTensor.data
+                let inputData = {"input": preprocessedData}
+                return emotionmodel.predict(inputData)
+            }).then(outputData => {
                 let valence_level = {
                     'angry': outputData.output[0],
                     'disgusted': outputData.output[1],
@@ -419,10 +409,10 @@ var FaceView = function (editor) {
                     'neutral': outputData.output[6]
                 };
 
-            signals.updateRecommendation.dispatch(valence_level);
-        } ).catch(err => {
+                signals.updateRecommendation.dispatch(valence_level);
+            }).catch(err => {
                 console.log(err)
-        } );
+            });
         }
     }
 
@@ -446,8 +436,7 @@ var FaceView = function (editor) {
                 'x': resX,
                 'y': resY
             };
-        }
-        else
+        } else
             return null;
     }
 
