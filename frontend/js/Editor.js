@@ -1,4 +1,7 @@
 var Editor = function () {
+    // global
+    this.GlobalCounter = 0;
+
     // node editing related
     this.staic_background_material = null;
     this.particle_engine_proton = null;
@@ -25,37 +28,33 @@ var Editor = function () {
     this.node_editor = null;
     this.node_editor_canvas = null;
 
-    // mutex
-
+    // face tracking and event mutex
     let that = this;
-
-    this.runningEmotionCMDState = {
+    this.GlobalRunningEmotionCMDState = {
         running: false,
         has_particle_node: false,
         num_danmaku_node: 0
     };
-
-    this.updateRunningEmotionCMDState = function () {
-        if (that.runningEmotionCMDState.has_particle_node === false && that.runningEmotionCMDState.num_danmaku_node === 0) {
-            that.runningEmotionCMDState.running = false;
+    this.UpdateRunningEmotionCMDState = function () {
+        if (that.GlobalRunningEmotionCMDState.has_particle_node === false) {
+            that.GlobalRunningEmotionCMDState.running = false;
 
             if (editor.selected !== null) {
                 editor.selected.updateEmotion('neutral');
                 editor.signals.sceneGraphChanged.dispatch();
             }
         }
+        else{
+            that.GlobalRunningEmotionCMDState.running = true;
+        }
     }
 
     this.runAtLeastOneCMD = false;
 
-    this.facePositionMutex = false;
 
     // Mode
-    this.usageMode = 1; // 0: live animation, 1: pre-edit
-
     this.boyLabel = null;
     this.girlLabel = null;
-
     this.boyLoaded = false;
     this.girlLoaded = false;
 
@@ -64,50 +63,28 @@ var Editor = function () {
     var Signal = signals.Signal;
 
     this.signals = {
-
-        // update emotion panel values
-        updateEmotionPanelValues: new Signal(),
-
-        add2Scene: new Signal(),
-
-        updateRecommendation: new Signal(),
-
-        // trigger
-        keyboardTriggering: new Signal(),
-
         // face following
         followFace: new Signal(),
         followLeftEye: new Signal(),
         followRightEye: new Signal(),
         followMouth: new Signal(),
+        updateCurrentDetectedEmotionIntensity: new Signal(),
 
-        // node editor
         saveEmotionCMD: new Signal(),
-
-        // notifications
-        savingStarted: new Signal(),
-        savingFinished: new Signal(),
-
         sceneGraphChanged: new Signal(),
 
+        CharacterAddedToScene: new Signal(),
+
         geometryChanged: new Signal(),
-
         objectSelected: new Signal(),
-
         objectAdded: new Signal(),
         objectChanged: new Signal(),
         objectRemoved: new Signal(),
-
         helperAdded: new Signal(),
         helperRemoved: new Signal(),
-
         materialChanged: new Signal(),
-
         windowResize: new Signal(),
-
-        refreshSidebarObject3D: new Signal(),
         historyChanged: new Signal()
-
     };
 
     // objects

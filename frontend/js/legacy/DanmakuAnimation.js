@@ -16,9 +16,9 @@ class DanmakuController {
 		function deleteText () {
 			that.paper.clear();
 
-			if( editor.runningEmotionCMDState.num_danmaku_node!==0 )
-				editor.runningEmotionCMDState.num_danmaku_node--;
-			editor.updateRunningEmotionCMDState();
+			if( editor.GlobalRunningEmotionCMDState.num_danmaku_node!==0 )
+				editor.GlobalRunningEmotionCMDState.num_danmaku_node--;
+			editor.UpdateRunningEmotionCMDState();
 		}
 	}
 }

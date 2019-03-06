@@ -5,17 +5,19 @@ SidebarLeft.EmotionCMD = function (editor) {
     let container = new UI.Panel();
 
     let clients = [
-        {"Name": "Otto Clay", "Match": 25, "uuid": "32432"},
+        {"Name": "Otto Clay", "Note": "test", "uuid": "32432"},
     ];
 
     $(container.dom).jsGrid({
         width: "100%",
-        height: "300px",
+        height: "100%",
 
-        inserting: true,
+        // filtering: true,
         editing: true,
+        // inserting: true,
         sorting: true,
         paging: true,
+        autoload: true,
 
         onItemEditing: function (args) {
             if (editor.emotionCMDManager.all_emotion_cmds.hasOwnProperty(args.item.uuid)) {
@@ -47,14 +49,11 @@ SidebarLeft.EmotionCMD = function (editor) {
         },
 
         onItemUpdated: function (args) {
-            if (args.previousItem.Match != args.item.Match) {
-                args.item.Match = args.previousItem.Match;
-            }
-
             if (editor.emotionCMDManager.all_emotion_cmds.hasOwnProperty(args.item.uuid)) {
                 let emotion_cmd = editor.emotionCMDManager.all_emotion_cmds[args.item.uuid];
                 emotion_cmd.setName(args.item.Name);
-                emotion_cmd.setMatchScore(args.previousItem.Match);
+                emotion_cmd.setNote(args.item.Note);
+                SaveAEmotionCMD(emotion_cmd);
             }
         },
 
@@ -66,18 +65,27 @@ SidebarLeft.EmotionCMD = function (editor) {
 
         data: clients,
 
+        deleteConfirm: "Do you really want to delete the client?",
+
         fields: [
             {name: "Name", type: "text", width: 120},
-            {name: "Match", type: "number", width: 80},
+            {name: "Note", type: "text", width: 80},
             {name: "uuid", type: "text", visible: false},
-            {type: "control"}
+            {type: "control", modeSwitchButton: false, editButton: false,
+                headerTemplate: function() {
+                    return $("<button>").text("Add").css('background', '#393939')
+                        .on("click", function () {
+                            RenewAGraph();
+                        });
+                }
+            }
         ]
     });
 
     signals.saveEmotionCMD.add(function (info) {
         $(container.dom).jsGrid("insertItem", {
             Name: info.name,
-            Match: info.match_score,
+            Note: info.note,
             uuid: info.uuid
         }).done(function () {
         });

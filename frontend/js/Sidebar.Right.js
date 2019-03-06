@@ -35,21 +35,23 @@ var SidebarRight = function (editor) {
 
     var valenceText = new UI.Div();
     valenceText.setId('valenceText');
-    valenceText.setWidth('20px');
+    valenceText.setWidth('60px');
     valenceText.setHeight('20px');
-    valenceText.setTextContent('5');
+    // valenceText.setTextContent('5');
+    valenceText.setTextContent('0');
+    valenceText.setColor('black');
     valenceText.setBackgroundColor('yellow');
     valenceText.setMargin('5px');
-    valenceText.setMarginLeft('90px');
+    valenceText.setMarginLeft('70px');
     valenceText.setTextAlign('center');
     valenceText.dom.style.borderRadius = '10px';
 
-    var valenceSlider = new UI.Div();
-    valenceSlider.setId('valenceSlider');
+    // var valenceSlider = new UI.Div();
+    // valenceSlider.setId('valenceSlider');
 
     container.add(valenceView);
     container.add(valenceText);
-    container.add(valenceSlider);
+    // container.add(valenceSlider);
 
     let titleArousal = new UI.Text('Arousal');
     titleArousal.addClass('h4');
@@ -66,74 +68,76 @@ var SidebarRight = function (editor) {
 
     var heartValueText = new UI.Div();
     heartValueText.setId('heartValueText');
-    heartValueText.setWidth('40px');
+    heartValueText.setWidth('60px');
     heartValueText.setHeight('20px');
-    heartValueText.setTextContent('70');
+    // heartValueText.setTextContent('70');
+    heartValueText.setTextContent('0');
+    heartValueText.setColor('black');
     heartValueText.setBackgroundColor('red');
     heartValueText.setMargin('5px');
-    heartValueText.setMarginLeft('80px');
+    heartValueText.setMarginLeft('70px');
     heartValueText.setTextAlign('center');
     heartValueText.dom.style.borderRadius = '15px';
 
-    var heartSlider = new UI.Div();
-    heartSlider.setId('heartSlider');
+    // var heartSlider = new UI.Div();
+    // heartSlider.setId('heartSlider');
 
     container.add(heartView);
     container.add(heartValueText);
-    container.add(heartSlider);
+    // container.add(heartSlider);
 
-    $(function () {
-
-        let heart = document.getElementsByClassName('heart')[0];
-
-        $("#heartSlider").slider({
-            value: 70,
-            min: 50,
-            max: 90,
-            slide: function (event, ui) {
-                $(heartValueText.dom).text(ui.value);
-                let val = Math.floor(-15 * ui.value + 2100);
-                heart.style.animation = val + 'ms pulsate infinite alternate ease-in-out';
-
-                if (editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null) {
-                    editor.emotionCMDManager.currentNodeSession.triggerNode.arousal.setArg(ui.value);
-                }
-            }
-        });
-
-        $("#valenceSlider").slider({
-            value: 5,
-            min: 1,
-            max: 9,
-            slide: function (event, ui) {
-                $(valenceText.dom).text(ui.value);
-                let res = ui.value;
-                valenceImg.src = './asset/valence_new/' + res + '.png';
-
-                if (editor.emotionCMDManager.currentNodeSession !== null && editor.emotionCMDManager.currentNodeSession.triggerNode !== null) {
-                    editor.emotionCMDManager.currentNodeSession.triggerNode.valence.setArg(ui.value);
-                }
-            }
-        });
-    });
+    // $(function () {
+    //
+    //     let heart = document.getElementsByClassName('heart')[0];
+    //
+    //     $("#heartSlider").slider({
+    //         value: 70,
+    //         min: 50,
+    //         max: 90,
+    //         slide: function (event, ui) {
+    //             $(heartValueText.dom).text(ui.value);
+    //             let val = Math.floor(-15 * ui.value + 2100);
+    //             heart.style.animation = val + 'ms pulsate infinite alternate ease-in-out';
+    //         }
+    //     });
+    //
+    //     $("#valenceSlider").slider({
+    //         value: 5,
+    //         min: 1,
+    //         max: 9,
+    //         slide: function (event, ui) {
+    //             $(valenceText.dom).text(ui.value);
+    //             let res = ui.value;
+    //             valenceImg.src = './asset/valence_new/' + res + '.png';
+    //         }
+    //     });
+    // });
 
 
-    editor.signals.updateEmotionPanelValues.add(function (vals) {
-        if (editor.usageMode === 0) {
+    editor.signals.updateCurrentDetectedEmotionIntensity.add(function (seven_emotions) {
+        let angery = seven_emotions['angry'];
+        let disgusted = seven_emotions['disgusted'];
+        let fearful = seven_emotions['fearful'];
+        let happy = seven_emotions['happy'];
+        let sad = seven_emotions['sad'];
 
-            $(valenceText.dom).text(vals.valence);
-            $("#valenceSlider").slider('value', vals.valence);
-            valenceImg.src = './asset/valence_new/' + vals.valence + '.png';
+        let valence = -0.51*angery -0.4*disgusted-0.64*fearful+0.4*happy-0.4*sad;
+        let arousal = 0.59*angery+0.2*disgusted+0.6*fearful+0.2*happy-0.2*sad;
 
-            $(heartValueText.dom).text(vals.arousal);
-            $("#heartSlider").slider('value', vals.arousal);
+        // valence = Math.floor((valence+2)/2);
+        // valence = Math.max(9, valence);
+        // valence = Math.min(1, valence);
 
-            let heart_val = Math.floor(-15 * vals.arousal + 2100);
-            let heart = document.getElementsByClassName('heart')[0];
-            heart.style.animation = heart_val + 'ms pulsate infinite alternate ease-in-out';
-        } else {
-            // set emotion command valence with face, tuning it later
-        }
+        $(valenceText.dom).text(valence);
+        // $("#valenceSlider").slider('value', valence);
+        // valenceImg.src = './asset/valence_new/' + valence + '.png';
+        //
+        $(heartValueText.dom).text(arousal);
+        // $("#heartSlider").slider('value', vals.arousal);
+        //
+        // let heart_val = Math.floor(-15 * vals.arousal + 2100);
+        // let heart = document.getElementsByClassName('heart')[0];
+        // heart.style.animation = heart_val + 'ms pulsate infinite alternate ease-in-out';
     });
 
     return container;

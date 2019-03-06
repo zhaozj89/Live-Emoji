@@ -97,7 +97,7 @@
     <script src="js/libs/graph/nodes/network.js"></script>
 
     <!--particle system-->
-    <script src="js/libs/particle/three.proton.js"></script>
+    <script src="js/libs/particle/three.proton.min.js"></script>
 
     <!--editor-->
     <script src="js/authoring/NodeEditor.ParticleSystem.js"></script>
@@ -121,8 +121,8 @@
     <script src="js/Scene.js"></script>
 
     <script src="js/Menubar.js"></script>
-    <script src="js/Menubar.Asset.js"></script>
-    <script src="js/Menubar.Tool.js"></script>
+    <script src="js/Menubar.File.js"></script>
+    <script src="js/Menubar.Edit.js"></script>
     <script src="js/Menubar.About.js"></script>
 
     <script src="js/Sidebar.Left.js"></script>
@@ -171,6 +171,8 @@
 
     // var soundAnimation = new SoundAnimation(editor);
 
+    $('a').css('bottom', '');
+
     // add events
     editor.signals.windowResize.add(function () {
         editor.main_camera.fov = 90;
@@ -200,17 +202,18 @@
     // keyboard
     document.addEventListener('keydown', function (event) {
         editor.emotionCMDManager.current_key = event.key;
+        console.log(event.key);
     });
     
     // track face
     editor.signals.followFace.add(function (event) {
         let puppet = editor.selected;
         if (puppet !== null) {
-            if (editor.facePositionMutex === false) {
+            // if (editor.facePositionMutex === false) {
                 puppet.position.x = event.x;
                 puppet.position.y = event.y;
                 editor.signals.sceneGraphChanged.dispatch();
-            }
+            // }
         }
     });
 
@@ -278,14 +281,29 @@
     editor.particle_engine_proton = new Proton();
     editor.particle_engine_proton.addRender(new Proton.MeshRender(editor.scene));
 
+    let clock = new THREE.Clock();
+    clock.start();
+
     // animation loop
     function _Animate() {
+        // control fps
         setTimeout( function() {
             editor.side_view_renderer.setAnimationLoop(_Animate); // for VR rendering
             // requestAnimationFrame(animate);
         }, 1000 / 50 ); // time interval 20 ms
 
-        editor.updateRunningEmotionCMDState();
+        // update global state
+        let num = editor.particle_engine_proton.getCount();
+        if( num===0 ) {
+            editor.GlobalRunningEmotionCMDState.has_particle_node = false;
+        }
+
+        console.log(clock.getElapsedTime());
+        if(clock.getElapsedTime()>1){
+            editor.UpdateRunningEmotionCMDState();
+            clock.start();
+        }
+
         // TWEEN.update();
 
         editor.particle_engine_proton.update();

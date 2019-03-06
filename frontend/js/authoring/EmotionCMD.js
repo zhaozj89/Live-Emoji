@@ -1,14 +1,5 @@
 "use strict";
 
-function _GenerateUUID()
-{
-	return uuidv5('http://example.com/hello', uuidv5.URL); // -> v5 UUID
-}
-
-function _ComputeMatchScore() {
-	return 0;
-}
-
 class EmotionCMD {
 	constructor(config){
 		this.name = null;
@@ -36,6 +27,20 @@ class EmotionCMD {
 		return this.name;
 	}
 
+	setNote(note){
+		this.note = note;
+	}
+	getNote(){
+		return this.note;
+	}
+
+	setUUID(uuid){
+		this.uuid = uuid;
+	}
+	getUUID(){
+		return this.uuid;
+	}
+
 	setMatchScore(score){
 		this.match_score = score;
 	}
@@ -45,15 +50,19 @@ class EmotionCMD {
 
 	toJSON(){
 		return {
+			uuid: this.uuid,
 			name: this.name,
 			match_score: this.match_score,
+			note: this.note,
 			graph: this.graph.serialize()
 		}
 	}
 
 	fromJSON(state){
+		this.uuid = state.uuid;
 		this.name = state.name;
 		this.match_score = state.match_score;
+		this.note = state.note;
 		this.graph.configure(state.graph);
 	}
 }
@@ -82,11 +91,8 @@ class EmotionCMDManager {
 		}
 	}
 
-	save (cmd) {
-		// _ComputeMatchScore();
-		let uuid = _GenerateUUID();
+	save (uuid, cmd) {
 		this.all_emotion_cmds[uuid] = cmd;
-		return {match_score: 0, uuid: uuid, name: ""};
 	}
 
 	toJSON () {

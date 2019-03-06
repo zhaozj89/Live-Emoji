@@ -35,65 +35,65 @@ var SidebarLeft = function (editor) {
     container.add(titleMode);
 
     // choose mode
-    let modeButtons = new UI.Div();
-    modeButtons.setMargin('5px');
-    modeButtons.addClass('btn-group');
-    modeButtons.addClass('btn-group-toggle');
-    modeButtons.dom.setAttribute('data-toggle', 'buttons');
-    container.add(modeButtons);
-
-    let liveLabel = new UI.Label();
-    liveLabel.addClass('btn');
-    liveLabel.addClass('btn-secondary');
-    liveLabel.setWidth('140px');
-    modeButtons.add(liveLabel);
-    liveLabel.dom.innerHTML = 'Live';
-
-    let liveInput = new UI.Input('');
-    liveInput.dom.setAttribute('type', 'radio');
-    liveInput.dom.setAttribute('name', 'options');
-    liveInput.dom.setAttribute('autocomplete', 'off');
-    liveLabel.add(liveInput);
-
-    let editLabel = new UI.Label();
-    editLabel.addClass('btn');
-    editLabel.addClass('btn-secondary');
-    editLabel.setWidth('150px');
-    modeButtons.add(editLabel);
-    editLabel.dom.innerHTML = 'Edit';
-
-    let editInput = new UI.Input('');
-    editInput.dom.setAttribute('type', 'radio');
-    editInput.dom.setAttribute('name', 'options');
-    editInput.dom.setAttribute('autocomplete', 'off');
-    editLabel.add(editInput);
-
-    liveLabel.dom.onclick = function () {
-        liveLabel.addClass('active');
-        editLabel.removeClass('active');
-
-        liveLabel.setOpacity('1');
-        editLabel.setOpacity('0.2');
-
-        editor.emotionCMDManager.start();
-    }
-
-    editLabel.dom.onclick = function () {
-        liveLabel.removeClass('active');
-        editLabel.addClass('active');
-
-        liveLabel.setOpacity('0.2');
-        editLabel.setOpacity('1');
-
-        editor.emotionCMDManager.stop();
-        if (editor.emotionCMDManager.current_emotion_cmd != null)
-            editor.emotionCMDManager.current_emotion_cmd.start();
-    }
-
-    liveLabel.setOpacity('0.2');
-    editLabel.setOpacity('0.2');
-
-    $(editLabel.dom).click();
+    // let modeButtons = new UI.Div();
+    // modeButtons.setMargin('5px');
+    // modeButtons.addClass('btn-group');
+    // modeButtons.addClass('btn-group-toggle');
+    // modeButtons.dom.setAttribute('data-toggle', 'buttons');
+    // container.add(modeButtons);
+    //
+    // let liveLabel = new UI.Label();
+    // liveLabel.addClass('btn');
+    // liveLabel.addClass('btn-secondary');
+    // liveLabel.setWidth('140px');
+    // modeButtons.add(liveLabel);
+    // liveLabel.dom.innerHTML = 'Live';
+    //
+    // let liveInput = new UI.Input('');
+    // liveInput.dom.setAttribute('type', 'radio');
+    // liveInput.dom.setAttribute('name', 'options');
+    // liveInput.dom.setAttribute('autocomplete', 'off');
+    // liveLabel.add(liveInput);
+    //
+    // let editLabel = new UI.Label();
+    // editLabel.addClass('btn');
+    // editLabel.addClass('btn-secondary');
+    // editLabel.setWidth('150px');
+    // modeButtons.add(editLabel);
+    // editLabel.dom.innerHTML = 'Edit';
+    //
+    // let editInput = new UI.Input('');
+    // editInput.dom.setAttribute('type', 'radio');
+    // editInput.dom.setAttribute('name', 'options');
+    // editInput.dom.setAttribute('autocomplete', 'off');
+    // editLabel.add(editInput);
+    //
+    // liveLabel.dom.onclick = function () {
+    //     liveLabel.addClass('active');
+    //     editLabel.removeClass('active');
+    //
+    //     liveLabel.setOpacity('1');
+    //     editLabel.setOpacity('0.2');
+    //
+    //     editor.emotionCMDManager.start();
+    // }
+    //
+    // editLabel.dom.onclick = function () {
+    //     liveLabel.removeClass('active');
+    //     editLabel.addClass('active');
+    //
+    //     liveLabel.setOpacity('0.2');
+    //     editLabel.setOpacity('1');
+    //
+    //     editor.emotionCMDManager.stop();
+    //     if (editor.emotionCMDManager.current_emotion_cmd != null)
+    //         editor.emotionCMDManager.current_emotion_cmd.start();
+    // }
+    //
+    // liveLabel.setOpacity('0.2');
+    // editLabel.setOpacity('0.2');
+    //
+    // $(editLabel.dom).click();
 
     // choose boy or girl
 
@@ -182,7 +182,7 @@ var SidebarLeft = function (editor) {
 
     //
 
-    let titleEmotionCommand = new UI.Text('Authoring');
+    let titleEmotionCommand = new UI.Text('Stories');
     titleEmotionCommand.addClass('h4');
     titleEmotionCommand.setTextAlign('center');
     titleEmotionCommand.setColor('whitesmoke');

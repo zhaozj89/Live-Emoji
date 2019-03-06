@@ -1,10 +1,10 @@
-Menubar.Tool = function (editor) {
+Menubar.Edit = function (editor) {
     let container = new UI.Panel();
     container.setClass('menu');
 
     let title = new UI.Panel();
     title.setClass('title');
-    title.setTextContent('Tool');
+    title.setTextContent('Edit');
     title.addClass('h4');
     container.add(title);
 
@@ -22,26 +22,15 @@ Menubar.Tool = function (editor) {
     });
     options.add(option);
 
+    //
     var option = new UI.Row();
     option.setClass('option');
-    option.setTextContent('Download Arousal');
+    option.setTextContent('Reset');
     option.onClick(function () {
-
-        let rows = editor.allArousals;
-        let csvContent = "data:text/csv;charset=utf-8,";
-        rows.forEach(function (rowArray) {
-            // let row = rowArray.join( "," );
-            csvContent += rowArray + "\r\n";
-        });
-
-        let encodedUri = encodeURI(csvContent);
-        let link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "my_data.csv");
-        document.body.appendChild(link);
-
-        link.click();
-
+        if (editor.selected !== null) {
+            editor.selected.position.x = 0;
+            editor.selected.position.y = 0;
+        }
     });
     options.add(option);
 

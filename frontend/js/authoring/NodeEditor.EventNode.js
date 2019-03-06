@@ -11,6 +11,9 @@ function KeyboardNode1()
 
 KeyboardNode1.prototype.onExecute = function()
 {
+	// console.log('in node:');
+	// console.log(this.properties.key);
+	// console.log('+++++++++++++++++');
 	let that = this;
 	if(this.properties.key!=null && editor.emotionCMDManager.current_key==this.properties.key){
 		this.setOutputData(0, LiteGraph.EVENT);

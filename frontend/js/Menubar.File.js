@@ -1,11 +1,11 @@
-Menubar.Asset = function (editor) {
+Menubar.File = function (editor) {
 
     let container = new UI.Panel();
     container.setClass('menu');
 
     let title = new UI.Panel();
     title.setClass('title');
-    title.setTextContent('Asset');
+    title.setTextContent('File');
     title.addClass('h4');
     container.add(title);
 
@@ -37,42 +37,54 @@ Menubar.Asset = function (editor) {
 
     var option = new UI.Row();
     option.setClass('option');
-    option.setTextContent('Reset');
-    option.onClick(function () {
-        if (editor.selected !== null) {
-            editor.selected.position.x = 0;
-            editor.selected.position.y = 0;
-        }
-    });
-    options.add(option);
-
-    // Background
-
+    option.setTextContent('Import Story');
     let form = document.createElement('form');
     form.style.display = 'none';
     document.body.appendChild(form);
-
-    let fileInput = document.createElement('input');
+    var fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.addEventListener('change', function (event) {
 
-        editor.loader.loadFile(fileInput.files[0]);
+        let file = fileInput.files[0];
+
+        let reader = new FileReader();
+
+        reader.addEventListener('load', function (event) {
+            let jsonFile = JSON.parse( event.target.result );
+            ParseTextToEditorAllEmotionCMDs(jsonFile);
+            editor.emotionCMDManager.stop();
+            if(editor.current_emotion_cmd!=null)editor.current_emotion_cmd.start();
+        });
+        reader.readAsText(file);
         form.reset();
 
     });
     form.appendChild(fileInput);
-
-    //
-
-    var option = new UI.Row();
-    option.setClass('option');
-    option.setTextContent('Background');
     option.onClick(function () {
-
         fileInput.click();
-
     });
     options.add(option);
+
+
+    //
+    var option = new UI.Row();
+    option.setClass('option');
+    option.setTextContent('Export Story');
+    option.onClick(function () {
+        let text_file = JSON.stringify(editor.emotionCMDManager);
+
+        function download(text, name, type) {
+            let a = document.createElement("a");
+            let file = new Blob([text], {type: type});
+            a.href = URL.createObjectURL(file);
+            a.download = name;
+            a.click();
+        }
+
+        download(text_file, 'test.json', 'text/plain');
+    });
+    options.add(option);
+
 
     return container;
 

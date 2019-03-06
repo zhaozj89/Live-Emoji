@@ -1,84 +1,80 @@
 var FaceView = function (editor) {
-    var signals = editor.signals;
+    let signals = editor.signals;
 
-    var cameraView = new UI.Panel();
+    let camera_view = new UI.Panel();
+    
+    let overlayed_panel = new UI.Panel();
+    overlayed_panel.setWidth('200px');
+    overlayed_panel.setHeight('150px');
 
-    let overlayedPanel = new UI.Panel();
-    overlayedPanel.setWidth('200px');
-    overlayedPanel.setHeight('150px');
-
-    cameraView.add(overlayedPanel);
+    camera_view.add(overlayed_panel);
 
     // camera
 
-    let videoStream = new UI.Video();
-    videoStream.setPosition('absolute');
-    videoStream.setId('selfVideo');
-    videoStream.dom.width = 200;
-    videoStream.dom.height = 150;
-    videoStream.setPreload('auto');
-    videoStream.setLoop(true);
-    videoStream.setPlaysinline(true);
-    videoStream.setAutoplay(true);
-    videoStream.dom.muted = 'muted';
-    let videoStreamWidth = videoStream.dom.width;
-    let videoStreamHeight = videoStream.dom.height;
-    overlayedPanel.add(videoStream);
+    let video_stream = new UI.Video();
+    video_stream.setPosition('absolute');
+    video_stream.setId('selfVideo');
+    video_stream.dom.width = 200;
+    video_stream.dom.height = 150;
+    video_stream.setPreload('auto');
+    video_stream.setLoop(true);
+    video_stream.setPlaysinline(true);
+    video_stream.setAutoplay(true);
+    video_stream.dom.muted = 'muted';
+    let video_streamWidth = video_stream.dom.width;
+    let video_streamHeight = video_stream.dom.height;
+    overlayed_panel.add(video_stream);
 
-    let videoStreamOverlay = new UI.Canvas();
-    videoStreamOverlay.setPosition('absolute');
-    videoStreamOverlay.setId('videoStreamOverlay');
-    videoStreamOverlay.dom.width = 200;
-    videoStreamOverlay.dom.height = 150;
-    overlayedPanel.add(videoStreamOverlay);
+    // drawing layer
+    
+    let video_stream_overlay = new UI.Canvas();
+    video_stream_overlay.setPosition('absolute');
+    video_stream_overlay.setId('video_stream_overlay');
+    video_stream_overlay.dom.width = 200;
+    video_stream_overlay.dom.height = 150;
+    overlayed_panel.add(video_stream_overlay);
 
-    let startButton = new UI.Button('Start');
-    // startButton.setValue( 'wait, loading video' );
-    startButton.setId('startButton');
-    startButton.setType('button');
-    startButton.setWidth('100%');
-    startButton.dom.style.borderRadius = '5px';
-    // startButton.setDisabled( 'disabled' );
+    // start button
+    
+    let start_button = new UI.Button('Start');
+    start_button.setId('start_button');
+    start_button.setType('button');
+    start_button.setWidth('100%');
+    start_button.dom.style.borderRadius = '5px';
 
-    $(startButton.dom).click(function () {
+    $(start_button.dom).click(function () {
         TurnONOFFFaceTracking();
     });
 
-    cameraView.add(startButton);
-
-
+    camera_view.add(start_button);
+    
     // video stream stuff
-    let videoStreamOverlayContext = videoStreamOverlay.getContext('2d');
-
-
+    let video_stream_overlay_context = video_stream_overlay.getContext('2d');
+    
     // face recognition stuff
     //define canvas for image processing
-    let captureCanvas = document.createElement('canvas');		// internal canvas for capturing full images from video stream
-    captureCanvas.width = 200;  //should be the same as videoStream.dom.width in Camera.js
-    captureCanvas.height = 150; //should be the same as videoStream.dom.height in Camera.js
-    let captureContext = captureCanvas.getContext('2d');
+    let capture_canvas = document.createElement('canvas');
+    capture_canvas.width = 200; 
+    capture_canvas.height = 150;
+    let capture_context = capture_canvas.getContext('2d');
 
-    let FaceCanvas = document.createElement('canvas');
-    FaceCanvas.width = 48;
-    FaceCanvas.height = 48;
-    let FaceContext = FaceCanvas.getContext('2d');
+    let face_canvas = document.createElement('canvas');
+    face_canvas.width = 48;
+    face_canvas.height = 48;
+    let FaceContext = face_canvas.getContext('2d');
 
-    let LeftEyeCanvas = document.createElement('canvas');
-    LeftEyeCanvas.width = 24;
-    LeftEyeCanvas.height = 24;
-    let LeftEyeContext = LeftEyeCanvas.getContext('2d');
+    let left_eye_canvas = document.createElement('canvas');
+    left_eye_canvas.width = 24;
+    left_eye_canvas.height = 24;
+    let left_eye_context = left_eye_canvas.getContext('2d');
 
-    let RightEyeCanvas = document.createElement('canvas');
-    RightEyeCanvas.width = 24;
-    RightEyeCanvas.height = 24;
-    let RightEyeContext = RightEyeCanvas.getContext('2d');
+    let right_eye_canvas = document.createElement('canvas');
+    right_eye_canvas.width = 24;
+    right_eye_canvas.height = 24;
+    let right_eye_context = right_eye_canvas.getContext('2d');
 
-    let faceLandmarkPosition = null;
-
-
-    //
-
-    let faceTrackingStarted = false;
+    let face_landmark_position = null;
+    let face_tracking_started = false;
 
     // Initialization
     {
@@ -86,34 +82,32 @@ var FaceView = function (editor) {
         window.URL = window.URL || window.webkitURL || window.msURL || window.mozURL;
 
         function GetUserMediaSuccess(stream) {
-            if ("srcObject" in videoStream.dom) {
-                videoStream.dom.srcObject = stream;
+            if ("srcObject" in video_stream.dom) {
+                video_stream.dom.srcObject = stream;
             } else {
-                videoStream.dom.src = (window.URL && window.URL.createObjectURL(stream));
+                video_stream.dom.src = (window.URL && window.URL.createObjectURL(stream));
             }
 
             function adjustVideoProportions() {
-                let proportion = videoStream.dom.videoWidth / videoStream.dom.videoHeight;
-                videoStreamWidth = Math.round(videoStreamHeight * proportion);
-                videoStream.dom.width = videoStreamWidth;
-                videoStreamOverlay.dom.width = videoStreamWidth;
-
-                captureCanvas.width = videoStreamWidth;
-
-                overlayedPanel.setWidth(videoStreamWidth + 'px');
+                let proportion = video_stream.dom.videoWidth / video_stream.dom.videoHeight;
+                video_streamWidth = Math.round(video_streamHeight * proportion);
+                video_stream.dom.width = video_streamWidth;
+                video_stream_overlay.dom.width = video_streamWidth;
+                capture_canvas.width = video_streamWidth;
+                overlayed_panel.setWidth(video_streamWidth + 'px');
             }
 
-            videoStream.dom.onloadedmetadata = function () {
+            video_stream.dom.onloadedmetadata = function () {
                 adjustVideoProportions();
-                videoStream.dom.play();
+                video_stream.dom.play();
             }
 
-            videoStream.dom.onresize = function () {
+            video_stream.dom.onresize = function () {
                 adjustVideoProportions();
-                if (faceTrackingStarted) {
+                if (face_tracking_started) {
                     ctrack.stop();
                     ctrack.reset();
-                    ctrack.start(videoStream.dom);
+                    ctrack.start(video_stream.dom);
                 }
             }
         }
@@ -129,51 +123,28 @@ var FaceView = function (editor) {
             alert("Your browser does not seem to support getUserMedia, using a fallback video instead.");
         }
 
-        videoStream.dom.addEventListener('canplay', function () {
-            startButton.dom.value = "Start";
-            startButton.dom.disabled = null;
+        video_stream.dom.addEventListener('canplay', function () {
+            start_button.dom.value = "Start";
+            start_button.dom.disabled = null;
         }, false);
-        //
-        // // Provides requestAnimationFrame in a cross browser way
-        // window.requestAnimFrame = (function () {
-        //     return window.requestAnimationFrame ||
-        //         window.webkitRequestAnimationFrame ||
-        //         window.mozRequestAnimationFrame ||
-        //         window.oRequestAnimationFrame ||
-        //         window.msRequestAnimationFrame ||
-        //         function (/* function FrameRequestCallback */ callback, /* DOMElement Element */ element) {
-        //             return window.setTimeout(callback, 1000 / 60);
-        //         };
-        // })();
-
-        // // Provides cancelRequestAnimationFrame in a cross browser way
-        // window.cancelRequestAnimFrame = (function () {
-        //     return window.cancelAnimationFrame ||
-        //         window.webkitCancelRequestAnimationFrame ||
-        //         window.mozCancelRequestAnimationFrame ||
-        //         window.oCancelRequestAnimationFrame ||
-        //         window.msCancelRequestAnimationFrame ||
-        //         window.clearTimeout;
-        // })();
     }
-
-
+    
     // setup model
     let ctrack = new clm.tracker({useWebGL: true});
     ctrack.init();
 
-    let resVals = [];
-    let bufSize = 20;
+    let LPFResultValues = [];
+    let LPFBufferSize = 20;
 
     function lpf(nextValue, smoothing) {
-        if (resVals.length < bufSize) {
-            resVals.push(nextValue);
+        if (LPFResultValues.length < LPFBufferSize) {
+            LPFResultValues.push(nextValue);
             return null;
         } else {
-            let initial = resVals.shift();
-            resVals.push(nextValue);
+            let initial = LPFResultValues.shift();
+            LPFResultValues.push(nextValue);
 
-            return resVals.reduce(function (last, current) {
+            return LPFResultValues.reduce(function (last, current) {
                 let res = {x: 0, y: 0};
                 res.x = smoothing * current.x + (1 - smoothing) * last.x;
                 res.y = smoothing * current.y + (1 - smoothing) * last.y;
@@ -182,20 +153,17 @@ var FaceView = function (editor) {
         }
     }
 
-    let requestId = undefined;
+    let request_id = undefined;
 
     let FaceTracker = new ParticleFilter();
-    FaceTracker.init(videoStreamWidth, videoStreamHeight, 500, 1);
+    FaceTracker.init(video_streamWidth, video_streamHeight, 500, 1);
 
     let pred = null;
     let measurement = null;
     let corr = null;
 
-    let fpsInterval, now, then, elapsed;
-
-
     function MainLoop() {
-        requestId = undefined;
+        request_id = undefined;
 
         // predict
         pred = FaceTracker.predict();
@@ -217,8 +185,8 @@ var FaceView = function (editor) {
             if (lpfCorr !== null) {
                 let res = {x: 0, y: 0};
 
-                res.x = lpfCorr.x / videoStreamWidth - 0.5;
-                res.y = lpfCorr.y / videoStreamHeight - 0.5;
+                res.x = lpfCorr.x / video_streamWidth - 0.5;
+                res.y = lpfCorr.y / video_streamHeight - 0.5;
 
                 res.x *= 10;
                 res.y *= 10;
@@ -229,46 +197,41 @@ var FaceView = function (editor) {
 
         DrawLandmark();
 
-        if (editor.runningEmotionCMDState.running === false)
+        if (editor.GlobalRunningEmotionCMDState.running === false)
             GetFaceEmotion();
 
         StartMainLoop();
     }
 
     function StartMainLoop() {
-        if (!requestId) {
-            requestId = requestAnimationFrame(MainLoop);
+        if (!request_id) {
+            request_id = requestAnimationFrame(MainLoop);
         }
     }
 
     function StopMainLoop() {
-        if (requestId) {
-            cancelAnimationFrame(requestId);
-            requestId = undefined;
+        if (request_id) {
+            cancelAnimationFrame(request_id);
+            request_id = undefined;
         }
     }
 
     function TurnONOFFFaceTracking() {
+        if (start_button.dom.textContent === 'Start') {
+            start_button.dom.textContent = 'Stop';
 
-        if (startButton.dom.textContent === 'Start') {
-            startButton.dom.textContent = 'Stop';
-
-            videoStream.dom.play();
-            ctrack.start(videoStream.dom);
-            faceTrackingStarted = true;
-
-            let fps = 10;
-            fpsInterval = 1000 / fps;
-            then = Date.now();
+            video_stream.dom.play();
+            ctrack.start(video_stream.dom);
+            face_tracking_started = true;
 
             StartMainLoop();
         } else {
-            startButton.dom.textContent = 'Start';
+            start_button.dom.textContent = 'Start';
 
-            ctrack.stop(videoStream.dom);
-            faceTrackingStarted = false;
+            ctrack.stop(video_stream.dom);
+            face_tracking_started = false;
 
-            videoStreamOverlayContext.clearRect(0, 0, videoStreamWidth, videoStreamHeight);
+            video_stream_overlay_context.clearRect(0, 0, video_streamWidth, video_streamHeight);
 
             StopMainLoop();
         }
@@ -293,18 +256,18 @@ var FaceView = function (editor) {
     });
 
     function GetFaceEmotion() { // kerasjs
-        if (faceLandmarkPosition !== null) {
-            let positions = faceLandmarkPosition;
+        if (face_landmark_position !== null) {
+            let positions = face_landmark_position;
 
-            // // open mouth detection
-            // let mousedist = positions[ 57 ][ 1 ] - positions[ 60 ][ 1 ];
-            // let mouthwidth = positions[ 50 ][ 0 ] - positions[ 44 ][ 0 ];
-            // if ( mousedist > mouthwidth * 0.18 ) {
-            // 	signals.followMouth.dispatch( 'open' );
-            // }
-            // else {
-            // 	signals.followMouth.dispatch( 'close' );
-            // }
+            // open mouth detection
+            let mousedist = positions[ 57 ][ 1 ] - positions[ 60 ][ 1 ];
+            let mouthwidth = positions[ 50 ][ 0 ] - positions[ 44 ][ 0 ];
+            if ( mousedist > mouthwidth * 0.18 ) {
+            	signals.followMouth.dispatch( 'open' );
+            }
+            else {
+            	signals.followMouth.dispatch( 'close' );
+            }
 
             //Blink & Emotion detection
             eyeRectRight.x = positions[23][0] - 5;
@@ -324,20 +287,20 @@ var FaceView = function (editor) {
 
             let width = 24;
             let height = 24;
-            captureContext.drawImage(videoStream.dom, 0, 0, videoStreamWidth, videoStreamHeight);
+            capture_context.drawImage(video_stream.dom, 0, 0, video_streamWidth, video_streamHeight);
 
-            LeftEyeContext.drawImage(captureCanvas, eyeRectLeft.x, eyeRectLeft.y, eyeRectLeft.w, eyeRectLeft.h, 0, 0, LeftEyeCanvas.width, LeftEyeCanvas.height);
-            let LeftImageData = LeftEyeContext.getImageData(0, 0, LeftEyeCanvas.width, LeftEyeCanvas.height);
+            left_eye_context.drawImage(capture_canvas, eyeRectLeft.x, eyeRectLeft.y, eyeRectLeft.w, eyeRectLeft.h, 0, 0, left_eye_canvas.width, left_eye_canvas.height);
+            let LeftImageData = left_eye_context.getImageData(0, 0, left_eye_canvas.width, left_eye_canvas.height);
             let LeftImageGray = grayscale(LeftImageData, 0.5);
             let LeftEyedata = LeftImageGray.data;
 
-            RightEyeContext.drawImage(captureCanvas, eyeRectRight.x, eyeRectRight.y, eyeRectRight.w, eyeRectRight.h, 0, 0, RightEyeCanvas.width, RightEyeCanvas.height);
-            let RightImageData = RightEyeContext.getImageData(0, 0, RightEyeCanvas.width, RightEyeCanvas.height);
+            right_eye_context.drawImage(capture_canvas, eyeRectRight.x, eyeRectRight.y, eyeRectRight.w, eyeRectRight.h, 0, 0, right_eye_canvas.width, right_eye_canvas.height);
+            let RightImageData = right_eye_context.getImageData(0, 0, right_eye_canvas.width, right_eye_canvas.height);
             let RightImageGray = grayscale(RightImageData, 0.5);
             let RightEyedata = RightImageGray.data;
 
-            FaceContext.drawImage(captureCanvas, FaceRect.x, FaceRect.y, FaceRect.w, FaceRect.h, 0, 0, FaceCanvas.width, FaceCanvas.height);
-            let FaceImageData = FaceContext.getImageData(0, 0, FaceCanvas.width, FaceCanvas.height);
+            FaceContext.drawImage(capture_canvas, FaceRect.x, FaceRect.y, FaceRect.w, FaceRect.h, 0, 0, face_canvas.width, face_canvas.height);
+            let FaceImageData = FaceContext.getImageData(0, 0, face_canvas.width, face_canvas.height);
             let FaceImageGray = grayscale(FaceImageData, 0.1); //, 0.2 );
             let Facedata = FaceImageGray.data;
 
@@ -388,8 +351,8 @@ var FaceView = function (editor) {
             })
 
             emotionmodel.ready().then(() => {
-                let dataTensor = ndarray(new Float32Array(Facedata), [FaceCanvas.width, FaceCanvas.height, 4]);
-                let dataProcessedTensor = ndarray(new Float32Array(FaceCanvas.width * FaceCanvas.height * 1), [FaceCanvas.width, FaceCanvas.height, 1]);
+                let dataTensor = ndarray(new Float32Array(Facedata), [face_canvas.width, face_canvas.height, 4]);
+                let dataProcessedTensor = ndarray(new Float32Array(face_canvas.width * face_canvas.height * 1), [face_canvas.width, face_canvas.height, 1]);
 
                 ops.divseq(dataTensor, 255)
                 ops.subseq(dataTensor, 0.5)
@@ -399,7 +362,7 @@ var FaceView = function (editor) {
                 let inputData = {"input": preprocessedData}
                 return emotionmodel.predict(inputData)
             }).then(outputData => {
-                let valence_level = {
+                let seven_emotions = {
                     'angry': outputData.output[0],
                     'disgusted': outputData.output[1],
                     'fearful': outputData.output[2],
@@ -409,7 +372,7 @@ var FaceView = function (editor) {
                     'neutral': outputData.output[6]
                 };
 
-                signals.updateRecommendation.dispatch(valence_level);
+                signals.updateCurrentDetectedEmotionIntensity.dispatch(seven_emotions);
             }).catch(err => {
                 console.log(err)
             });
@@ -420,7 +383,7 @@ var FaceView = function (editor) {
         let positions = ctrack.getCurrentPosition();
 
         if (positions) {
-            faceLandmarkPosition = positions;
+            face_landmark_position = positions;
 
             let resX = 0;
             let resY = 0;
@@ -441,28 +404,27 @@ var FaceView = function (editor) {
     }
 
     function DrawLandmark() {
-        videoStreamOverlayContext.clearRect(0, 0, videoStreamWidth, videoStreamHeight);
+        video_stream_overlay_context.clearRect(0, 0, video_streamWidth, video_streamHeight);
 
         if (pred !== null) {
-            videoStreamOverlayContext.strokeStyle = '#FF0000';
-            videoStreamOverlayContext.strokeRect(pred.x - 5, pred.y - 5, 10, 10);
+            video_stream_overlay_context.strokeStyle = '#FF0000';
+            video_stream_overlay_context.strokeRect(pred.x - 5, pred.y - 5, 10, 10);
         }
 
         if (measurement != null) {
-            videoStreamOverlayContext.strokeStyle = '#ff6dcb';
-            videoStreamOverlayContext.strokeRect(measurement.x - 5, measurement.y - 5, 10, 10);
+            video_stream_overlay_context.strokeStyle = '#ff6dcb';
+            video_stream_overlay_context.strokeRect(measurement.x - 5, measurement.y - 5, 10, 10);
         }
 
         if (corr !== null) {
-            videoStreamOverlayContext.strokeStyle = '#0004ff';
-            videoStreamOverlayContext.strokeRect(corr.x - 5, corr.y - 5, 10, 10);
+            video_stream_overlay_context.strokeStyle = '#0004ff';
+            video_stream_overlay_context.strokeRect(corr.x - 5, corr.y - 5, 10, 10);
         }
 
         if (ctrack.getCurrentPosition()) {
-            ctrack.draw(videoStreamOverlay.dom);
+            ctrack.draw(video_stream_overlay.dom);
         }
     }
 
-
-    return cameraView;
+    return camera_view;
 }

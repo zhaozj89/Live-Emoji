@@ -15,6 +15,8 @@ FountainNode.prototype.onExecute = function()
 		let emitter = CreateEmitter({p:{x: 0,y: 0}, Body: CreateMesh("sphere")});
 		editor.particle_engine_proton.addEmitter(emitter);
 		emitter.emit('once');
+		editor.GlobalRunningEmotionCMDState.has_particle_node = true;
+		editor.UpdateRunningEmotionCMDState();
 	}
 }
 

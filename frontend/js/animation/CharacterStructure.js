@@ -84,7 +84,7 @@ CharacterStructure.prototype.check = function () {
 			this.editor.girlLoaded = true;
 			this.editor.girlLabel.dom.click();
 		}
-		this.editor.signals.add2Scene.dispatch( this );
+		this.editor.signals.CharacterAddedToScene.dispatch( this );
 	}
 };
 

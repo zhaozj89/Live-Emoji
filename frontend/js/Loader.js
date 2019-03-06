@@ -642,7 +642,7 @@ var PreLoadCharacterJSON = function (editor, boy_or_gril) {
         editor.girl = characterStructure;
     }
 
-    editor.signals.add2Scene.add(function (obj) {
+    editor.signals.CharacterAddedToScene.add(function (obj) {
         editor.selected = obj;
         editor.execute(new AddObjectCommand(obj));
     });

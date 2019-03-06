@@ -1,15 +1,7 @@
 "use strict";
 
-function _RenewAGraph(){
-    $('#editor_canvas').remove();
-    CreateNECanvas(editor);
-    ResizeNECanvas(editor);
-
-    if(editor.emotionCMDManager.current_emotion_cmd!=null)
-        editor.emotionCMDManager.current_emotion_cmd.stop();
-    editor.emotionCMDManager.current_emotion_cmd = new EmotionCMD();
-    editor.emotionCMDManager.emotion_canvas = new LGraphCanvas("#editor_canvas", editor.emotionCMDManager.current_emotion_cmd.getGraph());
-    editor.emotionCMDManager.current_emotion_cmd.start();
+function _ComputeEmotionCMDMatchScore() {
+    return 0;
 }
 
 var NodeEditor = function (editor) {
@@ -48,8 +40,7 @@ var NodeEditor = function (editor) {
     close.setCursor('pointer');
     close.onClick(function () {
         if (confirm('Save the emotion command?')) {
-            let info = editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);
-            editor.signals.saveEmotionCMD.dispatch( info );
+            SaveAEmotionCMD(editor.emotionCMDManager.current_emotion_cmd);
         }
         container.setDisplay('none');
     });
@@ -63,14 +54,14 @@ var NodeEditor = function (editor) {
     let menu = new UI.UList();
     menu.setBackgroundColor('rgba(50, 50, 50, 0.8)');
     menu.dom.style.borderRadius = '10px';
-    menu.setWidth('965px');
+    menu.setWidth('900px');
     menu.setId('menu');
     menu.addClass('nav');
     menu.addClass('nav-pills');
 
     menu.setPosition('absolute');
     menu.setTop('0px');
-    menu.setLeft('5px');
+    menu.setLeft('80px');
     container.add(menu);
 
     let Event = menu.addLi('Trigger', 'nav-item dropdown', 'nav-link dropdown-toggle');
@@ -121,12 +112,6 @@ var NodeEditor = function (editor) {
     Scene.style.margin = '12px';
     Scene.style.fontSize = '14px';
 
-    let File = menu.addLi('File', 'nav-item dropdown', 'nav-link dropdown-toggle');
-    File.firstChild.setAttribute('data-toggle', 'dropdown');
-    File.style.backgroundColor = '#0065ff';
-    File.style.margin = '12px';
-    File.style.fontSize = '14px';
-
     let menuEvent = new UI.UList();
     menuEvent.addClass('dropdown-menu');
     let buttonKeyboard1 = menuEvent.addLi('a-z');
@@ -160,20 +145,6 @@ var NodeEditor = function (editor) {
     let buttonBackground = menuScene.addLi( 'Background' );
     buttonBackground.classList.add( 'dropdown-item' );
     Scene.appendChild(menuScene.dom);
-
-    let menuFile = new UI.UList();
-    menuFile.addClass('dropdown-menu');
-    let cmdNew = menuFile.addLi('New');
-    cmdNew.classList.add('dropdown-item');
-    let cmdSave = menuFile.addLi('Save');
-    cmdSave.classList.add('dropdown-item');
-    let cmdClean = menuFile.addLi('Clean');
-    cmdClean.classList.add('dropdown-item');
-    let cmdImport = menuFile.addLi('Import');
-    cmdImport.classList.add('dropdown-item');
-    let cmdExport = menuFile.addLi('Export');
-    cmdExport.classList.add('dropdown-item');
-    File.appendChild(menuFile.dom);
 
     $(function () {
         ResizeNECanvas(editor);
@@ -227,73 +198,6 @@ var NodeEditor = function (editor) {
             let node = LiteGraph.createNode("node_editor/background");
             node.pos = [200, 200];
             editor.emotionCMDManager.current_emotion_cmd.add(node);
-        });
-
-        //
-        $(cmdNew).click(function () {
-            _RenewAGraph();
-        });
-
-        $(cmdSave).click(function () {
-            let info = editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);
-            editor.signals.saveEmotionCMD.dispatch( info );
-        });
-
-        $(cmdClean).click(function () {
-            _RenewAGraph();
-        });
-
-        let form = document.createElement('form');
-        form.style.display = 'none';
-        document.body.appendChild(form);
-
-        //
-
-        let fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.addEventListener('change', function (event) {
-
-            let file = fileInput.files[0];
-
-            let reader = new FileReader();
-
-            reader.addEventListener('load', function (event) {
-                let jsonFile = JSON.parse( event.target.result );
-
-                editor.emotionCMDManager.fromJSON( jsonFile );
-
-                for ( let prop in editor.emotionCMDManager.all_emotion_cmds) {
-                    let cmd = editor.emotionCMDManager.all_emotion_cmds[prop];
-                    let info = {match_score: cmd.getMatchScore(), uuid: prop, name: cmd.getName()};
-                    editor.signals.saveEmotionCMD.dispatch( info );
-                }
-                editor.emotionCMDManager.stop();
-            });
-            reader.readAsText(file);
-            form.reset();
-
-        });
-        form.appendChild(fileInput);
-
-        //
-
-        $(cmdImport).click(function () {
-            fileInput.click();
-        });
-
-        $(cmdExport).click(function () {
-            editor.emotionCMDManager.save(editor.emotionCMDManager.current_emotion_cmd);
-            let text_file = JSON.stringify(editor.emotionCMDManager);
-
-            function download(text, name, type) {
-                let a = document.createElement("a");
-                let file = new Blob([text], {type: type});
-                a.href = URL.createObjectURL(file);
-                a.download = name;
-                a.click();
-            }
-
-            download(text_file, 'test.json', 'text/plain');
         });
     });
 

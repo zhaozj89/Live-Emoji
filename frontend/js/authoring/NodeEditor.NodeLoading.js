@@ -5,14 +5,7 @@ var LoadEmotionCMDJSONFile = function ( editor, filename ) {
     xhr.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
             let jsonFile = JSON.parse( this.responseText );
-
-            editor.emotionCMDManager.fromJSON( jsonFile );
-
-            for ( let prop in editor.emotionCMDManager.all_emotion_cmds) {
-                let cmd = editor.emotionCMDManager.all_emotion_cmds[prop];
-                let info = {match_score: cmd.getMatchScore(), uuid: prop, name: cmd.getName()};
-                editor.signals.saveEmotionCMD.dispatch( info );
-            }
+            ParseTextToEditorAllEmotionCMDs(jsonFile);
             editor.emotionCMDManager.stop();
         }
     };

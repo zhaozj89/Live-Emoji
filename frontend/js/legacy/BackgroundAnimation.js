@@ -137,8 +137,8 @@ var BackgroundAnimationCanvas = function ( editor ) {
 			let num = editor.protonPixi4Renderer.proton.getCount();
 
 			if( num===1 ) {
-				editor.runningEmotionCMDState.has_particle_node = false;
-				editor.updateRunningEmotionCMDState();
+				editor.GlobalRunningEmotionCMDState.has_particle_node = false;
+				editor.UpdateRunningEmotionCMDState();
 			}
 		});
     } );
