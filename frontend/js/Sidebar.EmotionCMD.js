@@ -5,7 +5,7 @@ SidebarLeft.EmotionCMD = function (editor) {
     let container = new UI.Panel();
 
     let clients = [
-        {"Name": "Otto Clay", "Note": "test", "uuid": "32432"},
+        {"Name": "Otto Clay", "uuid": "32432"},
     ];
 
     $(container.dom).jsGrid({
@@ -22,6 +22,9 @@ SidebarLeft.EmotionCMD = function (editor) {
         onItemEditing: function (args) {
             if (editor.emotionCMDManager.all_emotion_cmds.hasOwnProperty(args.item.uuid)) {
                 let emotion_cmd = editor.emotionCMDManager.all_emotion_cmds[args.item.uuid];
+
+                let content = emotion_cmd.getNote();
+                editor.quill.setContents([{insert: content}]);
 
                 // edit graph
                 $('#editor_canvas').remove();
@@ -52,8 +55,9 @@ SidebarLeft.EmotionCMD = function (editor) {
             if (editor.emotionCMDManager.all_emotion_cmds.hasOwnProperty(args.item.uuid)) {
                 let emotion_cmd = editor.emotionCMDManager.all_emotion_cmds[args.item.uuid];
                 emotion_cmd.setName(args.item.Name);
-                emotion_cmd.setNote(args.item.Note);
                 SaveAEmotionCMD(emotion_cmd);
+
+                emotion_cmd.setNote(editor.quill.getContents()["ops"][0]["insert"]);
             }
         },
 
@@ -68,14 +72,14 @@ SidebarLeft.EmotionCMD = function (editor) {
         deleteConfirm: "Do you really want to delete the client?",
 
         fields: [
-            {name: "Name", type: "text", width: 120},
-            {name: "Note", type: "text", width: 80},
+            {name: "Name", type: "text", width: 200},
             {name: "uuid", type: "text", visible: false},
             {type: "control", modeSwitchButton: false, editButton: false,
                 headerTemplate: function() {
                     return $("<button>").text("Add").css('background', '#393939')
                         .on("click", function () {
                             RenewAGraph();
+                            SaveAEmotionCMD(editor.emotionCMDManager.current_emotion_cmd);
                         });
                 }
             }
@@ -85,7 +89,6 @@ SidebarLeft.EmotionCMD = function (editor) {
     signals.saveEmotionCMD.add(function (info) {
         $(container.dom).jsGrid("insertItem", {
             Name: info.name,
-            Note: info.note,
             uuid: info.uuid
         }).done(function () {
         });

@@ -6,10 +6,10 @@ function _ComputeEmotionCMDMatchScore() {
 
 var NodeEditor = function (editor) {
     let container = new UI.Panel();
-    container.setId('nodeEditor');
+    container.setId('NodeEditor');
     container.setPosition('absolute');
     container.setBackgroundColor('rgba(20,20,20,0.5)');
-    container.setDisplay('');
+    container.setDisplay('none');
     // container.setDisplay( 'none' );
     // container.dom.style.zIndex = "5";
 
@@ -43,6 +43,7 @@ var NodeEditor = function (editor) {
             SaveAEmotionCMD(editor.emotionCMDManager.current_emotion_cmd);
         }
         container.setDisplay('none');
+        editor.script_editor.setDisplay('');
     });
     header.add(close);
 

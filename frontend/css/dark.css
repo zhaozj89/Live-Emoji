@@ -80,12 +80,20 @@ background-color: #111;
 	bottom: 0px;
 }
 
-#nodeEditor {
+#NodeEditor {
 	position: absolute;
 	top: 40px;
 	left: 300px;
 	right: 200px;
 	bottom: 0px;
+}
+
+#ScriptEditor {
+	position: absolute;
+	top: 40px;
+	left: 300px;
+	width: 400px;
+	height: 600px;
 }
 
 #menubar {

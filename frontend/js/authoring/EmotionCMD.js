@@ -2,7 +2,8 @@
 
 class EmotionCMD {
 	constructor(config){
-		this.name = null;
+		this.name = '';
+		this.note = '';
 		this.match_score = 0;
 		config = config || null;
 		this.graph = new LGraph(config);

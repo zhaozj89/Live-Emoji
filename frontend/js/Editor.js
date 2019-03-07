@@ -1,4 +1,6 @@
 var Editor = function () {
+    this.quill = null;
+
     // global
     this.GlobalCounter = 0;
 
@@ -26,6 +28,7 @@ var Editor = function () {
     this.sidebar = null;
     this.sidebar_right = null;
     this.node_editor = null;
+    this.script_editor = null;
     this.node_editor_canvas = null;
 
     // face tracking and event mutex

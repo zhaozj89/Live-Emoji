@@ -23,7 +23,7 @@ var ParseTextToEditorAllEmotionCMDs = function(jsonFile)
 
     for ( let prop in editor.emotionCMDManager.all_emotion_cmds) {
         let cmd = editor.emotionCMDManager.all_emotion_cmds[prop];
-        let info = {note: cmd.getNote(), uuid: prop, name: cmd.getName()};
+        let info = {uuid: prop, name: cmd.getName()};
         editor.signals.saveEmotionCMD.dispatch( info );
     }
 }
@@ -36,7 +36,7 @@ var SaveAEmotionCMD = function (cmd){
             editor.GlobalCounter+=1;
             cmd.setUUID(uuid);
             editor.emotionCMDManager.save(uuid, cmd);
-            editor.signals.saveEmotionCMD.dispatch({uuid: cmd.uuid, name: cmd.name, note: cmd.note});
+            editor.signals.saveEmotionCMD.dispatch({uuid: cmd.uuid, name: cmd.name});
         }else{
             editor.emotionCMDManager.save(uuid, cmd);
         }

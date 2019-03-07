@@ -20,6 +20,13 @@
     <!--ui-->
     <script src="js/ui.js"></script>
 
+    <!--script editing-->
+    <link rel="stylesheet" type="text/css" href="js/libs/quill/quill.core.css"/>
+    <link rel="stylesheet" type="text/css" href="js/libs/quill/quill.bubble.css"/>
+    <link rel="stylesheet" type="text/css" href="js/libs/quill/quill.snow.css"/>
+    <script src="js/libs/quill/quill.min.js"></script>
+    <!--<script src="js/libs/quill/quill.core.js"></script>-->
+
     <!--jquery-->
     <script src="js/libs/jquery/jquery.min.js"></script>
     <script src="js/libs/jquery/jquery-ui.min.js"></script>
@@ -99,6 +106,9 @@
     <!--particle system-->
     <script src="js/libs/particle/three.proton.min.js"></script>
 
+    <!--script editor-->
+    <script src="js/ScriptEditor.js"></script>
+
     <!--editor-->
     <script src="js/authoring/NodeEditor.ParticleSystem.js"></script>
     <script src="js/authoring/NodeEditor.Util.js"></script>
@@ -159,6 +169,9 @@
 
     var node_editor = new NodeEditor(editor);
     document.body.appendChild(node_editor.dom);
+
+    var script_editor = new ScriptEditor(editor);
+    document.body.appendChild(script_editor.dom);
 
     var sidebar_left = new SidebarLeft(editor);
     document.body.appendChild(sidebar_left.dom);
@@ -298,7 +311,7 @@
             editor.GlobalRunningEmotionCMDState.has_particle_node = false;
         }
 
-        console.log(clock.getElapsedTime());
+        // console.log(clock.getElapsedTime());
         if(clock.getElapsedTime()>1){
             editor.UpdateRunningEmotionCMDState();
             clock.start();
