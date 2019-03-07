@@ -1,10 +1,12 @@
 var Editor = function () {
     this.quill = null;
+    this.current_emotion = null;
 
     // global
     this.GlobalCounter = 0;
 
     // node editing related
+    this.static_background_sphere = null;
     this.staic_background_material = null;
     this.particle_engine_proton = null;
 

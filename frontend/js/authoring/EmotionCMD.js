@@ -71,6 +71,7 @@ class EmotionCMD {
 class EmotionCMDManager {
 	constructor (editor) {
 		this.current_key = null;
+		this.current_mouse = null;
 
 		this.current_emotion_cmd = null;
 		this.current_emotion_canvas = null;

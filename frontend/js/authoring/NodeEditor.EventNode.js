@@ -49,7 +49,7 @@ KeyboardNode2.prototype.onExecute = function()
 		setTimeout( function () {
 			that.setOutputData(0, null);
 			editor.emotionCMDManager.current_key = null;
-		}, 20 );
+		}, 50 );
 	}
 }
 
@@ -58,6 +58,38 @@ KeyboardNode2.color = "#ff0300";
 KeyboardNode2.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/keyboard2", KeyboardNode2 );
+
+
+// A-Z
+function FaceEmotionTriggerNode()
+{
+	let that = this;
+	that.properties = {emotion: ''};
+	that.addWidget("combo","emotion", "", function(val){
+		that.properties.emotion = val;
+	}, {values:["",'angry','disgusted','fearful','happy','sad','surprised']} );
+	that.addOutput('',LiteGraph.EVENT);
+}
+
+FaceEmotionTriggerNode.prototype.onExecute = function()
+{
+
+	let that = this;
+	console.log(that.properties.emotion);
+	if(editor.current_emotion!=null && editor.current_emotion==that.properties.emotion){
+		this.setOutputData(0, LiteGraph.EVENT);
+		setTimeout( function () {
+			that.setOutputData(0, null);
+			editor.current_emotion = null;
+		}, 50 );
+	}
+}
+
+FaceEmotionTriggerNode.title = "Emotion";
+FaceEmotionTriggerNode.color = "#ff0300";
+FaceEmotionTriggerNode.shape = LiteGraph.ROUND_SHAPE;
+
+LiteGraph.registerNodeType("node_editor/emotion_trigger", FaceEmotionTriggerNode );
 
 // function CounterNode()
 // {
@@ -89,6 +121,34 @@ LiteGraph.registerNodeType("node_editor/keyboard2", KeyboardNode2 );
 //
 // LiteGraph.registerNodeType("node_editor/counter", CounterNode );
 
+
+function MouseNode()
+{
+	let that = this;
+	that.properties = {side:null};
+	that.addWidget("combo","side", "", function(val){
+		that.properties.side = val;
+	}, {values:["",'left','right']} );
+	that.addOutput('',LiteGraph.EVENT);
+}
+
+MouseNode.prototype.onExecute = function()
+{
+	let that = this;
+	if(this.properties.side!=null && editor.emotionCMDManager.current_mouse==this.properties.side){
+		this.setOutputData(0, LiteGraph.EVENT);
+		setTimeout( function () {
+			that.setOutputData(0, null);
+			editor.emotionCMDManager.current_mouse = null;
+		}, 50 );
+	}
+}
+
+MouseNode.title = "A-Z";
+MouseNode.color = "#ff0300";
+MouseNode.shape = LiteGraph.ROUND_SHAPE;
+
+LiteGraph.registerNodeType("node_editor/mouse", MouseNode );
 
 
 

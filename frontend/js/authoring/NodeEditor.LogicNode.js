@@ -9,6 +9,7 @@ function AndNode()
 AndNode.prototype.onExecute = function()
 {
 	if(this.getInputData(0, false)==LiteGraph.EVENT && this.getInputData(1, false)==LiteGraph.EVENT){
+		console.log('works');
 		this.setOutputData(0, LiteGraph.EVENT);
 	}
 	else{

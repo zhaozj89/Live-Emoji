@@ -68,15 +68,7 @@ background-color: #111;
 	position: absolute;
 	top: 40px;
 	left: 300px;
-	right: 200px;
-	bottom: 0px;
-}
-
-#sideview {
-	position: absolute;
-	top: 40px;
-	left: 300px;
-	right: 200px;
+	right: 250px;
 	bottom: 0px;
 }
 
@@ -84,7 +76,7 @@ background-color: #111;
 	position: absolute;
 	top: 40px;
 	left: 300px;
-	right: 200px;
+	right: 250px;
 	bottom: 0px;
 }
 
@@ -206,7 +198,7 @@ background-color: #111;
 	right: 0;
 	top: 40px;
 	bottom: 0;
-	width: 200px;
+	width: 250px;
 	background-color: #111;
 	overflow: auto;
 }
@@ -232,14 +224,4 @@ background-color: #111;
 	#sidebar_right .Row {
 		min-height: 20px;
 		margin-bottom: 10px;
-	}
-
-	#sidebar_right .heartView {
-		width: 180px;
-		height: 180px;
-	}
-
-	#sidebar_right .valenceView {
-		width: 200px;
-		height: 200px;
 	}

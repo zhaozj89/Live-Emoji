@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-    <link rel="stylesheet" href="css/heart.css">
     <link rel="stylesheet" href="css/jquery-ui.min.css"/>
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/dark.css"/>
@@ -15,7 +14,11 @@
     <link rel="stylesheet" type="text/css" href="css/jsgrid-theme.css"/>
 
     <!--for uuid-->
-    <script src="http://wzrd.in/standalone/uuid%2Fv5@latest"></script>
+    <!--<script src="http://wzrd.in/standalone/uuid%2Fv5@latest"></script>-->
+    <script src="js/libs/uuid.js"></script>
+
+    <!--chart-->
+    <script src="js/libs/Chart.bundle.js"></script>
 
     <!--ui-->
     <script src="js/ui.js"></script>
@@ -25,7 +28,6 @@
     <link rel="stylesheet" type="text/css" href="js/libs/quill/quill.bubble.css"/>
     <link rel="stylesheet" type="text/css" href="js/libs/quill/quill.snow.css"/>
     <script src="js/libs/quill/quill.min.js"></script>
-    <!--<script src="js/libs/quill/quill.core.js"></script>-->
 
     <!--jquery-->
     <script src="js/libs/jquery/jquery.min.js"></script>
@@ -217,6 +219,15 @@
         editor.emotionCMDManager.current_key = event.key;
         console.log(event.key);
     });
+
+    $(main_view.dom).mousedown(function (event) {
+        if(event.which==1){
+            editor.emotionCMDManager.current_mouse = 'left';
+        }
+        if(event.which==3){
+            editor.emotionCMDManager.current_mouse = 'right';
+        }
+    });
     
     // track face
     editor.signals.followFace.add(function (event) {
@@ -292,7 +303,6 @@
 
     // particle system stuff
     editor.particle_engine_proton = new Proton();
-    editor.particle_engine_proton.addRender(new Proton.MeshRender(editor.scene));
 
     let clock = new THREE.Clock();
     clock.start();
@@ -303,7 +313,7 @@
         setTimeout( function() {
             editor.side_view_renderer.setAnimationLoop(_Animate); // for VR rendering
             // requestAnimationFrame(animate);
-        }, 1000 / 50 ); // time interval 20 ms
+        }, 1000 / 20 ); // time interval 20 ms
 
         // update global state
         let num = editor.particle_engine_proton.getCount();
@@ -311,7 +321,6 @@
             editor.GlobalRunningEmotionCMDState.has_particle_node = false;
         }
 
-        // console.log(clock.getElapsedTime());
         if(clock.getElapsedTime()>1){
             editor.UpdateRunningEmotionCMDState();
             clock.start();

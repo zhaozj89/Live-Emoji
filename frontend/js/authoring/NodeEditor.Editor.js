@@ -4,12 +4,16 @@ function _ComputeEmotionCMDMatchScore() {
     return 0;
 }
 
+function _GetRandomPositionArray() {
+    return [300+Math.random()*100, 300+Math.random()*100];
+}
+
 var NodeEditor = function (editor) {
     let container = new UI.Panel();
     container.setId('NodeEditor');
     container.setPosition('absolute');
     container.setBackgroundColor('rgba(20,20,20,0.5)');
-    container.setDisplay('none');
+    container.setDisplay('');
     // container.setDisplay( 'none' );
     // container.dom.style.zIndex = "5";
 
@@ -55,7 +59,7 @@ var NodeEditor = function (editor) {
     let menu = new UI.UList();
     menu.setBackgroundColor('rgba(50, 50, 50, 0.8)');
     menu.dom.style.borderRadius = '10px';
-    menu.setWidth('900px');
+    menu.setWidth('800px');
     menu.setId('menu');
     menu.addClass('nav');
     menu.addClass('nav-pills');
@@ -76,12 +80,6 @@ var NodeEditor = function (editor) {
     Logic.style.backgroundColor = '#31baff';
     Logic.style.margin = '12px';
     Logic.style.fontSize = '14px';
-
-    let Property = menu.addLi('Property', 'nav-item dropdown', 'nav-link dropdown-toggle');
-    Property.firstChild.setAttribute('data-toggle', 'dropdown');
-    Property.style.backgroundColor = '#6770a9';
-    Property.style.margin = '12px';
-    Property.style.fontSize = '14px';
 
     let Face = menu.addLi('Face', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Face.firstChild.setAttribute('data-toggle', 'dropdown');
@@ -119,6 +117,10 @@ var NodeEditor = function (editor) {
     buttonKeyboard1.classList.add('dropdown-item');
     let buttonKeyboard2 = menuEvent.addLi('A-Z');
     buttonKeyboard2.classList.add('dropdown-item');
+    let buttonMouse = menuEvent.addLi('Mouse');
+    buttonMouse.classList.add('dropdown-item');
+    let buttonEmotion = menuEvent.addLi('Emotion');
+    buttonEmotion.classList.add('dropdown-item');
     Event.appendChild(menuEvent.dom);
 
     let menuLogic = new UI.UList();
@@ -133,18 +135,28 @@ var NodeEditor = function (editor) {
     menuFace.addClass('dropdown-menu');
     let buttonFaceEmotion = menuFace.addLi('Emotion');
     buttonFaceEmotion.classList.add('dropdown-item');
+    let buttonFacePosition = menuFace.addLi('Position');
+    buttonFacePosition.classList.add('dropdown-item');
     Face.appendChild(menuFace.dom);
 
     let menuParticle = new UI.UList();
     menuParticle.addClass('dropdown-menu');
     let buttonFountain = menuParticle.addLi( 'Fountain' );
     buttonFountain.classList.add( 'dropdown-item' );
+    let buttonIllusion = menuParticle.addLi( 'Illusion' );
+    buttonIllusion.classList.add( 'dropdown-item' );
+    let buttonFire = menuParticle.addLi( 'Fire' );
+    buttonFire.classList.add( 'dropdown-item' );
+    let buttonSnow = menuParticle.addLi( 'Snow' );
+    buttonSnow.classList.add( 'dropdown-item' );
     Particle.appendChild(menuParticle.dom);
 
     let menuScene = new UI.UList();
     menuScene.addClass('dropdown-menu');
     let buttonBackground = menuScene.addLi( 'Background' );
     buttonBackground.classList.add( 'dropdown-item' );
+    let buttonBackgroundRotation = menuScene.addLi( 'Rotation' );
+    buttonBackgroundRotation.classList.add( 'dropdown-item' );
     Scene.appendChild(menuScene.dom);
 
     $(function () {
@@ -157,13 +169,25 @@ var NodeEditor = function (editor) {
         //event
         $(buttonKeyboard1).click(function () {
             let node = LiteGraph.createNode("node_editor/keyboard1");
-            node.pos = [200, 200];
+            node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         });
 
         $(buttonKeyboard2).click(function () {
             let node = LiteGraph.createNode("node_editor/keyboard2");
-            node.pos = [200, 200];
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        });
+
+        $(buttonMouse).click(function () {
+            let node = LiteGraph.createNode("node_editor/mouse");
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        });
+
+        $(buttonEmotion).click(function () {
+            let node = LiteGraph.createNode("node_editor/emotion_trigger");
+            node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         });
 
@@ -171,12 +195,12 @@ var NodeEditor = function (editor) {
 
         $( buttonAnd ).click( function () {
             let node = LiteGraph.createNode("node_editor/and");
-            node.pos = [200, 200];
+            node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );
         $( buttonOr ).click( function () {
             let node = LiteGraph.createNode("node_editor/or");
-            node.pos = [200, 200];
+            node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );
 
@@ -184,20 +208,52 @@ var NodeEditor = function (editor) {
 
         $(buttonFaceEmotion).click(function () {
             let node = LiteGraph.createNode("node_editor/face_emotion");
-            node.pos = [200, 200];
+            node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         });
 
+        $(buttonFacePosition).click(function () {
+            let node = LiteGraph.createNode("node_editor/face_position");
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        });
+
+        // Particle
+
         $( buttonFountain ).click( function () {
             let node = LiteGraph.createNode("node_editor/fountain");
-            node.pos = [200, 200];
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        } );
+
+        $( buttonIllusion ).click( function () {
+            let node = LiteGraph.createNode("node_editor/illusion");
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        } );
+
+        $( buttonFire ).click( function () {
+            let node = LiteGraph.createNode("node_editor/fire");
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        } );
+
+        $( buttonSnow ).click( function () {
+            let node = LiteGraph.createNode("node_editor/snow");
+            node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );
 
         // scene
         $(buttonBackground).click(function () {
             let node = LiteGraph.createNode("node_editor/background");
-            node.pos = [200, 200];
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        });
+
+        $(buttonBackgroundRotation).click(function () {
+            let node = LiteGraph.createNode("node_editor/background_rotation");
+            node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         });
     });

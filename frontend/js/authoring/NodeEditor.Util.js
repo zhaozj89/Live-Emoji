@@ -1,6 +1,7 @@
 function _GenerateEmotionCMDUUID(seed)
 {
-    return uuidv5(seed, uuidv5.URL); // -> v5 UUID
+    // return uuidv5(seed, uuidv5.URL); // -> v5 UUID
+    return UUID.generate();
 }
 
 var CreateNECanvas = function (editor) {

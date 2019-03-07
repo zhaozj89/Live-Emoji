@@ -21,6 +21,8 @@ SidebarLeft.EmotionCMD = function (editor) {
 
         onItemEditing: function (args) {
             if (editor.emotionCMDManager.all_emotion_cmds.hasOwnProperty(args.item.uuid)) {
+
+
                 let emotion_cmd = editor.emotionCMDManager.all_emotion_cmds[args.item.uuid];
 
                 let content = emotion_cmd.getNote();
@@ -46,6 +48,8 @@ SidebarLeft.EmotionCMD = function (editor) {
 
                 emotion_canvas.drawFrontCanvas();
                 editor.emotionCMDManager.stop();
+                if(editor.emotionCMDManager.current_emotion_cmd!=null)
+                    editor.emotionCMDManager.current_emotion_cmd.stop();
                 editor.emotionCMDManager.current_emotion_cmd = emotion_cmd;
                 emotion_cmd.start();
             }
@@ -63,6 +67,7 @@ SidebarLeft.EmotionCMD = function (editor) {
 
         onItemDeleted: function (args) {
             if (editor.emotionCMDManager.all_emotion_cmds.hasOwnProperty(args.item.uuid)) {
+                editor.emotionCMDManager.all_emotion_cmds[args.item.uuid].stop();
                 delete editor.emotionCMDManager.all_emotion_cmds[args.item.uuid];
             }
         },

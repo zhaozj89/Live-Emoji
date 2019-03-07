@@ -4,8 +4,8 @@ var FaceView = function (editor) {
     let camera_view = new UI.Panel();
     
     let overlayed_panel = new UI.Panel();
-    overlayed_panel.setWidth('200px');
-    overlayed_panel.setHeight('150px');
+    overlayed_panel.setWidth('250px');
+    overlayed_panel.setHeight('200px');
 
     camera_view.add(overlayed_panel);
 
@@ -14,8 +14,8 @@ var FaceView = function (editor) {
     let video_stream = new UI.Video();
     video_stream.setPosition('absolute');
     video_stream.setId('selfVideo');
-    video_stream.dom.width = 200;
-    video_stream.dom.height = 150;
+    video_stream.dom.width = 250;
+    video_stream.dom.height = 200;
     video_stream.setPreload('auto');
     video_stream.setLoop(true);
     video_stream.setPlaysinline(true);
@@ -30,8 +30,8 @@ var FaceView = function (editor) {
     let video_stream_overlay = new UI.Canvas();
     video_stream_overlay.setPosition('absolute');
     video_stream_overlay.setId('video_stream_overlay');
-    video_stream_overlay.dom.width = 200;
-    video_stream_overlay.dom.height = 150;
+    video_stream_overlay.dom.width = 250;
+    video_stream_overlay.dom.height = 200;
     overlayed_panel.add(video_stream_overlay);
 
     // start button
@@ -54,8 +54,8 @@ var FaceView = function (editor) {
     // face recognition stuff
     //define canvas for image processing
     let capture_canvas = document.createElement('canvas');
-    capture_canvas.width = 200; 
-    capture_canvas.height = 150;
+    capture_canvas.width = 250;
+    capture_canvas.height = 200;
     let capture_context = capture_canvas.getContext('2d');
 
     let face_canvas = document.createElement('canvas');
@@ -371,8 +371,19 @@ var FaceView = function (editor) {
                     'surprised': outputData.output[5],
                     'neutral': outputData.output[6]
                 };
-
+                let best_emotion = null;
+                let best_val = -1;
+                for(let prop in seven_emotions){
+                    // if(prop=='neutral') continue;
+                    if(seven_emotions[prop]>best_val){
+                        best_val = seven_emotions[prop];
+                        best_emotion = prop;
+                    }
+                }
+                editor.current_emotion = best_emotion;
+                console.log(editor.current_emotion);
                 signals.updateCurrentDetectedEmotionIntensity.dispatch(seven_emotions);
+
             }).catch(err => {
                 console.log(err)
             });
