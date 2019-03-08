@@ -165,6 +165,9 @@ var SidebarRight = function (editor) {
     boyLabel.setOpacity('0.2');
     girlLabel.setOpacity('0.2');
 
+    editor.boyLabel = boyLabel;
+    editor.girlLabel = girlLabel;
+
     editor.signals.updateCurrentDetectedEmotionIntensity.add(function (seven_emotions) {
         let angery = seven_emotions['angry'];
         let disgusted = seven_emotions['disgusted'];

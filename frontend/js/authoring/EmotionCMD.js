@@ -4,7 +4,7 @@ class EmotionCMD {
 	constructor(config){
 		this.name = '';
 		this.note = '';
-		this.match_score = 0;
+		this.shortcut = [];
 		config = config || null;
 		this.graph = new LGraph(config);
 	}
@@ -42,18 +42,18 @@ class EmotionCMD {
 		return this.uuid;
 	}
 
-	setMatchScore(score){
-		this.match_score = score;
+	setShortcut(score){
+		this.shortcut = score;
 	}
-	getMatchScore(){
-		return this.match_score;
+	getShortcut(){
+		return this.shortcut;
 	}
 
 	toJSON(){
 		return {
 			uuid: this.uuid,
 			name: this.name,
-			match_score: this.match_score,
+			shortcut: this.shortcut,
 			note: this.note,
 			graph: this.graph.serialize()
 		}
@@ -62,7 +62,7 @@ class EmotionCMD {
 	fromJSON(state){
 		this.uuid = state.uuid;
 		this.name = state.name;
-		this.match_score = state.match_score;
+		this.shortcut = state.shortcut;
 		this.note = state.note;
 		this.graph.configure(state.graph);
 	}

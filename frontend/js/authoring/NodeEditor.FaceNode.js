@@ -107,6 +107,32 @@ FacePositionNode.shape = LiteGraph.ROUND_SHAPE;
 LiteGraph.registerNodeType("node_editor/face_position", FacePositionNode );
 
 
+function FaceRoleNode()
+{
+	let that = this;
+	that.properties = {role: ''};
+	that.text = this.addWidget("combo","role", '', function (val) {
+			that.properties.role = val;
+		},
+		{values: ['', 'girl', 'boy']});
+	that.addInput("",LiteGraph.EVENT);
+}
+
+FaceRoleNode.prototype.onExecute = function()
+{
+	let that = this;
+	if(that.getInputData(0, false)==LiteGraph.EVENT){
+		if(that.properties.role=='boy') editor.boyLabel.dom.click();
+		if(that.properties.role=='girl') editor.girlLabel.dom.click();
+	}
+}
+
+FaceRoleNode.title = "Role";
+FaceRoleNode.color = "#ffb032";
+FaceRoleNode.shape = LiteGraph.ROUND_SHAPE;
+
+LiteGraph.registerNodeType("node_editor/face_role", FaceRoleNode );
+
 
 
 

@@ -59,7 +59,7 @@ var NodeEditor = function (editor) {
     let menu = new UI.UList();
     menu.setBackgroundColor('rgba(50, 50, 50, 0.8)');
     menu.dom.style.borderRadius = '10px';
-    menu.setWidth('800px');
+    menu.setWidth('965px');
     menu.setId('menu');
     menu.addClass('nav');
     menu.addClass('nav-pills');
@@ -73,43 +73,43 @@ var NodeEditor = function (editor) {
     Event.firstChild.setAttribute('data-toggle', 'dropdown');
     Event.style.backgroundColor = '#ff0300';
     Event.style.margin = '12px';
-    Event.style.fontSize = '14px';
+    Event.style.fontSize = '20px';
 
     let Logic = menu.addLi('Logic', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Logic.firstChild.setAttribute('data-toggle', 'dropdown');
     Logic.style.backgroundColor = '#31baff';
     Logic.style.margin = '12px';
-    Logic.style.fontSize = '14px';
+    Logic.style.fontSize = '20px';
 
     let Face = menu.addLi('Face', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Face.firstChild.setAttribute('data-toggle', 'dropdown');
     Face.style.backgroundColor = '#ffb032';
     Face.style.margin = '12px';
-    Face.style.fontSize = '14px';
+    Face.style.fontSize = '20px';
 
-    let Particle = menu.addLi('Particle', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    let Particle = menu.addLi('Visual Effect', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Particle.firstChild.setAttribute('data-toggle', 'dropdown');
     Particle.style.backgroundColor = '#ae0cff';
     Particle.style.margin = '12px';
-    Particle.style.fontSize = '14px';
+    Particle.style.fontSize = '20px';
 
     let Danmaku = menu.addLi('Danmaku', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Danmaku.firstChild.setAttribute('data-toggle', 'dropdown');
     Danmaku.style.backgroundColor = '#39a971';
     Danmaku.style.margin = '12px';
-    Danmaku.style.fontSize = '14px';
+    Danmaku.style.fontSize = '20px';
 
-    let Music = menu.addLi('Music', 'nav-item dropdown', 'nav-link dropdown-toggle');
-    Music.firstChild.setAttribute('data-toggle', 'dropdown');
-    Music.style.backgroundColor = '#a95166';
-    Music.style.margin = '12px';
-    Music.style.fontSize = '14px';
+    let Sound = menu.addLi('Sound', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    Sound.firstChild.setAttribute('data-toggle', 'dropdown');
+    Sound.style.backgroundColor = '#a95166';
+    Sound.style.margin = '12px';
+    Sound.style.fontSize = '20px';
 
     let Scene = menu.addLi('Scene', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Scene.firstChild.setAttribute('data-toggle', 'dropdown');
     Scene.style.backgroundColor = '#ff13a3';
     Scene.style.margin = '12px';
-    Scene.style.fontSize = '14px';
+    Scene.style.fontSize = '20px';
 
     let menuEvent = new UI.UList();
     menuEvent.addClass('dropdown-menu');
@@ -139,6 +139,8 @@ var NodeEditor = function (editor) {
     buttonFaceEmotion.classList.add('dropdown-item');
     let buttonFacePosition = menuFace.addLi('Position');
     buttonFacePosition.classList.add('dropdown-item');
+    let buttonFaceRole = menuFace.addLi('Role');
+    buttonFaceRole.classList.add('dropdown-item');
     Face.appendChild(menuFace.dom);
 
     let menuParticle = new UI.UList();
@@ -158,6 +160,12 @@ var NodeEditor = function (editor) {
     let buttonDanmaku = menuDanmaku.addLi( 'Danmaku' );
     buttonDanmaku.classList.add( 'dropdown-item' );
     Danmaku.appendChild(menuDanmaku.dom);
+
+    let menuSound = new UI.UList();
+    menuSound.addClass('dropdown-menu');
+    let buttonSound = menuSound.addLi( 'Sound' );
+    buttonSound.classList.add( 'dropdown-item' );
+    Sound.appendChild(menuSound.dom);
 
     let menuScene = new UI.UList();
     menuScene.addClass('dropdown-menu');
@@ -232,6 +240,12 @@ var NodeEditor = function (editor) {
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         });
 
+        $(buttonFaceRole).click(function () {
+            let node = LiteGraph.createNode("node_editor/face_role");
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        });
+
         // Particle
 
         $( buttonFountain ).click( function () {
@@ -258,13 +272,6 @@ var NodeEditor = function (editor) {
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );
 
-        //
-        $(buttonDanmaku).click( function () {
-            let node = LiteGraph.createNode("node_editor/danmaku");
-            node.pos = _GetRandomPositionArray();
-            editor.emotionCMDManager.current_emotion_cmd.add(node);
-        } );
-
         // scene
         $(buttonBackground).click(function () {
             let node = LiteGraph.createNode("node_editor/background");
@@ -277,6 +284,20 @@ var NodeEditor = function (editor) {
             node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         });
+
+        //
+        $(buttonDanmaku).click( function () {
+            let node = LiteGraph.createNode("node_editor/danmaku");
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        } );
+
+        //
+        $(buttonSound).click( function () {
+            let node = LiteGraph.createNode("node_editor/sound");
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        } );
     });
 
     return container;

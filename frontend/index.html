@@ -13,6 +13,8 @@
     <link rel="stylesheet" type="text/css" href="css/jsgrid.css"/>
     <link rel="stylesheet" type="text/css" href="css/jsgrid-theme.css"/>
 
+    <script src="js/libs/howler.min.js"></script>
+
     <!--for uuid-->
     <!--<script src="http://wzrd.in/standalone/uuid%2Fv5@latest"></script>-->
     <script src="js/libs/uuid.js"></script>
@@ -119,6 +121,7 @@
     <script src="js/authoring/NodeEditor.ParticleSystem.js"></script>
     <script src="js/authoring/NodeEditor.Util.js"></script>
     <script src="js/authoring/NodeEditor.SceneNode.js"></script>
+    <script src="js/authoring/NodeEditor.SoundNode.js"></script>
     <script src="js/authoring/NodeEditor.LogicNode.js"></script>
     <script src="js/authoring/NodeEditor.EventNode.js"></script>
     <script src="js/authoring/NodeEditor.FaceNode.js"></script>
@@ -127,7 +130,7 @@
     <script src="js/authoring/NodeEditor.NodeLoading.js"></script>
     <script src="js/authoring/NodeEditor.Editor.js"></script>
     <script src="js/authoring/EmotionCMD.js"></script>
-    <script src="js/authoring/SoundAnimation.js"></script>
+    <script src="js/authoring/NodeEditor.SoundAnimation.js"></script>
 
     <!--face tracking library-->
     <script src="js/face/ParticleFilter.js"></script>
@@ -189,7 +192,7 @@
     var menubar = new Menubar(editor);
     document.body.appendChild(menubar.dom);
 
-    // var soundAnimation = new SoundAnimation(editor);
+    var sound_animation = new SoundAnimation(editor);
 
     // Danmaku
     var DanmakuRobotoBoldKey = 'roboto-bold';

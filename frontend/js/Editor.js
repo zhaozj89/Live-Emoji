@@ -3,6 +3,7 @@ var Editor = function () {
     this.current_emotion = null;
 
     this.danmaku_bmtext = null;
+    this.sound_player = null;
 
     // global
     this.GlobalCounter = 0;
@@ -64,8 +65,6 @@ var Editor = function () {
     this.girlLabel = null;
     this.boyLoaded = false;
     this.girlLoaded = false;
-
-    this.soundPlayer = null;
 
     var Signal = signals.Signal;
 
