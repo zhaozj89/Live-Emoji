@@ -48,6 +48,10 @@
     <script src="js/libs/threejs/BoxLineGeometry.js"></script>
     <script src="js/libs/threejs/ui.three.js"></script>
     <script src="js/libs/threejs/Tween.js"></script>
+    <!--text-->
+    <script src="js/libs/text/three-bmfont-text-bundle.js"></script>
+    <script src="js/libs/text/sdf-shader.js"></script>
+    <script src="js/libs/text/text-bitmap.js"></script>
 
     <!--other threejs modules-->
     <script src="js/libs/threejs/examples/js/libs/system.min.js"></script>
@@ -118,6 +122,7 @@
     <script src="js/authoring/NodeEditor.LogicNode.js"></script>
     <script src="js/authoring/NodeEditor.EventNode.js"></script>
     <script src="js/authoring/NodeEditor.FaceNode.js"></script>
+    <script src="js/authoring/NodeEditor.DanmakuNode.js"></script>
     <script src="js/authoring/NodeEditor.ParticleNode.js"></script>
     <script src="js/authoring/NodeEditor.NodeLoading.js"></script>
     <script src="js/authoring/NodeEditor.Editor.js"></script>
@@ -185,6 +190,39 @@
     document.body.appendChild(menubar.dom);
 
     // var soundAnimation = new SoundAnimation(editor);
+
+    // Danmaku
+    var DanmakuRobotoBoldKey = 'roboto-bold';
+    var DanmakuFileName = 'js/libs/text/fonts/roboto/bitmap/' + DanmakuRobotoBoldKey;
+    var DanmakuJsonPath = DanmakuFileName + '.json';
+    var DanmakuImagePath = DanmakuFileName + '.png';
+
+    // load the Roboto bitmap font assets and assign them to the key
+    TextBitmap.load( DanmakuRobotoBoldKey, DanmakuJsonPath, DanmakuImagePath );
+
+    // after the assets load, you can pass the font key to TextBitmap constructor
+    THREE.DefaultLoadingManager.onLoad = function ( ) {
+
+        // fontKey and text are required, the rest are optional
+        editor.danmaku_bmtext = new TextBitmap({
+            text: 'Grumpy wizards make toxic brew for the evil Queen and Jack.',
+            fontKey: DanmakuRobotoBoldKey,
+            width: 1000,
+            align: 'center',
+            valign: 'center',
+            lineHeight: 80,
+            letterSpacing: 1,
+            scale: 0.01,
+            color: '#fff',
+            outlineColor: '#000'
+        });
+
+        // TextBitmap inherits THREE.Group
+        // so you can add instances to the scene
+        // and position, scale or rotate them
+        editor.scene.add( editor.danmaku_bmtext );
+        editor.danmaku_bmtext.position.set( 0, 1, -0.5 );
+    };
 
     $('a').css('bottom', '');
 
@@ -295,6 +333,9 @@
         controls.update();
         if (editor.selected != null) {
             editor.selected.lookAt(editor.main_camera.position);
+        }
+        if(editor.danmaku_bmtext!=null){
+            editor.danmaku_bmtext.lookAt(editor.main_camera.position);
         }
         editor.scene.updateMatrixWorld();
         editor.main_view_renderer.render(editor.scene, editor.main_camera);

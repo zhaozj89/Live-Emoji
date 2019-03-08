@@ -151,6 +151,52 @@ MouseNode.shape = LiteGraph.ROUND_SHAPE;
 LiteGraph.registerNodeType("node_editor/mouse", MouseNode );
 
 
+function CounterNode()
+{
+	let that = this;
+	that.properties = {num:0, counter: 0, first_time: true};
+	that.addWidget("combo","num", 0, function(val){
+		that.properties.num = val;
+		that.properties.counter = val;
+	}, {values:[0, 1, 5, 10, 20, 50]} );
+	that.addInput('', LiteGraph.EVENT);
+	that.addOutput('',LiteGraph.EVENT);
+}
+CounterNode.prototype.onExecute = function()
+{
+	let that = this;
+	if(that.getInputData(0, false)==LiteGraph.EVENT){
+		for(let k=0; k<that.properties.num; ++k){
+			setTimeout(function () {
+				console.log('even');
+				that.setOutputData(0, LiteGraph.EVENT);
+				that.properties.counter -=1;
+				if(that.properties.counter==0){
+					that.properties.num=0;
+					that.widgets[0].value = 0;
+				}
+			}, 2000*k);
+			setTimeout(function () {
+				console.log('odd');
+				that.setOutputData(0, '');
+			}, 2000*k+50);
+		}
+	}
+}
+CounterNode.title = "Counter";
+CounterNode.color = "#ff0300";
+CounterNode.shape = LiteGraph.ROUND_SHAPE;
+
+CounterNode.prototype.onDrawBackground = function(ctx)
+{
+	if(this.flags.collapsed)
+		return;
+	this.outputs[0].label = this.properties.counter;
+}
+
+LiteGraph.registerNodeType("node_editor/counter", CounterNode );
+
+
 
 
 

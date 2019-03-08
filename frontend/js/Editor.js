@@ -2,6 +2,8 @@ var Editor = function () {
     this.quill = null;
     this.current_emotion = null;
 
+    this.danmaku_bmtext = null;
+
     // global
     this.GlobalCounter = 0;
 

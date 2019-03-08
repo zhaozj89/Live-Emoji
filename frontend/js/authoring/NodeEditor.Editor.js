@@ -119,6 +119,8 @@ var NodeEditor = function (editor) {
     buttonKeyboard2.classList.add('dropdown-item');
     let buttonMouse = menuEvent.addLi('Mouse');
     buttonMouse.classList.add('dropdown-item');
+    let buttonCounter = menuEvent.addLi('Counter');
+    buttonCounter.classList.add('dropdown-item');
     let buttonEmotion = menuEvent.addLi('Emotion');
     buttonEmotion.classList.add('dropdown-item');
     Event.appendChild(menuEvent.dom);
@@ -151,6 +153,12 @@ var NodeEditor = function (editor) {
     buttonSnow.classList.add( 'dropdown-item' );
     Particle.appendChild(menuParticle.dom);
 
+    let menuDanmaku = new UI.UList();
+    menuDanmaku.addClass('dropdown-menu');
+    let buttonDanmaku = menuDanmaku.addLi( 'Danmaku' );
+    buttonDanmaku.classList.add( 'dropdown-item' );
+    Danmaku.appendChild(menuDanmaku.dom);
+
     let menuScene = new UI.UList();
     menuScene.addClass('dropdown-menu');
     let buttonBackground = menuScene.addLi( 'Background' );
@@ -181,6 +189,12 @@ var NodeEditor = function (editor) {
 
         $(buttonMouse).click(function () {
             let node = LiteGraph.createNode("node_editor/mouse");
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        });
+
+        $(buttonCounter).click(function () {
+            let node = LiteGraph.createNode("node_editor/counter");
             node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         });
@@ -240,6 +254,13 @@ var NodeEditor = function (editor) {
 
         $( buttonSnow ).click( function () {
             let node = LiteGraph.createNode("node_editor/snow");
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        } );
+
+        //
+        $(buttonDanmaku).click( function () {
+            let node = LiteGraph.createNode("node_editor/danmaku");
             node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );
