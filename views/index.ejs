@@ -165,11 +165,14 @@
         return this.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     };
 
+    var user_config_json = '<%= user.config %>'.replace(/&quot;/g, '"');
+    console.log(user_config_json);
+
     var editor = new Editor();
 
     // load pre-defined cmds
     editor.emotionCMDManager = new EmotionCMDManager(editor);
-    LoadEmotionCMDJSONFile(editor, 'test.json');
+    LoadConfigurationJSONFile(editor, user_config_json);
     // threejs stuff
     editor.scene = MakeScene();
 

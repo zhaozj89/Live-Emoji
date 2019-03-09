@@ -1,5 +1,5 @@
 "use strict";
-var LoadEmotionCMDJSONFile = function ( editor, filename ) {
+var LoadConfigurationJSONFile = function ( editor, filename ) {
 
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
@@ -10,6 +10,6 @@ var LoadEmotionCMDJSONFile = function ( editor, filename ) {
         }
     };
 
-    xhr.open( 'GET', './asset/' + filename, true );
+    xhr.open( 'GET', filename, true );
     xhr.send();
 }

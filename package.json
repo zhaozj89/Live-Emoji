@@ -1,19 +1,35 @@
 {
-  "name": "cartoon_robot",
+  "name": "live-emoji",
   "version": "1.0.0",
-  "author": "Zhenjie Zhao",
-  "description": "",
-  "private": true,
-  "scripts": {
-    "start": "node server.js"
+  "description": "Emotion Command\r ========",
+  "main": "server.js",
+  "directories": {
+    "doc": "doc"
   },
   "dependencies": {
-    "express": "^4.10.7",
-    "serve-static": "^1.8.0",
-    "path": "^0.12.7",
+    "body-parser": "^1.18.3",
+    "connect-ensure-login": "^0.1.1",
+    "cookie-parser": "^1.4.4",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "morgan": "^1.9.1",
+    "passport-local": "^1.0.0",
+    "passport": "^0.4.0"
   },
-  "license": "MIT",
-  "engines": {
-    "node": ">=0.8"
-  }
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhaozj89/Live-Emoji.git"
+  },
+  "author": "Zhenjie Zhao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhaozj89/Live-Emoji/issues"
+  },
+  "homepage": "https://github.com/zhaozj89/Live-Emoji#readme"
 }
