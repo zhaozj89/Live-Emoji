@@ -13,6 +13,7 @@ DanmakuNode.prototype.onExecute = function()
 	let that = this;
 	if(that.getInputData(0, false)==LiteGraph.EVENT && editor.danmaku_bmtext.text!=null){
 		editor.danmaku_bmtext.text = that.properties.text;
+
 		editor.signals.sceneGraphChanged.dispatch();
 	}
 }

@@ -45,24 +45,42 @@ function CreateEmitterWithMesh(obj) {
     return emitter;
 }
 
-function CreateDotSprite() {
-    let map = new THREE.TextureLoader().load("asset/img/dot.png");
-    let material = new THREE.SpriteMaterial({
+function CreateSprite(name) {
+    let map = new THREE.TextureLoader().load("asset/particle/small/" + name + ".png");
+    // let material = new THREE.SpriteMaterial({
+    //     map: map,
+    //     color: 0xff0000,
+    //     blending: THREE.AdditiveBlending,
+    //     fog: true
+    // });
+    // return new THREE.Sprite(material);
+    var material = new THREE.SpriteMaterial({
         map: map,
-        color: 0xff0000,
-        blending: THREE.AdditiveBlending,
-        fog: true
+        transparent: true,
+        opacity: .5,
+        color: 0xffffff
     });
     return new THREE.Sprite(material);
 }
+//
+// function CreateSnow() {
+//     var map = new THREE.TextureLoader().load("asset/img/snow.png");
+//     var material = new THREE.SpriteMaterial({
+//         map: map,
+//         transparent: true,
+//         opacity: .5,
+//         color: 0xffffff
+//     });
+//     return new THREE.Sprite(material);
+// }
 
-function CreateEmitterWithTexture1() {
+function CreateEmitterWithTexture1(name) {
     let emitter = new Proton.Emitter();
     emitter.rate = new Proton.Rate(new Proton.Span(5, 10), new Proton.Span(.1, .25));
     emitter.addInitialize(new Proton.Mass(1));
     emitter.addInitialize(new Proton.Radius(100));
     emitter.addInitialize(new Proton.Life(2, 4));
-    emitter.addInitialize(new Proton.Body(CreateDotSprite()));
+    emitter.addInitialize(new Proton.Body(CreateSprite(name)));
     emitter.addInitialize(new Proton.Position(new Proton.BoxZone(100)));
     emitter.addInitialize(new Proton.Velocity(200, new Proton.Vector3D(0, 1, 1), 180));
 
@@ -75,15 +93,20 @@ function CreateEmitterWithTexture1() {
     emitter.addBehaviour(new Proton.Collision(emitter,true));
     emitter.addBehaviour(new Proton.Color(0xff0000, 'random', Infinity, Proton.easeOutQuart));
 
-    emitter.p.x = 0;
-    emitter.p.y = 0;
+    let vec = new THREE.Vector3( 0, 0, -100 );
+    vec.applyQuaternion( editor.main_camera.quaternion );
+
+    emitter.p.x = vec.x;
+    emitter.p.y = vec.y;
+    emitter.p.z = vec.z;
+
     return emitter;
 }
 
-function CreateEmitterWithTexture2() {
+function CreateEmitterWithTexture2(name) {
     let emitter = new Proton.Emitter();
     emitter.rate = new Proton.Rate(new Proton.Span(10, 15), new Proton.Span(.05, .1));
-    emitter.addInitialize(new Proton.Body(CreateDotSprite()));
+    emitter.addInitialize(new Proton.Body(CreateSprite(name)));
     emitter.addInitialize(new Proton.Mass(1));
     emitter.addInitialize(new Proton.Life(1, 3));
     emitter.addInitialize(new Proton.Position(new Proton.SphereZone(20)));
@@ -93,34 +116,31 @@ function CreateEmitterWithTexture2() {
     emitter.addBehaviour(new Proton.Scale(new Proton.Span(2, 3.5), 0));
     emitter.addBehaviour(new Proton.G(6));
     emitter.addBehaviour(new Proton.Color('#FF0026', ['#ffff00', '#ffff11'], Infinity, Proton.easeOutSine));
-    emitter.p.x = 0;
-    emitter.p.y = -150;
+
+    let vec = new THREE.Vector3( 0, 0, -100 );
+    vec.applyQuaternion( editor.main_camera.quaternion );
+
+    emitter.p.x = vec.x;
+    emitter.p.y = vec.y;
+    emitter.p.z = vec.z;
+
     return emitter;
 }
 
-function CreateSnow() {
-    var map = new THREE.TextureLoader().load("asset/img/snow.png");
-    var material = new THREE.SpriteMaterial({
-        map: map,
-        transparent: true,
-        opacity: .5,
-        color: 0xffffff
-    });
-    return new THREE.Sprite(material);
-}
 
-function CreateEmitterSnow() {
+
+function CreateEmitterSnow(name) {
     let emitter = new Proton.Emitter();
     emitter.rate = new Proton.Rate(new Proton.Span(34, 48), new Proton.Span(.2, .5));
     emitter.addInitialize(new Proton.Mass(1));
     emitter.addInitialize(new Proton.Radius(new Proton.Span(10, 20)));
 
     let position = new Proton.Position();
-    position.addZone(new Proton.BoxZone(2500, 10, 2500));
+    position.addZone(new Proton.BoxZone(250, 10, 250));
     emitter.addInitialize(position);
 
     emitter.addInitialize(new Proton.Life(5, 10));
-    emitter.addInitialize(new Proton.Body(CreateSnow()));
+    emitter.addInitialize(new Proton.Body(CreateSprite(name)));
     emitter.addInitialize(new Proton.Velocity(0, new Proton.Vector3D(0, -1, 0), 90));
 
     emitter.addBehaviour(new Proton.RandomDrift(10, 1, 10, .05));

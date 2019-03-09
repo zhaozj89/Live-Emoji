@@ -17,10 +17,11 @@ KeyboardNode1.prototype.onExecute = function()
 	let that = this;
 	if(this.properties.key!=null && editor.emotionCMDManager.current_key==this.properties.key){
 		this.setOutputData(0, LiteGraph.EVENT);
+		console.log(editor.emotionCMDManager.current_key);
 		setTimeout( function () {
 			that.setOutputData(0, null);
 			editor.emotionCMDManager.current_key = null;
-		}, 20 );
+		}, TIME_STEP );
 	}
 }
 
@@ -49,7 +50,7 @@ KeyboardNode2.prototype.onExecute = function()
 		setTimeout( function () {
 			that.setOutputData(0, null);
 			editor.emotionCMDManager.current_key = null;
-		}, 50 );
+		}, TIME_STEP );
 	}
 }
 
@@ -81,7 +82,7 @@ FaceEmotionTriggerNode.prototype.onExecute = function()
 		setTimeout( function () {
 			that.setOutputData(0, null);
 			editor.current_emotion = null;
-		}, 50 );
+		}, TIME_STEP );
 	}
 }
 
@@ -140,7 +141,7 @@ MouseNode.prototype.onExecute = function()
 		setTimeout( function () {
 			that.setOutputData(0, null);
 			editor.emotionCMDManager.current_mouse = null;
-		}, 50 );
+		}, TIME_STEP );
 	}
 }
 
@@ -179,7 +180,7 @@ CounterNode.prototype.onExecute = function()
 			setTimeout(function () {
 				console.log('odd');
 				that.setOutputData(0, '');
-			}, 2000*k+50);
+			}, 2000*k+TIME_STEP);
 		}
 	}
 }

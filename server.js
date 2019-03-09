@@ -68,7 +68,7 @@ app.get('/login',
     });
 
 app.get('/index',
-    require('connect-ensure-login').ensureLoggedIn(),
+    // require('connect-ensure-login').ensureLoggedIn(),
     function (req, res) {
         res.render('index', {user: req.user});
     });

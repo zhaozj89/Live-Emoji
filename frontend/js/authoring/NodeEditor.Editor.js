@@ -145,9 +145,9 @@ var NodeEditor = function (editor) {
 
     let menuParticle = new UI.UList();
     menuParticle.addClass('dropdown-menu');
-    let buttonFountain = menuParticle.addLi( 'Fountain' );
+    let buttonFountain = menuParticle.addLi( '3D' );
     buttonFountain.classList.add( 'dropdown-item' );
-    let buttonIllusion = menuParticle.addLi( 'Illusion' );
+    let buttonIllusion = menuParticle.addLi( 'Ramble' );
     buttonIllusion.classList.add( 'dropdown-item' );
     let buttonFire = menuParticle.addLi( 'Fire' );
     buttonFire.classList.add( 'dropdown-item' );

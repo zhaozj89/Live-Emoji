@@ -1,0 +1,2 @@
+    //var user_config_json = '<%= user.config %>'.replace(/&quot;/g, '"');
+    // console.log(user_config_json);

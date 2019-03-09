@@ -13,6 +13,8 @@
     <link rel="stylesheet" type="text/css" href="css/jsgrid.css"/>
     <link rel="stylesheet" type="text/css" href="css/jsgrid-theme.css"/>
 
+    <script src="js/GlobalVariables.js"></script>
+
     <script src="js/libs/howler.min.js"></script>
 
     <!--for uuid-->
@@ -203,8 +205,13 @@
     // load the Roboto bitmap font assets and assign them to the key
     TextBitmap.load( DanmakuRobotoBoldKey, DanmakuJsonPath, DanmakuImagePath );
 
+    let _load_text_already = false;
+
     // after the assets load, you can pass the font key to TextBitmap constructor
     THREE.DefaultLoadingManager.onLoad = function ( ) {
+
+        if(_load_text_already==true) return;
+        _load_text_already = true;
 
         // fontKey and text are required, the rest are optional
         editor.danmaku_bmtext = new TextBitmap({
@@ -357,7 +364,7 @@
         setTimeout( function() {
             editor.side_view_renderer.setAnimationLoop(_Animate); // for VR rendering
             // requestAnimationFrame(animate);
-        }, 1000 / 20 ); // time interval 20 ms
+        }, TIME_STEP ); // time interval 50 ms
 
         // update global state
         let num = editor.particle_engine_proton.getCount();

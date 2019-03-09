@@ -32,7 +32,7 @@ FountainNode.prototype.onExecute = function()
 	}
 }
 
-FountainNode.title = "Fountain";
+FountainNode.title = "3D";
 FountainNode.color = "#ae0cff";
 FountainNode.shape = LiteGraph.ROUND_SHAPE;
 
@@ -42,18 +42,19 @@ LiteGraph.registerNodeType("node_editor/fountain", FountainNode );
 function IllusionNode()
 {
 	let that = this;
-	that.properties = {};
-	// that.text = this.addWidget("combo","emotion", "neutral", function (val) {
-	// 	that.properties.emotion = val;
-	// 	},
-	// 	{values: ['happy', 'sad', 'surprised', 'disgusted', 'angry', 'fearful', 'neutral']});
+	that.properties = {texture: 'dot'};
+	that.text = this.addWidget("combo","texture", "dot", function (val) {
+		that.properties.texture = val;
+		},
+		{values: ['dot', 'fire', 'heart', 'poop', 'raindrop', 'snow', 'splatter1',
+			'splatter2', 'surprised1', 'surprised2', 'bubble']});
 	that.addInput("", LiteGraph.EVENT);
 }
 
 IllusionNode.prototype.onExecute = function()
 {
 	if(this.getInputData(0, false)==LiteGraph.EVENT){
-		let emitter = CreateEmitterWithTexture1();
+		let emitter = CreateEmitterWithTexture1(this.properties.texture);
 		editor.particle_engine_proton.addEmitter(emitter);
 		editor.particle_engine_proton.addRender(new Proton.SpriteRender(editor.scene));
 		emitter.emit('once');
@@ -62,7 +63,7 @@ IllusionNode.prototype.onExecute = function()
 	}
 }
 
-IllusionNode.title = "Illusion";
+IllusionNode.title = "Ramble";
 IllusionNode.color = "#ae0cff";
 IllusionNode.shape = LiteGraph.ROUND_SHAPE;
 
@@ -75,17 +76,19 @@ function FireNode()
 {
 	let that = this;
 	that.properties = {};
-	// that.text = this.addWidget("combo","emotion", "neutral", function (val) {
-	// 	that.properties.emotion = val;
-	// 	},
-	// 	{values: ['happy', 'sad', 'surprised', 'disgusted', 'angry', 'fearful', 'neutral']});
+	that.properties = {texture: 'dot'};
+	that.text = this.addWidget("combo","texture", "dot", function (val) {
+			that.properties.texture = val;
+		},
+		{values: ['dot', 'fire', 'heart', 'poop', 'raindrop', 'snow', 'splatter1',
+				'splatter2', 'surprised1', 'surprised2', 'bubble']});
 	that.addInput("", LiteGraph.EVENT);
 }
 
 FireNode.prototype.onExecute = function()
 {
 	if(this.getInputData(0, false)==LiteGraph.EVENT){
-		let emitter = CreateEmitterWithTexture2();
+		let emitter = CreateEmitterWithTexture2(this.properties.texture);
 		editor.particle_engine_proton.addEmitter(emitter);
 		editor.particle_engine_proton.addRender(new Proton.SpriteRender(editor.scene));
 		emitter.emit('once');
@@ -108,17 +111,19 @@ function SnowNode()
 {
 	let that = this;
 	that.properties = {};
-	// that.text = this.addWidget("combo","emotion", "neutral", function (val) {
-	// 	that.properties.emotion = val;
-	// 	},
-	// 	{values: ['happy', 'sad', 'surprised', 'disgusted', 'angry', 'fearful', 'neutral']});
+	that.properties = {texture: 'dot'};
+	that.text = this.addWidget("combo","texture", "dot", function (val) {
+			that.properties.texture = val;
+		},
+		{values: ['dot', 'fire', 'heart', 'poop', 'raindrop', 'snow', 'splatter1',
+				'splatter2', 'surprised1', 'surprised2', 'bubble']});
 	that.addInput("", LiteGraph.EVENT);
 }
 
 SnowNode.prototype.onExecute = function()
 {
 	if(this.getInputData(0, false)==LiteGraph.EVENT){
-		let emitter = CreateEmitterSnow();
+		let emitter = CreateEmitterSnow(this.properties.texture);
 		editor.particle_engine_proton.addEmitter(emitter);
 		editor.particle_engine_proton.addRender(new Proton.SpriteRender(editor.scene));
 		emitter.emit('once');
