@@ -93,7 +93,7 @@ var NodeEditor = function (editor) {
     Particle.style.margin = '12px';
     Particle.style.fontSize = '20px';
 
-    let Danmaku = menu.addLi('Danmaku', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    let Danmaku = menu.addLi('Text', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Danmaku.firstChild.setAttribute('data-toggle', 'dropdown');
     Danmaku.style.backgroundColor = '#39a971';
     Danmaku.style.margin = '12px';
@@ -145,19 +145,17 @@ var NodeEditor = function (editor) {
 
     let menuParticle = new UI.UList();
     menuParticle.addClass('dropdown-menu');
-    let buttonFountain = menuParticle.addLi( '3D' );
-    buttonFountain.classList.add( 'dropdown-item' );
-    let buttonIllusion = menuParticle.addLi( 'Ramble' );
-    buttonIllusion.classList.add( 'dropdown-item' );
-    let buttonFire = menuParticle.addLi( 'Fire' );
-    buttonFire.classList.add( 'dropdown-item' );
-    let buttonSnow = menuParticle.addLi( 'Snow' );
-    buttonSnow.classList.add( 'dropdown-item' );
+    let buttonAnchor = menuParticle.addLi( 'Anchor' );
+    buttonAnchor.classList.add( 'dropdown-item' );
+    let buttonOverwhelm = menuParticle.addLi( 'Overwhelm' );
+    buttonOverwhelm.classList.add( 'dropdown-item' );
+    let buttonAttraction = menuParticle.addLi( 'Attraction' );
+    buttonAttraction.classList.add( 'dropdown-item' );
     Particle.appendChild(menuParticle.dom);
 
     let menuDanmaku = new UI.UList();
     menuDanmaku.addClass('dropdown-menu');
-    let buttonDanmaku = menuDanmaku.addLi( 'Danmaku' );
+    let buttonDanmaku = menuDanmaku.addLi( 'Text' );
     buttonDanmaku.classList.add( 'dropdown-item' );
     Danmaku.appendChild(menuDanmaku.dom);
 
@@ -248,26 +246,20 @@ var NodeEditor = function (editor) {
 
         // Particle
 
-        $( buttonFountain ).click( function () {
-            let node = LiteGraph.createNode("node_editor/fountain");
+        $( buttonAnchor ).click( function () {
+            let node = LiteGraph.createNode("node_editor/anchor");
             node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );
 
-        $( buttonIllusion ).click( function () {
-            let node = LiteGraph.createNode("node_editor/illusion");
+        $( buttonOverwhelm ).click( function () {
+            let node = LiteGraph.createNode("node_editor/overwhelm");
             node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );
 
-        $( buttonFire ).click( function () {
-            let node = LiteGraph.createNode("node_editor/fire");
-            node.pos = _GetRandomPositionArray();
-            editor.emotionCMDManager.current_emotion_cmd.add(node);
-        } );
-
-        $( buttonSnow ).click( function () {
-            let node = LiteGraph.createNode("node_editor/snow");
+        $( buttonAttraction ).click( function () {
+            let node = LiteGraph.createNode("node_editor/attraction");
             node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );

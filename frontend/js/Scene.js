@@ -40,30 +40,34 @@ var MakeScene = function () {
     // skyBox.layers.set(1);
     // scene.add(skyBox);
 
-    let geometry = new THREE.SphereBufferGeometry( 100, 60, 60 );
+    let geometry = new THREE.SphereBufferGeometry( 101, 60, 60 );
     geometry.scale( - 1, 1, 1 );
     let material = new THREE.MeshBasicMaterial( {
-        map: new THREE.TextureLoader().load('asset/panorama/test.jpg')
+        map: new THREE.TextureLoader().load('asset/panorama/hk.jpg')
     });
     editor.static_background_sphere = new THREE.Mesh(geometry, material);
     editor.static_background_sphere.scale.x = -1;
-    // sphere.rotation.z = Math.PI;
+    editor.static_background_sphere.rotation.z = Math.PI;
     scene.add(editor.static_background_sphere);
 
     editor.staic_background_material = {name: 'Hong Kong', material: material};
 
     // light
-    var ambientLight = new THREE.AmbientLight(0x101010);
+    let ambientLight = new THREE.AmbientLight(0x101010);
     scene.add(ambientLight);
 
-    var pointLight = new THREE.PointLight(0xffffff, 2, 100, 1);
-    pointLight.position.set(0, 20, 20);
+    let pointLight = new THREE.PointLight(0xffffff, 2, 100, 1);
+    pointLight.position.set(0, 100, 100);
     scene.add(pointLight);
 
-    var spotLight = new THREE.SpotLight(0xffffff, .5);
-    spotLight.position.set(0, 50, 10);
+    let spotLight = new THREE.SpotLight(0xffffff, .5);
+    spotLight.position.set(0, 100, 100);
     scene.add(spotLight);
     spotLight.lookAt(scene);
+
+
+    let axesHelper = new THREE.AxesHelper( 2 );
+    scene.add( axesHelper );
 
     return scene;
 }

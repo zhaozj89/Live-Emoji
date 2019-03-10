@@ -159,6 +159,10 @@
 </head>
 <body>
 <script>
+    var originalWarning = console.warn; // back up the original method
+    console.warn = function(){}; // now warnings do nothing!
+
+
     // configs
     window.URL = window.URL || window.webkitURL;
     window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
@@ -215,7 +219,7 @@
 
         // fontKey and text are required, the rest are optional
         editor.danmaku_bmtext = new TextBitmap({
-            text: 'Grumpy wizards make toxic brew for the evil Queen and Jack.',
+            text: '',
             fontKey: DanmakuRobotoBoldKey,
             width: 1000,
             align: 'center',
@@ -231,7 +235,6 @@
         // so you can add instances to the scene
         // and position, scale or rotate them
         editor.scene.add( editor.danmaku_bmtext );
-        editor.danmaku_bmtext.position.set( 0, 1, -0.5 );
     };
 
     $('a').css('bottom', '');
@@ -242,6 +245,7 @@
         editor.main_camera.aspect = editor.main_view.dom.offsetWidth / editor.main_view.dom.offsetHeight;
         editor.main_camera.near = 1; //0.1;
         editor.main_camera.far = 1000; //10;
+        editor.main_camera.position.y = 0;
         editor.main_camera.position.z = 10;
         editor.main_camera.layers.enable(1);
         editor.main_camera.updateProjectionMatrix();
