@@ -167,9 +167,12 @@
 
     var editor = new Editor();
 
+    var user_config_json = '<%= user.config %>'.replace(/&quot;/g, '"');
+    console.log(user_config_json);
+
     // load pre-defined cmds
     editor.emotionCMDManager = new EmotionCMDManager(editor);
-    LoadConfigurationJSONFile(editor, 'asset/test.json');
+    LoadConfigurationJSONFile(editor, user_config_json);
     // threejs stuff
     editor.scene = MakeScene();
 
