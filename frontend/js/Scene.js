@@ -43,11 +43,11 @@ var MakeScene = function () {
     let geometry = new THREE.SphereBufferGeometry( 101, 60, 60 );
     geometry.scale( - 1, 1, 1 );
     let material = new THREE.MeshBasicMaterial( {
-        map: new THREE.TextureLoader().load('asset/panorama/hk.jpg')
+        map: new THREE.TextureLoader().load('asset/panorama/desert/scene1.jpg')
     });
     editor.static_background_sphere = new THREE.Mesh(geometry, material);
     editor.static_background_sphere.scale.x = -1;
-    editor.static_background_sphere.rotation.z = Math.PI;
+    // editor.static_background_sphere.rotation.z = Math.PI;
     scene.add(editor.static_background_sphere);
 
     editor.staic_background_material = {name: 'Hong Kong', material: material};
