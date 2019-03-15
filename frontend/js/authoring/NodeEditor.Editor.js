@@ -87,7 +87,7 @@ var NodeEditor = function (editor) {
     Face.style.margin = '12px';
     Face.style.fontSize = '20px';
 
-    let Particle = menu.addLi('Visual Effect', 'nav-item dropdown', 'nav-link dropdown-toggle');
+    let Particle = menu.addLi('Kinetic Texture', 'nav-item dropdown', 'nav-link dropdown-toggle');
     Particle.firstChild.setAttribute('data-toggle', 'dropdown');
     Particle.style.backgroundColor = '#ae0cff';
     Particle.style.margin = '12px';
