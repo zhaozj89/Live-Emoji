@@ -31,6 +31,7 @@ Menubar.Edit = function (editor) {
         if (editor.selected !== null) {
             editor.selected.position.x = 0;
             editor.selected.position.y = 0;
+            editor.selected.position.z = 0;
         }
     });
     options.add(option);

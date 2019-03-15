@@ -5,7 +5,6 @@
 var Loader = function (editor) {
 
     var scope = this;
-    var signals = editor.signals;
 
     this.texturePath = '';
 
@@ -644,7 +643,9 @@ var PreLoadCharacterJSON = function (editor, boy_or_gril) {
 
     editor.signals.CharacterAddedToScene.add(function (obj) {
         editor.selected = obj;
-        editor.execute(new AddObjectCommand(obj));
+        editor.scene.add(editor.selected);
+        editor.selected.position.z -= 10;
+        editor.signals.sceneGraphChanged.dispatch();
     });
 
     for (let prop in loader) {

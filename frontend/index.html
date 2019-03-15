@@ -70,28 +70,7 @@
     <script src="asset/character_preload.js"></script>
 
     <script src="js/Editor.js"></script>
-    <script src="js/Config.js"></script>
-    <script src="js/History.js"></script>
     <script src="js/Loader.js"></script>
-
-    <script src="js/command/Command.js"></script>
-    <script src="js/command/AddObjectCommand.js"></script>
-    <script src="js/command/RemoveObjectCommand.js"></script>
-    <script src="js/command/MoveObjectCommand.js"></script>
-    <script src="js/command/SetPositionCommand.js"></script>
-    <script src="js/command/SetRotationCommand.js"></script>
-    <script src="js/command/SetScaleCommand.js"></script>
-    <script src="js/command/SetValueCommand.js"></script>
-    <script src="js/command/SetUuidCommand.js"></script>
-    <script src="js/command/SetColorCommand.js"></script>
-    <script src="js/command/SetGeometryCommand.js"></script>
-    <script src="js/command/SetGeometryValueCommand.js"></script>
-    <script src="js/command/MultiCmdsCommand.js"></script>
-    <script src="js/command/SetMaterialCommand.js"></script>
-    <script src="js/command/SetMaterialValueCommand.js"></script>
-    <script src="js/command/SetMaterialColorCommand.js"></script>
-    <script src="js/command/SetMaterialMapCommand.js"></script>
-    <script src="js/command/SetSceneCommand.js"></script>
 
     <!-- my animation library -->
     <script src="js/animation/CharacterStructure.js"></script>
@@ -159,7 +138,6 @@
 <script>
     var originalWarning = console.warn; // back up the original method
     console.warn = function(){}; // now warnings do nothing!
-
 
     // configs
     window.URL = window.URL || window.webkitURL;
@@ -249,6 +227,7 @@
         editor.main_camera.updateProjectionMatrix();
         editor.main_view_renderer.setSize( editor.main_view.dom.offsetWidth, editor.main_view.dom.offsetHeight);
 
+        editor.side_camera.copy(editor.main_camera);
         editor.side_view_renderer.setSize( editor.side_view.dom.offsetWidth, editor.side_view.dom.offsetHeight);
 
         editor.node_editor_canvas.dom.width = editor.main_view.dom.clientWidth;
@@ -283,11 +262,9 @@
     editor.signals.followFace.add(function (event) {
         let puppet = editor.selected;
         if (puppet !== null) {
-            // if (editor.facePositionMutex === false) {
-                puppet.position.x = event.x;
-                puppet.position.y = event.y;
-                editor.signals.sceneGraphChanged.dispatch();
-            // }
+            puppet.position.x = event.x;
+            puppet.position.y = event.y;
+            editor.signals.sceneGraphChanged.dispatch();
         }
     });
 
@@ -332,23 +309,43 @@
         editor.signals.windowResize.dispatch();
     }, false);
 
-    // rendering
-    // we must have those constraints to make everything work
-    let controls = new THREE.OrbitControls(editor.main_camera, editor.main_view_renderer.domElement);
-    controls.enableZoom = false;
-    controls.enablePan = false;
-    controls.enableDamping = true;
-    controls.dampingFactor = 1;
-    controls.rotateSpeed = 0.01;
+    // control
+    let isDragging = false;
+    let previousMousePosition = {
+        x: 0,
+        y: 0
+    };
+    $(editor.main_view_renderer.domElement).on('mousedown', function(e) {
+        isDragging = true;
+    });
+    $(editor.main_view_renderer.domElement).on('mouseup', function(e) {
+        isDragging = false;
+    });
+    $(editor.main_view_renderer.domElement).on('mousemove', function(e) {
+        let deltaMove = {
+            x: e.offsetX-previousMousePosition.x,
+            y: e.offsetY-previousMousePosition.y
+        };
+
+        if(isDragging) {
+            let deltaRotationQuaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(
+                    THREE.Math.degToRad(deltaMove.y * 0.01),
+                    THREE.Math.degToRad(deltaMove.x * 0.05),
+                    0,
+                    'XYZ'
+                ));
+
+            editor.static_background_sphere.quaternion.multiplyQuaternions(deltaRotationQuaternion,
+                editor.static_background_sphere.quaternion);
+        }
+
+        previousMousePosition = {
+            x: e.offsetX,
+            y: e.offsetY
+        };
+    });
 
     function _Rendering() {
-        controls.update();
-        if (editor.selected != null) {
-            editor.selected.lookAt(editor.main_camera.position);
-        }
-        if(editor.danmaku_bmtext!=null){
-            editor.danmaku_bmtext.lookAt(editor.main_camera.position);
-        }
         editor.scene.updateMatrixWorld();
         editor.main_view_renderer.render(editor.scene, editor.main_camera);
         editor.side_view_renderer.render(editor.scene, editor.side_camera);
@@ -379,12 +376,7 @@
             clock.start();
         }
 
-        // TWEEN.update();
-
         editor.particle_engine_proton.update();
-
-        editor.side_camera.copy(editor.main_camera);
-
         editor.signals.sceneGraphChanged.dispatch(); // re-rendering
     }
 

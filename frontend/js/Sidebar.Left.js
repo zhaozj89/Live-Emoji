@@ -12,10 +12,10 @@ var SidebarLeft = function (editor) {
     titleView.setBackgroundColor('blueviolet');
     container.add(titleView);
 
-    var audience_view = new AudienceView(editor);
+    let audience_view = new AudienceView(editor);
     container.add(audience_view);
 
-    var renderer = new THREE.WebGLRenderer({antialias: true});
+    let renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.vr.enabled = true;
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(editor.side_view.dom.offsetWidth, editor.side_view.dom.offsetHeight);

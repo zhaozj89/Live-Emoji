@@ -18,8 +18,8 @@ function CreateEmitterWithConfiguration1(config) {
     let scale = config['scale'];
     let velocity = config['velocity'];
 
-    anchor.applyQuaternion( editor.main_camera.quaternion );
-    direction.applyQuaternion( editor.main_camera.quaternion );
+    // anchor.applyQuaternion( editor.main_camera.quaternion );
+    // direction.applyQuaternion( editor.main_camera.quaternion );
 
     let emitter = new Proton.Emitter();
     emitter.rate = new Proton.Rate(new Proton.Span(5, 10), new Proton.Span(100, 500));
@@ -54,8 +54,8 @@ function CreateEmitterWithConfiguration2(config) {
     let scale = config['scale'];
     let velocity = config['velocity'];
 
-    anchor.applyQuaternion( editor.main_camera.quaternion );
-    direction.applyQuaternion( editor.main_camera.quaternion );
+    // anchor.applyQuaternion( editor.main_camera.quaternion );
+    // direction.applyQuaternion( editor.main_camera.quaternion );
 
     let emitter = new Proton.Emitter();
     emitter.rate = new Proton.Rate(new Proton.Span(30, 50), new Proton.Span(.2, .5));
@@ -97,7 +97,7 @@ function CreateAttractionWithConfiguration(config){
     let force = config['force'];
     let region = config['region'];
 
-    position.applyQuaternion( editor.main_camera.quaternion );
+    // position.applyQuaternion( editor.main_camera.quaternion );
 
     return new Proton.Attraction(position, force, region);
 }
