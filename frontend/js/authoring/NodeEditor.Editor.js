@@ -113,15 +113,15 @@ var NodeEditor = function (editor) {
 
     let menuEvent = new UI.UList();
     menuEvent.addClass('dropdown-menu');
-    let buttonKeyboard1 = menuEvent.addLi('a-z');
+    let buttonKeyboard1 = menuEvent.addLi('Keyboard (a-z)');
     buttonKeyboard1.classList.add('dropdown-item');
-    let buttonKeyboard2 = menuEvent.addLi('A-Z');
+    let buttonKeyboard2 = menuEvent.addLi('Keyboard (A-Z)');
     buttonKeyboard2.classList.add('dropdown-item');
     let buttonMouse = menuEvent.addLi('Mouse');
     buttonMouse.classList.add('dropdown-item');
     let buttonCounter = menuEvent.addLi('Counter');
     buttonCounter.classList.add('dropdown-item');
-    let buttonEmotion = menuEvent.addLi('Emotion');
+    let buttonEmotion = menuEvent.addLi('Facial Expression');
     buttonEmotion.classList.add('dropdown-item');
     Event.appendChild(menuEvent.dom);
 

@@ -5,7 +5,7 @@ SidebarLeft.EmotionCMD = function (editor) {
     let container = new UI.Panel();
 
     let clients = [
-        {"Name": "Otto Clay", "uuid": "32432"},
+        // {"Name": "Otto Clay", "uuid": "32432"},
     ];
 
     $(container.dom).jsGrid({
