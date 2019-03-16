@@ -4,8 +4,8 @@ var FaceView = function (editor) {
     let camera_view = new UI.Panel();
     
     let overlayed_panel = new UI.Panel();
-    overlayed_panel.setWidth('250px');
-    overlayed_panel.setHeight('200px');
+    overlayed_panel.setWidth('300px');
+    overlayed_panel.setHeight('250px');
 
     camera_view.add(overlayed_panel);
 
@@ -14,8 +14,8 @@ var FaceView = function (editor) {
     let video_stream = new UI.Video();
     video_stream.setPosition('absolute');
     video_stream.setId('selfVideo');
-    video_stream.dom.width = 250;
-    video_stream.dom.height = 200;
+    video_stream.dom.width = 300;
+    video_stream.dom.height = 250;
     video_stream.setPreload('auto');
     video_stream.setLoop(true);
     video_stream.setPlaysinline(true);
@@ -30,8 +30,8 @@ var FaceView = function (editor) {
     let video_stream_overlay = new UI.Canvas();
     video_stream_overlay.setPosition('absolute');
     video_stream_overlay.setId('video_stream_overlay');
-    video_stream_overlay.dom.width = 250;
-    video_stream_overlay.dom.height = 200;
+    video_stream_overlay.dom.width = 300;
+    video_stream_overlay.dom.height = 250;
     overlayed_panel.add(video_stream_overlay);
 
     // start button
@@ -54,8 +54,8 @@ var FaceView = function (editor) {
     // face recognition stuff
     //define canvas for image processing
     let capture_canvas = document.createElement('canvas');
-    capture_canvas.width = 250;
-    capture_canvas.height = 200;
+    capture_canvas.width = 300;
+    capture_canvas.height = 250;
     let capture_context = capture_canvas.getContext('2d');
 
     let face_canvas = document.createElement('canvas');
@@ -89,8 +89,8 @@ var FaceView = function (editor) {
             }
 
             function adjustVideoProportions() {
-                let proportion = video_stream.dom.videoWidth / video_stream.dom.videoHeight;
-                video_streamWidth = Math.round(video_streamHeight * proportion);
+                let proportion = video_stream.dom.videoHeight / video_stream.dom.videoWidth;
+                video_streamHeight = Math.round(video_streamWidth * proportion);
                 video_stream.dom.width = video_streamWidth;
                 video_stream_overlay.dom.width = video_streamWidth;
                 capture_canvas.width = video_streamWidth;

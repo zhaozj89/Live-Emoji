@@ -4,7 +4,7 @@ Menubar.Edit = function (editor) {
 
     let title = new UI.Panel();
     title.setClass('title');
-    title.setTextContent('Edit');
+    title.setTextContent('Emotion Editor');
     title.addClass('h4');
     container.add(title);
 
@@ -23,18 +23,18 @@ Menubar.Edit = function (editor) {
     });
     options.add(option);
 
-    //
-    var option = new UI.Row();
-    option.setClass('option');
-    option.setTextContent('Reset');
-    option.onClick(function () {
-        if (editor.selected !== null) {
-            editor.selected.position.x = 0;
-            editor.selected.position.y = 0;
-            editor.selected.position.z = 0;
-        }
-    });
-    options.add(option);
+    // //
+    // var option = new UI.Row();
+    // option.setClass('option');
+    // option.setTextContent('Reset');
+    // option.onClick(function () {
+    //     if (editor.selected !== null) {
+    //         editor.selected.position.x = 0;
+    //         editor.selected.position.y = 0;
+    //         editor.selected.position.z = 0;
+    //     }
+    // });
+    // options.add(option);
 
     return container;
 

@@ -1,36 +1,38 @@
-function _NameTranslate(name) {
-	if(name=="Beijing") return "beijing.jpg";
-	if(name=="Hong Kong") return "hk.jpg";
-	if(name=="France") return "france.jpg";
-	if(name=="Museum") return "museum.jpg";
-	if(name=="Sky") return "sky.jpg";
+function _NameTranslate(name, scene) {
+	return name+'/scene'+scene+'.jpg';
 }
 
 function BackgroundNode()
 {
 	let that = this;
-	that.properties = {place: "Hong Kong"};
-	that.text = this.addWidget("combo","place", "Hong Kong", function (val) {
+	that.properties = {place: "Antarctica", scene: "1"};
+	this.addWidget("combo","place", "Antarctica", function (val) {
 		that.properties.place = val;
 		},
-		{values: ['Beijing', 'Hong Kong', 'France', "Museum", "Sky"]});
+		{values: ['Antarctica', 'Earth', 'Everest', "Itza", "Jiuzhaigou", "Petra", "Solar", "World"]});
+
+	this.addWidget("combo","scene", "1", function (val) {
+			that.properties.scene = val;
+		},
+		{values: ['1', '2', '3', "4", "5", "6"]});
 	that.addInput("",LiteGraph.EVENT);
 }
 
 BackgroundNode.prototype.onExecute = function()
 {
+	let name = _NameTranslate(this.properties.place, this.properties.scene);
 	if(this.getInputData(0, false)==LiteGraph.EVENT){
-		if(editor.staic_background_material.name!=this.properties.place){
-			editor.staic_background_material.name = this.properties.place;
+		if(editor.staic_background_material.name!=name){
+			editor.staic_background_material.name = name;
 			editor.staic_background_material.material.map =
-				new THREE.TextureLoader().load('asset/panorama/' + _NameTranslate(this.properties.place));
+				new THREE.TextureLoader().load('asset/panorama/' + name);
 			editor.staic_background_material.material.needsUpdate = true;
 		}
 	}
 }
 
 BackgroundNode.title = "Background";
-BackgroundNode.color = "#ff13a3";
+BackgroundNode.color = "#88419d";
 BackgroundNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/background", BackgroundNode );
@@ -68,14 +70,17 @@ BackgroundRotationNode.prototype.onExecute = function()
 		editor.static_background_sphere.rotation.x %= (2*Math.PI);
 		editor.static_background_sphere.rotation.y %= (2*Math.PI);
 		editor.static_background_sphere.rotation.z %= (2*Math.PI);
+
+		editor.signals.main_camera_rotate_y.dispatch(Math.PI * Number(that.properties.rotation_y)/180);
 	}
 }
 
 BackgroundRotationNode.title = "Background Rotation";
-BackgroundRotationNode.color = "#ff13a3";
+BackgroundRotationNode.color = "#88419d";
 BackgroundRotationNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/background_rotation", BackgroundRotationNode );
+
 
 
 

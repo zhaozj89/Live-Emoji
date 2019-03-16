@@ -37,7 +37,7 @@ DanmakuNode.prototype.onExecute = function()
 }
 
 DanmakuNode.title = "Text";
-DanmakuNode.color = "#39a971";
+DanmakuNode.color = "#41b6c4";
 DanmakuNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/danmaku", DanmakuNode );

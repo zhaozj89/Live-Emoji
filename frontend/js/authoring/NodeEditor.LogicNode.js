@@ -18,7 +18,7 @@ AndNode.prototype.onExecute = function()
 }
 
 AndNode.title = "AND";
-AndNode.color = "#31baff";
+AndNode.color = "#238745";
 AndNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/and", AndNode );
@@ -42,7 +42,7 @@ OrNode.prototype.onExecute = function()
 }
 
 OrNode.title = "OR";
-OrNode.color = "#31baff";
+OrNode.color = "#238745";
 OrNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/or", OrNode );

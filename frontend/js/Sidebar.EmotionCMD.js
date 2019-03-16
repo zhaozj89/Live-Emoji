@@ -10,7 +10,7 @@ SidebarLeft.EmotionCMD = function (editor) {
 
     $(container.dom).jsGrid({
         width: "100%",
-        height: "100%",
+        height: "200px",
 
         // filtering: true,
         editing: true,
@@ -61,7 +61,12 @@ SidebarLeft.EmotionCMD = function (editor) {
                 emotion_cmd.setName(args.item.Name);
                 SaveAEmotionCMD(emotion_cmd);
 
-                emotion_cmd.setNote(editor.quill.getContents()["ops"][0]["insert"]);
+                let content = '';
+
+                for(let k=0; k<editor.quill.getContents()["ops"].length; ++k){
+                    content += editor.quill.getContents()["ops"][k]["insert"];
+                }
+                emotion_cmd.setNote(content);
             }
         },
 

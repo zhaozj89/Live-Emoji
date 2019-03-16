@@ -1,3 +1,34 @@
+// 1-9
+function KeyboardNumberNode()
+{
+	let that = this;
+	that.properties = {key:null};
+	that.addWidget("combo","key", "", function(val){
+		that.properties.key = val;
+	}, {values:["",'0','1','2','3','4','5','6','7','8','9']} );
+	that.addOutput('',LiteGraph.EVENT);
+}
+
+KeyboardNumberNode.prototype.onExecute = function()
+{
+	let that = this;
+	if(this.properties.key!=null && editor.emotionCMDManager.current_key==this.properties.key){
+		this.setOutputData(0, LiteGraph.EVENT);
+		
+		setTimeout( function () {
+			that.setOutputData(0, null);
+			editor.emotionCMDManager.current_key = null;
+		}, TIME_STEP );
+	}
+}
+
+KeyboardNumberNode.title = "Keyboard (0-9)";
+KeyboardNumberNode.color = "#cb181d";
+KeyboardNumberNode.shape = LiteGraph.ROUND_SHAPE;
+
+LiteGraph.registerNodeType("node_editor/keyboard_number", KeyboardNumberNode );
+
+
 // a-z
 function KeyboardNode1()
 {
@@ -17,7 +48,7 @@ KeyboardNode1.prototype.onExecute = function()
 	let that = this;
 	if(this.properties.key!=null && editor.emotionCMDManager.current_key==this.properties.key){
 		this.setOutputData(0, LiteGraph.EVENT);
-		console.log(editor.emotionCMDManager.current_key);
+		
 		setTimeout( function () {
 			that.setOutputData(0, null);
 			editor.emotionCMDManager.current_key = null;
@@ -26,7 +57,7 @@ KeyboardNode1.prototype.onExecute = function()
 }
 
 KeyboardNode1.title = "Keyboard (a-z)";
-KeyboardNode1.color = "#ff0300";
+KeyboardNode1.color = "#cb181d";
 KeyboardNode1.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/keyboard1", KeyboardNode1 );
@@ -55,7 +86,7 @@ KeyboardNode2.prototype.onExecute = function()
 }
 
 KeyboardNode2.title = "Keyboard (A-Z)";
-KeyboardNode2.color = "#ff0300";
+KeyboardNode2.color = "#cb181d";
 KeyboardNode2.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/keyboard2", KeyboardNode2 );
@@ -87,7 +118,7 @@ FaceEmotionTriggerNode.prototype.onExecute = function()
 }
 
 FaceEmotionTriggerNode.title = "Facial Expression";
-FaceEmotionTriggerNode.color = "#ff0300";
+FaceEmotionTriggerNode.color = "#cb181d";
 FaceEmotionTriggerNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/emotion_trigger", FaceEmotionTriggerNode );
@@ -115,7 +146,7 @@ MouseNode.prototype.onExecute = function()
 }
 
 MouseNode.title = "Mouse";
-MouseNode.color = "#ff0300";
+MouseNode.color = "#cb181d";
 MouseNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/mouse", MouseNode );
@@ -154,7 +185,7 @@ CounterNode.prototype.onExecute = function()
 	}
 }
 CounterNode.title = "Counter";
-CounterNode.color = "#ff0300";
+CounterNode.color = "#cb181d";
 CounterNode.shape = LiteGraph.ROUND_SHAPE;
 
 CounterNode.prototype.onDrawBackground = function(ctx)

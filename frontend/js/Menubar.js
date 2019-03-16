@@ -5,8 +5,8 @@ var Menubar = function (editor) {
     container.dom.style.zIndex = "10";
 
     container.add(new Menubar.File(editor));
-    container.add(new Menubar.Edit(editor));
-    container.add(new Menubar.About(editor));
+    // container.add(new Menubar.Edit(editor));
+    // container.add(new Menubar.About(editor));
 
     return container;
 

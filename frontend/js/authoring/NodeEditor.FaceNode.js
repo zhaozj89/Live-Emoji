@@ -19,7 +19,7 @@ FaceEmotionNode.prototype.onExecute = function()
 }
 
 FaceEmotionNode.title = "Face Emotion";
-FaceEmotionNode.color = "#ffb032";
+FaceEmotionNode.color = "#253494";
 FaceEmotionNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/face_emotion", FaceEmotionNode );
@@ -63,7 +63,7 @@ LiteGraph.registerNodeType("node_editor/face_emotion", FaceEmotionNode );
 // }
 //
 // FaceRotationNode.title = "Face Rotation";
-// FaceRotationNode.color = "#ffb032";
+// FaceRotationNode.color = "#253494";
 // FaceRotationNode.shape = LiteGraph.ROUND_SHAPE;
 //
 // LiteGraph.registerNodeType("node_editor/face_rotation", FaceRotationNode );
@@ -101,7 +101,7 @@ FacePositionNode.prototype.onExecute = function()
 }
 
 FacePositionNode.title = "Face Position";
-FacePositionNode.color = "#ffb032";
+FacePositionNode.color = "#253494";
 FacePositionNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/face_position", FacePositionNode );
@@ -128,10 +128,33 @@ FaceRoleNode.prototype.onExecute = function()
 }
 
 FaceRoleNode.title = "Role";
-FaceRoleNode.color = "#ffb032";
+FaceRoleNode.color = "#253494";
 FaceRoleNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/face_role", FaceRoleNode );
+
+
+function FaceResetNode()
+{
+	this.addInput("",LiteGraph.EVENT);
+}
+
+FaceResetNode.prototype.onExecute = function()
+{
+	let that = this;
+	if(that.getInputData(0, false)==LiteGraph.EVENT){
+		editor.selected.position.x = 0;
+		editor.selected.position.y = 0;
+		editor.selected.position.z = -10;
+		editor.signals.sceneGraphChanged.dispatch();
+	}
+}
+
+FaceResetNode.title = "Reset";
+FaceResetNode.color = "#253494";
+FaceResetNode.shape = LiteGraph.ROUND_SHAPE;
+
+LiteGraph.registerNodeType("node_editor/face_reset", FaceResetNode );
 
 
 

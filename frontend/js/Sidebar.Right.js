@@ -4,12 +4,12 @@ var SidebarRight = function (editor) {
     container.setId('sidebar_right');
     container.dom.style.zIndex = '4';
 
-    var titleCamera = new UI.Text('Camera');
+    var titleCamera = new UI.Text('Presenter View');
     titleCamera.addClass('h4');
     titleCamera.setTextAlign('center');
     titleCamera.setColor('whitesmoke');
-    titleCamera.setWidth('250px');
-    titleCamera.setBackgroundColor('blueviolet');
+    titleCamera.setWidth('300px');
+    titleCamera.setBackgroundColor('#6a51a3');
     container.add(titleCamera);
 
     var faceView = new FaceView(editor);
@@ -21,8 +21,8 @@ var SidebarRight = function (editor) {
     titleEmotion.addClass('h4');
     titleEmotion.setTextAlign('center');
     titleEmotion.setColor('whitesmoke');
-    titleEmotion.setWidth('250px');
-    titleEmotion.setBackgroundColor('blueviolet');
+    titleEmotion.setWidth('300px');
+    titleEmotion.setBackgroundColor('#6a51a3');
     container.add(titleEmotion);
 
     let emotion_bar_chart_canvas = new UI.Canvas();
@@ -74,46 +74,46 @@ var SidebarRight = function (editor) {
 
     // title
 
-    let titleMode = new UI.Text('Setting');
-    titleMode.addClass('h4');
-    titleMode.setTextAlign('center');
-    titleMode.setColor('whitesmoke');
-    titleMode.setWidth('250px');
-    titleMode.setBackgroundColor('blueviolet');
-    container.add(titleMode);
+    // let titleMode = new UI.Text('Setting');
+    // titleMode.addClass('h4');
+    // titleMode.setTextAlign('center');
+    // titleMode.setColor('whitesmoke');
+    // titleMode.setWidth('250px');
+    // titleMode.setBackgroundColor('blueviolet');
+    // container.add(titleMode);
 
-    let characterButtons = new UI.Div();
-    characterButtons.setMargin('5px');
-    characterButtons.addClass('btn-group');
-    characterButtons.addClass('btn-group-toggle');
-    characterButtons.dom.setAttribute('data-toggle', 'buttons');
-    container.add(characterButtons);
+    // let characterButtons = new UI.Div();
+    // characterButtons.setMargin('5px');
+    // characterButtons.addClass('btn-group');
+    // characterButtons.addClass('btn-group-toggle');
+    // characterButtons.dom.setAttribute('data-toggle', 'buttons');
+    // container.add(characterButtons);
 
     let boyLabel = new UI.Label();
-    boyLabel.addClass('btn');
-    boyLabel.addClass('btn-secondary');
-    boyLabel.setWidth('125px');
-    characterButtons.add(boyLabel);
-    boyLabel.dom.innerHTML = 'Boy';
+    // boyLabel.addClass('btn');
+    // boyLabel.addClass('btn-secondary');
+    // boyLabel.setWidth('125px');
+    // characterButtons.add(boyLabel);
+    // boyLabel.dom.innerHTML = 'Boy';
 
-    let boyInput = new UI.Input('');
-    boyInput.dom.setAttribute('type', 'radio');
-    boyInput.dom.setAttribute('name', 'options');
-    boyInput.dom.setAttribute('autocomplete', 'off');
-    boyLabel.add(boyInput);
+    // let boyInput = new UI.Input('');
+    // boyInput.dom.setAttribute('type', 'radio');
+    // boyInput.dom.setAttribute('name', 'options');
+    // boyInput.dom.setAttribute('autocomplete', 'off');
+    // boyLabel.add(boyInput);
 
     let girlLabel = new UI.Label();
-    girlLabel.addClass('btn');
-    girlLabel.addClass('btn-secondary');
-    girlLabel.setWidth('125px');
-    characterButtons.add(girlLabel);
-    girlLabel.dom.innerHTML = 'Girl';
+    // girlLabel.addClass('btn');
+    // girlLabel.addClass('btn-secondary');
+    // girlLabel.setWidth('125px');
+    // characterButtons.add(girlLabel);
+    // girlLabel.dom.innerHTML = 'Girl';
 
-    let girlInput = new UI.Input('');
-    girlInput.dom.setAttribute('type', 'radio');
-    girlInput.dom.setAttribute('name', 'options');
-    girlInput.dom.setAttribute('autocomplete', 'off');
-    girlLabel.add(girlInput);
+    // let girlInput = new UI.Input('');
+    // girlInput.dom.setAttribute('type', 'radio');
+    // girlInput.dom.setAttribute('name', 'options');
+    // girlInput.dom.setAttribute('autocomplete', 'off');
+    // girlLabel.add(girlInput);
 
     editor.boyLabel = boyLabel;
     editor.girlLabel = girlLabel;
@@ -184,6 +184,30 @@ var SidebarRight = function (editor) {
         emotion_bar_chart.data.datasets[0].data[5] = surprised;
 
         emotion_bar_chart.update();
+    });
+
+    let titleEmotionCommand = new UI.Text('Storylines');
+    titleEmotionCommand.addClass('h4');
+    titleEmotionCommand.setTextAlign('center');
+    titleEmotionCommand.setColor('whitesmoke');
+    titleEmotionCommand.setMarginTop('15px');
+    titleEmotionCommand.setWidth('300px');
+    // titleEmotionCommand.setBackgroundColor('blueviolet');
+    titleEmotionCommand.setBackgroundColor('#6a51a3');
+    container.add(titleEmotionCommand);
+
+    let emotionCommandView = new SidebarLeft.EmotionCMD(editor);
+    container.add(emotionCommandView);
+
+    let editor_button = new UI.Button('Editor');
+    editor_button.setType('button');
+    editor_button.setWidth('100%');
+    editor_button.dom.style.borderRadius = '5px';
+    container.add(editor_button);
+
+    $(editor_button.dom).click(function () {
+        editor.node_editor.setDisplay('');
+        editor.script_editor.dom.style.zIndex = "-1";
     });
 
     return container;

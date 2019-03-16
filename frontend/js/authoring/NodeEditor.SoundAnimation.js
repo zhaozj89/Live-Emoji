@@ -28,8 +28,10 @@ class SoundPlayer {
 	}
 
 	pause (name) {
-		let sound = this.howl_list[name];
-		sound.pause();
+		if(this.howl_list.hasOwnProperty(name)){
+			let sound = this.howl_list[name];
+			sound.pause();
+		}
 	}
 
 	volume ( val ) {

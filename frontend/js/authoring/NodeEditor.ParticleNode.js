@@ -124,7 +124,7 @@ AnchorNode.prototype.onExecute = function()
 }
 
 AnchorNode.title = "Anchor";
-AnchorNode.color = "#ae0cff";
+AnchorNode.color = "#2c7fb8";
 AnchorNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/anchor", AnchorNode );
@@ -195,7 +195,7 @@ OverwhelmNode.prototype.onExecute = function()
 }
 
 OverwhelmNode.title = "Overwhelm";
-OverwhelmNode.color = "#ae0cff";
+OverwhelmNode.color = "#2c7fb8";
 OverwhelmNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/overwhelm", OverwhelmNode );
@@ -234,7 +234,7 @@ AttractionNode.prototype.onExecute = function()
 }
 
 AttractionNode.title = "Attraction";
-AttractionNode.color = "#ae0cff";
+AttractionNode.color = "#2c7fb8";
 AttractionNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/attraction", AttractionNode );

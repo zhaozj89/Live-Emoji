@@ -9,7 +9,8 @@ var SidebarLeft = function (editor) {
     titleView.setTextAlign('center');
     titleView.setColor('whitesmoke');
     titleView.setWidth('300px');
-    titleView.setBackgroundColor('blueviolet');
+    // titleView.setBackgroundColor('blueviolet');
+    titleView.setBackgroundColor('#2185b5');
     container.add(titleView);
 
     let audience_view = new AudienceView(editor);
@@ -87,17 +88,105 @@ var SidebarLeft = function (editor) {
 
     //
 
-    let titleEmotionCommand = new UI.Text('Stories');
-    titleEmotionCommand.addClass('h4');
-    titleEmotionCommand.setTextAlign('center');
-    titleEmotionCommand.setColor('whitesmoke');
-    titleEmotionCommand.setMarginTop('15px');
-    titleEmotionCommand.setWidth('300px');
-    titleEmotionCommand.setBackgroundColor('blueviolet');
-    container.add(titleEmotionCommand);
+    let titleOverhead = new UI.Text('Overhead');
+    titleOverhead.addClass('h4');
+    titleOverhead.setTextAlign('center');
+    titleOverhead.setColor('whitesmoke');
+    titleOverhead.setWidth('300px');
+    // titleView.setBackgroundColor('blueviolet');
+    titleOverhead.setBackgroundColor('#2185b5');
+    container.add(titleOverhead);
 
-    let emotionCommandView = new SidebarLeft.EmotionCMD(editor);
-    container.add(emotionCommandView);
+    let overhead_canvas = new UI.Canvas();
+    overhead_canvas.setWidth("300px");
+    overhead_canvas.setHeight("300px");
+    overhead_canvas.dom.width = 300;
+    overhead_canvas.dom.height = 300;
+
+    let mainContext = overhead_canvas.dom.getContext('2d');
+    let canvasWidth = overhead_canvas.dom.width;
+    let canvasHeight = overhead_canvas.dom.height;
+
+    let pre_main_arrow1 = new THREE.Vector2(-50, -50);
+    let pre_main_arrow2 = new THREE.Vector2(50, -50);
+
+    let delta_theta = 0;
+
+    function _RotateTheta(vec, theta) {
+        let res = new THREE.Vector2(0, 0);
+
+        let cost = Math.cos(theta);
+        let sint = Math.sin(theta);
+
+        res.x = vec.x*cost-vec.y*sint;
+        res.y = vec.x*sint+vec.y*cost;
+        return res;
+    }
+    
+    function _RedrawOverhead(delta_theta) {
+        //background
+        mainContext.beginPath();
+        mainContext.arc(150, 150, 150, 0, 2 * Math.PI, true);
+        mainContext.fillStyle = "#ffffff";
+        mainContext.fill();
+        mainContext.closePath();
+
+        mainContext.strokeStyle = "#000000";
+        mainContext.setLineDash([5, 3]);
+        mainContext.lineWidth = 1;
+
+        mainContext.beginPath();
+        mainContext.moveTo(0,150);
+        mainContext.lineTo(300, 150);
+        mainContext.stroke();
+        mainContext.closePath();
+
+        mainContext.beginPath();
+        mainContext.moveTo(150,0);
+        mainContext.lineTo(150, 300);
+        mainContext.stroke();
+        mainContext.closePath();
+
+        // rotate
+        pre_main_arrow1 = _RotateTheta(pre_main_arrow1, delta_theta);
+        pre_main_arrow2 = _RotateTheta(pre_main_arrow2, delta_theta);
+
+        mainContext.strokeStyle = "#ff0000";
+        mainContext.setLineDash([0]);
+        mainContext.lineWidth = 3;
+
+        mainContext.beginPath();
+        mainContext.moveTo(150, 150);
+        mainContext.lineTo(150+pre_main_arrow1.x, 150+pre_main_arrow1.y);
+        mainContext.stroke();
+
+        mainContext.moveTo(150, 150);
+        mainContext.lineTo(150+pre_main_arrow2.x, 150+pre_main_arrow2.y);
+        mainContext.stroke();
+        mainContext.closePath();
+
+        let side_angle = -editor.side_camera.rotation.y;
+        mainContext.beginPath();
+        mainContext.moveTo(150,150);
+        mainContext.arc(150,150,60,-3*Math.PI/4+side_angle,-Math.PI/4+side_angle);
+        mainContext.fillStyle = "rgba(100,0,0,0.5)";
+        mainContext.fill();
+        mainContext.closePath();
+
+    }
+
+    _RedrawOverhead(delta_theta);
+
+    editor.signals.main_camera_rotate_y.add(function (delta) {
+        delta_theta = delta;
+        _RedrawOverhead(delta_theta);
+    });
+
+    editor.signals.side_camera_rotate_y.add(function () {
+        _RedrawOverhead(delta_theta);
+    });
+
+    container.add(overhead_canvas);
 
     return container;
 

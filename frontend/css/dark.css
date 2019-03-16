@@ -68,7 +68,7 @@ background-color: #111;
 	position: absolute;
 	top: 40px;
 	left: 300px;
-	right: 250px;
+	right: 300px;
 	bottom: 0px;
 }
 
@@ -76,7 +76,7 @@ background-color: #111;
 	position: absolute;
 	top: 40px;
 	left: 300px;
-	right: 250px;
+	right: 300px;
 	bottom: 0px;
 }
 
@@ -198,7 +198,7 @@ background-color: #111;
 	right: 0;
 	top: 40px;
 	bottom: 0;
-	width: 250px;
+	width: 300px;
 	background-color: #111;
 	overflow: auto;
 }

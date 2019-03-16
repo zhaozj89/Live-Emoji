@@ -42,6 +42,9 @@ var Editor = function () {
 
     let Signal = signals.Signal;
     this.signals = {
+        main_camera_rotate_y: new Signal(),
+        side_camera_rotate_y: new Signal(),
+
         // face following
         followFace: new Signal(),
         followLeftEye: new Signal(),
