@@ -1,7 +1,6 @@
 function _GenerateEmotionCMDUUID(seed)
 {
-    // return uuidv5(seed, uuidv5.URL); // -> v5 UUID
-    return UUID.generate();
+    return THREE.Math.generateUUID();
 }
 
 var CreateNECanvas = function (editor) {
@@ -33,8 +32,7 @@ var SaveAEmotionCMD = function (cmd){
     if(cmd!=null){
         let uuid = cmd.getUUID();
         if(uuid==null) {
-            uuid = _GenerateEmotionCMDUUID(JSON.stringify(cmd.getGraph().serialize())+editor.GlobalCounter);
-            editor.GlobalCounter+=1;
+            uuid = _GenerateEmotionCMDUUID();
             cmd.setUUID(uuid);
             editor.emotionCMDManager.save(uuid, cmd);
             editor.signals.saveEmotionCMD.dispatch({uuid: cmd.uuid, name: cmd.name});

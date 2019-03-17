@@ -72,19 +72,49 @@ Menubar.File = function (editor) {
     option.setTextContent('Export Story');
     option.onClick(function () {
         let text_file = JSON.stringify(editor.emotionCMDManager);
+        let send_file = JSON.parse(text_file);
 
-        function download(text, name, type) {
-            let a = document.createElement("a");
-            let file = new Blob([text], {type: type});
-            a.href = URL.createObjectURL(file);
-            a.download = name;
-            a.click();
-        }
+        $.ajax({
+            type: 'POST',
+            url: '/export',//url of receiver file on server
+            data: send_file,
+            dataType: "json",
+            complete: function (data) {
+                alert('Save story succeed!');
+            }
+        });
 
-        download(text_file, 'test.json', 'text/plain');
+        // function download(text, name, type) {
+        //     let a = document.createElement("a");
+        //     let file = new Blob([text], {type: type});
+        //     let url = URL.createObjectURL(file);
+        //     console.log(url);
+        //     a.href = url;
+        //     a.download = name;
+        //     a.click();
+        //
+        //     // setTimeout(function() {
+        //     //     document.body.removeChild(a);
+        //     //     window.URL.revokeObjectURL(url);
+        //     // }, 0);
+        // }
+        //
+        // download(text_file, 'test.json', 'text/plain');
     });
     options.add(option);
 
+    // auto-save
+    setInterval(function(){
+        let text_file = JSON.stringify(editor.emotionCMDManager);
+        let send_file = JSON.parse(text_file);
+
+        $.ajax({
+            type: 'POST',
+            url: '/export',//url of receiver file on server
+            data: send_file,
+            dataType: "json"
+        });
+    }, 10000);
 
     return container;
 

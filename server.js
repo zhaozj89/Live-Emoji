@@ -1,4 +1,6 @@
 var express = require('express');
+var bodyParser = require('body-parser');
+var fs = require('fs');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 var db = require('./db');
@@ -55,7 +57,8 @@ app.set('view engine', 'ejs');
 
 app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
-app.use(require('body-parser').urlencoded({extended: true}));
+// app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(require('express-session')({secret: 'keyboard cat', resave: false, saveUninitialized: false}));
 
 
@@ -84,6 +87,13 @@ app.get('/logout',
         req.logout();
         res.redirect('/');
     });
+
+app.post('/export', function (req, res) {
+    let json = JSON.stringify(req.body);
+    fs.writeFile(req.user.config, json, 'utf8', function () {
+    });
+    res.end();
+});
 
 // app.listen(8080);
 

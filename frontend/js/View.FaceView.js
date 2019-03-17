@@ -5,7 +5,7 @@ var FaceView = function (editor) {
     
     let overlayed_panel = new UI.Panel();
     overlayed_panel.setWidth('300px');
-    overlayed_panel.setHeight('250px');
+    overlayed_panel.setHeight('225px');
 
     camera_view.add(overlayed_panel);
 
@@ -15,7 +15,7 @@ var FaceView = function (editor) {
     video_stream.setPosition('absolute');
     video_stream.setId('selfVideo');
     video_stream.dom.width = 300;
-    video_stream.dom.height = 250;
+    video_stream.dom.height = 225;
     video_stream.setPreload('auto');
     video_stream.setLoop(true);
     video_stream.setPlaysinline(true);
@@ -31,7 +31,7 @@ var FaceView = function (editor) {
     video_stream_overlay.setPosition('absolute');
     video_stream_overlay.setId('video_stream_overlay');
     video_stream_overlay.dom.width = 300;
-    video_stream_overlay.dom.height = 250;
+    video_stream_overlay.dom.height = 225;
     overlayed_panel.add(video_stream_overlay);
 
     // start button
@@ -55,7 +55,7 @@ var FaceView = function (editor) {
     //define canvas for image processing
     let capture_canvas = document.createElement('canvas');
     capture_canvas.width = 300;
-    capture_canvas.height = 250;
+    capture_canvas.height = 225;
     let capture_context = capture_canvas.getContext('2d');
 
     let face_canvas = document.createElement('canvas');
@@ -163,7 +163,7 @@ var FaceView = function (editor) {
     let corr = null;
 
     function MainLoop() {
-        request_id = undefined;
+        // request_id = undefined;
 
         // predict
         pred = FaceTracker.predict();
@@ -200,18 +200,18 @@ var FaceView = function (editor) {
         if (editor.GlobalRunningEmotionCMDState.running === false)
             GetFaceEmotion();
 
-        StartMainLoop();
+        // StartMainLoop();
     }
 
     function StartMainLoop() {
-        if (!request_id) {
-            request_id = requestAnimationFrame(MainLoop);
-        }
+        // if (!request_id) {
+            request_id = setInterval(MainLoop, TIME_STEP);
+        // }
     }
 
     function StopMainLoop() {
         if (request_id) {
-            cancelAnimationFrame(request_id);
+            clearInterval(request_id);
             request_id = undefined;
         }
     }
@@ -317,6 +317,7 @@ var FaceView = function (editor) {
                 let inputData = {"input": preprocessedData}
                 return blinkmodelLeft.predict(inputData)
             }).then(outputData => {
+                // console.log(outputData.output);
                 if (outputData.output < 0.2) {
                     signals.followLeftEye.dispatch('close');
                 } else {
@@ -340,8 +341,8 @@ var FaceView = function (editor) {
                     let inputData = {"input": preprocessedData}
                     return blinkmodelRight.predict(inputData)
                 }).then(outputData => {
-                if (outputData.output < 0.2
-                ) {
+                    // console.log(outputData.output);
+                if (outputData.output < 0.2) {
                     signals.followRightEye.dispatch('close');
                 } else {
                     signals.followRightEye.dispatch('open');
@@ -374,14 +375,18 @@ var FaceView = function (editor) {
                 let best_emotion = null;
                 let best_val = -1;
                 for(let prop in seven_emotions){
-                    // if(prop=='neutral') continue;
+                    if(prop=='neutral') continue;
                     if(seven_emotions[prop]>best_val){
                         best_val = seven_emotions[prop];
                         best_emotion = prop;
                     }
                 }
-                editor.current_emotion = best_emotion;
-                console.log(editor.current_emotion);
+                if(Math.abs(best_val-seven_emotions['neutral'])<0.2)
+                    editor.current_emotion = best_emotion;
+                else
+                    editor.current_emotion = 'neutral';
+                // console.log('face detection');
+                // console.log(editor.current_emotion);
                 signals.updateCurrentDetectedEmotionIntensity.dispatch(seven_emotions);
 
             }).catch(err => {
@@ -415,6 +420,8 @@ var FaceView = function (editor) {
     }
 
     function DrawLandmark() {
+        // console.log(video_streamWidth);
+        // console.log(video_streamHeight);
         video_stream_overlay_context.clearRect(0, 0, video_streamWidth, video_streamHeight);
 
         if (pred !== null) {

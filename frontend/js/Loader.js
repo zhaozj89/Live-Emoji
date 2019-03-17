@@ -644,7 +644,7 @@ var PreLoadCharacterJSON = function (editor, boy_or_gril) {
     editor.signals.CharacterAddedToScene.add(function (obj) {
         editor.selected = obj;
         editor.scene.add(editor.selected);
-        editor.selected.position.z -= 10;
+        editor.selected.position.z -= 15;
         editor.signals.sceneGraphChanged.dispatch();
     });
 

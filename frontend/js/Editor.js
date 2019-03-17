@@ -90,9 +90,6 @@ var Editor = function () {
     this.danmaku_bmtext = null;
     this.sound_player = null;
 
-    // global
-    this.GlobalCounter = 0;
-
     // node editing related
     this.static_background_sphere = null;
     this.staic_background_material = null;

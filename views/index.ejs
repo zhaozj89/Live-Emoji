@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
     <link rel="stylesheet" href="css/jquery-ui.min.css"/>
-    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/dark.css"/>
     <link rel="stylesheet" type="text/css" href="css/litegraph.css"/>
     <link rel="stylesheet" type="text/css" href="css/litegraph-style.css"/>
@@ -15,10 +15,6 @@
 
     <script src="js/GlobalVariables.js"></script>
     <script src="js/libs/howler.min.js"></script>
-
-    <!--for uuid-->
-    <!--<script src="http://wzrd.in/standalone/uuid%2Fv5@latest"></script>-->
-    <script src="js/libs/uuid.js"></script>
 
     <!--chart-->
     <script src="js/libs/Chart.bundle.js"></script>
@@ -36,8 +32,8 @@
     <script src="js/libs/jquery/jquery.min.js"></script>
     <script src="js/libs/jquery/jquery-ui.min.js"></script>
     <script src="js/libs/jquery/jsgrid.js"></script>
-    <script src="js/libs/jquery/popper.js"></script>
-    <script src="js/libs/jquery/bootstrap.js"></script>
+    <script src="js/libs/jquery/popper.min.js"></script>
+    <script src="js/libs/jquery/bootstrap.min.js"></script>
 
     <!--numeric-->
     <script src="js/libs/gaussian.js"></script>
@@ -153,7 +149,6 @@
     // LoadConfigurationJSONFile(editor, 'asset/test.json');
 
     var user_config_json = '<%= user.config %>'.replace(/&quot;/g, '"');
-    console.log(user_config_json);
 
     // load pre-defined cmds
     editor.emotionCMDManager = new EmotionCMDManager(editor);
@@ -219,8 +214,6 @@
         // and position, scale or rotate them
         editor.scene.add( editor.danmaku_bmtext );
     };
-
-    $('a').css('bottom', '');
 
     // add events
     editor.signals.windowResize.add(function () {

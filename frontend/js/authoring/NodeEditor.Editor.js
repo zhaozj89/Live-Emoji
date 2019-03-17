@@ -162,9 +162,9 @@ var NodeEditor = function (editor) {
 
     let menuSound = new UI.UList();
     menuSound.addClass('dropdown-menu');
-    let buttonSound = menuSound.addLi( 'Sound' );
+    let buttonSound = menuSound.addLi( 'Human Sound' );
     buttonSound.classList.add( 'dropdown-item' );
-    let buttonEmotionSound = menuSound.addLi( 'Emotion Sound' );
+    let buttonEmotionSound = menuSound.addLi( 'Customized Sound' );
     buttonEmotionSound.classList.add( 'dropdown-item' );
     Sound.appendChild(menuSound.dom);
 

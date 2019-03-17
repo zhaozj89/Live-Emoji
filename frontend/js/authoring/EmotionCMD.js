@@ -9,7 +9,7 @@ class EmotionCMD {
 		this.graph = new LGraph(config);
 	}
 	start(){
-		this.graph.start();
+		this.graph.start(TIME_STEP+10);
 	}
 	stop(){
 		this.graph.stop();

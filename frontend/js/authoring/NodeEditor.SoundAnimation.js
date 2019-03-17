@@ -1,13 +1,13 @@
 class SoundPlayer {
-	constructor (playlist) {
-		this.playlist = playlist;
+	constructor () {
 		this.howl_list = {};
 	}
 
 	register(name){
-		let data = this.playlist[ name ];
+		if(this.howl_list.hasOwnProperty(name)) return;
+		console.log('registered');
 		let sound = new Howl( {
-			src: [ './asset/audio/' + data + '.mp3' ],
+			src: [ './asset/audio/' + name + '.mp3' ],
 			html5: true,
 			onplay: function () {
 			},
@@ -20,6 +20,7 @@ class SoundPlayer {
 			onstop: function () {
 			}
 		} );
+		console.log(sound);
 		this.howl_list[name] = sound;
 	}
 
@@ -40,14 +41,6 @@ class SoundPlayer {
 }
 
 var SoundAnimation = function (editor) {
-	let player = new SoundPlayer({
-			'bill': 'bill',
-			'burp': 'burp',
-			'cry': 'cry',
-			'laugh': 'laugh',
-			'scream': 'scream',
-			'slurp': 'slurp'
-		});
-
+	let player = new SoundPlayer();
 	editor.sound_player = player;
 }

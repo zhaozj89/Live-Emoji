@@ -107,13 +107,18 @@ FaceEmotionTriggerNode.prototype.onExecute = function()
 {
 
 	let that = this;
-	console.log(that.properties.emotion);
+	console.log('event');
+	console.log(editor.current_emotion);
 	if(editor.current_emotion!=null && editor.current_emotion==that.properties.emotion){
+		// console.log('emotion in');
 		this.setOutputData(0, LiteGraph.EVENT);
-		setTimeout( function () {
-			that.setOutputData(0, null);
-			editor.current_emotion = null;
-		}, TIME_STEP );
+		// setTimeout( function () {
+		// 	that.setOutputData(0, null);
+		// 	editor.current_emotion = null;
+		// }, TIME_STEP );
+	}
+	if(editor.current_emotion!=null && editor.current_emotion!=that.properties.emotion){
+		this.setOutputData(0, '');
 	}
 }
 

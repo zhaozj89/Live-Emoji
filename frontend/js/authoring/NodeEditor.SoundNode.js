@@ -7,11 +7,8 @@ function SoundNode()
 		},
 		{values: ['', 'bill', 'burp', "cry", "laugh", "scream", "slurp"]});
 
-	this.addWidget("combo","play", "", function (val) {
-			that.properties.play = val;
-		},
-		{values: ['', 'play', 'pause']});
 	that.addInput("",LiteGraph.EVENT);
+	that.is_playing = false;
 }
 
 SoundNode.prototype.onExecute = function()
@@ -21,14 +18,13 @@ SoundNode.prototype.onExecute = function()
 		if(that.properties.sound!='' && editor.sound_player!=null){
 			let name = that.properties.sound;
 
-			console.log(that.properties.play);
-			if(that.properties.play=='play') {
-
+			if(that.is_playing==false) {
 				editor.sound_player.register(name);
 				editor.sound_player.play(name);
-			}
-			if(that.properties.play=='pause'){
+				that.is_playing=true;
+			}else{
 				editor.sound_player.pause(name);
+				that.is_playing=false;
 			}
 		}
 	}
@@ -41,24 +37,16 @@ SoundNode.shape = LiteGraph.ROUND_SHAPE;
 LiteGraph.registerNodeType("node_editor/sound", SoundNode );
 
 
-
-
-
-
-
 function EmotionSoundNode()
 {
 	let that = this;
 	that.properties = {name: "", play: ""};
 	this.addWidget("text","name", "", function (val) {
-			that.properties.text = val;
+			that.properties.name = val;
 		});
 
-	this.addWidget("combo","play", "", function (val) {
-			that.properties.play = val;
-		},
-		{values: ['', 'play', 'pause']});
 	that.addInput("",LiteGraph.EVENT);
+	that.is_playing = false;
 }
 
 EmotionSoundNode.prototype.onExecute = function()
@@ -68,19 +56,19 @@ EmotionSoundNode.prototype.onExecute = function()
 		if(that.properties.name!='' && editor.sound_player!=null){
 			let name = 'emotion/' + that.properties.name;
 
-			if(that.properties.play=='play') {
-
+			if(that.is_playing==false) {
 				editor.sound_player.register(name);
 				editor.sound_player.play(name);
-			}
-			if(that.properties.play=='pause'){
+				that.is_playing=true;
+			}else{
 				editor.sound_player.pause(name);
+				that.is_playing=false;
 			}
 		}
 	}
 }
 
-EmotionSoundNode.title = "Emotion Sound";
+EmotionSoundNode.title = "Customized Sound";
 EmotionSoundNode.color = "#7fcdbb";
 EmotionSoundNode.shape = LiteGraph.ROUND_SHAPE;
 
