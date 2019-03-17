@@ -352,12 +352,14 @@
         };
     });
 
+    let side_camera_rotation_y = editor.signals.side_camera_rotate_y;
     function _Rendering() {
         editor.scene.updateMatrixWorld();
         editor.main_view_renderer.render(editor.scene, editor.main_camera);
         editor.side_view_renderer.render(editor.scene, editor.side_camera);
 
-        editor.signals.side_camera_rotate_y.dispatch();
+        if(Math.abs(side_camera_rotation_y-editor.signals.side_camera_rotate_y)>0.01)
+            editor.signals.side_camera_rotate_y.dispatch();
     }
 
     // particle system stuff

@@ -9,8 +9,8 @@ var NodeEditor = function (editor) {
     container.setId('NodeEditor');
     container.setPosition('absolute');
     container.setBackgroundColor('rgba(20,20,20,0.5)');
-    container.setDisplay('');
-    // container.setDisplay( 'none' );
+    // container.setDisplay('');
+    container.setDisplay( 'none' );
     // container.dom.style.zIndex = "5";
 
     editor.node_editor = container;
@@ -63,7 +63,7 @@ var NodeEditor = function (editor) {
 
     menu.setPosition('absolute');
     menu.setTop('0px');
-    menu.setLeft('120px');
+    menu.setLeft('230px');
     container.add(menu);
 
     let Event = menu.addLi('Trigger', 'nav-item dropdown', 'nav-link dropdown-toggle');
@@ -148,7 +148,7 @@ var NodeEditor = function (editor) {
     menuParticle.addClass('dropdown-menu');
     let buttonAnchor = menuParticle.addLi( 'Anchor' );
     buttonAnchor.classList.add( 'dropdown-item' );
-    let buttonOverwhelm = menuParticle.addLi( 'Overwhelm' );
+    let buttonOverwhelm = menuParticle.addLi( 'Full Screen' );
     buttonOverwhelm.classList.add( 'dropdown-item' );
     let buttonAttraction = menuParticle.addLi( 'Attraction' );
     buttonAttraction.classList.add( 'dropdown-item' );

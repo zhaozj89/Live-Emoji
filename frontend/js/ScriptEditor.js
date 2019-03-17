@@ -5,8 +5,8 @@ var ScriptEditor = function (editor) {
     container.setId('ScriptEditor');
     container.setPosition('absolute');
     container.setBackgroundColor('rgba(20,20,20,0.5)');
-    container.setDisplay('none');
-    // container.setDisplay( 'none' );
+    // container.setDisplay('none');
+    container.setDisplay( '' );
     container.dom.style.zIndex = "0";
 
     editor.script_editor = container;

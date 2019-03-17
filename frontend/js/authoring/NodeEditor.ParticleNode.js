@@ -194,7 +194,7 @@ OverwhelmNode.prototype.onExecute = function()
 	}
 }
 
-OverwhelmNode.title = "Overwhelm";
+OverwhelmNode.title = "Full Screen";
 OverwhelmNode.color = "#2c7fb8";
 OverwhelmNode.shape = LiteGraph.ROUND_SHAPE;
 

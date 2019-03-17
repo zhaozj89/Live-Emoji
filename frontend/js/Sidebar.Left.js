@@ -111,6 +111,7 @@ var SidebarLeft = function (editor) {
     let pre_main_arrow2 = new THREE.Vector2(50, -50);
 
     let delta_theta = 0;
+    let accumulate_delta = 0;
 
     function _RotateTheta(vec, theta) {
         let res = new THREE.Vector2(0, 0);
@@ -165,14 +166,14 @@ var SidebarLeft = function (editor) {
         mainContext.stroke();
         mainContext.closePath();
 
-        let side_angle = -editor.side_camera.rotation.y;
+        let side_angle = -editor.side_camera.rotation.y - accumulate_delta;
+        accumulate_delta -= delta_theta;
         mainContext.beginPath();
         mainContext.moveTo(150,150);
         mainContext.arc(150,150,60,-3*Math.PI/4+side_angle,-Math.PI/4+side_angle);
         mainContext.fillStyle = "rgba(100,0,0,0.5)";
         mainContext.fill();
         mainContext.closePath();
-
     }
 
     _RedrawOverhead(delta_theta);
