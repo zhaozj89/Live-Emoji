@@ -57,7 +57,9 @@ app.set('view engine', 'ejs');
 
 app.use(require('morgan')('combined'));
 app.use(require('cookie-parser')());
-// app.use(bodyParser.json());
+var multer = require('multer'); // v1.0.5
+var upload = multer(); // for parsing multipart/form-data
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(require('express-session')({secret: 'keyboard cat', resave: false, saveUninitialized: false}));
 
@@ -88,9 +90,9 @@ app.get('/logout',
         res.redirect('/');
     });
 
-app.post('/export', function (req, res) {
-    let json = JSON.stringify(req.body);
-    fs.writeFile(req.user.config, json, 'utf8', function () {
+app.post('/export', upload.array(), function (req, res) {
+    let text_file = JSON.stringify(req.body);
+    fs.writeFile('frontend/'+req.user.config, text_file, 'utf8', function () {
     });
     res.end();
 });

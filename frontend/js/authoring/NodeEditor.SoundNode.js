@@ -54,7 +54,7 @@ EmotionSoundNode.prototype.onExecute = function()
 	let that = this;
 	if(that.getInputData(0, false)==LiteGraph.EVENT){
 		if(that.properties.name!='' && editor.sound_player!=null){
-			let name = 'emotion/' + that.properties.name;
+			let name = that.properties.name;
 
 			if(that.is_playing==false) {
 				editor.sound_player.register(name);
@@ -73,3 +73,33 @@ EmotionSoundNode.color = "#7fcdbb";
 EmotionSoundNode.shape = LiteGraph.ROUND_SHAPE;
 
 LiteGraph.registerNodeType("node_editor/emotion_sound", EmotionSoundNode );
+
+
+
+
+
+
+
+
+
+function SoundStopNode()
+{
+	let that = this;
+	that.addInput("",LiteGraph.EVENT);
+}
+
+SoundStopNode.prototype.onExecute = function()
+{
+	let that = this;
+	if(that.getInputData(0, false)==LiteGraph.EVENT){
+		if(editor.sound_player!=null){
+			editor.sound_player.pause_all();
+		}
+	}
+}
+
+SoundStopNode.title = "Stop All";
+SoundStopNode.color = "#7fcdbb";
+SoundStopNode.shape = LiteGraph.ROUND_SHAPE;
+
+LiteGraph.registerNodeType("node_editor/sound_stop", SoundStopNode );

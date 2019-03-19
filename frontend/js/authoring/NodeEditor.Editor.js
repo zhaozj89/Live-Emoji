@@ -162,10 +162,12 @@ var NodeEditor = function (editor) {
 
     let menuSound = new UI.UList();
     menuSound.addClass('dropdown-menu');
-    let buttonSound = menuSound.addLi( 'Human Sound' );
+    let buttonSound = menuSound.addLi( 'Human' );
     buttonSound.classList.add( 'dropdown-item' );
-    let buttonEmotionSound = menuSound.addLi( 'Customized Sound' );
+    let buttonEmotionSound = menuSound.addLi( 'Customization' );
     buttonEmotionSound.classList.add( 'dropdown-item' );
+    let buttonStopSound = menuSound.addLi( 'Stop' );
+    buttonStopSound.classList.add( 'dropdown-item' );
     Sound.appendChild(menuSound.dom);
 
     let menuScene = new UI.UList();
@@ -311,6 +313,13 @@ var NodeEditor = function (editor) {
             node.pos = _GetRandomPositionArray();
             editor.emotionCMDManager.current_emotion_cmd.add(node);
         } );
+
+        $(buttonStopSound).click( function () {
+            let node = LiteGraph.createNode("node_editor/sound_stop");
+            node.pos = _GetRandomPositionArray();
+            editor.emotionCMDManager.current_emotion_cmd.add(node);
+        } );
+
     });
 
     return container;

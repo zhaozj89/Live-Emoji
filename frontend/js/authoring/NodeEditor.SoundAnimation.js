@@ -5,7 +5,6 @@ class SoundPlayer {
 
 	register(name){
 		if(this.howl_list.hasOwnProperty(name)) return;
-		console.log('registered');
 		let sound = new Howl( {
 			src: [ './asset/audio/' + name + '.mp3' ],
 			html5: true,
@@ -20,7 +19,6 @@ class SoundPlayer {
 			onstop: function () {
 			}
 		} );
-		console.log(sound);
 		this.howl_list[name] = sound;
 	}
 
@@ -37,6 +35,12 @@ class SoundPlayer {
 
 	volume ( val ) {
 		Howler.volume( val );
+	}
+
+	pause_all(){
+		for(let prop in this.howl_list){
+			this.howl_list[prop].pause();
+		}
 	}
 }
 

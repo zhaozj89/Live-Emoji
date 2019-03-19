@@ -4,6 +4,7 @@ var LoadConfigurationJSONFile = function ( editor, filename ) {
     let xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if ( this.readyState == 4 && this.status == 200 ) {
+            console.log(this.responseText);
             let jsonFile = JSON.parse( this.responseText );
             ParseTextToEditorAllEmotionCMDs(jsonFile);
             editor.emotionCMDManager.stop();
