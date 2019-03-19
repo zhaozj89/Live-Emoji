@@ -36,15 +36,12 @@ function KeyboardNode1()
 	that.properties = {key:null};
 	that.addWidget("combo","key", "", function(val){
 		that.properties.key = val;
-	}, {values:["","a","b","c",'d','e','f','g','h','i','j','k','l','m','o','p','q','r','s','t','u','v','w','x','y','z']} );
+	}, {values:['a','b','c','d','e','f','g','h','i','j','k','l','m','o','p','q','r','s','t','u','v','w','x','y','z']} );
 	that.addOutput('',LiteGraph.EVENT);
 }
 
 KeyboardNode1.prototype.onExecute = function()
 {
-	// console.log('in node:');
-	// console.log(this.properties.key);
-	// console.log('+++++++++++++++++');
 	let that = this;
 	if(this.properties.key!=null && editor.emotionCMDManager.current_key==this.properties.key){
 		this.setOutputData(0, LiteGraph.EVENT);
@@ -69,7 +66,7 @@ function KeyboardNode2()
 	that.properties = {key:null};
 	that.addWidget("combo","key", "", function(val){
 		that.properties.key = val;
-	}, {values:["","A","B","C",'D','E','F','G','H','I','J','K','L','M','O','P','Q','R','S','T','U','V','W','X','Y','Z']} );
+	}, {values:['A','B','C','D','E','F','G','H','I','J','K','L','M','O','P','Q','R','S','T','U','V','W','X','Y','Z']} );
 	that.addOutput('',LiteGraph.EVENT);
 }
 
@@ -99,7 +96,7 @@ function FaceEmotionTriggerNode()
 	that.properties = {emotion: ''};
 	that.addWidget("combo","emotion", "", function(val){
 		that.properties.emotion = val;
-	}, {values:["",'angry','disgusted','fearful','happy','sad','surprised']} );
+	}, {values:['','angry','disgusted','fearful','happy','sad','surprised']} );
 	that.addOutput('',LiteGraph.EVENT);
 }
 
@@ -134,7 +131,7 @@ function MouseNode()
 	that.properties = {side:null};
 	that.addWidget("combo","side", "", function(val){
 		that.properties.side = val;
-	}, {values:["",'left','right']} );
+	}, {values:['','left','right']} );
 	that.addOutput('',LiteGraph.EVENT);
 }
 
