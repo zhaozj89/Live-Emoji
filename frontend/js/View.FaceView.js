@@ -163,8 +163,6 @@ var FaceView = function (editor) {
     let corr = null;
 
     function MainLoop() {
-        // request_id = undefined;
-
         // predict
         pred = FaceTracker.predict();
 
@@ -199,14 +197,10 @@ var FaceView = function (editor) {
 
         if (editor.GlobalRunningEmotionCMDState.running === false)
             GetFaceEmotion();
-
-        // StartMainLoop();
     }
 
     function StartMainLoop() {
-        // if (!request_id) {
-            request_id = setInterval(MainLoop, TIME_STEP);
-        // }
+        request_id = setInterval(MainLoop, TIME_STEP);
     }
 
     function StopMainLoop() {

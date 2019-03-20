@@ -21,24 +21,9 @@ var Editor = function () {
 
     // face tracking and event mutex
     let that = this;
-    this.GlobalRunningEmotionCMDState = {
-        running: false,
-        has_particle_node: false,
-        num_danmaku_node: 0
+    that.GlobalRunningEmotionCMDState = {
+        running: false
     };
-    this.UpdateRunningEmotionCMDState = function () {
-        if (that.GlobalRunningEmotionCMDState.has_particle_node === false) {
-            that.GlobalRunningEmotionCMDState.running = false;
-
-            if (editor.selected !== null) {
-                editor.selected.updateEmotion('neutral');
-                editor.signals.sceneGraphChanged.dispatch();
-            }
-        }
-        else{
-            that.GlobalRunningEmotionCMDState.running = true;
-        }
-    }
 
     let Signal = signals.Signal;
     this.signals = {

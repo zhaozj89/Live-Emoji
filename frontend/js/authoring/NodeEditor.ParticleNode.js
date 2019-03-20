@@ -118,8 +118,7 @@ AnchorNode.prototype.onExecute = function()
 		editor.particle_engine_proton.addRender(new Proton.SpriteRender(editor.scene));
 		emitter.emit('once');
 
-		editor.GlobalRunningEmotionCMDState.has_particle_node = true;
-		editor.UpdateRunningEmotionCMDState();
+		editor.GlobalRunningEmotionCMDState.running = true;
 	}
 }
 
@@ -189,8 +188,7 @@ OverwhelmNode.prototype.onExecute = function()
 		editor.particle_engine_proton.addRender(new Proton.SpriteRender(editor.scene));
 		emitter.emit('once');
 
-		editor.GlobalRunningEmotionCMDState.has_particle_node = true;
-		editor.UpdateRunningEmotionCMDState();
+		editor.GlobalRunningEmotionCMDState.running = true;
 	}
 }
 

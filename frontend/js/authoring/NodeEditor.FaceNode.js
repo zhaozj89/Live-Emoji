@@ -14,6 +14,7 @@ FaceEmotionNode.prototype.onExecute = function()
 	let that = this;
 	if(that.getInputData(0, false)==LiteGraph.EVENT && that.properties.emotion!=null&&editor.selected!=null){
 		editor.selected.updateEmotion( that.properties.emotion );
+		editor.GlobalRunningEmotionCMDState.running = true;
 		editor.signals.sceneGraphChanged.dispatch();
 	}
 }

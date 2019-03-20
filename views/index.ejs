@@ -259,6 +259,13 @@
     });
     
     // track face
+    editor.signals.updateCurrentDetectedEmotionIntensity.add(function (seven_emotions) {
+        if(editor.selected!=null){
+            editor.selected.updateEmotion( editor.current_emotion );
+            editor.signals.sceneGraphChanged.dispatch();
+        }
+    });
+
     editor.signals.followFace.add(function (event) {
         let puppet = editor.selected;
         if (puppet !== null) {
@@ -372,11 +379,20 @@
         // update global state
         let num = editor.particle_engine_proton.getCount();
         if( num===0 ) {
-            editor.GlobalRunningEmotionCMDState.has_particle_node = false;
+            editor.GlobalRunningEmotionCMDState.running = false;
+        }
+        else{
+            editor.GlobalRunningEmotionCMDState.running = true;
         }
 
-        if(clock.getElapsedTime()>1){
-            editor.UpdateRunningEmotionCMDState();
+        console.log(editor.GlobalRunningEmotionCMDState.running);
+
+        if(clock.getElapsedTime()>8){
+            editor.GlobalRunningEmotionCMDState.running = false;
+            if (editor.selected !== null) {
+                editor.selected.updateEmotion('neutral');
+                editor.signals.sceneGraphChanged.dispatch();
+            }
             clock.start();
         }
 
