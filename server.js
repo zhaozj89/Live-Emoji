@@ -103,6 +103,6 @@ app.post('/export', upload.array(), function (req, res) {
 var web_server = https.createServer(credentials, app).listen(8080);
 
 //listen on port 8080
-web_server.listen(8080, function () {
-    console.log('listening on https://localhost:8080');
-});
+// web_server.listen(8080, function () {
+//     console.log('listening on https://localhost:8080');
+// });
