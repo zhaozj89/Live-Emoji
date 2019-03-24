@@ -29,10 +29,10 @@ DanmakuNode.prototype.onExecute = function()
 		editor.danmaku_bmtext.scale.set(scale_val,scale_val,scale_val);
 		editor.signals.sceneGraphChanged.dispatch();
 
-		setTimeout(function () {
-			editor.danmaku_bmtext.text = '';
-			editor.signals.sceneGraphChanged.dispatch();
-		}, 2000);
+		// setTimeout(function () {
+		// 	editor.danmaku_bmtext.text = '';
+		// 	editor.signals.sceneGraphChanged.dispatch();
+		// }, 2000);
 	}
 }
 

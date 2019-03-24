@@ -197,7 +197,7 @@
 
         // fontKey and text are required, the rest are optional
         editor.danmaku_bmtext = new TextBitmap({
-            text: '',
+            text: 'haaaaa~',
             fontKey: DanmakuRobotoBoldKey,
             width: 1000,
             align: 'center',
@@ -211,7 +211,7 @@
 
         // TextBitmap inherits THREE.Group
         // so you can add instances to the scene
-        // and position, scale or rotate them
+        editor.danmaku_bmtext.position.set( 30, 20, -50 );
         editor.scene.add( editor.danmaku_bmtext );
     };
 
@@ -246,7 +246,7 @@
     // keyboard
     document.addEventListener('keydown', function (event) {
         editor.emotionCMDManager.current_key = event.key;
-        console.log(event.key);
+        // console.log(event.key);
     });
 
     $(main_view.dom).mousedown(function (event) {
@@ -259,12 +259,12 @@
     });
     
     // track face
-    editor.signals.updateCurrentDetectedEmotionIntensity.add(function (seven_emotions) {
-        if(editor.selected!=null){
-            editor.selected.updateEmotion( editor.current_emotion );
-            editor.signals.sceneGraphChanged.dispatch();
-        }
-    });
+    // editor.signals.updateCurrentDetectedEmotionIntensity.add(function (seven_emotions) {
+    //     if(editor.selected!=null){
+    //         editor.selected.updateEmotion( editor.current_emotion );
+    //         editor.signals.sceneGraphChanged.dispatch();
+    //     }
+    // });
 
     editor.signals.followFace.add(function (event) {
         let puppet = editor.selected;
@@ -291,13 +291,13 @@
         }
     });
 
-    editor.signals.followMouth.add(function (state) {
-        let puppet = editor.selected;
-        if (puppet !== null) {
-            puppet.updateMouth(state);
-            editor.signals.sceneGraphChanged.dispatch();
-        }
-    });
+    // editor.signals.followMouth.add(function (state) {
+    //     let puppet = editor.selected;
+    //     if (puppet !== null) {
+    //         puppet.updateMouth(state);
+    //         editor.signals.sceneGraphChanged.dispatch();
+    //     }
+    // });
     
     // dom stuff
     document.addEventListener('dragover', function (event) {
