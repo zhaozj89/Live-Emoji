@@ -146,7 +146,7 @@ var NodeEditor = function (editor) {
 
     let menuParticle = new UI.UList();
     menuParticle.addClass('dropdown-menu');
-    let buttonAnchor = menuParticle.addLi( 'Anchor' );
+    let buttonAnchor = menuParticle.addLi( 'Point' );
     buttonAnchor.classList.add( 'dropdown-item' );
     let buttonOverwhelm = menuParticle.addLi( 'Full Screen' );
     buttonOverwhelm.classList.add( 'dropdown-item' );

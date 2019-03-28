@@ -88,7 +88,7 @@ var SidebarLeft = function (editor) {
 
     //
 
-    let titleOverhead = new UI.Text('Overhead');
+    let titleOverhead = new UI.Text('Viewing Angle');
     titleOverhead.addClass('h4');
     titleOverhead.setTextAlign('center');
     titleOverhead.setColor('whitesmoke');
