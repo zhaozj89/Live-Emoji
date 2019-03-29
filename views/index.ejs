@@ -352,14 +352,23 @@
         };
     });
 
-    let side_camera_rotation_y = editor.signals.side_camera_rotate_y;
+    let side_camera_rotation_y = editor.side_camera.rotation.y;
+    console.log('-------------------------');
+    console.log(side_camera_rotation_y);
     function _Rendering() {
         editor.scene.updateMatrixWorld();
         editor.main_view_renderer.render(editor.scene, editor.main_camera);
         editor.side_view_renderer.render(editor.scene, editor.side_camera);
 
-        if(Math.abs(side_camera_rotation_y-editor.signals.side_camera_rotate_y)>0.01)
+        if(Math.abs(side_camera_rotation_y-editor.side_camera.rotation.y)>0.1){
+            side_camera_rotation_y = editor.side_camera.rotation.y;
+
             editor.signals.side_camera_rotate_y.dispatch();
+            console.log('sending rotation');
+
+        }
+        // console.log(editor.side_camera.rotation_y);
+
     }
 
     // particle system stuff
@@ -385,7 +394,7 @@
             editor.GlobalRunningEmotionCMDState.running = true;
         }
 
-        console.log(editor.GlobalRunningEmotionCMDState.running);
+        // console.log(editor.GlobalRunningEmotionCMDState.running);
 
         if(clock.getElapsedTime()>8){
             editor.GlobalRunningEmotionCMDState.running = false;
