@@ -65,7 +65,7 @@ function _GetConfigurationDecorator(position_name, force_name, region_name) {
 function AnchorNode()
 {
 	let that = this;
-	that.properties = {anchor: 'center', direction: 'top right', texture: 'heart', scale: 'middle', velocity: 'middle'};
+	that.properties = {anchor: 'center', direction: 'top right', texture: 'heart', texture_name: '', scale: 'middle', velocity: 'middle'};
 	this.addWidget("combo","anchor", "center", function (val) {
 			that.properties.anchor = val;
 		},
@@ -82,6 +82,9 @@ function AnchorNode()
 		},
 		{values: ['dot', 'fire', 'heart', 'poop', 'raindrop', 'snow', 'splatter1',
 			'splatter2', 'surprised1', 'surprised2', 'bubble']});
+	this.addWidget("text","text", "", function (val) {
+		that.properties.texture_name = val;
+	});
 	this.addWidget("combo","scale", "middle", function (val) {
 			that.properties.scale = val;
 		},
@@ -103,6 +106,10 @@ AnchorNode.prototype.onExecute = function()
 			this.properties.texture,
 			this.properties.scale,
 			this.properties.velocity);
+
+		if(this.properties.texture_name!=''){
+			config.texture_name = this.properties.texture_name;
+		}
 		let emitter = CreateEmitterWithConfiguration1(config);
 
 		let attraction1 = this.getInputData(1,false);
