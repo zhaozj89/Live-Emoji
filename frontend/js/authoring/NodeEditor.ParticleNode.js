@@ -129,7 +129,7 @@ AnchorNode.prototype.onExecute = function()
 	}
 }
 
-AnchorNode.title = "Anchor";
+AnchorNode.title = "Point";
 AnchorNode.color = "#2c7fb8";
 AnchorNode.shape = LiteGraph.ROUND_SHAPE;
 
