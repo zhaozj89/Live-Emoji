@@ -269,8 +269,8 @@
     editor.signals.followFace.add(function (event) {
         let puppet = editor.selected;
         if (puppet !== null) {
-            puppet.position.x = event.x;
-            puppet.position.y = event.y;
+            puppet.position.x = 5 * event.x;
+            puppet.position.y = 5 * event.y;
             editor.signals.sceneGraphChanged.dispatch();
         }
     });
