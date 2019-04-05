@@ -418,20 +418,20 @@ var FaceView = function (editor) {
         // console.log(video_streamHeight);
         video_stream_overlay_context.clearRect(0, 0, video_streamWidth, video_streamHeight);
 
-        if (pred !== null) {
-            video_stream_overlay_context.strokeStyle = '#FF0000';
-            video_stream_overlay_context.strokeRect(pred.x - 5, pred.y - 5, 10, 10);
-        }
+        // if (pred !== null) {
+        //     video_stream_overlay_context.strokeStyle = '#FF0000';
+        //     video_stream_overlay_context.strokeRect(pred.x - 5, pred.y - 5, 10, 10);
+        // }
 
         if (measurement != null) {
             video_stream_overlay_context.strokeStyle = '#ff6dcb';
             video_stream_overlay_context.strokeRect(measurement.x - 5, measurement.y - 5, 10, 10);
         }
 
-        if (corr !== null) {
-            video_stream_overlay_context.strokeStyle = '#0004ff';
-            video_stream_overlay_context.strokeRect(corr.x - 5, corr.y - 5, 10, 10);
-        }
+        // if (corr !== null) {
+        //     video_stream_overlay_context.strokeStyle = '#0004ff';
+        //     video_stream_overlay_context.strokeRect(corr.x - 5, corr.y - 5, 10, 10);
+        // }
 
         if (ctrack.getCurrentPosition()) {
             ctrack.draw(video_stream_overlay.dom);
