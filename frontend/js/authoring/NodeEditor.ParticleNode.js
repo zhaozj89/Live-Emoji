@@ -77,12 +77,12 @@ function AnchorNode()
 		},
 		{values: ['top left', 'top', 'top right', 'right', 'down right',
 				'down', 'down left', 'left']});
-	this.addWidget("combo","texture", "heart", function (val) {
+	this.addWidget("combo","icon", "", function (val) {
 		that.properties.texture = val;
 		},
-		{values: ['dot', 'fire', 'heart', 'poop', 'raindrop', 'snow', 'splatter1',
+		{values: ['', 'dot', 'fire', 'heart', 'poop', 'raindrop', 'snow', 'splatter1',
 			'splatter2', 'surprised1', 'surprised2', 'bubble']});
-	this.addWidget("text","text", "", function (val) {
+	this.addWidget("text","emoji", "", function (val) {
 		that.properties.texture_name = val;
 	});
 	this.addWidget("combo","scale", "middle", function (val) {
